@@ -1,0 +1,11 @@
+*2017-02-27*
+- service inject error while serviceimpl works fine
+- global exception handler `@ControllerAdvice`
+- mybatis auto-mapping performance
+- mybatis generator generate all java files
+- mybatis java if test
+- spring test mapper
+- mybatis generator add annotation such as `@Repository` to Mapper
+- mybatis generator
+- jackson avoid null property
+- server side rendering for wechat sharing page
