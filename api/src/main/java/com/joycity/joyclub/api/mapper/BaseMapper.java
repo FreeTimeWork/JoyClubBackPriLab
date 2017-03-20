@@ -11,7 +11,7 @@ import java.util.List;
  * @author CallMeXYZ
  * @date 2016/8/19
  */
-public interface MybatisBaseMapper<T, PK extends Serializable, E> {
+public interface BaseMapper<T, PK extends Serializable, E> {
     int countByExample(E example);
 
     int deleteByExample(E example);

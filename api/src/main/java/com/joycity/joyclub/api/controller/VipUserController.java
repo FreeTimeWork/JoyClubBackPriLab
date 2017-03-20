@@ -1,5 +1,6 @@
 package com.joycity.joyclub.api.controller;
 
+import com.joycity.joyclub.api.service.VipUserService;
 import com.joycity.joyclub.api.service.impl.VipUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,17 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/vipuser")
 public class VipUserController {
-@Autowired
-ApplicationContext context;
+
     @Autowired
     VipUserServiceImpl vipUserService;
 
     @RequestMapping("/list")
     public Object list() {
-        String[] ss=context.getBeanDefinitionNames();
-        for(String s:ss){
-            System.out.println(s);
-        }
         return vipUserService.getList();
     }
 

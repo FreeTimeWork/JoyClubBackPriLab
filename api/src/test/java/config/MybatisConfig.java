@@ -1,8 +1,7 @@
-package com.joycity.joyclub.system.config;
+package config;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -22,9 +21,10 @@ import java.io.IOException;
  * @date 2016/6/24
  */
 @Configuration
-@MapperScan("com.joycity.joyclub.**.mapper")
 @PropertySource("classpath:jdbc.properties")
 public class MybatisConfig {
+
+
   /*  @Bean
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         PropertyPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertyPlaceholderConfigurer();
@@ -66,13 +66,13 @@ public class MybatisConfig {
         return sessionFactoryBean;
     }
 
- /*   @Bean
+    @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
         configurer.setBasePackage("com.joycity.joyclub");
         configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
         return configurer;
-    }*/
+    }
 
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {

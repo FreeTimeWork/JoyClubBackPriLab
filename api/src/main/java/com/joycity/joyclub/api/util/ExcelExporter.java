@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 // TODO: 2017/2/21
 	@SuppressWarnings("deprecation")
-public class ExcelExportor<T> {
+public class ExcelExporter<T> {
 
 	private  final int DATA_START_ROWINDEX = 2;
 

@@ -8,8 +8,8 @@
             location="D:\IDEA workspace\joyclub\mysql-connector-java-5.1.40-bin.jar"/>
     <context id="context1" targetRuntime="MyBatis3">
         <commentGenerator>
-			<property name="suppressDate" value="true"/>
-		</commentGenerator>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=UTF-8"
                         userId="root" password=""/>
@@ -17,8 +17,8 @@
                             targetProject="D:\IDEA workspace\joyclub\api\src\main\java"/>
         <sqlMapGenerator targetPackage="mapper.generated"
                          targetProject="D:\IDEA workspace\joyclub\api\src\main\resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.api.mapper.generated"
-                             targetProject="D:\IDEA workspace\joyclub\api\src\main\java"/>
+<!--        <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.api.mapper.generated"
+                             targetProject="D:\IDEA workspace\joyclub\api\src\main\java"/>-->
 
         <table tableName="sys_user">
             <generatedKey column="id" sqlStatement="JDBC"/>

@@ -15,4 +15,5 @@ import java.util.List;
 public interface VipUserMapper {
 @Select("select id_ id,virprice_ point,card_no_ cardNum,vip_code_ vipNum,realname_ name from sys_user ")
     List<VipUser> getList();
+
 }

@@ -3,9 +3,10 @@ package com.joycity.joyclub.api.service.impl;
 import com.joycity.joyclub.api.constant.ResultCode;
 import com.joycity.joyclub.api.entity.VipUser;
 import com.joycity.joyclub.api.entity.base.ResultData;
+import com.joycity.joyclub.api.exception.BusinessException;
 import com.joycity.joyclub.api.mapper.manual.VipUserMapper;
 import com.joycity.joyclub.api.service.VipUserService;
-import com.joycity.joyclub.api.util.ExcelExportor;
+import com.joycity.joyclub.api.util.ExcelExporter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,13 @@ public class VipUserServiceImpl implements VipUserService {
     @Override
     public ResultData export(HttpServletResponse response) {
         List<VipUser> list = vipUserMapper.getList();
-        ExcelExportor<VipUser> excelExportor = new ExcelExportor<>();
+        ExcelExporter<VipUser> excelExporter = new ExcelExporter<>();
         try {
-            excelExportor.exportExcelToResponse(response, "会员表", USER_TABLE_HEADERS, list);
+            excelExporter.exportExcelToResponse(response, "会员表", USER_TABLE_HEADERS, list);
         } catch (IOException e) {
             log.error(LOGGER_HEADER + "export VipUser excel error and list size is " + list.size());
             e.printStackTrace();
-            return new ResultData(ResultCode.ERR_EXPORT_EXCEL, ResultCode.ERR_MSG_EXPORT_EXCEL);
+           throw new BusinessException(ResultCode.ERR_EXPORT_EXCEL);
         }
         return new ResultData(ResultCode.SUCCESS);
     }

@@ -8,11 +8,13 @@ import java.util.Objects;
  * Created by CallMeXYZ on 2017/2/21.
  * http数据返回的基础类
  * code类型请看{@link ResultCode}
+ * 如果正确返回结构为<code>{data:object,code:200,}</code>
+ * 如果出错返回结构未<code>{error:stringMsg,code:errorCode,}</code>
  */
 public class ResultData {
     private Integer code;
     private String msg;
-    private Objects data;
+    private Object data;
 
     public ResultData(Integer code) {
         this.code = code;
@@ -23,7 +25,7 @@ public class ResultData {
         this.msg = msg;
     }
 
-    public ResultData(Integer code, String msg, Objects data) {
+    public ResultData(Integer code, String msg, Object data) {
         this(code, msg);
         this.data = data;
     }
@@ -44,11 +46,11 @@ public class ResultData {
         this.msg = msg;
     }
 
-    public Objects getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(Objects data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

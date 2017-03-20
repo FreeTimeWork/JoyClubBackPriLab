@@ -1,11 +1,11 @@
 *2017-02-27*
-- service inject error while serviceimpl works fine
+- ~~service inject error while serviceimpl works fine~~ use `@MapperScan` works fine
 - global exception handler `@ControllerAdvice`
 - mybatis auto-mapping performance
 - mybatis generator generate all java files
 - mybatis java if test
 - spring test mapper
-- mybatis generator add annotation such as `@Repository` to Mapper
+- ~~mybatis generator add annotation such as `@Repository` to ~~use `@MapperScan` without such annotations
 - mybatis generator
 - jackson avoid null property
 - server side rendering for wechat sharing page
