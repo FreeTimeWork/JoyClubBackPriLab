@@ -33,7 +33,6 @@ public class MybatisConfig {
     }
 */
     @Bean
-
     public BasicDataSource dataSource(@Value("${jdbc.className}") String className,
                                       @Value("${jdbc.url}")
                                               String url, @Value("${jdbc.username}")

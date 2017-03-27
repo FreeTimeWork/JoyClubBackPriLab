@@ -3,19 +3,19 @@ package com.joycity.joyclub.system.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
+import com.joycity.joyclub.system.config.security.AuthenticationInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
-import static com.fasterxml.jackson.databind.MapperFeature.DEFAULT_VIEW_INCLUSION;
 
 /**
  * ServletConfig
@@ -25,8 +25,11 @@ import static com.fasterxml.jackson.databind.MapperFeature.DEFAULT_VIEW_INCLUSIO
  */
 @Configuration
 @EnableWebMvc
+@PropertySource("classpath:session.sys.properties")
 @ComponentScan(basePackages = {"com.joycity.joyclub"},useDefaultFilters = false,includeFilters = {@ComponentScan.Filter(Controller.class)})
 public class ServletConfig extends WebMvcConfigurerAdapter {
+    @Value("${session.api-back.attr.user}")
+    public String name;
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
@@ -35,5 +38,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
         converter.setObjectMapper(objectMapper);
         converters.add(converter);
         super.configureMessageConverters(converters);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        System.out.println(name);
+        AuthenticationInterceptor interceptor  = new AuthenticationInterceptor();
+        interceptor.setApiBackSessionAttrUser("USER");
+        registry.addInterceptor(interceptor);
+        super.addInterceptors(registry);
+
     }
 }

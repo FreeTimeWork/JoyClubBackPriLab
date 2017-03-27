@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import java.util.Arrays;
 
 /**
@@ -15,7 +17,6 @@ import java.util.Arrays;
  * @date 2016/6/23
  */
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
 
 
     protected Class<?>[] getRootConfigClasses() {
