@@ -2,32 +2,34 @@ package com.joycity.joyclub.api.entity.base;
 
 import com.joycity.joyclub.api.constant.ResultCode;
 
-import java.util.Objects;
+import static com.joycity.joyclub.api.constant.ResultCode.SUCCESS;
 
 /**
  * Created by CallMeXYZ on 2017/2/21.
- * http数据返回的基础类
+ * api业务失败时，http数据返回的基础类
  * code类型请看{@link ResultCode}
- * 如果正确返回结构为<code>{data:object,code:200,}</code>
- * 如果出错返回结构未<code>{error:stringMsg,code:errorCode,}</code>
+ * <p>
+ * 返回结构：<code>{code:errorCode,msg:stringMsg,error:object}</code>
  */
-public class ResultData {
+public class ResultError {
     private Integer code;
+    /**
+     * 错误信息
+     */
     private String msg;
-    private Object data;
+    /**
+     * 错误对象
+     */
+    private Object error;
 
-    public ResultData(Integer code) {
+    public ResultError(Integer code, String msg) {
         this.code = code;
-    }
-
-    public ResultData(Integer code, String msg) {
-        this(code);
         this.msg = msg;
     }
 
-    public ResultData(Integer code, String msg, Object data) {
+    public ResultError(Integer code, String msg, Object error) {
         this(code, msg);
-        this.data = data;
+        this.error = error;
     }
 
     public Integer getCode() {
@@ -46,11 +48,11 @@ public class ResultData {
         this.msg = msg;
     }
 
-    public Object getData() {
-        return data;
+    public Object getError() {
+        return error;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setError(Object error) {
+        this.error = error;
     }
 }
