@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.joycity.joyclub.apiback.mapper.generated.SysProjectMapper">
+<mapper namespace="com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper">
   <resultMap id="BaseResultMap" type="com.joycity.joyclub.apiback.modal.generated.SysProject">
     <!--
       WARNING - @mbg.generated
@@ -23,6 +23,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
     <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
+    <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -97,7 +98,7 @@
     -->
     id, headquarters, type, name, code, vip_share, card_resource_project, address, remark, 
     contact_name, contact_phone, wechat_app_id, wechat_app_secret, wechat_token_address, 
-    create_time, last_update, delete_flag
+    create_time, last_update, delete_flag, delete_time
   </sql>
   <select id="selectByExample" parameterType="com.joycity.joyclub.apiback.modal.generated.SysProjectExample" resultMap="BaseResultMap">
     <!--
@@ -155,13 +156,13 @@
       address, remark, contact_name, 
       contact_phone, wechat_app_id, wechat_app_secret, 
       wechat_token_address, create_time, last_update, 
-      delete_flag)
+      delete_flag, delete_time)
     values (#{headquarters,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{vipShare,jdbcType=VARCHAR}, #{cardResourceProject,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
       #{contactPhone,jdbcType=VARCHAR}, #{wechatAppId,jdbcType=VARCHAR}, #{wechatAppSecret,jdbcType=VARCHAR}, 
       #{wechatTokenAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdate,jdbcType=TIMESTAMP}, 
-      #{deleteFlag,jdbcType=BIT})
+      #{deleteFlag,jdbcType=BIT}, #{deleteTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.joycity.joyclub.apiback.modal.generated.SysProject" useGeneratedKeys="true">
     <!--
@@ -218,6 +219,9 @@
       <if test="deleteFlag != null">
         delete_flag,
       </if>
+      <if test="deleteTime != null">
+        delete_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="headquarters != null">
@@ -267,6 +271,9 @@
       </if>
       <if test="deleteFlag != null">
         #{deleteFlag,jdbcType=BIT},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -338,6 +345,9 @@
       <if test="record.deleteFlag != null">
         delete_flag = #{record.deleteFlag,jdbcType=BIT},
       </if>
+      <if test="record.deleteTime != null">
+        delete_time = #{record.deleteTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -365,7 +375,8 @@
       wechat_token_address = #{record.wechatTokenAddress,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_update = #{record.lastUpdate,jdbcType=TIMESTAMP},
-      delete_flag = #{record.deleteFlag,jdbcType=BIT}
+      delete_flag = #{record.deleteFlag,jdbcType=BIT},
+      delete_time = #{record.deleteTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -425,6 +436,9 @@
       <if test="deleteFlag != null">
         delete_flag = #{deleteFlag,jdbcType=BIT},
       </if>
+      <if test="deleteTime != null">
+        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -449,7 +463,8 @@
       wechat_token_address = #{wechatTokenAddress,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       last_update = #{lastUpdate,jdbcType=TIMESTAMP},
-      delete_flag = #{deleteFlag,jdbcType=BIT}
+      delete_flag = #{deleteFlag,jdbcType=BIT},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

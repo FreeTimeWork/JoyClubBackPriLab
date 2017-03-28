@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
@@ -24,21 +25,6 @@ import java.io.IOException;
 @Configuration
 /*@EnableScheduling*/
 @ComponentScan(basePackages = {"com.joycity.joyclub"}, excludeFilters = {@ComponentScan.Filter(Controller.class)})
+@PropertySource("classpath:application.properties")
 public class RootConfig {
-
-/**
- * 属性文件读取
- * @param applicationContext
- * @return
- * @throws IOException
- */
-//    @Bean
-//    public static PropertyPlaceholderConfigurer getProperties(ApplicationContext applicationContext) throws IOException {
-//
-//        PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
-//        configurer.setLocations(applicationContext.getResources("classpath:***/*//*.properties"));
-//        System.out.println("---------------------load properties file num；" + applicationContext.getResources("classpath:*.properties").length);
-//
-//        return configurer;
-//    }
 }

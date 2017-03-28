@@ -5,7 +5,7 @@ import com.joycity.joyclub.apiback.modal.generated.SysProject;
 /**
  * Created by CallMeXYZ on 2017/2/27.
  */
-public class BaseProject extends SysProject {
+public class ProjectInfo extends SysProject {
     private String typeName;
 
     public String getTypeName() {

@@ -23,7 +23,6 @@ import java.io.IOException;
  */
 @Configuration
 @MapperScan("com.joycity.joyclub.**.mapper")
-@PropertySource("classpath:jdbc.properties")
 public class MybatisConfig {
   /*  @Bean
     public PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {

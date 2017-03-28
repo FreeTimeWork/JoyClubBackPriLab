@@ -11,7 +11,7 @@ import java.util.List;
  * @author CallMeXYZ
  */
 public interface BaseMapper<T, PK extends Serializable, E> {
-    int countByExample(E example);
+    long countByExample(E example);
 
     int deleteByExample(E example);
 

@@ -1,24 +1,25 @@
 package com.joycity.joyclub.apiback.controller;
 
+import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
+
 
 /**
  * Created by CallMeXYZ on 2017/3/27.
  */
 @RestController
-@RequestMapping("/api/back")
-public class AuthController extends BaseController {
-
+@RequestMapping(URL_API_BACK)
+public class AuthController extends BaseUserSessionController {
     @Autowired
     private AuthService authService;
 

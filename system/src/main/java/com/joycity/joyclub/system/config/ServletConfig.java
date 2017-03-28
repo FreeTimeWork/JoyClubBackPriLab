@@ -3,17 +3,16 @@ package com.joycity.joyclub.system.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.joycity.joyclub.system.config.security.AuthenticationInterceptor;
+import com.joycity.joyclub.apiback.config.security.AuthenticationInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-@PropertySource("classpath:session.sys.properties")
 @ComponentScan(basePackages = {"com.joycity.joyclub"},useDefaultFilters = false,includeFilters = {@ComponentScan.Filter(Controller.class)})
 public class ServletConfig extends WebMvcConfigurerAdapter {
     @Value("${session.api-back.attr.user}")
@@ -42,11 +40,10 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        System.out.println(name);
-        AuthenticationInterceptor interceptor  = new AuthenticationInterceptor();
-        interceptor.setApiBackSessionAttrUser("USER");
-        registry.addInterceptor(interceptor);
+        AuthenticationInterceptor apiBackInterceptor  = new AuthenticationInterceptor();
+        apiBackInterceptor.setApiBackSessionAttrUser(name);
+        registry.addInterceptor(apiBackInterceptor);
         super.addInterceptors(registry);
-
     }
+
 }

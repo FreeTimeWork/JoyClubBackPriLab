@@ -1,13 +1,13 @@
-package com.joycity.joyclub.system.config.security;
+package com.joycity.joyclub.apiback.config.security;
+
+import com.joycity.joyclub.apiback.exception.BusinessException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import static com.joycity.joyclub.apiback.constant.ResultCode.USER_SESSION_NULL;
 
 /**
  * Created by CallMeXYZ on 2017/3/27.
@@ -15,7 +15,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
 @Component
-@PropertySource("classpath:log4j.properties")
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     /**
@@ -38,11 +37,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
 //        for api back
         if (!uri.endsWith("/api/back/login")) {
-            System.out.println(getApiBackSessionAttrUser()+""+request.getSession().getAttribute(getApiBackSessionAttrUser()));
-
             if (request.getSession().getAttribute(getApiBackSessionAttrUser()) == null) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "用户未登录");
-                return false;
+                throw new BusinessException(USER_SESSION_NULL);
             }
         }
         return true;

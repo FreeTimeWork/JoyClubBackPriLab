@@ -11,6 +11,8 @@
 - server side rendering for wechat sharing page
 - security
 - multi properties file  configure one time,`ServletConfig`使用`@Value`
-
+- 统一所有的properties file
+- test mapper 跨module
+- 所有的配置属性改成`@ConfigurationProperties`配置类
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
