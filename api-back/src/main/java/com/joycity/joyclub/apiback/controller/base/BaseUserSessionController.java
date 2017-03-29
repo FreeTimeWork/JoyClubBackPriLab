@@ -9,6 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import javax.servlet.http.HttpSession;
 
 import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
+import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PLATFORM;
+import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
 
 /**
  * 主要是定义一个基础类， user的获取session属性名
@@ -22,23 +24,32 @@ public abstract class BaseUserSessionController {
     public String SESSION_ATTR_NAME_USER;
 
     public void checkStoreUser(HttpSession session) {
-        checkUser(session, UserType.USER_TYPE_STORE);
+        checkUser(session, USER_TYPE_STORE);
     }
+
     public void checkProjectUser(HttpSession session) {
         checkUser(session, UserType.USER_TYPE_PROJECT);
     }
 
-    public void checkPlatFormUser(HttpSession session) {
-        checkUser(session, UserType.USER_TYPE_PLATFORM);
+    protected SysUser checkPlatformUser(HttpSession session) {
+        return checkUser(session, USER_TYPE_PLATFORM);
     }
 
-    public void checkUser(HttpSession session, Integer... userType) {
+    protected SysUser checkPlatformOrProjectUser(HttpSession session) {
+        return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_STORE);
+    }
+
+    private SysUser checkUser(HttpSession session, Integer... userType) {
         SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
+        boolean checkRight = false;
         for (Integer type : userType) {
-            if (user.getType() != type) {
-                throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+            if (user.getType().equals(type)) {
+                checkRight = true;
+                break;
             }
         }
+        if (!checkRight) throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+        return user;
 
     }
 }
