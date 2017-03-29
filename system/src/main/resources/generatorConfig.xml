@@ -17,16 +17,51 @@
                             targetProject="D:\IDEA workspace\joyclub\api-back\src\main\java"/>
         <sqlMapGenerator targetPackage="mapper.generated"
                          targetProject="D:\IDEA workspace\joyclub\api-back\src\main\resources"/>
-   <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.apiback.mapper.generated"
-                             targetProject="D:\IDEA workspace\joyclub\api-back\src\main\java"/>
--->
-        <table tableName="sys_user">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
-        <table tableName="sys_project">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+        <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.apiback.mapper.generated"
+                                  targetProject="D:\IDEA workspace\joyclub\api-back\src\main\java"/>
+     -->
 
+        <table tableName="sys_user" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sys_project" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sys_store" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sys_product_category"
+               >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_store_designer"
+               >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_product_price"
+               >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_product_attr"
+               >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_product" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_order" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_order_detail"
+               >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_cart" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="client_address" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
     </context>
 
 </generatorConfiguration>
