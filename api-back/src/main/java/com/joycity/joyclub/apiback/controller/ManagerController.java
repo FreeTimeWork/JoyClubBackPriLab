@@ -61,13 +61,24 @@ public class ManagerController extends BaseUserSessionController {
      * @param httpSession
      * @return
      */
-    @RequestMapping(value = "/manager/{id}/resetpwd", method = RequestMethod.POST)
+    @RequestMapping(value = "/manager/{id}/password/reset", method = RequestMethod.POST)
     public ResultData resetPassword(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
         checkPlatformUser(httpSession);
         return managerService.resetPwd(id);
     }
-
+    /**
+     * 只有登陆可以访问
+     *
+     * @param httpSession
+     * @return
+     */
+    @RequestMapping(value = "/manager/password", method = RequestMethod.POST)
+    public ResultData changeCurrentUserPassword(@RequestParam String password, HttpSession httpSession) {
+        //确保是登陆用户
+       SysUser user= checkUser(httpSession);
+        return managerService.updateManagerPassword(user.getId(),password);
+    }
     /**
      * 只有平台用户可以访问
      *
