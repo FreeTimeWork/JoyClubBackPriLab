@@ -18,7 +18,7 @@ import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
  * 主要是定义一个基础类， user的获取session属性名
  * Created by CallMeXYZ on 2017/3/27.
  */
-public abstract class BaseUserSessionController extends BaseTimeController{
+public abstract class BaseUserSessionController extends BaseTimeController {
     /**
      * user的session属性名
      */
@@ -41,13 +41,15 @@ public abstract class BaseUserSessionController extends BaseTimeController{
         return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_STORE);
     }
 
-    private SysUser checkUser(HttpSession session, Integer... userType) {
+
+    protected SysUser checkUser(HttpSession session, Integer... userType) {
         SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
-        if(user==null)  throw new BusinessException(USER_SESSION_NULL);
-        boolean checkRight = false;
+        //目前验证user==null是多余的，因为在所有的api请求前都会验证session的存在
+        if (user == null) throw new BusinessException(USER_SESSION_NULL);
+        boolean checkRight = true;
         for (Integer type : userType) {
             if (user.getType().equals(type)) {
-                checkRight = true;
+                checkRight = false;
                 break;
             }
         }
