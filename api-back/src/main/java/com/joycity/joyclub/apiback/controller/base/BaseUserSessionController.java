@@ -46,10 +46,10 @@ public abstract class BaseUserSessionController extends BaseTimeController {
         SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
         //目前验证user==null是多余的，因为在所有的api请求前都会验证session的存在
         if (user == null) throw new BusinessException(USER_SESSION_NULL);
-        boolean checkRight = true;
+        boolean checkRight = false;
         for (Integer type : userType) {
             if (user.getType().equals(type)) {
-                checkRight = false;
+                checkRight = true;
                 break;
             }
         }
