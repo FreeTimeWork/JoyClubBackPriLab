@@ -74,10 +74,10 @@ public class ManagerController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/manager/password", method = RequestMethod.POST)
-    public ResultData changeCurrentUserPassword(@RequestParam String password, HttpSession httpSession) {
+    public ResultData changeCurrentUserPassword(@RequestParam String oldPassword,@RequestParam String password, HttpSession httpSession) {
         //确保是登陆用户
        SysUser user= checkUser(httpSession);
-        return managerService.updateManagerPassword(user.getId(),password);
+        return managerService.updateManagerPassword(user.getId(),oldPassword,password);
     }
     /**
      * 只有平台用户可以访问

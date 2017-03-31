@@ -21,6 +21,7 @@ import java.util.Date;
 
 import static com.joycity.joyclub.apiback.constant.ResultCode.ACCOUNT_EXIST;
 import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.apiback.constant.ResultCode.OLD_PASSWORD_ERROR;
 import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**
@@ -96,10 +97,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ResultData resetPwd(Long managerId) {
-        SysUser sysUser = new SysUser();
-        sysUser.setId(managerId);
-        sysUser.setPassword(MD5Util.MD5(MD5Util.MD5(PASSWORD_RESET), PASSWORD_SALT));
-        return updateManager(sysUser);
+        return updateManagerPassword(managerId, PASSWORD_RESET);
     }
 
     @Override
@@ -119,17 +117,29 @@ public class ManagerServiceImpl implements ManagerService {
         return updateManager(sysUser);
     }
 
+    @Override
+    public ResultData updateManagerPassword(long id, String oldPassword, String password) {
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
+        if (sysUser.getPassword() != MD5Util.MD5(oldPassword, PASSWORD_SALT))
+            throw new BusinessException(OLD_PASSWORD_ERROR);
+        return updateManagerPassword(id, password);
+    }
+
+    private ResultData updateManagerPassword(long id, String password) {
+        SysUser sysUser = new SysUser();
+        sysUser.setId(id);
+        sysUser.setPassword(MD5Util.MD5(password, PASSWORD_SALT));
+        return updateManager(sysUser);
+    }
+
     private ResultData updateManager(SysUser sysUser) {
         return new ResultData(new UpdateResult(sysUserMapper.updateByPrimaryKeySelective(sysUser)));
     }
 
     private ResultData createManager(SysUser sysUser) {
-        sysUser.setDeleteFlag(null);
-        sysUser.setLastUpdate(null);
-        sysUser.setCreateTime(null);
-        sysUser.setDeleteTime(null);
         SysUser accountUser = sysUserMapper.getByAccount(sysUser.getAccount());
         if (accountUser != null) throw new BusinessException(ACCOUNT_EXIST);
+        sysUser.setPassword(MD5Util.MD5(sysUser.getPassword(), PASSWORD_SALT));
         sysUserMapper.insertSelective(sysUser);
         return new ResultData(new CreateResult(sysUser.getId()));
     }

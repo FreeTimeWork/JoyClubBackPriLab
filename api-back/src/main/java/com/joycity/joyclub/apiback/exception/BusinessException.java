@@ -19,11 +19,12 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.ERR_EXPORT_EXCEL, "导出excel失败");
         map.put(ResultCode.LOGIN_ERROR, "登陆失败");
         map.put(ResultCode.UPLOAD_ERROR, "上传失败");
-        map.put(ResultCode.USER_SESSION_NULL, "用户未登录");
+        map.put(ResultCode.USER_SESSION_NULL, "用户未登录或者登陆过期，请重新登陆");
         map.put(ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER, "当前账户没有权限访问该内容");
         map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
         map.put(ResultCode.ACCOUNT_EXIST, "该账号已经存在");
         map.put(ResultCode.DATA_NOT_PERMIT, "不允许该数据");
+        map.put(ResultCode.OLD_PASSWORD_ERROR, "原密码错误");
 
     }
 

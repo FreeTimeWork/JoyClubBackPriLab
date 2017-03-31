@@ -17,11 +17,8 @@ import java.util.Date;
 public class TinyTest {
     @Test
     public void testMD5() {
-        System.out.println(MD5Util.MD5("1"));
-        System.out.println(MD5Util.MD5(MD5Util.MD5("1"), "joyclub$%^@"));
-        System.out.println(MD5Util.MD5("21218cca77804d2ba1922c33e0151105", "joyclub$%^@"));
-        assert MD5Util.MD5("21218cca77804d2ba1922c33e0151105", "joyclub$%^@").equals("6d78570770f5cf00800e36151fb561b4");
-        assert MD5Util.MD5("888888", "joyclub$%^@").equals("879638928508a329c8747a3e104f752f");
+
+        System.out.println(MD5Util.MD5("1", "joyclub$%^@"));
     }
 
     @Test
@@ -90,4 +87,5 @@ public class TinyTest {
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date date2 = sdf.parse("1993-12-12 12:12:12.111");
     }
+
 }

@@ -39,14 +39,16 @@ public interface ManagerService {
 
     /**
      * 修改管理账户的备注
+     *
      * @param managerId
      * @param remark
      * @return
      */
-    ResultData updateRemark(Long managerId,String remark);
+    ResultData updateRemark(Long managerId, String remark);
 
     /**
-     *重置密码为888888
+     * 重置密码为888888
+     *
      * @param managerId
      * @return
      */
@@ -54,6 +56,7 @@ public interface ManagerService {
 
     /**
      * 禁用账户
+     *
      * @param managerId
      * @return
      */
@@ -61,8 +64,11 @@ public interface ManagerService {
 
     /**
      * 取消禁用账户
+     *
      * @param managerId
      * @return
      */
     ResultData cancelForbid(Long managerId);
+
+    ResultData updateManagerPassword(long id, String oldPassword,String password);
 }
