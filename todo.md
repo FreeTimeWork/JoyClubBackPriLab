@@ -14,5 +14,12 @@
 - 统一所有的properties file
 - test mapper 跨module
 - 所有的配置属性改成`@ConfigurationProperties`配置类
+- `service`层的更新时，把createTime等信息置为null应该可以抽象为通用方法。
+- getList里的getSum应该用缓存
+- mybatis generator comment generator
+- 创建和更新删除时不必要的数据项
+- 退出登陆 某些state不清空
+- 商家
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
+- formData乱码，使用`CommonsMultipartResolver`

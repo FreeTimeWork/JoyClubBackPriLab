@@ -1,5 +1,7 @@
 package com.joycity.joyclub.apiback.modal.base;
 
+import com.joycity.joyclub.apiback.util.PageUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +12,31 @@ public class DataListResult {
     private List list;
     private Long sum;
     private Integer page;
+    private Integer pageSize;
+
+    public DataListResult() {
+    }
 
     public DataListResult(List list) {
+        this();
         this.list = list;
+    }
+
+    public DataListResult(List list, Long sum, Integer page, Integer pageSize) {
+        this.list = list;
+        this.sum = sum;
+        this.page = page;
+        this.pageSize = pageSize;
     }
 
     public DataListResult(List list, Long sum, Integer page) {
         this.list = list;
         this.sum = sum;
         this.page = page;
+    }
+    public void setByPageUtil(PageUtil pageUtil) {
+        setPage(pageUtil.getPage());
+        setPageSize(pageUtil.getPageSize());
     }
 
     public List getList() {
@@ -42,6 +60,15 @@ public class DataListResult {
     }
 
     public void setPage(Integer page) {
+
         this.page = page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

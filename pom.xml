@@ -278,7 +278,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>FamilyBook</finalName>
+        <finalName>JoyClub</finalName>
     </build>
 
 </project>

@@ -255,66 +255,6 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
-        public Criteria andHeadquartersIsNull() {
-            addCriterion("headquarters is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersIsNotNull() {
-            addCriterion("headquarters is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersEqualTo(Long value) {
-            addCriterion("headquarters =", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersNotEqualTo(Long value) {
-            addCriterion("headquarters <>", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersGreaterThan(Long value) {
-            addCriterion("headquarters >", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersGreaterThanOrEqualTo(Long value) {
-            addCriterion("headquarters >=", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersLessThan(Long value) {
-            addCriterion("headquarters <", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersLessThanOrEqualTo(Long value) {
-            addCriterion("headquarters <=", value, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersIn(List<Long> values) {
-            addCriterion("headquarters in", values, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersNotIn(List<Long> values) {
-            addCriterion("headquarters not in", values, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersBetween(Long value1, Long value2) {
-            addCriterion("headquarters between", value1, value2, "headquarters");
-            return (Criteria) this;
-        }
-
-        public Criteria andHeadquartersNotBetween(Long value1, Long value2) {
-            addCriterion("headquarters not between", value1, value2, "headquarters");
-            return (Criteria) this;
-        }
-
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -442,6 +382,76 @@ public class SysProjectExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersIsNull() {
+            addCriterion("headquarters is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersIsNotNull() {
+            addCriterion("headquarters is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersEqualTo(String value) {
+            addCriterion("headquarters =", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersNotEqualTo(String value) {
+            addCriterion("headquarters <>", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersGreaterThan(String value) {
+            addCriterion("headquarters >", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersGreaterThanOrEqualTo(String value) {
+            addCriterion("headquarters >=", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersLessThan(String value) {
+            addCriterion("headquarters <", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersLessThanOrEqualTo(String value) {
+            addCriterion("headquarters <=", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersLike(String value) {
+            addCriterion("headquarters like", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersNotLike(String value) {
+            addCriterion("headquarters not like", value, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersIn(List<String> values) {
+            addCriterion("headquarters in", values, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersNotIn(List<String> values) {
+            addCriterion("headquarters not in", values, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersBetween(String value1, String value2) {
+            addCriterion("headquarters between", value1, value2, "headquarters");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadquartersNotBetween(String value1, String value2) {
+            addCriterion("headquarters not between", value1, value2, "headquarters");
             return (Criteria) this;
         }
 

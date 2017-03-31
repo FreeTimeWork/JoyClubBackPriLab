@@ -505,6 +505,66 @@ public class SaleProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andBasePriceIsNull() {
+            addCriterion("base_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceIsNotNull() {
+            addCriterion("base_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceEqualTo(Integer value) {
+            addCriterion("base_price =", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceNotEqualTo(Integer value) {
+            addCriterion("base_price <>", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceGreaterThan(Integer value) {
+            addCriterion("base_price >", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceGreaterThanOrEqualTo(Integer value) {
+            addCriterion("base_price >=", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceLessThan(Integer value) {
+            addCriterion("base_price <", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceLessThanOrEqualTo(Integer value) {
+            addCriterion("base_price <=", value, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceIn(List<Integer> values) {
+            addCriterion("base_price in", values, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceNotIn(List<Integer> values) {
+            addCriterion("base_price not in", values, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceBetween(Integer value1, Integer value2) {
+            addCriterion("base_price between", value1, value2, "basePrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andBasePriceNotBetween(Integer value1, Integer value2) {
+            addCriterion("base_price not between", value1, value2, "basePrice");
+            return (Criteria) this;
+        }
+
         public Criteria andPortraitIsNull() {
             addCriterion("portrait is null");
             return (Criteria) this;
@@ -822,6 +882,66 @@ public class SaleProductExample {
 
         public Criteria andDeleteFlagNotBetween(Boolean value1, Boolean value2) {
             addCriterion("delete_flag not between", value1, value2, "deleteFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeIsNull() {
+            addCriterion("delete_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeIsNotNull() {
+            addCriterion("delete_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeEqualTo(Date value) {
+            addCriterion("delete_time =", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeNotEqualTo(Date value) {
+            addCriterion("delete_time <>", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeGreaterThan(Date value) {
+            addCriterion("delete_time >", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("delete_time >=", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeLessThan(Date value) {
+            addCriterion("delete_time <", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeLessThanOrEqualTo(Date value) {
+            addCriterion("delete_time <=", value, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeIn(List<Date> values) {
+            addCriterion("delete_time in", values, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeNotIn(List<Date> values) {
+            addCriterion("delete_time not in", values, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeBetween(Date value1, Date value2) {
+            addCriterion("delete_time between", value1, value2, "deleteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeleteTimeNotBetween(Date value1, Date value2) {
+            addCriterion("delete_time not between", value1, value2, "deleteTime");
             return (Criteria) this;
         }
     }

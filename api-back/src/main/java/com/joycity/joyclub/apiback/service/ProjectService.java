@@ -8,7 +8,7 @@ import com.joycity.joyclub.apiback.modal.generated.SysProject;
  */
 public interface ProjectService {
     /**
-     * @return data为按时间倒序的所有项目列表
+     * @return data为按创建时间倒序的所有项目列表
      */
     ResultData getList();
 
@@ -18,6 +18,6 @@ public interface ProjectService {
      * @return
      */
     ResultData getProject(Long id);
-    ResultData updateProject(Long id,SysProject project);
+    ResultData updateProject(SysProject project);
     ResultData createProject(SysProject project);
 }

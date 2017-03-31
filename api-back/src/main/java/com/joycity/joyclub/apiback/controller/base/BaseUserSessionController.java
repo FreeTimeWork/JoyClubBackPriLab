@@ -16,19 +16,19 @@ import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
  * 主要是定义一个基础类， user的获取session属性名
  * Created by CallMeXYZ on 2017/3/27.
  */
-public abstract class BaseUserSessionController {
+public abstract class BaseUserSessionController extends BaseTimeController{
     /**
      * user的session属性名
      */
     @Value("${session.api-back.attr.user}")
     public String SESSION_ATTR_NAME_USER;
 
-    public void checkStoreUser(HttpSession session) {
-        checkUser(session, USER_TYPE_STORE);
+    public SysUser checkStoreUser(HttpSession session) {
+        return checkUser(session, USER_TYPE_STORE);
     }
 
-    public void checkProjectUser(HttpSession session) {
-        checkUser(session, UserType.USER_TYPE_PROJECT);
+    public SysUser checkProjectUser(HttpSession session) {
+        return checkUser(session, UserType.USER_TYPE_PROJECT);
     }
 
     protected SysUser checkPlatformUser(HttpSession session) {

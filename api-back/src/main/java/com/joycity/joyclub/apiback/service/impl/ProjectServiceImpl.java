@@ -25,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
     SysProjectMapper sysProjectMapper;
 
     /**
-     * @return resultData, data为按时间倒序的所有项目列表
+     * @return resultData, data为按创建时间倒序的所有项目列表
      */
     @Override
     public ResultData getList() {
@@ -42,22 +42,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResultData createProject(SysProject project) {
-        long id = sysProjectMapper.insertSelective(project);
-        return new ResultData(new CreateResult(id));
+        sysProjectMapper.insertSelective(project);
+        return new ResultData(new CreateResult(project.getId()));
     }
 
     @Override
-    public ResultData updateProject(Long id, SysProject project) {
-        //防止不必要的数据更新
-        project.setDeleteFlag(null);
-        project.setLastUpdate(null);
-        project.setCreateTime(null);
-        project.setLastUpdate(null);
+    public ResultData updateProject(SysProject project) {
         return new ResultData(new UpdateResult(sysProjectMapper.updateByPrimaryKeySelective(project)));
     }
 
-    /*@Override*/
-    public ResultData getManagers(Long managerId) {
-        return null;
-    }
 }

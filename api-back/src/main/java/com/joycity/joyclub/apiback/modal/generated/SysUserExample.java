@@ -575,63 +575,63 @@ public class SysUserExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeIsNull() {
-            addCriterion("project_type is null");
+        public Criteria andAuthTypeIsNull() {
+            addCriterion("auth_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeIsNotNull() {
-            addCriterion("project_type is not null");
+        public Criteria andAuthTypeIsNotNull() {
+            addCriterion("auth_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeEqualTo(Integer value) {
-            addCriterion("project_type =", value, "projectType");
+        public Criteria andAuthTypeEqualTo(Integer value) {
+            addCriterion("auth_type =", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeNotEqualTo(Integer value) {
-            addCriterion("project_type <>", value, "projectType");
+        public Criteria andAuthTypeNotEqualTo(Integer value) {
+            addCriterion("auth_type <>", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeGreaterThan(Integer value) {
-            addCriterion("project_type >", value, "projectType");
+        public Criteria andAuthTypeGreaterThan(Integer value) {
+            addCriterion("auth_type >", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("project_type >=", value, "projectType");
+        public Criteria andAuthTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("auth_type >=", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeLessThan(Integer value) {
-            addCriterion("project_type <", value, "projectType");
+        public Criteria andAuthTypeLessThan(Integer value) {
+            addCriterion("auth_type <", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("project_type <=", value, "projectType");
+        public Criteria andAuthTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("auth_type <=", value, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeIn(List<Integer> values) {
-            addCriterion("project_type in", values, "projectType");
+        public Criteria andAuthTypeIn(List<Integer> values) {
+            addCriterion("auth_type in", values, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeNotIn(List<Integer> values) {
-            addCriterion("project_type not in", values, "projectType");
+        public Criteria andAuthTypeNotIn(List<Integer> values) {
+            addCriterion("auth_type not in", values, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeBetween(Integer value1, Integer value2) {
-            addCriterion("project_type between", value1, value2, "projectType");
+        public Criteria andAuthTypeBetween(Integer value1, Integer value2) {
+            addCriterion("auth_type between", value1, value2, "authType");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("project_type not between", value1, value2, "projectType");
+        public Criteria andAuthTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("auth_type not between", value1, value2, "authType");
             return (Criteria) this;
         }
 

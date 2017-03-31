@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.apiback.mapper.manual.SaleProductAttrMapper">
+
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+    <sql id="where_store_and_product_name">
+        <where>
+            a.delete_flag=0 and p.store_id=#{storeId}
+            <if test="nameLike!=null">
+                and a.name like #{nameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countByStoreIdAndProductName" resultType="java.lang.Long">
+
+        select count(*) from sale_product_attr a
+        left join sale_product p on a.product_id=p.id
+        <include refid="where_store_and_product_name"/>
+    </select>
+    <select id="selectByStoreIdAndProductName"
+            resultType="com.joycity.joyclub.apiback.modal.product.attr.ProductAttrWithProductName">
+
+        select a.id,a.name,a.product_id,a.num,a.remark,p.name productName
+        from sale_product_attr a
+        left join sale_product p on a.product_id=p.id
+        <include refid="where_store_and_product_name"/>
+        order by a.id desc
+        <include refid="limit"/>
+    </select>
+
+
+</mapper>

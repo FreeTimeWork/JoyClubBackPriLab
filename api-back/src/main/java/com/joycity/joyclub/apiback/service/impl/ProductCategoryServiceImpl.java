@@ -1,0 +1,60 @@
+package com.joycity.joyclub.apiback.service.impl;
+
+import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.apiback.mapper.manual.SysProductCategoryMapper;
+import com.joycity.joyclub.apiback.modal.base.CreateResult;
+import com.joycity.joyclub.apiback.modal.base.DataListResult;
+import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.apiback.modal.base.UpdateResult;
+import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
+import com.joycity.joyclub.apiback.modal.generated.SysProductCategoryExample;
+import com.joycity.joyclub.apiback.service.ProductCategoryService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
+
+/**
+ * Created by CallMeXYZ on 2017/2/27.
+ */
+@Service
+public class ProductCategoryServiceImpl implements ProductCategoryService {
+    private final Log log = LogFactory.getLog(ProductCategoryServiceImpl.class);
+    @Autowired
+    SysProductCategoryMapper sysProductCategoryMapper;
+
+    /**
+     * @return resultData, data为按创建时间倒序的所有项目列表
+     */
+    @Override
+    public ResultData getList() {
+        SysProductCategoryExample example = new SysProductCategoryExample();
+        SysProductCategoryExample.Criteria criteria = example.createCriteria();
+        criteria.andDeleteFlagEqualTo(false);
+        return new ResultData(new DataListResult(sysProductCategoryMapper.selectByExample(example)));
+    }
+
+    @Override
+    public ResultData getProductCategory(Long id) {
+        SysProductCategory sysProductCategory = sysProductCategoryMapper.selectByPrimaryKey(id);
+        if (sysProductCategory == null || sysProductCategory.getDeleteFlag())
+            throw new BusinessException(DATA_NOT_EXIST, "该分类不存在");
+        return new ResultData(sysProductCategory);
+    }
+
+
+    @Override
+    public ResultData createProductCategory(SysProductCategory productCategory) {
+       sysProductCategoryMapper.insertSelective(productCategory);
+        return new ResultData(new CreateResult(productCategory.getId()));
+    }
+
+    @Override
+    public ResultData updateProductCategory(Long id, SysProductCategory productCategory) {
+        return new ResultData(new UpdateResult(sysProductCategoryMapper.updateByPrimaryKeySelective(productCategory)));
+    }
+
+
+}

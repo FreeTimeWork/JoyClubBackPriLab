@@ -35,7 +35,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/forbid", method = RequestMethod.POST)
     public ResultData forbid(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatFormUser(httpSession);
+        checkPlatformUser(httpSession);
         return managerService.forbid(id);
     }
 
@@ -49,7 +49,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/forbidcancel", method = RequestMethod.POST)
     public ResultData cancelForbid(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatFormUser(httpSession);
+        checkPlatformUser(httpSession);
         return managerService.cancelForbid(id);
     }
 
@@ -64,7 +64,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/resetpwd", method = RequestMethod.POST)
     public ResultData resetPassword(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatFormUser(httpSession);
+        checkPlatformUser(httpSession);
         return managerService.resetPwd(id);
     }
 
@@ -78,7 +78,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/remark", method = RequestMethod.POST)
     public ResultData resetPassword(@PathVariable Long id, @RequestParam String remark, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatFormUser(httpSession);
+        checkPlatformUser(httpSession);
         return managerService.updateRemark(id, remark);
     }
 }
