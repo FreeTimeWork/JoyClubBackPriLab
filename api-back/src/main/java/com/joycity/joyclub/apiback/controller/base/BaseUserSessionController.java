@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
 import static com.joycity.joyclub.apiback.constant.ResultCode.USER_SESSION_NULL;
 import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PLATFORM;
+import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PROJECT;
 import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
 
 /**
@@ -38,7 +39,7 @@ public abstract class BaseUserSessionController extends BaseTimeController {
     }
 
     protected SysUser checkPlatformOrProjectUser(HttpSession session) {
-        return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_STORE);
+        return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_PROJECT);
     }
 
 
