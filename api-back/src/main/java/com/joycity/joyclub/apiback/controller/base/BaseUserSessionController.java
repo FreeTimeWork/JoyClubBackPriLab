@@ -43,6 +43,9 @@ public abstract class BaseUserSessionController extends BaseTimeController {
     }
 
 
+    protected SysUser checkPlatformOrProjectOrStoreUser(HttpSession session) {
+        return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_PROJECT,USER_TYPE_STORE);
+    }
     protected SysUser checkUser(HttpSession session, Integer... userType) {
         SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
         //目前验证user==null是多余的，因为在所有的api请求前都会验证session的存在
