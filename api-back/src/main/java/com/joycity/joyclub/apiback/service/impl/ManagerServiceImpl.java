@@ -12,7 +12,7 @@ import com.joycity.joyclub.apiback.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProject;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
-import com.joycity.joyclub.apiback.util.MD5Util;
+import com.joycity.joyclub.commons.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -120,7 +120,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResultData updateManagerPassword(long id, String oldPassword, String password) {
         SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
-        if (sysUser.getPassword() != MD5Util.MD5(oldPassword, PASSWORD_SALT))
+        if (!sysUser.getPassword().equals(MD5Util.MD5(oldPassword, PASSWORD_SALT)))
             throw new BusinessException(OLD_PASSWORD_ERROR);
         return updateManagerPassword(id, password);
     }

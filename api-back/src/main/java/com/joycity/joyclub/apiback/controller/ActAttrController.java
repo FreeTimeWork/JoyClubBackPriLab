@@ -64,7 +64,7 @@ public class ActAttrController extends BaseUserSessionController {
         //确保是商户用户
         checkStoreUser(httpSession);
         actAttr.setId(id);
-        return actAttrService.updateActAttr( actAttr);
+        return actAttrService.updateActAttr(actAttr);
     }
 
     /**

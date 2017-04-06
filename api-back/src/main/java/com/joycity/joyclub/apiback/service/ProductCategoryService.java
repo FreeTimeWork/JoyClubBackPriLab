@@ -2,7 +2,6 @@ package com.joycity.joyclub.apiback.service;
 
 import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
-import com.joycity.joyclub.apiback.util.PageUtil;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.

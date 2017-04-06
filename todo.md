@@ -20,6 +20,11 @@
 - 创建和更新删除时不必要的数据项
 - 退出登陆 某些state不清空
 - 商家
+- 修改更新api-front的相关依赖
+- config properties class而不是每次重新赋值
+- act 和 product 抽象
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
 - formData乱码，使用`CommonsMultipartResolver`
+- 不同模块的spring bean也不能重名
+- 系统管理员最好是单点登录，比如制卡，如果同时操作很可能制出重复的卡号

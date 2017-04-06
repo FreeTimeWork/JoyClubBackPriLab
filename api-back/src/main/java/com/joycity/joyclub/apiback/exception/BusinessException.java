@@ -24,7 +24,7 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
         map.put(ResultCode.ACCOUNT_EXIST, "该账号已经存在");
         map.put(ResultCode.DATA_NOT_PERMIT, "不允许该数据");
-        map.put(ResultCode.OLD_PASSWORD_ERROR, "原密码错误");
+        map.put(ResultCode.OLD_PASSWORD_ERROR, "旧密码不正确");
 
     }
 

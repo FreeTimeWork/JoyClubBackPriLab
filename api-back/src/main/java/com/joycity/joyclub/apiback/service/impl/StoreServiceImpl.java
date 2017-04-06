@@ -9,7 +9,7 @@ import com.joycity.joyclub.apiback.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysStore;
 import com.joycity.joyclub.apiback.modal.generated.SysStoreExample;
 import com.joycity.joyclub.apiback.service.StoreService;
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

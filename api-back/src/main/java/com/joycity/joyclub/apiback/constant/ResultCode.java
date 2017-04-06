@@ -22,7 +22,12 @@ public class ResultCode {
      */
     public static final int DATA_NOT_EXIST = 3003;
     public static final int DATA_NOT_PERMIT = 3004;
+    public static final int DATA_ALREADY_EXIST = 3005;
 
+    /**
+     * 请求的参数错误
+     */
+    public static final int REQUEST_PARAMS_ERROR = 3006;
 
 
 }

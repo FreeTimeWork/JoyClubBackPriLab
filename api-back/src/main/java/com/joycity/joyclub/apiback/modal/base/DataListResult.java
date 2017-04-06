@@ -1,8 +1,7 @@
 package com.joycity.joyclub.apiback.modal.base;
 
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

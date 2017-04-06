@@ -22,13 +22,37 @@
                                   targetProject="D:\IDEA workspace\joyclub\api-back\src\main\java"/>
      -->
 
-        <table tableName="sys_store" >
+        <table tableName="sys_project_vip_card_range"
+        >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="sale_store_designer">
+        <table tableName="sys_vip_card_num"
+        >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-       <!-- <table tableName="sale_product">
+
+       <!--
+       <table tableName="client"
+        >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sys_act_category"
+        >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+
+        <table tableName="sale_act_price"
+        >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_act_attr"
+        >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_act" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="sale_product">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
         <table tableName="sys_project">
@@ -60,10 +84,10 @@
         <table tableName="sale_product" >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="sale_order" >
+        <table tableName="sale_product_order" >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="sale_order_detail"
+        <table tableName="sale_product_order_detail"
                >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>

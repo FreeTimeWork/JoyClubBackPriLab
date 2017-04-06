@@ -1,6 +1,5 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleProductMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SaleStoreDesignerMapper;
@@ -9,21 +8,16 @@ import com.joycity.joyclub.apiback.modal.base.CreateResult;
 import com.joycity.joyclub.apiback.modal.base.DataListResult;
 import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.base.UpdateResult;
-import com.joycity.joyclub.apiback.modal.generated.SaleProduct;
-import com.joycity.joyclub.apiback.modal.generated.SaleProductExample;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductWithBLOBs;
-import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
 import com.joycity.joyclub.apiback.modal.product.ProductFormData;
 import com.joycity.joyclub.apiback.service.ProductService;
-import com.joycity.joyclub.apiback.util.PageUtil;
-import org.apache.commons.collections4.queue.CircularFifoQueue;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
 

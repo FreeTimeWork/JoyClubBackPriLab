@@ -36,7 +36,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 //        for api back
-        if (!uri.endsWith("/api/back/login")) {
+        if ( uri.startsWith("/api/back/")&&!uri.endsWith("/api/back/login")) {
             if (request.getSession().getAttribute(getApiBackSessionAttrUser()) == null) {
                 throw new BusinessException(USER_SESSION_NULL);
             }

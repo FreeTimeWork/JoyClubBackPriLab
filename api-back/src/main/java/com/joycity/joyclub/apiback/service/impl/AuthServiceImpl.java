@@ -6,7 +6,7 @@ import com.joycity.joyclub.apiback.mapper.manual.SysUserMapper;
 import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.AuthService;
-import com.joycity.joyclub.apiback.util.MD5Util;
+import com.joycity.joyclub.commons.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

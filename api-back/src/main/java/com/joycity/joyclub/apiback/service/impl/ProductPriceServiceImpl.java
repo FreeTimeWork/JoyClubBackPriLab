@@ -9,7 +9,7 @@ import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductPrice;
 import com.joycity.joyclub.apiback.service.ProductPriceService;
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,26 +30,47 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     @Autowired
     SaleProductPriceMapper productPriceMapper;
 
-
-    /**
-     * @return resultData, data为按创建时间倒序的所有项目列表
-     */
     @Override
-    public ResultData getListByStoreIdAndProductName(Long storeId, Integer reviewStatus, String name, PageUtil pageUtil) {
+    public ResultData getListForStore(Long storeId, Integer reviewStatus, String productName, PageUtil pageUtil) {
         DataListResult dataListResult = new DataListResult();
         dataListResult.setByPageUtil(pageUtil);
-        if (name != null) {
-            name = "%" + name + "%";
+        if (productName != null) {
+            productName = getSearchLikeStr(productName);
         }
-        long sum = productPriceMapper.countByStoreIdAndProductNameAndReviewStatus(storeId, reviewStatus, name, pageUtil);
+        long sum = productPriceMapper.countForStore(storeId, reviewStatus, productName, pageUtil);
         dataListResult.setSum(sum);
         if (sum == 0) {
             dataListResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(productPriceMapper.selectByStoreIdAndProductNameAndReviewStatus(storeId, reviewStatus, name, pageUtil));
+            dataListResult.setList(productPriceMapper.selectForStore(storeId, reviewStatus, productName, pageUtil));
         }
         return new ResultData(dataListResult);
+    }
+
+    @Override
+    public ResultData getListForProject(String storeName, Integer reviewStatus, String productName, PageUtil pageUtil) {
+        DataListResult dataListResult = new DataListResult();
+        dataListResult.setByPageUtil(pageUtil);
+        if (storeName != null) {
+            storeName = getSearchLikeStr(storeName);
+        }
+        if (productName != null) {
+            productName = getSearchLikeStr(productName);
+        }
+        long sum = productPriceMapper.countForProject(storeName, reviewStatus, productName, pageUtil);
+        dataListResult.setSum(sum);
+        if (sum == 0) {
+            dataListResult.setList(new ArrayList());
+        } else {
+
+            dataListResult.setList(productPriceMapper.selectForProject(storeName, reviewStatus, productName, pageUtil));
+        }
+        return new ResultData(dataListResult);
+    }
+
+    private String getSearchLikeStr(String likeStr) {
+        return "%" + likeStr + "%";
     }
 
     @Override
@@ -73,10 +94,10 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 
 
     @Override
-    public ResultData updateProductPrice(SaleProductPrice productPrice) {
-        checkPrice(productPrice);
-        productPrice.setReviewStatus(STATUS_NOT_REVIEW);
-        return new ResultData(new UpdateResult(productPriceMapper.updateByPrimaryKeySelective(productPrice)));
+    public ResultData updateProductPrice(SaleProductPrice price) {
+        checkPrice(price);
+        price.setReviewStatus(STATUS_NOT_REVIEW);
+        return updateByPrimaryKeySelective(price);
     }
 
     @Override
@@ -84,8 +105,26 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         SaleProductPrice price = new SaleProductPrice();
         price.setId(id);
         price.setForbidFlag(true);
+        return updateByPrimaryKeySelective(price);
+    }
+
+    @Override
+    public ResultData permitProductPrice(Long id) {
+        SaleProductPrice price = new SaleProductPrice();
+        price.setId(id);
+        price.setReviewStatus(PriceReviewStatus.STATUS_REVIEW_PERMIT);
         return new ResultData(new UpdateResult(productPriceMapper.updateByPrimaryKeySelective(price)));
     }
+
+    @Override
+    public ResultData rejectProductPrice(Long id, String reviewInfo) {
+        SaleProductPrice price = new SaleProductPrice();
+        price.setId(id);
+        price.setReviewStatus(PriceReviewStatus.STATUS_REVIEW_REJECT);
+        price.setReviewInfo(reviewInfo);
+        return updateByPrimaryKeySelective(price);
+    }
+
 
     /**
      * 检验该价格是否合理
@@ -98,5 +137,9 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         if (sum != 0) {
             throw new BusinessException(DATA_NOT_PERMIT, "时间段与其他冲突");
         }
+    }
+
+    private ResultData updateByPrimaryKeySelective(SaleProductPrice price) {
+        return new ResultData(new UpdateResult(productPriceMapper.updateByPrimaryKeySelective(price)));
     }
 }

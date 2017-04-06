@@ -10,6 +10,15 @@
     <!--这个模块主要是给管理端提供api-->
     <modelVersion>4.0.0</modelVersion>
     <artifactId>api-back</artifactId>
-
+    <properties>
+        <utils>1.0-SNAPSHOT</utils>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>commons</artifactId>
+            <version>${utils}</version>
+        </dependency>
+    </dependencies>
 
 </project>

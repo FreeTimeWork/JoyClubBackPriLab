@@ -1,10 +1,9 @@
 package com.joycity.joyclub.apiback.service;
 
 import com.joycity.joyclub.apiback.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SaleProduct;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductWithBLOBs;
 import com.joycity.joyclub.apiback.modal.product.ProductFormData;
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
