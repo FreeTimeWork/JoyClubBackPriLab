@@ -3,8 +3,7 @@ package com.joycity.joyclub.apiback.mapper.manual;
 import com.joycity.joyclub.apiback.mapper.BaseMapper;
 import com.joycity.joyclub.apiback.modal.generated.SysStore;
 import com.joycity.joyclub.apiback.modal.generated.SysStoreExample;
-import com.joycity.joyclub.apiback.modal.project.ProjectInfo;
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

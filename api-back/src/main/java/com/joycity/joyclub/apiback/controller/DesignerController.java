@@ -6,7 +6,7 @@ import com.joycity.joyclub.apiback.modal.generated.SaleStoreDesignerWithBLOBs;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
 import com.joycity.joyclub.apiback.service.DesignerService;
-import com.joycity.joyclub.apiback.util.PageUtil;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
