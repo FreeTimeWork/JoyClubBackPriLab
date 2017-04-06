@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.apiback.mapper.manual.SaleActMapper"><sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <sql id="where_store_and_name">
+        <where>
+            p.delete_flag=0 and p.store_id=#{storeId}
+            <if test="nameLike!=null">
+                and p.name like #{nameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countByStoreIdAndName" resultType="java.lang.Long">
+
+        select count(*) from sale_act p
+        <include refid="where_store_and_name"/>
+    </select>
+    <select id="selectByStoreIdAndName"
+            resultType="com.joycity.joyclub.apiback.modal.act.ActWithCategoryName">
+
+        select p.id,p.name,p.base_price,p.category_id,c.name categoryName
+        from sale_act p
+        left join sys_act_category c on c.id=p.category_id
+        <include refid="where_store_and_name"/>
+        order by p.id desc
+        <include refid="limit"/>
+    </select>
+
+
+</mapper>
