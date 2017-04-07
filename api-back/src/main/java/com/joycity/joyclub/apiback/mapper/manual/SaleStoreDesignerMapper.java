@@ -1,8 +1,7 @@
 package com.joycity.joyclub.apiback.mapper.manual;
 
-import com.joycity.joyclub.apiback.mapper.BaseMapper;
 import com.joycity.joyclub.apiback.mapper.BaseMapperWithBLOBS;
-import com.joycity.joyclub.apiback.modal.base.IdNameResult;
+import com.joycity.joyclub.apiback.modal.base.IdName;
 import com.joycity.joyclub.apiback.modal.generated.SaleStoreDesigner;
 import com.joycity.joyclub.apiback.modal.generated.SaleStoreDesignerExample;
 import com.joycity.joyclub.apiback.modal.generated.SaleStoreDesignerWithBLOBs;
@@ -15,5 +14,5 @@ import java.util.List;
  */
 public interface SaleStoreDesignerMapper extends BaseMapperWithBLOBS<SaleStoreDesigner,SaleStoreDesignerWithBLOBs, Long, SaleStoreDesignerExample> {
     @Select("select id,name from sale_store_designer where delete_flag=0 and store_id=#{storeId}")
-    List<IdNameResult> getSimpleListByStoreId(Long storeId);
+    List<IdName> getSimpleListByStoreId(Long storeId);
 }

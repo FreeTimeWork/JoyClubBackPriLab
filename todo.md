@@ -28,3 +28,4 @@
 - formData乱码，使用`CommonsMultipartResolver`
 - 不同模块的spring bean也不能重名
 - 系统管理员最好是单点登录，比如制卡，如果同时操作很可能制出重复的卡号
+- `com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (5,089,070 > 4,194,304)`

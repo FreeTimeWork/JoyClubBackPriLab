@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.modal.act;
 
 
-import com.joycity.joyclub.apiback.modal.base.IdNameResult;
+import com.joycity.joyclub.apiback.modal.base.IdName;
 
 import java.util.List;
 
@@ -10,14 +10,14 @@ import java.util.List;
  */
 public class ActFormData {
 
-    private List<IdNameResult> categories;
+    private List<IdName> categories;
 
 
-    public List<IdNameResult> getCategories() {
+    public List<IdName> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<IdNameResult> categories) {
+    public void setCategories(List<IdName> categories) {
         this.categories = categories;
     }
 }

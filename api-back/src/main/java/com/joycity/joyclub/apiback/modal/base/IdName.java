@@ -4,7 +4,7 @@ package com.joycity.joyclub.apiback.modal.base;
  * 只有id,name属性的简单类
  * Created by CallMeXYZ on 2017/3/29.
  */
-public class IdNameResult {
+public class IdName {
     private Long id;
     private String name;
 
