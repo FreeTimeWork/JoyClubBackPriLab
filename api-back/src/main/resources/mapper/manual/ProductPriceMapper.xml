@@ -70,6 +70,8 @@
 
         select count(*) from sale_product_price
         where forbid_flag=false
+        and review_status !=2
+        and product_id = #{productId}
         <if test="id!=null">
             and id !=#{id}
         </if>

@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.apiback.exception.BusinessException;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.upload.FileUploadResult;
 import com.joycity.joyclub.apiback.service.FileService;
 import org.apache.commons.logging.Log;

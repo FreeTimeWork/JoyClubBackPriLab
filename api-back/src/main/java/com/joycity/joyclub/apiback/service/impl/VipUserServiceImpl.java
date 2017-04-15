@@ -2,7 +2,7 @@ package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.apiback.constant.ResultCode;
 import com.joycity.joyclub.apiback.modal.VipUser;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.VipUserMapper;
 import com.joycity.joyclub.apiback.service.VipUserService;

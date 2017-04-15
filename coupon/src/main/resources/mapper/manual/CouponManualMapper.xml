@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.coupon.mapper.CouponMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <sql id="where_project_and_name">
+        <where>
+            delete_flag=0 and project_id=#{projectId}
+            <if test="type!=null">
+                and type = #{type}
+            </if>
+            <if test="useFlag!=null">
+                and use_flag = #{useFlag}
+            </if>
+            <if test="nameLike!=null">
+                and name like #{nameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countByFilter" resultType="java.lang.Long">
+
+        select count(*) from coupon
+        <include refid="where_project_and_name"/>
+    </select>
+    <select id="selectByFilter"
+            resultType="com.joycity.joyclub.coupon.modal.generated.Coupon">
+
+        select id, project_id, name, type, show_start_time, show_end_time, available_start_time,
+        available_end_time, point_cost, num, use_flag, use_time, forbid_flag,
+        forbid_time/*,info, portrait,create_time, last_update, delete_flag, delete_time*/
+        from coupon
+        <include refid="where_project_and_name"/>
+        order by id desc
+        <include refid="limit"/>
+    </select>
+
+
+</mapper>

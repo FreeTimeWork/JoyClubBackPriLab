@@ -70,6 +70,8 @@
 
         select count(*) from sale_act_price
         where forbid_flag=false
+        and review_status !=2
+        and act_id = #{actId}
         <if test="id!=null">
             and id !=#{id}
         </if>

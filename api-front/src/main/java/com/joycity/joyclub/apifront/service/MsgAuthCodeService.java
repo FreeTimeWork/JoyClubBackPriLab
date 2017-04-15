@@ -1,9 +1,18 @@
 package com.joycity.joyclub.apifront.service;
 
+import com.joycity.joyclub.commons.modal.base.ResultData;
+
 import java.util.List;
 
 public interface MsgAuthCodeService {
-
+    /**
+     * 获取验证码
+     * 会抛出今日已达上线次数的BusinessException
+     *
+     * @param phone
+     * @return
+     */
+    ResultData getAndSendAuthCode(String phone);
 
     /**
      * 获取验证码

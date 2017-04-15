@@ -11,17 +11,22 @@
     <artifactId>api-front</artifactId>
     <properties>
         <commons>1.0-SNAPSHOT</commons>
+        <coupon>1.0-SNAPSHOT</coupon>
         <httpcomponents.httpclient>4.5.2</httpcomponents.httpclient>
         <httpcomponents.httpcore>4.4.4</httpcomponents.httpcore>
         <ning.asnchttpclient>1.9.40</ning.asnchttpclient>
         <commons.codec>1.10</commons.codec>
-        <commons.lang3.version>3.4</commons.lang3.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>commons</artifactId>
             <version>${commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>coupon</artifactId>
+            <version>${coupon}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -43,11 +48,7 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang3.version}</version>
-        </dependency>
+
 
     </dependencies>
 </project>

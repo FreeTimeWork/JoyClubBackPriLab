@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.service;
 
-import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysStore;
 import com.joycity.joyclub.commons.utils.PageUtil;
 

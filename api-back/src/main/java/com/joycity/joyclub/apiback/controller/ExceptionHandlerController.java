@@ -1,9 +1,8 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.constant.ResultCode;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
 import com.joycity.joyclub.apiback.exception.BusinessException;
-import com.joycity.joyclub.apiback.modal.base.ResultError;
+import com.joycity.joyclub.commons.modal.base.ResultError;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;

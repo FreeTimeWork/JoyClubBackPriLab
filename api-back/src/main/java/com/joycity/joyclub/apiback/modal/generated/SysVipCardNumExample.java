@@ -255,6 +255,66 @@ public class SysVipCardNumExample {
             return (Criteria) this;
         }
 
+        public Criteria andProjectIdIsNull() {
+            addCriterion("project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIsNotNull() {
+            addCriterion("project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdEqualTo(Long value) {
+            addCriterion("project_id =", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotEqualTo(Long value) {
+            addCriterion("project_id <>", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThan(Long value) {
+            addCriterion("project_id >", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("project_id >=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThan(Long value) {
+            addCriterion("project_id <", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThanOrEqualTo(Long value) {
+            addCriterion("project_id <=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIn(List<Long> values) {
+            addCriterion("project_id in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotIn(List<Long> values) {
+            addCriterion("project_id not in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdBetween(Long value1, Long value2) {
+            addCriterion("project_id between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotBetween(Long value1, Long value2) {
+            addCriterion("project_id not between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
         public Criteria andNumIsNull() {
             addCriterion("num is null");
             return (Criteria) this;
@@ -385,66 +445,6 @@ public class SysVipCardNumExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdIsNull() {
-            addCriterion("project_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdIsNotNull() {
-            addCriterion("project_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdEqualTo(Long value) {
-            addCriterion("project_id =", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdNotEqualTo(Long value) {
-            addCriterion("project_id <>", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdGreaterThan(Long value) {
-            addCriterion("project_id >", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("project_id >=", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdLessThan(Long value) {
-            addCriterion("project_id <", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdLessThanOrEqualTo(Long value) {
-            addCriterion("project_id <=", value, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdIn(List<Long> values) {
-            addCriterion("project_id in", values, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdNotIn(List<Long> values) {
-            addCriterion("project_id not in", values, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdBetween(Long value1, Long value2) {
-            addCriterion("project_id between", value1, value2, "projectId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectIdNotBetween(Long value1, Long value2) {
-            addCriterion("project_id not between", value1, value2, "projectId");
-            return (Criteria) this;
-        }
-
         public Criteria andBatchIsNull() {
             addCriterion("batch is null");
             return (Criteria) this;
@@ -572,6 +572,66 @@ public class SysVipCardNumExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeIsNull() {
+            addCriterion("use_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeIsNotNull() {
+            addCriterion("use_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeEqualTo(Date value) {
+            addCriterion("use_time =", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeNotEqualTo(Date value) {
+            addCriterion("use_time <>", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeGreaterThan(Date value) {
+            addCriterion("use_time >", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("use_time >=", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeLessThan(Date value) {
+            addCriterion("use_time <", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeLessThanOrEqualTo(Date value) {
+            addCriterion("use_time <=", value, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeIn(List<Date> values) {
+            addCriterion("use_time in", values, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeNotIn(List<Date> values) {
+            addCriterion("use_time not in", values, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeBetween(Date value1, Date value2) {
+            addCriterion("use_time between", value1, value2, "useTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseTimeNotBetween(Date value1, Date value2) {
+            addCriterion("use_time not between", value1, value2, "useTime");
             return (Criteria) this;
         }
 

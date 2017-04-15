@@ -6,9 +6,9 @@ import com.joycity.joyclub.apiback.mapper.manual.SysProjectVipCardRangeMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysVipCardNumMapper;
 import com.joycity.joyclub.apiback.modal.vipcardnum.VipCardFormData;
 import com.joycity.joyclub.apiback.modal.vipcardnum.VipCardNumInfo;
-import com.joycity.joyclub.apiback.modal.base.DataListResult;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRange;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRangeExample;
 import com.joycity.joyclub.apiback.service.VipCardNumService;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
+import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
 import static com.joycity.joyclub.apiback.constant.ResultCode.VIP_CARD_MAKE_ERROR;
 
 /**

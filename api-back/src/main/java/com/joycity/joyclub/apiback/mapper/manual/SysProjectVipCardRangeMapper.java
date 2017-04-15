@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.mapper.manual;
 
-import com.joycity.joyclub.apiback.mapper.BaseMapper;
+import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.apiback.modal.ProjectVipCardRangeInfo;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRange;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRangeExample;

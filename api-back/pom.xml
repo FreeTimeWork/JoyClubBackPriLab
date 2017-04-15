@@ -11,13 +11,19 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>api-back</artifactId>
     <properties>
-        <utils>1.0-SNAPSHOT</utils>
+        <commons>1.0-SNAPSHOT</commons>
+        <coupon>1.0-SNAPSHOT</coupon>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>commons</artifactId>
-            <version>${utils}</version>
+            <version>${commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>coupon</artifactId>
+            <version>${coupon}</version>
         </dependency>
     </dependencies>
 

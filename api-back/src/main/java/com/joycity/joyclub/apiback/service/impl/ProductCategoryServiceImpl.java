@@ -2,10 +2,10 @@ package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProductCategoryMapper;
-import com.joycity.joyclub.apiback.modal.base.CreateResult;
-import com.joycity.joyclub.apiback.modal.base.DataListResult;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
 import com.joycity.joyclub.apiback.modal.generated.SysProductCategoryExample;
 import com.joycity.joyclub.apiback.service.ProductCategoryService;

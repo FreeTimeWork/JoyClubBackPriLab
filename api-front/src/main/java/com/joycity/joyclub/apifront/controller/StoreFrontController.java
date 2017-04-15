@@ -1,10 +1,10 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.modal.base.ResultData;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.joycity.joyclub.apifront.service.StoreFrontService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -15,13 +15,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RestController
 @RequestMapping(URL_API_FRONT)
 public class StoreFrontController {
-    /**
-     * 获取某个商品信息
-     *
-     * @return
-     */
+    @Autowired
+    StoreFrontService storeService;
+
     @RequestMapping(value = "/store/{id}", method = GET)
     public ResultData getStoreData(@PathVariable Long id) {
-        return null;
+        return storeService.getInfo(id);
     }
+    @RequestMapping(value = "/stores", method = GET)
+    public ResultData getStoreData(@RequestParam(required = false) Long projectId, PageUtil pageUtil) {
+        return storeService.getList(projectId, pageUtil);
+    }
+
+
 }

@@ -23,6 +23,7 @@ public interface KeChuanCrmService {
      * @return vipcode crm对会员的唯一标识
      */
     public String createMember(String cardNo, String tel, String group13, String vipgrade, String creditCardProject);
+    public String createMember(Client user);
 
     /**
      * 更新会员

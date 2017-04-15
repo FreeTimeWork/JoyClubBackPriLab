@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.exception.BusinessException;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;

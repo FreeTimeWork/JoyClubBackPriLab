@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.mapper.manual;
 
-import com.joycity.joyclub.apiback.mapper.BaseMapperWithBLOBS;
+import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
 import com.joycity.joyclub.apiback.modal.generated.SaleAct;
 import com.joycity.joyclub.apiback.modal.generated.SaleActExample;
 import com.joycity.joyclub.apiback.modal.generated.SaleActWithBLOBs;

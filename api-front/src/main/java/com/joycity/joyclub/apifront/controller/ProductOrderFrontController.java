@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

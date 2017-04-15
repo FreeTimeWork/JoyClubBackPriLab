@@ -27,6 +27,7 @@ public class MD5Util {
         return resultString;
     }
 
+
     private static  String byte2hexString(byte[] bytes) {
         StringBuilder bf = new StringBuilder(bytes.length * 2);
         for (int i = 0; i < bytes.length; i++) {

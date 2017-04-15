@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.service;
 
 import com.joycity.joyclub.apiback.modal.VipUser;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;

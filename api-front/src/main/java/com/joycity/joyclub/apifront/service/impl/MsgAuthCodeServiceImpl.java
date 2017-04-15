@@ -1,10 +1,12 @@
 package com.joycity.joyclub.apifront.service.impl;
 
 import com.joycity.joyclub.apifront.exception.BusinessException;
-import com.joycity.joyclub.apifront.mapper.MsgAuthCodeMapper;
+import com.joycity.joyclub.apifront.mapper.manual.MsgAuthCodeMapper;
 import com.joycity.joyclub.apifront.modal.MsgAuthCode;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apifront.service.MsgAuthCodeService;
 
+import com.joycity.joyclub.apifront.util.SHA1ForMsgSend;
 import com.joycity.joyclub.commons.utils.MD5Util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +59,14 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
     MsgAuthCodeMapper msgAuthCodeMapper;
 
     @Override
+    public ResultData getAndSendAuthCode(String phone) {
+        String code = getAuthCode(phone);
+        sendMessageCode("您的验证码为：" + code + "，有效时间" + (msgPeriod / 60) + "分钟。", phone);
+        saveAuthCode(phone, code);
+        return new ResultData("发送成功");
+    }
+
+    @Override
     public String getAuthCode(String phone) {
         //今日已发次数
         int todayNum = msgAuthCodeMapper.getTodayNumByPhone(phone);
@@ -77,7 +87,7 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
         if (authCode == null) {
             throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码未发送");
         }
-
+        //这里忽视了数据库里有个创建日期是未来值的情况，如果是未来值，始终有效
         if ((System.currentTimeMillis() - authCode.getCreateTime().getTime()) / 1000 > msgPeriod) {
             throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码已过期");
         }
@@ -86,6 +96,10 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
             throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码不正确");
         }
 
+    }
+
+    public void sendMessageCode(String content, String phone) {
+        sendMessageCode(content, Arrays.asList(phone));
     }
 
     public void sendMessageCode(String content, List<String> phone) {
@@ -109,7 +123,7 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
 
         List<String> params = new ArrayList<>();
         params.add("message=" + doc.asXML());
-        params.add("sid=" + DigestUtils.sha1Hex("" + "&" + message));
+        params.add("sid=" + new SHA1ForMsgSend().getDigestOfString(("" + "&" + message).getBytes()));
 
         PrintWriter out = null;
         BufferedReader in = null;
@@ -147,19 +161,30 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
             }
         }
 
-
         Document resultDoc = null;
         try {
             resultDoc = DocumentHelper.parseText(result);
         } catch (DocumentException e) {
-            e.printStackTrace();
+            resultXmlError(e);
         }
         Element root = resultDoc.getRootElement();
-        String resultText = root.selectSingleNode("/response/result").getText();
-        if (!"0".equals(resultText)) {
-            logger.error("验证码发送异常 " + resultText);
-            throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码发送异常");
+        //检查返回码
+        if (!"0".equals(root.elementText("result"))) {
+            resultXmlError();
         }
     }
 
+    private void resultXmlError() {
+        resultXmlError(null);
+    }
+
+    private void resultXmlError(DocumentException e) {
+        if (e == null) {
+            logger.error("短信验证码发送失败");
+        } else {
+            logger.error("短信验证码返回值解析异常", e);
+        }
+        throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码发送失败");
+
+    }
 }

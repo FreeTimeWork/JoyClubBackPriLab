@@ -1,6 +1,7 @@
 package com.joycity.joyclub.apiback.exception;
 
 import com.joycity.joyclub.apiback.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BaseBusinessException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Map;
 
 /**
  * Created by CallMeXYZ on 2017/3/20.
- * 捕获业务层抛出错误代码的异常并返回相应的错误代码{@link com.joycity.joyclub.apiback.modal.base.ResultData}
+ * 捕获业务层抛出错误代码的异常并返回相应的错误代码{@link com.joycity.joyclub.commons.modal.base.ResultData}
  */
 public class BusinessException extends BaseBusinessException {
     private static Map<Integer, String> map = new HashMap<>();

@@ -3,10 +3,10 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.constant.PriceReviewStatus;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleActPriceMapper;
-import com.joycity.joyclub.apiback.modal.base.CreateResult;
-import com.joycity.joyclub.apiback.modal.base.DataListResult;
-import com.joycity.joyclub.apiback.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleActPrice;
 import com.joycity.joyclub.apiback.service.ActPriceService;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -133,7 +133,7 @@ public class ActPriceServiceImpl implements ActPriceService {
      * @param actPrice
      */
     private void checkPrice(SaleActPrice actPrice) {
-        Long sum = actPriceMapper.countPriceTimeOverlap(actPrice.getStartTime(), actPrice.getEndTime(), actPrice.getId());
+        Long sum = actPriceMapper.countPriceTimeOverlap(actPrice.getId(),actPrice.getActId(),actPrice.getStartTime(), actPrice.getEndTime());
         if (sum != 0) {
             throw new BusinessException(DATA_NOT_PERMIT, "时间段与其他冲突");
         }

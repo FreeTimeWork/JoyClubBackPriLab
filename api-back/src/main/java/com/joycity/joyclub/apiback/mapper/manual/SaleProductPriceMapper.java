@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.mapper.manual;
 
-import com.joycity.joyclub.apiback.mapper.BaseMapper;
+import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductPrice;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductPriceExample;
 import com.joycity.joyclub.apiback.modal.product.ProductWithCategoryAndDesignerName;
@@ -62,5 +62,12 @@ public interface SaleProductPriceMapper extends BaseMapper<SaleProductPrice, Lon
      */
     List<ProductWithCategoryAndDesignerName> selectForProject(@Param("storeNameLike") String storeNameLike, @Param("reviewStatus") Integer reviewStatus, @Param("productNameLike") String productNameLike, @Param("pageUtil") PageUtil pageUtil);
 
-    Long countPriceTimeOverlap(@Param("startTime") Date statTime, @Param("endTime") Date endTime, @Param("id") Long id);
+    /**
+     * @param id 如果提供id 就排除跟该id的冲突检查
+     * @param productId
+     * @param statTime
+     * @param endTime
+     * @return
+     */
+    Long countPriceTimeOverlap(@Param("id") Long id,@Param("productId") Long productId,@Param("startTime") Date statTime, @Param("endTime") Date endTime );
 }

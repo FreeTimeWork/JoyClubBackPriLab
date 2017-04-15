@@ -1,7 +1,8 @@
 package com.joycity.joyclub.apifront.exception;
 
 import com.joycity.joyclub.apifront.constant.ResultCode;
-import com.joycity.joyclub.apifront.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.exception.BaseBusinessException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.WECHAT_PAY_REQUEST_ERROR, "请求微信支付异常");
         map.put(ResultCode.KECHUAN_INFO_ERROR, "获得会员信息失败");
         map.put(ResultCode.MSG_AUTH_CODE_ERROR, "发送验证码出错");
+        map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
 
 
     }

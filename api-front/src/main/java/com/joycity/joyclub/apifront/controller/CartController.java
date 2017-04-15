@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.constant.ResultCode;
-import com.joycity.joyclub.apifront.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.web.bind.annotation.*;
 
 import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
