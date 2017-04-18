@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleActAttrMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleActAttr;
@@ -33,20 +33,20 @@ public class ActAttrServiceImpl implements ActAttrService {
      */
     @Override
     public ResultData getListByStoreIdAndActName(Long storeId, String name, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
         if (name != null) {
             name = "%" + name + "%";
         }
         long sum = actAttrMapper.countByStoreIdAndActName(storeId, name, pageUtil);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(actAttrMapper.selectByStoreIdAndActName(storeId, name, pageUtil));
+            listResult.setList(actAttrMapper.selectByStoreIdAndActName(storeId, name, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     @Override

@@ -66,6 +66,6 @@ public interface KeChuanCrmService {
      * @param vipCode
      * @return
      */
-    public List<Map<String, Object>> getSocreRecord(String vipCode);
+    public List<Map<String, Object>> getScoreRecord(String vipCode);
 
 }

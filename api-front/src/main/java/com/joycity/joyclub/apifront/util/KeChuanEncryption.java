@@ -90,7 +90,7 @@ public class KeChuanEncryption {
         return DigestUtils.sha1Hex(tempStr);
     }
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         List<String> key = new ArrayList<String>();
         key.add("4028678156348fd7015634911b370002");//token
         key.add("1483524166242");//timestamp当前时间的时间戳
@@ -100,6 +100,6 @@ public class KeChuanEncryption {
         System.out.println("加密结果：" + DigestUtils.sha1Hex(tempStr));
 
         System.out.println("解密结果：" + KeChuanEncryption.aesDecrypt("O4PMm3EKbQ4cQfD6LRDXQg==", "89622015104709087435617163207900"));
-    }
+    }*/
 
 }

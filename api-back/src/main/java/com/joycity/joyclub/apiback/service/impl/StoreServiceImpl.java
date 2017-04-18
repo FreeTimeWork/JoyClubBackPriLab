@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysStoreMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysStore;
@@ -33,17 +33,17 @@ public class StoreServiceImpl implements StoreService {
      */
     @Override
     public ResultData getList(Long projectId, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setPage(pageUtil.getPage());
-        dataListResult.setPageSize(pageUtil.getPageSize());
+        ListResult listResult = new ListResult();
+        listResult.setPage(pageUtil.getPage());
+        listResult.setPageSize(pageUtil.getPageSize());
         long sum = getStoreSumByProjectId(projectId);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
-            dataListResult.setList(sysStoreMapper.getListByProjectId(projectId, pageUtil));
+            listResult.setList(sysStoreMapper.getListByProjectId(projectId, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     @Override

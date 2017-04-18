@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProject;
@@ -29,7 +29,7 @@ public class ProjectServiceImpl implements ProjectService {
      */
     @Override
     public ResultData getList() {
-        return new ResultData(new DataListResult(sysProjectMapper.getList()));
+        return new ResultData(new ListResult(sysProjectMapper.getList()));
     }
 
     @Override

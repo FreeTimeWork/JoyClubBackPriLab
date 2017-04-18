@@ -5,7 +5,7 @@ import com.joycity.joyclub.apifront.mapper.manual.designer.DesignerFrontMapper;
 import com.joycity.joyclub.apifront.modal.designer.SimpleDesigner;
 import com.joycity.joyclub.apifront.modal.store.StoreInfoPage;
 import com.joycity.joyclub.apifront.service.StoreFrontService;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class StoreFrontServiceImpl implements StoreFrontService {
 
     @Override
     public ResultData getList(Long projectId, PageUtil pageUtil) {
-        DataListResult listResult = new DataListResult(storeFrontMapper.selectSimpleByFilter(projectId, pageUtil));
+        ListResult listResult = new ListResult(storeFrontMapper.selectSimpleByFilter(projectId, pageUtil));
         listResult.setByPageUtil(pageUtil);
         return new ResultData(listResult);
     }
@@ -45,6 +45,6 @@ public class StoreFrontServiceImpl implements StoreFrontService {
     // TODO: 2017/4/13 待完善
    /* @Override
     public ResultData getList(Long storeId) {
-        return new ResultData(new DataListResult(productMapper.selectByStore(storeId)));
+        return new ResultData(new ListResult(productMapper.selectByStore(storeId)));
     }*/
 }

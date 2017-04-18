@@ -23,15 +23,16 @@ import java.util.UUID;
 /**
  * Created by CallMeXYZ on 2017/4/1.
  */
-@RequestMapping("/api/front/wxpay")
+@RequestMapping("/api/front/wechat/pay")
 @RestController
-public class PayController {
+public class WechatPayController {
     @Autowired
     WxPayService wxpay;
     @Autowired
     WxPayConfig wxpayConfig;
-// TODO: 2017/4/6  
-    @RequestMapping(value = "/receive", method = {RequestMethod.POST, RequestMethod.GET})
+
+    // TODO: 2017/4/6
+    @RequestMapping(value = "/notify", method = {RequestMethod.POST, RequestMethod.GET})
     public void wxRecevie(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, String> params = WechatXmlUtil.xmlToMap(request
@@ -55,7 +56,7 @@ public class PayController {
         PreOrder request = new PreOrder();
         request.setBody("测试");
         request.setOutTradeNo(UUID.randomUUID().toString().replace("-", ""));
-        request.setTotalFee("0.1");
+        request.setTotalFee("0.011");
         request.setOpenId("oBDYawi1UjKoNXeDDeunHbqUn3As");
         String result = wxpay.precreate(request);
         return result;
@@ -69,7 +70,6 @@ public class PayController {
      */
     @RequestMapping(value = "/pay", method = {RequestMethod.GET})
     public String startPay(@RequestParam String prepayId) {
-
         Map<String, Object> param = new HashMap<>();
         param.put("appId", wxpayConfig.getAppid());
         param.put("timeStamp", String.valueOf(new Date().getTime()));

@@ -175,11 +175,9 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         String sign = DigestUtils.md5Hex(date + time + signKey);
 
         String prama = null;
-        try {
+
             prama = KeChuanEncryption.aesEncrypt(tel, secretKey);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+
 
         StringBuffer header = new StringBuffer();
         header.append("<REQDATE>" + date + "</REQDATE>");
@@ -345,7 +343,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
     }
 
     @Override
-    public List<Map<String, Object>> getSocreRecord(String vipCode) {
+    public List<Map<String, Object>> getScoreRecord(String vipCode) {
         Date now = new Date();
         String date = DateFormatUtils.format(now, "yyyyMMdd");
         String time = DateFormatUtils.format(now, "HHmmss");

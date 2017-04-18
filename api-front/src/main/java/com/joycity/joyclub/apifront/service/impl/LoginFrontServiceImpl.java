@@ -1,14 +1,16 @@
 package com.joycity.joyclub.apifront.service.impl;
 
 import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
 import com.joycity.joyclub.apifront.mapper.manual.ClientUserMapper;
 import com.joycity.joyclub.apifront.mapper.manual.OpenIdMapper;
 import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apifront.modal.client.Client;
 import com.joycity.joyclub.apifront.modal.project.SysProject;
+import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
 import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
 import com.joycity.joyclub.apifront.service.*;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -37,10 +39,21 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     OpenIdMapper openIdMapper;
     @Autowired
     VipCardNumFrontService vipCardNumService;
+    @Autowired
+    ClientLoginLogMapper clientLoginLogMapper;
 
+    /**
+     * @param wechatCode
+     * @param projectId
+     * @param phone
+     * @param authCode
+     * @return
+     */
     @Override
-    public ResultData wechatLogin(String openId, Long projectId, String phone, String authCode) {
-
+    public ResultData wechatLogin(String wechatCode, Long projectId, String phone, String authCode) {
+        //todo 检查此处的accessTokenAndOpenId里的accessToken能否接下来使用
+     AccessTokenAndOpenId accessTokenAndOpenId= wechatService.getAccessTokenAndOpenId(wechatCode);
+        String openId = accessTokenAndOpenId.getOpenid();
         SysProject project = projectMapper.selectByPrimaryKey(projectId);
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");
@@ -54,7 +67,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
             Long cardNumAvailable = vipCardNumService.useDigitalVipCard(projectId);
 
             kechuanClient = new Client();
-            kechuanClient.setCardNo(cardNumAvailable+"");
+            kechuanClient.setCardNo(cardNumAvailable + "");
             kechuanClient.setTel(phone);
             kechuanClient.setGroup13(project.getVipShare());
             kechuanClient.setVipCardGrade(VIP_CARD_DIGITAL);
@@ -67,11 +80,11 @@ public class LoginFrontServiceImpl implements LoginFrontService {
 
         Client user = new Client();
         //同步科传会员信息
-        updateClientFromKeChuan(user,kechuanClient);
+        updateClientFromKeChuan(user, kechuanClient);
         WechatUserInfo wechatInfo = wechatService.getUserInfo(openId, project.getWechatTokenAddress());
 
         //同步会员微信信息
-        updateClientWechatInfo(user,wechatInfo);
+        updateClientWechatInfo(user, wechatInfo);
         //查看本地有没有该号码用户
         Long userId = clientMapper.getIdByTel(phone);
         user.setTel(phone);
@@ -86,13 +99,19 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         //可能用户在其他登陆中先创建了会员，然后再进行微信登陆
         //所以判断openid有没有存储，必须一直判断，而不是只放在userId==null时
         if (!openIdService.checkOpenIdExist(openId)) {
+            // TODO: 2017/4/17 多个微信 
             openIdMapper.saveOpenId(projectId, user.getId(), openId);
         }
-
-        return new ResultData(user);
+        clientLoginLogMapper.addLog(user.getId(),projectId);
+        //只返回用户id和用户手机号
+        Client resultUser = new Client();
+        resultUser.setId(user.getId());
+        resultUser.setTel(user.getTel());
+        return new ResultData(resultUser);
 
     }
-    private void updateClientFromKeChuan (Client user,Client kechuanClient) {
+
+    private void updateClientFromKeChuan(Client user, Client kechuanClient) {
         user.setVipPoint(kechuanClient.getVipPoint());//积分
         user.setCardNo(kechuanClient.getCardNo());//卡面编号
         user.setVipCode(kechuanClient.getVipCode());//
@@ -106,7 +125,8 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         user.setGroup13(kechuanClient.getGroup13());
         user.setCreditCardProject(kechuanClient.getCreditCardProject());
     }
-    private void updateClientWechatInfo(Client client,WechatUserInfo info){
+
+    private void updateClientWechatInfo(Client client, WechatUserInfo info) {
         client.setWxCity(getStrBeforeCheck(info.getCity()));
         client.setWxCountry(getStrBeforeCheck(info.getCountry()));
         client.setWxGender(getStrBeforeCheck(info.getSex()));
@@ -118,10 +138,11 @@ public class LoginFrontServiceImpl implements LoginFrontService {
 
     /**
      * 返回有值的str
+     *
      * @param s
      * @return
      */
-    private String getStrBeforeCheck(String s){
-       return StringUtils.isEmpty(s)?null:s;
+    private String getStrBeforeCheck(String s) {
+        return StringUtils.isEmpty(s) ? null : s;
     }
 }

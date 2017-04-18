@@ -65,7 +65,6 @@ public class SignUtils {
     public static String paySign(Map<String, Object> params, String payKey) {
         String string1 = basicSign(params, false);
         string1 += "&key=" + payKey;
-        System.out.println(string1);
         String paySign = DigestUtils.md5Hex(string1);
         return paySign;
     }

@@ -1,7 +1,10 @@
 package com.joycity.joyclub.apifront.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
 import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
+import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.service.WechatService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -19,20 +22,21 @@ import static com.joycity.joyclub.apifront.constant.ResultCode.WECHAT_ERROR;
  */
 @Service
 public class WechatServiceImpl implements WechatService {
-    private   Log logger = LogFactory.getLog(WechatServiceImpl.class);
-
-
+    private Log logger = LogFactory.getLog(WechatServiceImpl.class);
+    @Autowired
+    WxPayConfig wxpayConfig;
     @Autowired
     RestTemplate restTemplate;
     private final String URL_USER_INFO = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+    private final String URL_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 
-   @Override
+    @Override
     public WechatUserInfo getUserInfo(String openid, String accessTokenUrl) {
         if (StringUtils.isBlank(openid)) {
             throw new BusinessException(WECHAT_ERROR, "获取微信用户信息的失败，openId为空");
         }
         String url = URL_USER_INFO.replaceAll("ACCESS_TOKEN", getAccessToken(accessTokenUrl)).replaceAll("OPENID", openid);
-       WechatUserInfo info = restTemplate.getForObject(url, WechatUserInfo.class);
+        WechatUserInfo info = restTemplate.getForObject(url, WechatUserInfo.class);
         //基本上出错就是因为accessToken获取的原因
         if (info.getOpenid() == null) {
             logger.error("获取用户信息失败");
@@ -42,9 +46,21 @@ public class WechatServiceImpl implements WechatService {
 
     }
 
+    @Override
+    public AccessTokenAndOpenId getAccessTokenAndOpenId(String code) {
+        String url = URL_ACCESS_TOKEN.replaceAll("APPID", wxpayConfig.getAppid()).replaceAll("SECRET", wxpayConfig.getAppsecret()).replace("CODE", code);
+        String resultStr = restTemplate.getForObject(url, String.class);
+        AccessTokenAndOpenId result = JSON.parseObject(resultStr, AccessTokenAndOpenId.class);
+        if (result == null || result.getErrcode() != null || result.getOpenid() == null) {
+            throw new BusinessException(WECHAT_ERROR, "获取微信openId失败");
+        }
+        return result;
+    }
+
     /**
      * 获取accessToken
      * getToken
+     *
      * @return
      */
     public String getAccessToken(String url) {

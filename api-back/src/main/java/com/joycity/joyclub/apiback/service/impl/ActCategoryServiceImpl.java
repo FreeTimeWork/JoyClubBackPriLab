@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysActCategoryMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysActCategory;
@@ -33,7 +33,7 @@ public class ActCategoryServiceImpl implements ActCategoryService {
         SysActCategoryExample example = new SysActCategoryExample();
         SysActCategoryExample.Criteria criteria = example.createCriteria();
         criteria.andDeleteFlagEqualTo(false);
-        return new ResultData(new DataListResult(sysActCategoryMapper.selectByExample(example)));
+        return new ResultData(new ListResult(sysActCategoryMapper.selectByExample(example)));
     }
 
     @Override

@@ -4,32 +4,30 @@
     <sql id="limit">
       limit #{pageUtil.offset},#{pageUtil.pageSize}
   </sql>
-    <sql id="where_store_and_designer">
-        <where>
-            p.delete_flag=0 and p.store_id=#{storeId}
-            <if test="nameLike!=null">
-                and p.name like #{nameLike}
-            </if>
-        </where>
 
-    </sql>
-
-    <select id="selectByStore"
+    <sql id="list_column">
+    a.id,a.portrait,a.name,a.base_price,p.price,a.store_id,s.name storeName,s.pickup_address storeAddress
+</sql>
+    <select id="selectByProjectOrStore"
             resultType="com.joycity.joyclub.apifront.modal.act.ActSimpleWithAddress">
 
-        select a.id,a.portrait,a.name,a.base_price,p.price,a.store_id,s.name storeName,s.pickup_address storeAddress
+        select
+        <include refid="list_column"/>
         from sale_act_price p
         left join sale_act a on a.id = p.act_id
         left join sys_store s on a.store_id=s.id
         where
+        <if test="projectId!=null">
+            s.project_id = #{projectId} and
+        </if>
         <if test="storeId!=null">
-             a.store_id = #{storeId} and
+            a.store_id = #{storeId} and
         </if>
 
         p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc
 
-
+        <include refid="limit"/>
     </select>
 
 

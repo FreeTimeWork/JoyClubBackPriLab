@@ -8,6 +8,15 @@ import com.joycity.joyclub.commons.utils.PageUtil;
  */
 public interface ProductFrontService {
     ResultData getInfo(Long id);
+    ResultData getAttrs(Long id);
 
-    ResultData getList(Long storeId, Long designerId, PageUtil pageUtil);
+    /**
+     * projectId,storeId, designerId知按顺序取不为空的作为筛选条件
+     * @param projectId
+     * @param storeId
+     * @param designerId
+     * @param pageUtil
+     * @return
+     */
+    ResultData getList(Long projectId,Long storeId, Long designerId, PageUtil pageUtil);
 }

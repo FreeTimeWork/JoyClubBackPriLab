@@ -4,7 +4,7 @@ import com.joycity.joyclub.apiback.constant.ResultCode;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectVipCardRangeMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRange;
@@ -23,7 +23,7 @@ public class ProjectVipCardRangeServiceImpl implements ProjectVipCardRangeServic
 
     @Override
     public ResultData getRanges(long projectId) {
-        return new ResultData(new DataListResult(vipCardRangeMapper.selectByProjectId(projectId)));
+        return new ResultData(new ListResult(vipCardRangeMapper.selectByProjectId(projectId)));
     }
 
     @Override

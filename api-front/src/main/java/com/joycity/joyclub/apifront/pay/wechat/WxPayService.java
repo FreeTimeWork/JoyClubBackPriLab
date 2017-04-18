@@ -183,11 +183,5 @@ public class WxPayService {
         params.put("sign", sign.toUpperCase());
     }
 
-    public WxPayConfig getWxPayConfig() {
-        return wxPayConfig;
-    }
 
-    public void setWxPayConfig(WxPayConfig wxPayConfig) {
-        this.wxPayConfig = wxPayConfig;
-    }
 }

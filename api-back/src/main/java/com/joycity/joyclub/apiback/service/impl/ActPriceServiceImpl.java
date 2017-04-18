@@ -4,7 +4,7 @@ import com.joycity.joyclub.apiback.constant.PriceReviewStatus;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleActPriceMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleActPrice;
@@ -32,26 +32,26 @@ public class ActPriceServiceImpl implements ActPriceService {
 
     @Override
     public ResultData getListForStore(Long storeId, Integer reviewStatus, String actName, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
         if (actName != null) {
             actName = getSearchLikeStr(actName);
         }
         long sum = actPriceMapper.countForStore(storeId, reviewStatus, actName, pageUtil);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(actPriceMapper.selectForStore(storeId, reviewStatus, actName, pageUtil));
+            listResult.setList(actPriceMapper.selectForStore(storeId, reviewStatus, actName, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     @Override
     public ResultData getListForProject(String storeName, Integer reviewStatus, String actName, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
         if (storeName != null) {
             storeName = getSearchLikeStr(storeName);
         }
@@ -59,14 +59,14 @@ public class ActPriceServiceImpl implements ActPriceService {
             actName = getSearchLikeStr(actName);
         }
         long sum = actPriceMapper.countForProject(storeName, reviewStatus, actName, pageUtil);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(actPriceMapper.selectForProject(storeName, reviewStatus, actName, pageUtil));
+            listResult.setList(actPriceMapper.selectForProject(storeName, reviewStatus, actName, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     private String getSearchLikeStr(String likeStr) {

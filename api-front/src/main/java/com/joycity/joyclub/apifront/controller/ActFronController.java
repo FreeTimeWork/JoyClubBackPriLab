@@ -2,6 +2,7 @@ package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.ActFrontService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,8 @@ public class ActFronController {
     }
 
     @RequestMapping(value = "/acts", method = RequestMethod.GET)
-    public ResultData getActs(@RequestParam(required = false) Long storeId) {
+    public ResultData getActs(@RequestParam(required = false) Long projectId, @RequestParam(required = false) Long storeId, PageUtil pageUtil) {
 
-        return actService.getList(storeId);
+        return actService.getList(projectId,storeId,pageUtil);
     }
 }

@@ -6,7 +6,7 @@ import com.joycity.joyclub.apifront.modal.base.IdNamePortrait;
 import com.joycity.joyclub.apifront.modal.designer.DesignerInfoPage;
 import com.joycity.joyclub.apifront.modal.designer.SimpleDesigner;
 import com.joycity.joyclub.apifront.service.DesignerFrontService;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,6 @@ public class DesignerFrontServiceImpl implements DesignerFrontService {
         else {
             list = designerMapper.getSimpleList();
         }
-        return new ResultData(new DataListResult(list));
+        return new ResultData(new ListResult(list));
     }
 }

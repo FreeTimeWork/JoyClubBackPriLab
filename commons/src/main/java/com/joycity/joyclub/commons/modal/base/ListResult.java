@@ -7,28 +7,28 @@ import java.util.List;
 /**
  * Created by CallMeXYZ on 2017/3/28.
  */
-public class DataListResult {
+public class ListResult {
     private List list;
     private Long sum;
     private Integer page;
     private Integer pageSize;
 
-    public DataListResult() {
+    public ListResult() {
     }
 
-    public DataListResult(List list) {
+    public ListResult(List list) {
         this();
         this.list = list;
     }
 
-    public DataListResult(List list, Long sum, Integer page, Integer pageSize) {
+    public ListResult(List list, Long sum, Integer page, Integer pageSize) {
         this.list = list;
         this.sum = sum;
         this.page = page;
         this.pageSize = pageSize;
     }
 
-    public DataListResult(List list, Long sum, Integer page) {
+    public ListResult(List list, Long sum, Integer page) {
         this.list = list;
         this.sum = sum;
         this.page = page;

@@ -4,7 +4,7 @@ import com.joycity.joyclub.apiback.constant.PriceReviewStatus;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleProductPriceMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleProductPrice;
@@ -32,26 +32,26 @@ public class ProductPriceServiceImpl implements ProductPriceService {
 
     @Override
     public ResultData getListForStore(Long storeId, Integer reviewStatus, String productName, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
         if (productName != null) {
             productName = getSearchLikeStr(productName);
         }
         long sum = productPriceMapper.countForStore(storeId, reviewStatus, productName, pageUtil);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(productPriceMapper.selectForStore(storeId, reviewStatus, productName, pageUtil));
+            listResult.setList(productPriceMapper.selectForStore(storeId, reviewStatus, productName, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     @Override
     public ResultData getListForProject(String storeName, Integer reviewStatus, String productName, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
         if (storeName != null) {
             storeName = getSearchLikeStr(storeName);
         }
@@ -59,14 +59,14 @@ public class ProductPriceServiceImpl implements ProductPriceService {
             productName = getSearchLikeStr(productName);
         }
         long sum = productPriceMapper.countForProject(storeName, reviewStatus, productName, pageUtil);
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(productPriceMapper.selectForProject(storeName, reviewStatus, productName, pageUtil));
+            listResult.setList(productPriceMapper.selectForProject(storeName, reviewStatus, productName, pageUtil));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     private String getSearchLikeStr(String likeStr) {

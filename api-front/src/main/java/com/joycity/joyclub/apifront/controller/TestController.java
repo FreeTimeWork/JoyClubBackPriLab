@@ -1,15 +1,14 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.joycity.joyclub.coupon.modal.generated.Coupon;
+import com.joycity.joyclub.apifront.mapper.manual.ClientUserMapper;
+import com.joycity.joyclub.apifront.mapper.manual.MsgAuthCodeMapper;
+import com.joycity.joyclub.apifront.modal.MsgAuthCode;
+import com.joycity.joyclub.apifront.service.MsgAuthCodeService;
 import com.joycity.joyclub.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
 
@@ -21,11 +20,17 @@ import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
 public class TestController {
     @Autowired
     CouponService couponService;
+    @Autowired
+    ClientUserMapper clientUserMapper;
+    @Autowired
+    MsgAuthCodeService msgAuthCodeService;
+    @Autowired
+    MsgAuthCodeMapper msgAuthCodeMapper;
 
     @RequestMapping("/test")
-    public void test(String[] test) {
-
-        System.out.println(JSON.toJSONString(test));
-
+    public Long test(@RequestParam String phone, @RequestParam String code) {
+ /*       msgAuthCodeService.checkAuthCode(phone, code);*/
+       MsgAuthCode msgAuthCode = msgAuthCodeMapper.getLatestCodeByPhone(phone);
+        return msgAuthCode.getCreateTime().getTime() ;
     }
 }

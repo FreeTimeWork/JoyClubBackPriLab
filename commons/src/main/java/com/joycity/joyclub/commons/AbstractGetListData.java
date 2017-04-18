@@ -1,6 +1,6 @@
 package com.joycity.joyclub.commons;
 
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 
@@ -17,17 +17,17 @@ public abstract class AbstractGetListData<T>{
     public abstract List<T> selectByFilter();
 
     public ResultData getList(PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
-        dataListResult.setByPageUtil(pageUtil);
+        ListResult listResult = new ListResult();
+        listResult.setByPageUtil(pageUtil);
 
         long sum = countByFilter();
-        dataListResult.setSum(sum);
+        listResult.setSum(sum);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
 
-            dataListResult.setList(selectByFilter());
+            listResult.setList(selectByFilter());
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 }

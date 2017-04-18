@@ -35,6 +35,8 @@ public interface SysVipCardNumMapper extends BaseMapper<SysVipCardNum, Long, Sys
                                           @Param("type") String type,
                                           @Param("status") Byte status,
                                           @Param("pageUtil") PageUtil pageUtil);
+@Select("select max(num) from sys_vip_card_num where project_id = #{projectId} and type=#{type}")
+   Long getMaxCardNum(@Param("projectId")Long projectId,@Param("type") String type);
 
     /**
      * 使用<code>${}</code>语法，可能会导致sql注入

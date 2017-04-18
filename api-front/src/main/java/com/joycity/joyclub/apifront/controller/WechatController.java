@@ -2,7 +2,6 @@ package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.WechatService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +23,46 @@ public class WechatController {
     public ResultData getUserInfoForProject(@PathVariable String openId) {
         return new ResultData(wechatService.getUserInfo(openId, "http://bjmall.stcl365.com:20000/wechat/public/getToken"));
     }
+
+   /* @RequestMapping("/wechat/auth")
+    public ResultData getAuthCode(@RequestParam String code, @RequestParam(required = false) String state) {
+        return new ResultData(wechatService.getAccessTokenAndOpenId(code));
+    }*/
+
+/*    @RequestMapping("/wechat/pay/notify")
+    public void wechatPayNotify(HttpServletRequest request, HttpServletResponse response) {
+        try {
+
+            Map<String, String> params = WechatXmlUtil.xmlToMap(request
+                    .getInputStream());
+
+            String tradeStatus = params.get("result_code");
+            if (tradeStatus != null && tradeStatus.equals("SUCCESS")) {
+                String tradeNo = params.get("transaction_id");
+                String out_trade_no = params.get("out_trade_no");
+                System.out.println(out_trade_no);
+                System.out.println(tradeNo);
+                *//*List<Trade> ts =  tradeService.getTradeByOutTradeNo(out_trade_no);
+                for(Trade t : ts) {
+                    if(t.getPlatTradeNo() != null) {
+                        throw new BusinessException(BusinessException.PARAM_ILLEGAL);
+                    }
+                }
+                logger.info("wxpay notify,out_trade_no is... ... ... : " + out_trade_no);
+                logger.info("wxpay notify,trade_no is ... ..." + tradeNo);
+                SaleCalculDTO saleCalculDTO = new SaleCalculDTO();
+                saleCalculDTO.setOutTradeNo(out_trade_no);
+                saleService.saleHandler(saleCalculDTO,tradeNo,Trade.ORDER_PAY);*//*
+            }
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("return_code", "SUCCESS");
+            map.put("return_msg", "OK");
+            response.getWriter().write(WechatXmlUtil.mapToXml(map));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw e;
+        }
+    }*/
 
 }

@@ -4,12 +4,14 @@
     <sql id="limit">
       limit #{pageUtil.offset},#{pageUtil.pageSize}
   </sql>
-
-
+    <sql id="product_simple_columns">
+        a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,c.point_rate as basePointRate
+    </sql>
     <select id="selectByFilter"
             resultType="com.joycity.joyclub.apifront.modal.product.ProductSimple">
 
-        select a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,c.point_rate as basePointRate
+        select
+        <include refid="product_simple_columns"/>
         from sale_product_price p
         left join sale_product a on a.id = p.product_id
         left join sys_product_category c on a.category_id=c.id
@@ -21,6 +23,23 @@
         <if test="designerId!=null">
             a.designer_id = #{designerId} and
         </if>
+        p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        order by a.display_weight desc,a.id desc
+        <include refid="limit"/>
+
+    </select>
+
+
+    <select id="selectByProject"
+            resultType="com.joycity.joyclub.apifront.modal.product.ProductSimple">
+
+        select <include refid="product_simple_columns"/>
+        from sale_product_price p
+        left join sale_product a on a.id = p.product_id
+        left join sys_product_category c on a.category_id=c.id
+        left join sys_store ss on a.store_id = ss.id
+        where
+        ss.project_id = #{projectId} and
         p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc
         <include refid="limit"/>

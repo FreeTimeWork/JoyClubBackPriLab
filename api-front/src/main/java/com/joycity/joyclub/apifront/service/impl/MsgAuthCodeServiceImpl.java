@@ -3,12 +3,10 @@ package com.joycity.joyclub.apifront.service.impl;
 import com.joycity.joyclub.apifront.exception.BusinessException;
 import com.joycity.joyclub.apifront.mapper.manual.MsgAuthCodeMapper;
 import com.joycity.joyclub.apifront.modal.MsgAuthCode;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apifront.service.MsgAuthCodeService;
-
 import com.joycity.joyclub.apifront.util.SHA1ForMsgSend;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.MD5Util;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -26,7 +24,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static com.joycity.joyclub.apifront.constant.ResultCode.MSG_AUTH_CODE_ERROR;
 
@@ -87,6 +88,7 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
         if (authCode == null) {
             throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码未发送");
         }
+        // TODO: 2017/4/17 过期无法判定 
         //这里忽视了数据库里有个创建日期是未来值的情况，如果是未来值，始终有效
         if ((System.currentTimeMillis() - authCode.getCreateTime().getTime()) / 1000 > msgPeriod) {
             throw new BusinessException(MSG_AUTH_CODE_ERROR, "验证码已过期");

@@ -1,14 +1,12 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.ProductFrontService;
-import com.joycity.joyclub.apifront.service.ProductFrontService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Created by CallMeXYZ on 2017/4/13.
@@ -25,53 +23,25 @@ public class ProductFrontController {
     }
 
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public ResultData getProducts(/*@RequestParam Long projectId*/
+    public ResultData getProducts(@RequestParam(required = false) Long projectId,
                                   @RequestParam(required = false) Long storeId,
                                   @RequestParam(required = false) Long designerId,
                                   PageUtil pageUtil
     ) {
-        //store designer 取一个就好
-        return productService.getList(storeId, designerId, pageUtil);
-    }
-   /* @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public ResultData getProducts(@RequestParam(required = false) Long storeId) {
-
-        return productService.getList(storeId);
-    }
-        *//**
-     * 获得项目的商品
-     *
-     * @param projectId
-     * @return
-     *//*
-    @RequestMapping(value = "/products", method = GET)
-    public ResultData getProducts(@RequestParam Long projectId, PageUtil pageUtil) {
-        return null;
+        //projectId,store designer 取一个就好
+        return productService.getList(projectId, storeId, designerId, pageUtil);
     }
 
-    *//**
-     * 获得商户的商品
+
+    /**
+     * 获得商品的属性
      *
      * @param id
-     * @param pageUtil
      * @return
-     *//*
-    @RequestMapping(value = "/store/{id}/products", method = GET)
-    public ResultData getStoreProducts(@PathVariable Long id, PageUtil pageUtil) {
-        return null;
+     */
+    @RequestMapping(value = "/product/{id}/attrs", method = RequestMethod.GET)
+    public ResultData getProductAttrs(@PathVariable Long id) {
+        return productService.getAttrs(id);
     }
-
-    *//**
-     * 获得设计师的商品
-     *
-     * @param id
-     * @param pageUtil
-     * @return
-     *//*
-    @RequestMapping(value = "/designer/{id}/products", method = GET)
-    public ResultData getDesignerProducts(@PathVariable Long id, PageUtil pageUtil) {
-        return null;
-    }
-*/
 
 }

@@ -6,7 +6,7 @@ import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysUserMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProject;
@@ -49,7 +49,7 @@ public class ManagerServiceImpl implements ManagerService {
         SysProject sysProject = sysProjectMapper.selectByPrimaryKey(projectId);
         if (sysProject == null) throw new BusinessException(DATA_NOT_EXIST, "项目不存在");
         return new ResultData(
-                new DataListResult(
+                new ListResult(
                         sysUserMapper.getManagersByUserTypeAndInfoId(
                                 sysProject.getType().equals(ProjectType.PROJECT_TYPE_PLATFORM) ?
                                         USER_TYPE_PLATFORM :
@@ -76,7 +76,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ResultData getStoreManagersByStoreId(Long storeId) {
-        return new ResultData(new DataListResult(sysUserMapper.getManagersByUserTypeAndInfoId(USER_TYPE_STORE, storeId)));
+        return new ResultData(new ListResult(sysUserMapper.getManagersByUserTypeAndInfoId(USER_TYPE_STORE, storeId)));
 
     }
 

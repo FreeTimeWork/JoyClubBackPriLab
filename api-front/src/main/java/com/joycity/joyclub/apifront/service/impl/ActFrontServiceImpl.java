@@ -6,8 +6,9 @@ import com.joycity.joyclub.apifront.mapper.manual.store.StoreFrontMapper;
 import com.joycity.joyclub.apifront.modal.act.ActInfoPage;
 import com.joycity.joyclub.apifront.modal.base.IdNamePortrait;
 import com.joycity.joyclub.apifront.service.ActFrontService;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,8 @@ public class ActFrontServiceImpl implements ActFrontService {
 
     // TODO: 2017/4/13 待完善
     @Override
-    public ResultData getList(Long storeId) {
-        return new ResultData(new DataListResult(actMapper.selectByStore(storeId)));
+    public ResultData getList(Long projectId, Long storeId, PageUtil pageUtil) {
+
+        return new ResultData(new ListResult(actMapper.selectByProjectOrStore(projectId,storeId,pageUtil)));
     }
 }

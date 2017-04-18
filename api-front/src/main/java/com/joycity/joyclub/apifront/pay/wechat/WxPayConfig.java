@@ -12,24 +12,25 @@ public class WxPayConfig {
 	 */
 	@Value("${wxpay.appid}")
 	private String appid;
-	
+	@Value("${wxpay.appsecret}")
+	private String appsecret;
 	/**
 	 * 商户号
 	 */
 	@Value("${wxpay.mchid}")
 	private String mchid;
-	
-	/**
+/*
+	*//**
 	 * 服务商appid
-	 */
+	 *//*
 	@Value("${wxpay.subAppid}")
 	private String subAppid;
 	
-	/**
+	*//**
 	 * 服务商商户号
-	 */
+	 *//*
 	@Value("${wxpay.subMchid}")
-	private String subMchid;
+	private String subMchid;*/
 	
 	/**
 	 * 签名
@@ -80,7 +81,7 @@ public class WxPayConfig {
 	public void setCert(String cert) {
 		this.cert = cert;
 	}
-
+/*
 	public String getSubAppid() {
 		return subAppid;
 	}
@@ -95,7 +96,7 @@ public class WxPayConfig {
 
 	public void setSubMchid(String subMchid) {
 		this.subMchid = subMchid;
-	}
+	}*/
 
 	public String getNotifyUrl() {
 		return notifyUrl;
@@ -105,5 +106,11 @@ public class WxPayConfig {
 		this.notifyUrl = notifyUrl;
 	}
 
-	
+	public String getAppsecret() {
+		return appsecret;
+	}
+
+	public void setAppsecret(String appsecret) {
+		this.appsecret = appsecret;
+	}
 }

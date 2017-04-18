@@ -7,6 +7,9 @@ package com.joycity.joyclub.commons.modal.base;
 public class UpdateResult {
     private Integer affectNum;
 
+    public UpdateResult() {
+    }
+
     public UpdateResult(Integer affectNum) {
         this.affectNum = affectNum;
     }

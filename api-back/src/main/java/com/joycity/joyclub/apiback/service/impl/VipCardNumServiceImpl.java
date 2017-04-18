@@ -4,14 +4,13 @@ import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectVipCardRangeMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysVipCardNumMapper;
-import com.joycity.joyclub.apiback.modal.vipcardnum.VipCardFormData;
-import com.joycity.joyclub.apiback.modal.vipcardnum.VipCardNumInfo;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRange;
 import com.joycity.joyclub.apiback.modal.generated.SysProjectVipCardRangeExample;
+import com.joycity.joyclub.apiback.modal.vipcardnum.VipCardFormData;
 import com.joycity.joyclub.apiback.service.VipCardNumService;
+import com.joycity.joyclub.commons.modal.base.ListResult;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,8 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
 import static com.joycity.joyclub.apiback.constant.ResultCode.VIP_CARD_MAKE_ERROR;
+import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
 
 /**
  * Created by CallMeXYZ on 2017/4/6.
@@ -48,17 +47,17 @@ public class VipCardNumServiceImpl implements VipCardNumService {
 
     @Override
     public ResultData getList(Long projectId, String batch, String type, Byte status, PageUtil pageUtil) {
-        DataListResult dataListResult = new DataListResult();
+        ListResult listResult = new ListResult();
         Long sum = vipCardNumMapper.countWithFilter(projectId, batch, type, status);
-        dataListResult.setSum(sum);
-        dataListResult.setByPageUtil(pageUtil);
+        listResult.setSum(sum);
+        listResult.setByPageUtil(pageUtil);
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
-            dataListResult.setList(vipCardNumMapper.selectWithFilter(projectId, batch, type, status, pageUtil));
+            listResult.setList(vipCardNumMapper.selectWithFilter(projectId, batch, type, status, pageUtil));
 
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     /**
@@ -95,15 +94,11 @@ public class VipCardNumServiceImpl implements VipCardNumService {
         SysProjectVipCardRange range = rangelist.get(0);
         Long start = range.getMin();
         //获取当前的projectId,和type下最大id的卡
-        List<VipCardNumInfo> maxCardNums = vipCardNumMapper.selectWithFilter(projectId, null, type, null, new PageUtil(1, 1));
+        Long maxCardNum = vipCardNumMapper.getMaxCardNum(projectId, type);
         //maxCardNum应该size为0或1
-        if (maxCardNums.size() > 1) {
-
-            throw new BusinessException(VIP_CARD_MAKE_ERROR);
-        } else if (maxCardNums.size() == 1) {
+         if (maxCardNum!=null) {
             //如果该号段已经制过卡，设置起始值
-            VipCardNumInfo maxCardNum = maxCardNums.get(0);
-            start = maxCardNum.getNum() + 1;
+            start = maxCardNum+ 1;
         }
         Long maxNum = range.getMax() - start + 1;
         //判断最大制卡数目

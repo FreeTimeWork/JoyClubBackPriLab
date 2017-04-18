@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleStoreDesignerMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SaleStoreDesignerExample;
@@ -33,7 +33,7 @@ public class DesignerServiceImpl implements DesignerService {
      */
     @Override
     public ResultData getListByStoreId(Long storeId) {
-        DataListResult dataListResult = new DataListResult();
+        ListResult listResult = new ListResult();
         SaleStoreDesignerExample example = new SaleStoreDesignerExample();
         SaleStoreDesignerExample.Criteria criteria = example.createCriteria();
         criteria.andStoreIdEqualTo(storeId);
@@ -42,12 +42,12 @@ public class DesignerServiceImpl implements DesignerService {
         long sum = designerMapper.countByExample(example);
         ;
         if (sum == 0) {
-            dataListResult.setList(new ArrayList());
+            listResult.setList(new ArrayList());
         } else {
             example.setOrderByClause("id desc");
-            dataListResult.setList(designerMapper.selectByExample(example));
+            listResult.setList(designerMapper.selectByExample(example));
         }
-        return new ResultData(dataListResult);
+        return new ResultData(listResult);
     }
 
     @Override

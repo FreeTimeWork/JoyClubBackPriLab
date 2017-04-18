@@ -1,18 +1,22 @@
 package com.joycity.joyclub.apifront.service.impl;
 
 import com.joycity.joyclub.apifront.mapper.manual.designer.DesignerFrontMapper;
+import com.joycity.joyclub.apifront.mapper.manual.product.ProductAttrFrontMapper;
 import com.joycity.joyclub.apifront.mapper.manual.product.ProductFrontMapper;
-import com.joycity.joyclub.apifront.mapper.manual.store.StoreFrontMapper;
 import com.joycity.joyclub.apifront.mapper.manual.product.ProductPriceFrontMapper;
-import com.joycity.joyclub.apifront.modal.product.ProductInfoPage;
+import com.joycity.joyclub.apifront.mapper.manual.store.StoreFrontMapper;
 import com.joycity.joyclub.apifront.modal.base.IdNamePortrait;
+import com.joycity.joyclub.apifront.modal.product.ProductInfoPage;
+import com.joycity.joyclub.apifront.modal.product.ProductSimple;
 import com.joycity.joyclub.apifront.modal.product.price.ProductPrice;
 import com.joycity.joyclub.apifront.service.ProductFrontService;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.joycity.joyclub.apifront.util.ThrowBusinessExceptionUtil.checkNull;
 
@@ -29,6 +33,8 @@ public class ProductFrontServiceImpl implements ProductFrontService {
     DesignerFrontMapper designerMapper;
     @Autowired
     ProductPriceFrontMapper productPriceMapper;
+    @Autowired
+    ProductAttrFrontMapper productAttrMapper;
 
     @Override
     public ResultData getInfo(Long id) {
@@ -53,8 +59,19 @@ public class ProductFrontServiceImpl implements ProductFrontService {
     }
 
     @Override
-    public ResultData getList(Long storeId, Long designerId, PageUtil pageUtil) {
-        DataListResult listResult = new DataListResult(productMapper.selectByFilter(storeId, designerId, pageUtil));
+    public ResultData getAttrs(Long id) {
+        return new ResultData(new ListResult(productAttrMapper.selectAvailableSimpleByProduct(id)));
+    }
+
+    @Override
+    public ResultData getList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil) {
+        List<ProductSimple> list;
+        if (projectId != null) {
+            list = productMapper.selectByProject(projectId, pageUtil);
+        } else {
+            list = productMapper.selectByFilter(storeId, designerId, pageUtil);
+        }
+        ListResult listResult = new ListResult(list);
         listResult.setByPageUtil(pageUtil);
         return new ResultData(listResult);
     }
@@ -62,6 +79,6 @@ public class ProductFrontServiceImpl implements ProductFrontService {
     // TODO: 2017/4/13 待完善
    /* @Override
     public ResultData getList(Long storeId) {
-        return new ResultData(new DataListResult(productMapper.selectByStore(storeId)));
+        return new ResultData(new ListResult(productMapper.selectByStore(storeId)));
     }*/
 }

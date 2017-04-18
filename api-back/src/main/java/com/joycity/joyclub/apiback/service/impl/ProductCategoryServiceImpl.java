@@ -3,7 +3,7 @@ package com.joycity.joyclub.apiback.service.impl;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProductCategoryMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.DataListResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
@@ -33,7 +33,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         SysProductCategoryExample example = new SysProductCategoryExample();
         SysProductCategoryExample.Criteria criteria = example.createCriteria();
         criteria.andDeleteFlagEqualTo(false);
-        return new ResultData(new DataListResult(sysProductCategoryMapper.selectByExample(example)));
+        return new ResultData(new ListResult(sysProductCategoryMapper.selectByExample(example)));
     }
 
     @Override
