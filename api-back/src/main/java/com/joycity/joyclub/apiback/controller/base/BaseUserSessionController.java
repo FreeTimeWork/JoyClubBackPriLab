@@ -1,19 +1,15 @@
 package com.joycity.joyclub.apiback.controller.base;
 
-import com.joycity.joyclub.apiback.constant.ResultCode;
 import com.joycity.joyclub.apiback.constant.UserType;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
 import javax.servlet.http.HttpSession;
 
 import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
 import static com.joycity.joyclub.apiback.constant.ResultCode.USER_SESSION_NULL;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PLATFORM;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PROJECT;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
+import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**
  * 主要是定义一个基础类， user的获取session属性名
@@ -37,6 +33,8 @@ public abstract class BaseUserSessionController extends BaseTimeController {
     protected SysUser checkPlatformUser(HttpSession session) {
         return checkUser(session, USER_TYPE_PLATFORM);
     }
+
+
 
     protected SysUser checkPlatformOrProjectUser(HttpSession session) {
         return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_PROJECT);

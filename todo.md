@@ -40,3 +40,4 @@
 - 号段：商通的号段暂时不用。等将商通的功能全部实现并停止后，导入商通的生成的卡号并且将号段拿过来使用
 - `List<String>` 并不继承 `List<Object>`,[see](http://stackoverflow.com/questions/22144671/why-liststring-is-not-acceptable-as-listobject),
   所以，一个`void test(List<Object> list)`的方法不能用`List<String>`去调用
+- 积分记录排序

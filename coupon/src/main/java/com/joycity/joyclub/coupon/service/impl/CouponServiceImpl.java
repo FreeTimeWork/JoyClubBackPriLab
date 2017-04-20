@@ -2,6 +2,7 @@ package com.joycity.joyclub.coupon.service.impl;
 
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -12,6 +13,7 @@ import com.joycity.joyclub.coupon.mapper.CouponMapper;
 import com.joycity.joyclub.coupon.modal.CouponCodeInfo;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.modal.generated.CouponCardType;
+import com.joycity.joyclub.coupon.modal.generated.CouponCode;
 import com.joycity.joyclub.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,7 +85,8 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public ResultData insert(Coupon coupon, List<String> cardTypes) {
+    public ResultData insert(Coupon coupon, String[] cardTypes) {
+
         couponMapper.insertSelective(coupon);
         addCardTypes(coupon.getId(), cardTypes);
         return new ResultData(new CreateResult(coupon.getId()));
@@ -97,7 +100,7 @@ public class CouponServiceImpl implements CouponService {
      * @param cardTypes
      * @return
      */
-    public int addCardTypes(Long id, List<String> cardTypes) {
+    public int addCardTypes(Long id,  String[] cardTypes) {
         CouponCardType couponCardType = new CouponCardType();
         int numAdded = 0;
         for (String cardType : cardTypes) {
@@ -112,7 +115,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public ResultData updateInfo(Long id, String info) {
+    public ResultData updateInfo(Long id, String info, String[] cardTypes) {
         Coupon coupon = createCouponObject(id);
         coupon.setInfo(info);
         return new ResultData(new UpdateResult(updateByPrimaryKeySelective(coupon)));
@@ -161,6 +164,34 @@ public class CouponServiceImpl implements CouponService {
         couponMapper.addNum(id,insertedNum);
         return new ResultData(new UpdateResult(insertedNum));
 
+    }
+
+    @Override
+    public ResultData checkCode(Long couponId, String code) {
+        CouponCode couponCode = couponCodeMapper.getCodeByCodeAndCouponId(couponId,code);
+        String text=null;
+       if(couponCode==null) {
+           text="该卡券号不存在";
+       }
+        else if(!couponCode.getUseStatus()) {
+           text="该卡券号未领取";
+       }
+        else if(couponCode.getCheckFlag()) {
+           text="该卡券号已被核销";
+       }
+        if(text!=null) {
+            throw  new CouponException(text);
+
+        }
+        else {
+            return new ResultData("核销成功");
+        }
+
+    }
+
+    @Override
+    public ResultData getSimpleCouponList() {
+        return new ResultData(new ListResult(couponMapper.getAllSimpleList()));
     }
 
     /**

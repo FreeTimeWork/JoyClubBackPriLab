@@ -1,6 +1,5 @@
 package com.joycity.joyclub.apiback.controller;
 
-import com.joycity.joyclub.apiback.constant.ResultCode;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +34,13 @@ public class CouponController extends BaseUserSessionController {
     @Autowired
     CouponService couponService;
 
+    /**{id,name}list
+     * @return
+     */
+    @RequestMapping(value = "/coupons/simple", method = GET)
+    public ResultData getCouponList() {
+        return couponService.getSimpleCouponList();
+    }
 
     @RequestMapping(value = "/coupons", method = GET)
     public ResultData getCouponList(@RequestParam(required = false) String name,
@@ -68,7 +72,7 @@ public class CouponController extends BaseUserSessionController {
      * @param httpSession
      * @return
      */
-    @RequestMapping(value = "/coupon/{id}/startuser", method = POST)
+    @RequestMapping(value = "/coupon/{id}/startuse", method = POST)
     public ResultData startUserCoupon(
             @PathVariable Long id,
             HttpSession httpSession) {
@@ -89,7 +93,7 @@ public class CouponController extends BaseUserSessionController {
             HttpSession httpSession) {
         //平台或者项目成员才能访问
         checkPlatformOrProjectUser(httpSession);
-        return couponService.startUse(id);
+        return couponService.forbid(id);
     }
 
     /**
@@ -102,20 +106,41 @@ public class CouponController extends BaseUserSessionController {
     public ResultData updateInfo(
             @PathVariable Long id,
             @RequestParam String info,
+            String[] cardTypes,
             HttpSession httpSession) {
         //平台或者项目成员才能访问
         checkPlatformOrProjectUser(httpSession);
-        return couponService.updateInfo(id, info);
+        return couponService.updateInfo(id, info, cardTypes);
+    }
+
+    /**
+     * @param httpSession
+     * @return
+     */
+    @RequestMapping(value = "/coupon", method = POST)
+    public ResultData add(
+            Coupon coupon,
+            String[] cardTypes,
+            HttpSession httpSession) {
+        //平台或者项目成员才能访问
+        SysUser user = checkPlatformOrProjectUser(httpSession);
+        coupon.setProjectId(user.getInfoId());
+
+        return couponService.insert(coupon, cardTypes);
     }
 
     @RequestMapping(value = "/coupon/{id}/codes/excel", method = {RequestMethod.POST})
-    public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file, @PathVariable Long id) {
+    public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
+                                           @PathVariable Long id,
+                                           HttpSession httpSession
+    ) {
+        checkPlatformOrProjectUser(httpSession);
         if (couponService.getById(id) == null) {
             throw new BusinessException(DATA_NOT_EXIST, "该卡券不存在");
         }
         List<List<String>> list;
         try {
-            list = ExcelToBeanParser.loadDataFromExcel(file.getInputStream(), file.getOriginalFilename(), 1);
+            list = ExcelToBeanParser.loadDataFromExcel(file.getInputStream(), file.getOriginalFilename(), 0);
         } catch (IOException e) {
             e.printStackTrace();
             throw new BusinessException(ERR_IMPORT_EXCEL, "导入excel失败");
@@ -137,4 +162,20 @@ public class CouponController extends BaseUserSessionController {
 
 
     }
+
+    //核销
+    @RequestMapping(value = "/coupon/{id}/check", method = POST)
+    public ResultData checkCode(
+            HttpSession httpSession,
+            @PathVariable Long id,
+            @RequestParam String code) {
+        checkPlatformOrProjectOrStoreUser(httpSession);
+
+        try {
+            return couponService.checkCode(id, code);
+        } catch (CouponException e) {
+          throw new BusinessException(DATA_NOT_EXIST,e.getMessage());
+        }
+    }
+
 }

@@ -97,7 +97,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ResultData resetPwd(Long managerId) {
-        return updateManagerPassword(managerId, PASSWORD_RESET);
+        return updateManagerPassword(managerId, MD5Util.MD5(PASSWORD_RESET));
     }
 
     @Override

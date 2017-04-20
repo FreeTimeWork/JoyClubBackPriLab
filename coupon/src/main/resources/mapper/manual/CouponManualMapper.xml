@@ -29,7 +29,7 @@
 
         select id, project_id, name, type, show_start_time, show_end_time, available_start_time,
         available_end_time, point_cost, num, use_flag, use_time, forbid_flag,
-        forbid_time/*,info, portrait,create_time, last_update, delete_flag, delete_time*/
+        forbid_time,info, portrait/*create_time, last_update, delete_flag, delete_time*/
         from coupon
         <include refid="where_project_and_name"/>
         order by id desc

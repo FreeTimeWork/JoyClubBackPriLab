@@ -565,6 +565,126 @@ public class CouponCodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andCheckFlagIsNull() {
+            addCriterion("check_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagIsNotNull() {
+            addCriterion("check_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagEqualTo(Boolean value) {
+            addCriterion("check_flag =", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagNotEqualTo(Boolean value) {
+            addCriterion("check_flag <>", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagGreaterThan(Boolean value) {
+            addCriterion("check_flag >", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("check_flag >=", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagLessThan(Boolean value) {
+            addCriterion("check_flag <", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagLessThanOrEqualTo(Boolean value) {
+            addCriterion("check_flag <=", value, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagIn(List<Boolean> values) {
+            addCriterion("check_flag in", values, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagNotIn(List<Boolean> values) {
+            addCriterion("check_flag not in", values, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagBetween(Boolean value1, Boolean value2) {
+            addCriterion("check_flag between", value1, value2, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckFlagNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("check_flag not between", value1, value2, "checkFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNull() {
+            addCriterion("check_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNotNull() {
+            addCriterion("check_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeEqualTo(Date value) {
+            addCriterion("check_time =", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotEqualTo(Date value) {
+            addCriterion("check_time <>", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThan(Date value) {
+            addCriterion("check_time >", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("check_time >=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThan(Date value) {
+            addCriterion("check_time <", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThanOrEqualTo(Date value) {
+            addCriterion("check_time <=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIn(List<Date> values) {
+            addCriterion("check_time in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotIn(List<Date> values) {
+            addCriterion("check_time not in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeBetween(Date value1, Date value2) {
+            addCriterion("check_time between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotBetween(Date value1, Date value2) {
+            addCriterion("check_time not between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

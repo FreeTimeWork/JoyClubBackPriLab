@@ -3,11 +3,11 @@ package com.joycity.joyclub.coupon.mapper;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.coupon.modal.CouponCodeInfo;
-import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.modal.generated.CouponCode;
 import com.joycity.joyclub.coupon.modal.generated.CouponCodeExample;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
@@ -52,5 +52,12 @@ public interface CouponCodeMapper extends BaseMapper<CouponCode, Long, CouponCod
                                         @Param("phone") String phone,
                                         @Param("nameLike") String nameLike,
                                         @Param("pageUtil") PageUtil pageUtil);
+
+
+    @Update("update coupon_code set check_flag=true , check_time = now() where id=#{id}")
+    Integer setCodeChecked(Long id);
+
+    @Select("select id,coupon_id,code,use_status,use_time,client_id,check_flag,check_time from coupon_code where code=#{code} and coupon_id=#{couponId} limit 0,1")
+    CouponCode getCodeByCodeAndCouponId(@Param("couponId") Long couponId, @Param("code") String code);
 
 }

@@ -2,7 +2,6 @@ package com.joycity.joyclub.coupon.service;
 
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.exception.CouponException;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public interface CouponService {
      * @param cardTypes 允许领取的卡类型
      * @return
      */
-    ResultData insert(Coupon coupon, List<String> cardTypes);
+    ResultData insert(Coupon coupon, String[] cardTypes);
 
 
     /**
@@ -51,7 +50,7 @@ public interface CouponService {
      * @param info
      * @return 受影响的数量
      */
-    ResultData updateInfo(Long id, String info);
+    ResultData updateInfo(Long id, String info, String[] cardTypes);
 
     /**
      * 卡券开始使用
@@ -77,4 +76,13 @@ public interface CouponService {
      * @return
      */
     ResultData addCodes(Long id, List<String> codes) ;
+
+    /**
+     * 核销
+     * @param id
+     * @param code
+     * @return
+     */
+    ResultData checkCode(Long id,String code);
+    ResultData getSimpleCouponList();
 }

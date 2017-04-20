@@ -42,6 +42,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     ProductOrderMapper orderMapper;
     @Autowired
     ProductOrderStoreMapper orderStoreMapper;
+    @Autowired
     ProductOrderDetailMapper orderDetailMapper;
     @Autowired
     KeChuanCrmService keChuanCrmService;
@@ -196,7 +197,12 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             Float pointRate = info.getPointRate() != null ? info.getPointRate() : info.getBasePointRate();
             Integer itemMoney = rawData.getNum() * info.getPrice();
             Integer itemPoint = (int) (rawData.getNum() * info.getPrice() * pointRate);
+            if (rawData.getMoneyOrPoint()) {
+                moneySum += itemMoney;
 
+            } else {
+                pointSum += itemPoint;
+            }
             //初始化商品订单信息
             ProductOrderDetail detailOrder = new ProductOrderDetail();
             detailOrder.setProductAttr(info.getAttrId());
@@ -221,24 +227,25 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
                     //金钱
                     if (rawData.getMoneyOrPoint()) {
-                        moneySum += itemMoney;
                         storeOrder.setMoneySum(storeOrder.getMoneySum() + itemMoney);
                     } else {
                         storeOrder.setPointSum(storeOrder.getPointSum() + itemPoint);
                     }
                     storeWithDetail.getOrderDetails().add(detailOrder);
+
                     break;
                 }
             }
             if (!hasStore) {
                 ProductOrderStore storeOrder = new ProductOrderStore();
                 storeOrder.setStoreId(info.getStoreId());
-                storeOrder.setPointSum(0);
-                storeOrder.setMoneySum(0);
+                storeOrder.setPointSum(moneySum);
+                storeOrder.setMoneySum(pointSum);
                 storeOrder.setStatus(STORE_ORDER_STATUS_NULL);
                 StoreOrderWithDetails storeWithDetail = new StoreOrderWithDetails();
                 storeWithDetail.setOrderStore(storeOrder);
                 storeWithDetail.setOrderDetails(new ArrayList<ProductOrderDetail>());
+                storeWithDetail.getOrderDetails().add(detailOrder);
                 storeWithDetails.add(storeWithDetail);
 
             }
@@ -263,7 +270,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             }
         }
         //金钱业务
-        ResultData result = new ResultData();
+
         PreOrderResult preOrderResult = new PreOrderResult();
 
         if (moneySum > 0) {
@@ -278,7 +285,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
             String prepay_id = prepayResult.get("prepay_id");
             if (prepay_id == null) {
-                logger.error("微信统一下单失败,错误返回值为 " + result);
+                logger.error("微信统一下单失败,错误返回值为 " + prepayResultStr);
                 throw new BusinessException(ResultCode.WECHAT_PAY_REQUEST_ERROR, "微信统一下单失败");
             }
             preOrderResult.setIfUseWechat(true);
@@ -286,7 +293,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
         } else {
             //总金钱为0，直接积分处理，支付成功
-            changePoint(client.getVipCode(), pointSum);
+            changePoint(client.getVipCode(), -pointSum);
             orderMapper.setPayedByCode(mainOrder.getCode());
             // 订单已经算支付完成了
             preOrderResult.setIfUseWechat(false);
@@ -294,6 +301,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         return new ResultData(preOrderResult);
 
     }
+//todo 库存影响 购物车影响（是否立刻购买）
 
     @Override
     public void wechatNotifyPayed(String code, String outCode) {
@@ -306,8 +314,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         }
         ProductOrder order = list.get(0);
         // TODO: 2017/4/20 用户可能在下订单时积分够了,在回调时积分用了
-        changePoint(clientMapper.getVipCodeById(order.getClientId()), order.getPointSum());
-        ProductOrder updateOrder = new ProductOrder();
+        changePoint(clientMapper.getVipCodeById(order.getClientId()), -order.getPointSum());
         orderMapper.setPayedByCode(code);
         orderMapper.setOutPayCodeByCode(code, outCode);
     }
@@ -324,9 +331,27 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         return param;
     }
 
-    public void changePoint(Long clientId, String vipCodeParam, Integer point) {
-        String vipCode = vipCodeParam != null ? vipCodeParam : clientMapper.getVipCodeById(clientId);
+    /**
+     * clientId,vipCodeParam至少有一个不为空
+     *
+     * @param clientId
+     * @param vipCode
+     * @param point
+     */
+    public void changePoint(Long clientId, String vipCode, Integer point) throws NullPointerException {
+        //先验证参数
+        if (clientId == null && vipCode == null) {
+            throw new NullPointerException("clientId vipCode 不能同时为空");
+        }
+        //再给null参数赋值
         if (vipCode == null) {
+            vipCode = clientMapper.getVipCodeById(clientId);
+        }
+        if (clientId == null) {
+            clientId = clientMapper.getIdByVipCode(vipCode);
+        }
+        //可能clientId或者vipcode错误 抛出异常
+        if (clientId == null || vipCode == null) {
             throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
         }
         Integer newPoint = keChuanCrmService.changePoint(vipCode, Double.valueOf(point));
@@ -348,9 +373,6 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         String pix = String.valueOf(System.nanoTime());
         return pix + RandomStringUtils.random(8, "1234567890");
     }
-
-
-
 
 
     class StoreOrderWithDetails {

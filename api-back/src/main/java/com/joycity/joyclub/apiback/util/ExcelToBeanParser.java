@@ -153,7 +153,7 @@ public class ExcelToBeanParser {
         return dataset;
     }
 
-
+    // TODO: 2017/4/20 integer 的问题 为小数
     @SuppressWarnings("static-access")
     private static String getCellValue(Cell hssfCell) {
         if (hssfCell.getCellType() == hssfCell.CELL_TYPE_BOOLEAN) {
@@ -161,7 +161,10 @@ public class ExcelToBeanParser {
         } else if (hssfCell.getCellType() == hssfCell.CELL_TYPE_STRING) {
             return String.valueOf(hssfCell.getStringCellValue());
         } else if (hssfCell.getCellType() == hssfCell.CELL_TYPE_NUMERIC) {
-            return String.valueOf(hssfCell.getNumericCellValue());
+            //如果是小数部分是0，变成整数
+           Double dvalue = hssfCell.getNumericCellValue();
+          int intValue =   dvalue.intValue();
+            return dvalue-intValue==0?String.valueOf(intValue):String.valueOf(dvalue);
         } else {
             return String.valueOf(hssfCell.getStringCellValue());
         }

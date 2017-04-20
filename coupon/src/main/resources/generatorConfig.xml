@@ -21,19 +21,19 @@
         <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.coupon.mapper.generated"
                                   targetProject="D:\IDEA workspace\joyclub\coupon\src\main\java"/>
      -->
-
-        <table tableName="coupon"
-        >
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
         <table tableName="coupon_code"
         >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="coupon_card_type"
+       <!-- <table tableName="coupon"
         >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
+
+        <table tableName="coupon_card_type"
+        >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>-->
     </context>
 
 </generatorConfiguration>
