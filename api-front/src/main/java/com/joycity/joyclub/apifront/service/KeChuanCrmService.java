@@ -33,7 +33,6 @@ public interface KeChuanCrmService {
 
     /**
      * 根据手机号获取会员
-     * 会员积分为：user.getVirPrice()
      * @return
      */
     public Client getMemberByTel(String tel);
@@ -56,10 +55,10 @@ public interface KeChuanCrmService {
 
     /**
      * 增减积分
-     * @param vipCardNum
-     * @param score
+     * @param vipCode
+     * @param changeValue
      */
-    public Integer changeScore(String vipCardNum, Double score);
+    public Integer changePoint(String vipCode, Double changeValue);
 
     /**
      * 查询积分流水

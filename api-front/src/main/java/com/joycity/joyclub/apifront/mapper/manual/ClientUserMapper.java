@@ -4,6 +4,7 @@ import com.joycity.joyclub.apifront.modal.client.Client;
 import com.joycity.joyclub.apifront.modal.client.ClientExample;
 import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -16,7 +17,11 @@ public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample
     String getVipCodeById(Long id);
     @Select("select wx_head_img_url headimgurl,wx_nick_name nickName,wx_gender sex,wx_language language,wx_city city, wx_country country,wx_province province from client where id=#{id}")
     WechatUserInfo getWechatInfo(Long id);
+    @Select("select vip_point from client where id=#{id}")
+    Integer getPoint(Long id);
 
-
-
+    @Select("select tel from client where id=#{id}")
+    String getTel(Long id);
+    @Select("select vip_point#{point} from client where id=#{id}")
+    Integer setPoint(@Param("id") Long id,@Param("point") Integer point);
 }

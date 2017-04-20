@@ -5,9 +5,11 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
+import static com.joycity.joyclub.commons.constants.Global.PLATFORM_ID_REQUEST_PARAM;
 
 /**
  * Created by CallMeXYZ on 2017/4/14.
@@ -23,11 +25,11 @@ public class WechatController {
     public ResultData getUserInfoForProject(@PathVariable String openId) {
         return new ResultData(wechatService.getUserInfo(openId, "http://bjmall.stcl365.com:20000/wechat/public/getToken"));
     }
-
-   /* @RequestMapping("/wechat/auth")
-    public ResultData getAuthCode(@RequestParam String code, @RequestParam(required = false) String state) {
-        return new ResultData(wechatService.getAccessTokenAndOpenId(code));
-    }*/
+// TODO: 2017/4/18  openId小写 同时修改前端的路径
+    @RequestMapping("/wechat/openId")
+    public ResultData getAuthCode(@RequestParam String code, @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId) {
+        return new ResultData(wechatService.getAccessTokenAndOpenId(code,projectId));
+    }
 
 /*    @RequestMapping("/wechat/pay/notify")
     public void wechatPayNotify(HttpServletRequest request, HttpServletResponse response) {

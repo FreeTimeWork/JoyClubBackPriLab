@@ -28,17 +28,17 @@ public class LoginFrontController {
      *
      * @param phone
      * @param authCode
-     * @param wechatCode 微信授权跳转后获得的code
+     * @param openId  微信 openId
      * @param projectId
      * @return
      */
     @RequestMapping(value = "/login/wechat", method = {RequestMethod.POST})
     public ResultData wechatLogin(@RequestParam String phone,
                                   @RequestParam final String authCode,
-                                  @RequestParam final String wechatCode,
+                                  @RequestParam final String openId,
                                   @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) final Long projectId
     ) {
-        return loginFrontService.wechatLogin(wechatCode, projectId, phone, authCode);
+        return loginFrontService.wechatLogin(openId, projectId, phone, authCode);
     }
 
 

@@ -50,9 +50,8 @@ public class WxPayService {
         Map<String, Object> params = getSubmitMap();
         params.put("out_trade_no", precreateRequest.getOutTradeNo());
         params.put("body", precreateRequest.getBody());
-        Double totolFee = Double.valueOf(precreateRequest.getTotalFee());
         //系统里的总金额都是精确到元，微信则需提供到分
-        params.put("total_fee", String.valueOf(Math.round(totolFee * 100))); // 总金额
+        params.put("total_fee", String.valueOf(Math.round(precreateRequest.getTotalFee() * 100))); // 总金额
         params.put("spbill_create_ip", "127.0.0.1"); // ip
 //		params.put("product_id", );
         params.put("notify_url", wxPayConfig.getNotifyUrl());

@@ -47,7 +47,8 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
-    public AccessTokenAndOpenId getAccessTokenAndOpenId(String code) {
+    public AccessTokenAndOpenId getAccessTokenAndOpenId(String code,Long projectId) {
+        // TODO: 2017/4/18 不同的项目appid不同 
         String url = URL_ACCESS_TOKEN.replaceAll("APPID", wxpayConfig.getAppid()).replaceAll("SECRET", wxpayConfig.getAppsecret()).replace("CODE", code);
         String resultStr = restTemplate.getForObject(url, String.class);
         AccessTokenAndOpenId result = JSON.parseObject(resultStr, AccessTokenAndOpenId.class);

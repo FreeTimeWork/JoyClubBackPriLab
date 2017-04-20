@@ -30,4 +30,9 @@ public class VipCardNumFrontServiceImpl implements VipCardNumFrontService {
     public Long useDigitalVipCard(Long projectId) {
         return useVipCard(projectId, ProjectVipCard.VIP_CARD_DIGITAL);
     }
+
+    @Override
+    public Integer cancelUseVipCard(Long vipCardNum) {
+        return vipCardNumMapper.setCardStatusUsed(vipCardNum);
+    }
 }

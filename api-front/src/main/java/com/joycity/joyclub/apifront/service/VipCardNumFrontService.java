@@ -22,4 +22,11 @@ public interface VipCardNumFrontService {
      * @return
      */
     Long useDigitalVipCard(Long projectId);
+
+    /**
+     * 取消使用
+     * @param vipCardNum
+     * @return
+     */
+    Integer cancelUseVipCard(Long vipCardNum);
 }

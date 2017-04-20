@@ -3,14 +3,15 @@ package com.joycity.joyclub.apifront.service.impl;
 import com.joycity.joyclub.apifront.exception.BusinessException;
 import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
 import com.joycity.joyclub.apifront.mapper.manual.ClientUserMapper;
-import com.joycity.joyclub.apifront.mapper.manual.OpenIdMapper;
+import com.joycity.joyclub.apifront.mapper.manual.WechatOpenIdMapper;
 import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
 import com.joycity.joyclub.apifront.modal.client.Client;
 import com.joycity.joyclub.apifront.modal.project.SysProject;
-import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
 import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
 import com.joycity.joyclub.apifront.service.*;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_DIGI
  */
 @Service
 public class LoginFrontServiceImpl implements LoginFrontService {
+    private Log logger = LogFactory.getLog(LoginFrontServiceImpl.class);
     @Autowired
     WechatService wechatService;
     @Autowired
@@ -36,24 +38,22 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     @Autowired
     ClientUserMapper clientMapper;
     @Autowired
-    OpenIdMapper openIdMapper;
+    WechatOpenIdMapper wechatOpenIdMapper;
     @Autowired
     VipCardNumFrontService vipCardNumService;
     @Autowired
     ClientLoginLogMapper clientLoginLogMapper;
 
     /**
-     * @param wechatCode
+     * @param openId
      * @param projectId
      * @param phone
      * @param authCode
      * @return
      */
     @Override
-    public ResultData wechatLogin(String wechatCode, Long projectId, String phone, String authCode) {
+    public ResultData wechatLogin(String openId, Long projectId, String phone, String authCode) {
         //todo 检查此处的accessTokenAndOpenId里的accessToken能否接下来使用
-     AccessTokenAndOpenId accessTokenAndOpenId= wechatService.getAccessTokenAndOpenId(wechatCode);
-        String openId = accessTokenAndOpenId.getOpenid();
         SysProject project = projectMapper.selectByPrimaryKey(projectId);
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");
@@ -64,6 +64,9 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         Client kechuanClient = keChuanCrmService.getMemberByTel(phone);
         //如果科传处没有该号码用户，立刻新建
         if (kechuanClient == null) {
+            // TODO: 2017/4/18 这里是先将卡设为使用，如果创建会员失败，再设置为不可用 。而不是先找到可用的号码，创建成功后再设置为已用。
+            //主要考虑是创建会员操作耗时，可能出现并发，导致一号多用。
+            //如果后续进行锁记录，则这个蠢方法可以废弃。
             Long cardNumAvailable = vipCardNumService.useDigitalVipCard(projectId);
 
             kechuanClient = new Client();
@@ -74,7 +77,16 @@ public class LoginFrontServiceImpl implements LoginFrontService {
             //发卡项目
             kechuanClient.setCreditCardProject(project.getCardResourceProject());
             //在科传处创建会员
-            String vipCode = keChuanCrmService.createMember(kechuanClient);
+            String vipCode = null;
+            try {
+                vipCode = keChuanCrmService.createMember(kechuanClient);
+            } catch (BusinessException e) {
+                //如果创建失败，则捕获异常，恢复卡号为未使用
+                vipCardNumService.cancelUseVipCard(cardNumAvailable);
+                //一定要抛出异常，终止后续操作
+                throw e;
+            }
+            logger.info("使用电子卡"+cardNumAvailable);
             kechuanClient.setVipCode(vipCode);
         }
 
@@ -100,9 +112,9 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         //所以判断openid有没有存储，必须一直判断，而不是只放在userId==null时
         if (!openIdService.checkOpenIdExist(openId)) {
             // TODO: 2017/4/17 多个微信 
-            openIdMapper.saveOpenId(projectId, user.getId(), openId);
+            wechatOpenIdMapper.saveOpenId(projectId, user.getId(), openId);
         }
-        clientLoginLogMapper.addLog(user.getId(),projectId);
+        clientLoginLogMapper.addLog(user.getId(), projectId);
         //只返回用户id和用户手机号
         Client resultUser = new Client();
         resultUser.setId(user.getId());

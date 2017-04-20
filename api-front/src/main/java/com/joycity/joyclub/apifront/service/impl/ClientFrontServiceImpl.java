@@ -45,6 +45,21 @@ public class ClientFrontServiceImpl implements ClientFrontService {
         return new ResultData(info);
     }
 
+    @Override
+    public Integer getPoint(Long id) {
+        return clientUserMapper.getPoint(id);
+    }
+
+    @Override
+    public void addPoint(Long id, Double changeValue) {
+     String vipCode =    clientUserMapper.getVipCodeById(id);
+        if(vipCode==null) {
+            throw  new BusinessException(DATA_NOT_EXIST,"会员不存在");
+
+        }
+        keChuanCrmService.changePoint(vipCode,changeValue);
+    }
+
     private String getVipCodeById(Long id) {
         String code = clientUserMapper.getVipCodeById(id);
         checkNullThrowUserNotExist(code);

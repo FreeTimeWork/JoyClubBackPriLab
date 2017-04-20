@@ -19,6 +19,6 @@ public interface WechatService {
      * @param code 微信网页跳转返回的code参数
      * @return
      */
-    AccessTokenAndOpenId getAccessTokenAndOpenId(String code);
+    AccessTokenAndOpenId getAccessTokenAndOpenId(String code,Long projectId);
 
 }

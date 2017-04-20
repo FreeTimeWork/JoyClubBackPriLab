@@ -1,6 +1,5 @@
 package com.joycity.joyclub.apifront.mapper.manual;
 
-import com.joycity.joyclub.apifront.modal.wechat.ClientWechatOpenId;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -8,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 /**
  * Created by CallMeXYZ on 2017/4/10.
  */
-public interface OpenIdMapper {
+public interface WechatOpenIdMapper {
     @Select("select count(*) from client_wx_openid where open_id=#{openId} ")
     Integer countByOpenId(String openId);
 

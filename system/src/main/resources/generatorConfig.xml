@@ -22,6 +22,10 @@
                                   targetProject="D:\IDEA workspace\joyclub\api-back\src\main\java"/>
      -->
 
+        <table tableName="sale_product_order" >
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+       <!--
         <table tableName="sys_project_vip_card_range"
         >
             <generatedKey column="id" sqlStatement="JDBC"/>
@@ -30,8 +34,6 @@
         >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-
-       <!--
        <table tableName="client"
         >
             <generatedKey column="id" sqlStatement="JDBC"/>
@@ -94,7 +96,7 @@
         <table tableName="sale_cart" >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
-        <table tableName="client_address" >
+        <table tableName="client_post_address" >
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>-->
     </context>

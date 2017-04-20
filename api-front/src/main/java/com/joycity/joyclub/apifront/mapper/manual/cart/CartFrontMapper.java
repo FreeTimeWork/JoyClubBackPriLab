@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Administrator on 2017/4/17.
  */
 public interface CartFrontMapper extends BaseMapper<Cart, Long, CartExample> {
-    @Update("update sale_cart set  delete_flag = 1 and delete_time = now() where id=#{id}")
+    @Update("update sale_cart set  delete_flag=1, delete_time = now() where id=#{id}")
     Integer deleteCart(@Param("id") Long id);
     /**
      * 修改num
@@ -40,7 +40,7 @@ public interface CartFrontMapper extends BaseMapper<Cart, Long, CartExample> {
      * @param clientId
      * @return
      */
-    @Select("select c.id,c.attr_id,c.num, a.name as attrName,p.id  productId,p.name  productName,s.id storeId,s.name storeName,price.price,price.point_rate pointRate,p.base_price basePrice,cate.point_rate basePointRate " +
+    @Select("select c.id,c.attr_id,c.num, a.name as attrName,a.num as maxNum,p.id  productId,p.portrait,p.name  productName,s.id storeId,s.name storeName,price.price,price.point_rate pointRate,p.base_price basePrice,cate.point_rate basePointRate " +
             "from sale_cart c  " +
             "join sale_product_attr a on a.id = c.attr_id " +
             "join sale_product p on p.id =a.product_id " +

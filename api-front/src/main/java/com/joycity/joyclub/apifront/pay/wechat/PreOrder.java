@@ -16,12 +16,12 @@ public class PreOrder {
 	private String outTradeNo;
 	
 	/**
-	 * 总金额
+	 * 总金额 元
 	 */
-	private String totalFee;
+	private Integer totalFee;
 	
 	/**
-	 * 终端ip
+	 * 终端ip 可以null
 	 */
 	private String spbillCreateIp;
 	
@@ -56,11 +56,11 @@ public class PreOrder {
 		this.outTradeNo = outTradeNo;
 	}
 
-	public String getTotalFee() {
+	public Integer getTotalFee() {
 		return totalFee;
 	}
 
-	public void setTotalFee(String totalFee) {
+	public void setTotalFee(Integer totalFee) {
 		this.totalFee = totalFee;
 	}
 

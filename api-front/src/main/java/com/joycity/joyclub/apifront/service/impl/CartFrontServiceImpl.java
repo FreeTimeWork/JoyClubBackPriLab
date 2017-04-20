@@ -2,13 +2,15 @@ package com.joycity.joyclub.apifront.service.impl;
 
 import com.joycity.joyclub.apifront.mapper.manual.cart.CartFrontMapper;
 import com.joycity.joyclub.apifront.modal.cart.Cart;
+import com.joycity.joyclub.apifront.modal.cart.CartInfo;
 import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/17.
@@ -44,9 +46,9 @@ public class CartFrontServiceImpl implements CartFrontService {
     }
 
     @Override
-    public ResultData getCardList(Long projectId, Long clientId) {
+    public List<CartInfo> getCartList(Long projectId, Long clientId) {
 
-        return new ResultData(new ListResult(cartMapper.getCartInfoList(projectId,clientId)));
+        return cartMapper.getCartInfoList(projectId,clientId);
     }
 
     @Override

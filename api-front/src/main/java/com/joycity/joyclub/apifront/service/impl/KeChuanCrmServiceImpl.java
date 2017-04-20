@@ -28,6 +28,7 @@ import java.util.*;
 import static com.joycity.joyclub.apifront.constant.Global.SEX_FEMALE;
 import static com.joycity.joyclub.apifront.constant.Global.SEX_MALE;
 import static com.joycity.joyclub.apifront.constant.ResultCode.KECHUAN_INFO_ERROR;
+import static com.joycity.joyclub.apifront.constant.ResultCode.KECHUAN_INFO_ERROR_BUT_RIGHT;
 
 
 @Service
@@ -176,7 +177,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
 
         String prama = null;
 
-            prama = KeChuanEncryption.aesEncrypt(tel, secretKey);
+        prama = KeChuanEncryption.aesEncrypt(tel, secretKey);
 
 
         StringBuffer header = new StringBuffer();
@@ -193,10 +194,9 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         //获取会员信息失败有可能是会员不存在
         if (!checkApiResult(head)) {
             // TODO: 2017/4/11 根据字符串 “无效的会员号/手机号” 来判断会员不存在很危险 
-            if("无效的会员号/手机号".equals(getApiErrorMsg(head))||"100".equals(head.element(RESULT_TAG_ERROR_CODE).getText())){
+            if ("无效的会员号/手机号".equals(getApiErrorMsg(head)) || "100".equals(head.element(RESULT_TAG_ERROR_CODE).getText())) {
                 return null;
-            }
-           else {
+            } else {
                 throw new BusinessException(KECHUAN_INFO_ERROR, "获取会员信息失败");
             }
         }
@@ -312,12 +312,12 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
     }
 
     @Override
-    public Integer changeScore(String vipCode, Double score) {
+    public Integer changePoint(String vipCode, Double changedValue) {
         // System.out.println("会员减积分，vipcode：" + vipCode + "score:" + score.intValue());
         Date now = new Date();
         String date = DateFormatUtils.format(now, "yyyyMMdd");
         String time = DateFormatUtils.format(now, "HHmmss");
-        String sign = DigestUtils.md5Hex(date + time + String.valueOf(score.intValue()) + signKey);
+        String sign = DigestUtils.md5Hex(date + time + String.valueOf(changedValue.intValue()) + signKey);
 
         StringBuffer header = new StringBuffer();
         header.append("<REQDATE>" + date + "</REQDATE>");
@@ -328,18 +328,18 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         StringBuffer request = new StringBuffer();
         request.append("<vipcode>" + KeChuanEncryption.aesEncrypt(vipCode, secretKey) + "</vipcode>");
         request.append("<expdate>9999-12-31</expdate>");
-        request.append("<bonus>" + KeChuanEncryption.aesEncrypt(String.valueOf(score.intValue()), secretKey) + "</bonus>");
+        request.append("<bonus>" + KeChuanEncryption.aesEncrypt(String.valueOf(changedValue.intValue()), secretKey) + "</bonus>");
         request.append("<reasoncode>00004</reasoncode>");
 //		request.append("<remark>" + prama + "</remark>");
 
         Element data = postCrm("BonusChange", header.toString(), request.toString());
 
         String scoreText = data.element("currentbonus").getText();
-        Integer socre = null;
+        Integer score = null;
         if (StringUtils.isNotBlank(scoreText)) {
-            socre = Integer.parseInt(KeChuanEncryption.aesDecrypt(scoreText, secretKey));
+            score = Integer.parseInt(KeChuanEncryption.aesDecrypt(scoreText, secretKey));
         }
-        return socre;
+        return score;
     }
 
     @Override
@@ -363,8 +363,9 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         try {
             data = postCrm("GetBonusledgerRecord", header.toString(), request.toString());
         } catch (BusinessException e) {
-            if ("会员无积分记录".equals(e.getMessage())) {
-                return null;
+            //科传会把无记录当成错误，这里拦截后正常返回
+            if (KECHUAN_INFO_ERROR_BUT_RIGHT==e.getCode()) {
+                return new ArrayList<>();
             }
             throw e;
         }
@@ -462,8 +463,14 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         Element head = result.element(RESULT_TAG_HEADER);
         Element dataElement = result.element(RESULT_TAG_DATA);
         if (checkResultBeforeReturn && !checkApiResult(head)) {
-            logger.error("科传api请求失败：errorMsg:" + getApiErrorMsg(head) + " method:" + method + " header:" + header + " data:" + data);
-            throw new BusinessException(KECHUAN_INFO_ERROR, "会员操作失败");
+            String apiErrorMsg = getApiErrorMsg(head);
+             if ("会员无积分记录".equals(apiErrorMsg)) {
+                 //会员无积分记录会被科传当成错误，我们要在上层中拦截这个KECHUAN_INFO_ERROR_BUT_RIGHT
+                throw new BusinessException(KECHUAN_INFO_ERROR_BUT_RIGHT);
+            } else {
+                 logger.error("科传api请求失败：errorMsg:" + apiErrorMsg + " method:" + method + " header:" + header + " data:" + data);
+                 throw new BusinessException(KECHUAN_INFO_ERROR, "会员操作失败");
+            }
         }
         return checkResultBeforeReturn ? dataElement : result;
     }

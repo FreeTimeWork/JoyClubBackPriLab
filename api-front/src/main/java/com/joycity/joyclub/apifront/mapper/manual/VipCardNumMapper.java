@@ -4,8 +4,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.util.Date;
-
 /**
  * 卡号管理
  * 对应 sys_vip_card_num
@@ -25,4 +23,11 @@ public interface VipCardNumMapper {
      */
     @Update("update sys_vip_card_num set status=2,use_time=now() where num=#{num}")
     int setCardStatusUsed(@Param("num") Long num);
+    /**
+     * 设置卡为未使用状态
+     * @param num
+     * @return
+     */
+    @Update("update sys_vip_card_num set status=1,use_time=null where num=#{num}")
+    int setCardStatusNOtUsed(@Param("num") Long num);
 }

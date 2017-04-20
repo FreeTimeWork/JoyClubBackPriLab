@@ -19,8 +19,10 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.SUCCESS, "请求成功");
         map.put(ResultCode.WECHAT_PAY_REQUEST_ERROR, "请求微信支付异常");
         map.put(ResultCode.KECHUAN_INFO_ERROR, "获得会员信息失败");
+        map.put(ResultCode.KECHUAN_INFO_ERROR_BUT_RIGHT, "科传返回异常");
         map.put(ResultCode.MSG_AUTH_CODE_ERROR, "发送验证码出错");
         map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
+        map.put(ResultCode.REQUEST_PARAM_ERROR, "请求参数错误");
 
 
     }
