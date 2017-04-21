@@ -27,6 +27,7 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.DATA_NOT_PERMIT, "不允许该数据");
         map.put(ResultCode.OLD_PASSWORD_ERROR, "旧密码不正确");
         map.put(ResultCode.VIP_CARD_MAKE_ERROR, "制卡错误");
+        map.put(ResultCode.COUPON_CHECK_ERROR, "卡券核销错误");
 
     }
 

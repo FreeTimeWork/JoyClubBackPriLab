@@ -19,6 +19,11 @@ public class ResultCode {
     public static final int ERR_IMPORT_EXCEL = 30002;
     public static final int UPLOAD_ERROR = 30101;
 
+    /**
+     * 请求的参数错误
+     */
+    public static final int REQUEST_PARAMS_ERROR = 30006;
+
 
     /**
      * 数据不存在，比如通过id访问时返回null
@@ -27,14 +32,12 @@ public class ResultCode {
     public static final int DATA_NOT_PERMIT = 30202;
     public static final int DATA_ALREADY_EXIST = 30203;
 
-    /**
-     * 请求的参数错误
-     */
-    public static final int REQUEST_PARAMS_ERROR = 30006;
+
+
     /**
      * 制卡错误
      */
     public static final int VIP_CARD_MAKE_ERROR = 31000;
 
-
+    public static final int COUPON_CHECK_ERROR = 31100;
 }
