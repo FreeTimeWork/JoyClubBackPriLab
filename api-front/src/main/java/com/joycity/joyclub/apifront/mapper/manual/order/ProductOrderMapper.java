@@ -22,7 +22,7 @@ public interface ProductOrderMapper extends BaseMapper<ProductOrder, Long, Produ
             "where a.id = #{attrId} ")
     ProductOrderFormDataItem getOrderRawDataItem(@Param("attrId") Long attrId);
 
-    @Update("update sale_product_order set status =2 , pay_time=now where code=#{code}")
+    @Update("update sale_product_order set status =2 , pay_time=now() where code=#{code}")
     Integer setPayedByCode(String code);
 
     @Update("update sale_product_order set out_pay_code =#{outPayCode} where code=#{code}")
