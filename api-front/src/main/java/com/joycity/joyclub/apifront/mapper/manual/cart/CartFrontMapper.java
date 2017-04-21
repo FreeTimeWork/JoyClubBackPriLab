@@ -46,7 +46,7 @@ public interface CartFrontMapper extends BaseMapper<Cart, Long, CartExample> {
             "join sale_product p on p.id =a.product_id " +
             "join sys_product_category cate on p.category_id = cate.id " +
             "join sys_store s on s.id = p.store_id " +
-            " join sale_product_price price on price.product_id=s.id and price.forbid_flag=0 and price.review_status=1 and price.start_time<=now() and price.end_time>=now() " +
+            " join sale_product_price price on price.product_id=p.id and price.forbid_flag=0 and price.review_status=1 and now() between price.start_time and price.end_time " +
             "where c.delete_flag=0 and c.project_id = #{projectId} and c.client_id = #{clientId} order by c.id desc limit 0,50")
     List<CartInfo> getCartInfoList(@Param("projectId") Long projectId, @Param("clientId") Long clientId);
 }
