@@ -100,7 +100,7 @@ public class CouponServiceImpl implements CouponService {
      * @param cardTypes
      * @return
      */
-    public int addCardTypes(Long id,  String[] cardTypes) {
+    public int addCardTypes(Long id, String[] cardTypes) {
         CouponCardType couponCardType = new CouponCardType();
         int numAdded = 0;
         for (String cardType : cardTypes) {
@@ -161,32 +161,47 @@ public class CouponServiceImpl implements CouponService {
             }
         }
         //更新卡券数量
-        couponMapper.addNum(id,insertedNum);
+        couponMapper.addNum(id, insertedNum);
         return new ResultData(new UpdateResult(insertedNum));
 
     }
 
     @Override
     public ResultData checkCode(Long couponId, String code) {
-        CouponCode couponCode = couponCodeMapper.getCodeByCodeAndCouponId(couponId,code);
-        String text=null;
-       if(couponCode==null) {
-           text="该卡券号不存在";
-       }
-        else if(!couponCode.getUseStatus()) {
-           text="该卡券号未领取";
-       }
-        else if(couponCode.getCheckFlag()) {
-           text="该卡券号已被核销";
-       }
-        if(text!=null) {
-            throw  new CouponException(text);
+        CouponCode couponCode = couponCodeMapper.getCodeByCodeAndCouponId(couponId, code);
+        String errorText = null;
+        //先检查卡券号存在性
+        if (couponCode == null) {
+            errorText = "该卡券号不存在";
+        } else {
+            if (!couponCode.getUseStatus()) {
+                errorText = "该卡券号未领取";
+            } else if (couponCode.getCheckFlag()) {
+                errorText = "该卡券号已被核销";
+            }
+            //如果卡券号还没被核销，确认下卡券现在是否可以核销（当前时间在使用期）
+            Coupon coupon = couponMapper.selectByPrimaryKey(couponCode.getId());
+            //检查下该卡券的存在，基本上是存在的，主要是防止下一步出错
+            if (coupon == null) {
+                errorText = "卡券不存在";
+            } else {
+                //卡券存在的话，确定核销日期是否是卡券的使用日期
+                long nowTime = System.currentTimeMillis();
+                if (coupon.getAvailableStartTime().getTime() > nowTime || coupon.getAvailableEndTime().getTime() < nowTime) {
+                    errorText = "卡券已过期";
+                }
+            }
+
 
         }
-        else {
+        if (errorText != null) {
+            throw new CouponException(errorText);
+
+        } else {
+            //成功的话 设置卡券号为已核销
+            couponCodeMapper.setCodeChecked(couponCode.getId());
             return new ResultData("核销成功");
         }
-
     }
 
     @Override
@@ -200,6 +215,7 @@ public class CouponServiceImpl implements CouponService {
      * @param id
      * @return
      */
+
     private Coupon createCouponObject(Long id) {
         Coupon coupon = new Coupon();
         coupon.setId(id);

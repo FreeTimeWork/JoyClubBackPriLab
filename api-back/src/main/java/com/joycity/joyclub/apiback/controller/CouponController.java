@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.apiback.constant.ResultCode.COUPON_CHECK_ERROR;
 import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.apiback.constant.ResultCode.ERR_IMPORT_EXCEL;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -174,7 +175,7 @@ public class CouponController extends BaseUserSessionController {
         try {
             return couponService.checkCode(id, code);
         } catch (CouponException e) {
-          throw new BusinessException(DATA_NOT_EXIST,e.getMessage());
+          throw new BusinessException(COUPON_CHECK_ERROR,e.getMessage());
         }
     }
 
