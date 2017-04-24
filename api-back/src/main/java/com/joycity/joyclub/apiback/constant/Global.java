@@ -14,5 +14,5 @@ public class Global {
     /**
      * 日期表单的格式
      */
-    public static final String DATE_FORM_FORMAT ="yyyy-MM-dd HH:mm:ss.SSS";
+    public static final String DATE_FORM_FORMAT ="yyyy-MM-dd HH:mm:ss";
 }
