@@ -35,6 +35,32 @@
         order by id desc
         <include refid="limit"/>
     </select>
+    <select id="selectForFrontByFilter"
+            resultType="com.joycity.joyclub.coupon.modal.CouponForClient">
+        select c.*,code.code,code.use_status clientUseStatus,code.use_time clientUseTime,code.check_flag,code.check_time
+        from coupon c
+        join coupon_card_type cardType on c.id=cardType.coupon_id and cardType.card_type=#{cardType}
+        left join coupon_code code on code.coupon_id=c.id and code.client_id=#{clientId}
+        where c.project_id=#{projectId} and c.delete_flag=false and c.use_flag=true and c.forbid_flag=false and now() between c.show_start_time and c.show_end_time
+        order by c.use_time desc
+        <include refid="limit"/>
+    </select>
+    <select id="selectForFrontWithoutClientByFilter"
+            resultType="com.joycity.joyclub.coupon.modal.CouponForClient">
+        select c.*,0 clientUseStatus,0 checkStatus
+        from coupon c
+        where c.project_id=#{projectId} and c.delete_flag=false and c.use_flag=true and c.forbid_flag=false and now() between c.show_start_time and c.show_end_time
+        order by c.use_time desc
+        <include refid="limit"/>
+    </select>
 
-
+    <select id="selectClientCouponsByFilter"
+            resultType="com.joycity.joyclub.coupon.modal.CouponForClient">
+        select c.*,code.code,code.use_status,code.use_time,code.check_flag,code.check_time
+        from coupon_code code
+        join coupon c on code.coupon_id=c.id
+        where code.delete_flag=0 and code.client_id=#{clientId} and code.use_status=1 and code.check_flag=0 and  now() between c.show_start_time and c.show_end_time
+        order by code.use_time desc
+        <include refid="limit"/>
+    </select>
 </mapper>

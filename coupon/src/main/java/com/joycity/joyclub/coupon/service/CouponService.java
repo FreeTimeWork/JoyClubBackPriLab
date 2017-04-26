@@ -2,7 +2,10 @@ package com.joycity.joyclub.coupon.service;
 
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.coupon.exception.CouponException;
+import com.joycity.joyclub.coupon.modal.CouponForClient;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
+import com.joycity.joyclub.coupon.modal.generated.CouponCardType;
 
 import java.util.List;
 
@@ -13,7 +16,11 @@ import java.util.List;
 public interface CouponService {
     Coupon getById(Long id);
 
+    List<CouponCardType> getCardTypes(Long couponId);
+
     /**
+     * 给管理端用的
+     *
      * @param projectId
      * @param type      可空
      * @param name      可空
@@ -23,7 +30,7 @@ public interface CouponService {
      */
     ResultData getCouponList(Long projectId, Integer type, String name, Boolean useFlag, PageUtil pageUtil);
 
-    /**
+    /**\
      * @param type     卡券类型
      * @param code     某个卡券号码（严格相等）
      * @param phone    用户手机号
@@ -71,18 +78,46 @@ public interface CouponService {
     /**
      * 为某个卡券增加号码，并更新总数量
      * throws CouponException 该卡券不存在
+     *
      * @param id
      * @param codes
      * @return
      */
-    ResultData addCodes(Long id, List<String> codes) ;
+    ResultData addCodes(Long id, List<String> codes);
 
     /**
      * 核销
-     * @param id
-     * @param code
+
+     */
+    ResultData checkCode(Long couponId,Long managerId, String code);
+
+    ResultData getSimpleCouponList();
+
+
+    ///////////下面是手机端/////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 手机端的获取的卡券list
+     *
      * @return
      */
-    ResultData checkCode(Long id,String code);
-    ResultData getSimpleCouponList();
+    List<CouponForClient> getCouponListForFront(Long projectId, Long clientId, String cardType, PageUtil pageUtil);
+
+    /**
+     * 对于未登录用户
+     */
+    List<CouponForClient> getCouponListForFront(Long projectId, PageUtil pageUtil);
+
+    /**
+     * 用户查看我的卡券
+     * @param clientId
+     * @param pageUtil
+     * @return
+     */
+    List<CouponForClient> getCouponListForFrontClient( Long clientId,  PageUtil pageUtil);
+
+    /**
+     * @return 领券需要的积分，业务需要根据这个修改用户积分
+     */
+    Integer clientReceiveCoupon(Long couponId, Long clientId) ;
 }

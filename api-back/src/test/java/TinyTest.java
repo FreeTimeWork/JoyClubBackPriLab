@@ -6,12 +6,8 @@ import org.junit.Test;
 public class TinyTest {
 @Test
 public void test(){
-    Integer a = 2;
-    System.out.println(a);
-    testInt(a);
- System.out.println(a);   
+ System.out.println(System.nanoTime());
+
 }
-    public void testInt(Integer a){
-        a++;
-    }
+
 }

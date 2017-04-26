@@ -11,6 +11,7 @@ import com.joycity.joyclub.coupon.mapper.CouponCardTypeMapper;
 import com.joycity.joyclub.coupon.mapper.CouponCodeMapper;
 import com.joycity.joyclub.coupon.mapper.CouponMapper;
 import com.joycity.joyclub.coupon.modal.CouponCodeInfo;
+import com.joycity.joyclub.coupon.modal.CouponForClient;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.modal.generated.CouponCardType;
 import com.joycity.joyclub.coupon.modal.generated.CouponCode;
@@ -18,6 +19,7 @@ import com.joycity.joyclub.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +42,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Coupon getById(Long id) {
         return couponMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<CouponCardType> getCardTypes(Long couponId) {
+        return  couponCardTypeMapper.getByCouponId(couponId);
     }
 
     @Override
@@ -167,7 +174,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public ResultData checkCode(Long couponId, String code) {
+    public ResultData checkCode(Long couponId, Long managerId, String code) {
         CouponCode couponCode = couponCodeMapper.getCodeByCodeAndCouponId(couponId, code);
         String errorText = null;
         //先检查卡券号存在性
@@ -178,28 +185,28 @@ public class CouponServiceImpl implements CouponService {
                 errorText = "该卡券号未领取";
             } else if (couponCode.getCheckFlag()) {
                 errorText = "该卡券号已被核销";
-            }
-            //如果卡券号还没被核销，确认下卡券现在是否可以核销（当前时间在使用期）
-            Coupon coupon = couponMapper.selectByPrimaryKey(couponCode.getId());
-            //检查下该卡券的存在，基本上是存在的，主要是防止下一步出错
-            if (coupon == null) {
-                errorText = "卡券不存在";
             } else {
-                //卡券存在的话，确定核销日期是否是卡券的使用日期
-                long nowTime = System.currentTimeMillis();
-                if (coupon.getAvailableStartTime().getTime() > nowTime || coupon.getAvailableEndTime().getTime() < nowTime) {
-                    errorText = "卡券已过期";
+                //如果卡券号还没被核销，确认下卡券现在是否可以核销（当前时间在使用期）
+                Coupon coupon = couponMapper.selectByPrimaryKey(couponCode.getCouponId());
+                //检查下该卡券的存在，基本上是存在的，主要是防止下一步出错
+                if (coupon == null) {
+                    errorText = "卡券不存在";
+                } else {
+                    //卡券存在的话，确定核销日期是否是卡券的使用日期
+                    long nowTime = System.currentTimeMillis();
+                    if (coupon.getAvailableStartTime().getTime() > nowTime || coupon.getAvailableEndTime().getTime() < nowTime) {
+                        errorText = "卡券已过期";
+                    }
                 }
             }
-
-
         }
         if (errorText != null) {
             throw new CouponException(errorText);
 
         } else {
             //成功的话 设置卡券号为已核销
-            couponCodeMapper.setCodeChecked(couponCode.getId());
+            // TODO: 2017/4/21 记录核销人
+            couponCodeMapper.setCodeChecked(couponCode.getId(), managerId);
             return new ResultData("核销成功");
         }
     }
@@ -207,6 +214,40 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public ResultData getSimpleCouponList() {
         return new ResultData(new ListResult(couponMapper.getAllSimpleList()));
+    }
+
+    //////////////////////////////////////////////////////////
+    @Override
+    public List<CouponForClient> getCouponListForFront(Long projectId, Long clientId, String cardType, PageUtil pageUtil) {
+        return couponMapper.selectForFrontByFilter(projectId, clientId, cardType, pageUtil);
+    }
+
+    @Override
+    public List<CouponForClient> getCouponListForFront(Long projectId, PageUtil pageUtil) {
+        return couponMapper.selectForFrontWithoutClientByFilter(projectId, pageUtil);
+    }
+
+    @Override
+    public List<CouponForClient> getCouponListForFrontClient(Long clientId, PageUtil pageUtil) {
+        return couponMapper.selectClientCouponsByFilter(clientId, pageUtil);
+    }
+
+    @Override
+    public Integer clientReceiveCoupon(Long couponId, Long clientId) throws CouponException {
+        CouponCode code = couponCodeMapper.getMinCodeIdOfCoupon(couponId);
+        if (code == null) {
+            //没有能领取
+            throw new CouponException("卡券已被领光了");
+        }
+        Coupon coupon = couponMapper.selectByPrimaryKey(code.getCouponId());
+        if (coupon == null) {
+            throw new CouponException("卡券已下架");
+        } else {
+            couponCodeMapper.setCodeUsed(code.getId(), clientId);
+            //并发问题
+            couponMapper.addNum(coupon.getId(), -1);
+            return coupon.getPointCost();
+        }
     }
 
     /**

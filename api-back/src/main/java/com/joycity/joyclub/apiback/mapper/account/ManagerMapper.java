@@ -13,14 +13,14 @@ import java.util.List;
  */
 @Repository
 public interface ManagerMapper {
-    /**
+  /*  *//**
      * 根据sys_user 获取管理账户
      *
      * @param type   可以为null
      * @param infoId 可以为null
      * @return
-     */
-    List<Manager> getList(@Param("type") Integer type, @Param("infoId") Long infoId);
+     *//*
+    List<Manager> getList(@Param("type") Integer type, @Param("infoId") Long infoId);*/
 
     @Select("select count(*) from sys_user where binary account=#{account}")
     Long getUserNumByAccount(@Param("account") String account);

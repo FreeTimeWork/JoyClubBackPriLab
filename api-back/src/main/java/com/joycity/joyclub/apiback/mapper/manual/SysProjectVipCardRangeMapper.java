@@ -24,7 +24,7 @@ public interface SysProjectVipCardRangeMapper extends BaseMapper<SysProjectVipCa
      */
     @Select("select count(*) from sys_project_vip_card_range where (min>=#{min} and min<=#{max}) or (max>=#{min} and max<=#{max})")
     long countByRangeOverlap(@Param("min") long min, @Param("max") long max);
-    @Select("select id,project_id,type,case type when '01' then '璀璨卡' when '02' then '缤纷卡' when '74' then '电子卡' else '其他' end typeName,min,max from sys_project_vip_card_range  where project_id = #{projectId}")
+    @Select("select id,project_id,type,case type when '01' then '缤纷卡' when '02' then '璀璨' when '74' then '电子卡' else '其他' end typeName,min,max from sys_project_vip_card_range  where project_id = #{projectId}")
 
     List<ProjectVipCardRangeInfo> selectByProjectId(long projectId);
 }

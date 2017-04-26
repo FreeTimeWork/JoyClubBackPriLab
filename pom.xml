@@ -13,6 +13,7 @@
         <module>api-front</module>
         <module>commons</module>
         <module>coupon</module>
+        <module>kechuan</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

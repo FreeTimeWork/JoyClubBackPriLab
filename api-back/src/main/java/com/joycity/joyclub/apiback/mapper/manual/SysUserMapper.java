@@ -22,4 +22,6 @@ public interface SysUserMapper extends BaseMapper<SysUser, Long, SysUserExample>
 
     @Select("select id,info_id,account,type,sub_type,auth_type,forbid_flag,forbid_time,remark from sys_user where  type=#{type} and info_id=#{infoId} and delete_flag=0 order by id desc")
     List<SysUser> getManagersByUserTypeAndInfoId(@Param("type") Integer type,@Param("infoId") Long infoId);
+    @Select("select id,info_id,account,type,sub_type,auth_type,forbid_flag,forbid_time,remark from sys_user where  type=0 or 1 and info_id=#{infoId} and delete_flag=0 order by id desc")
+    List<SysUser> getPlatFormManagersByUserTypeAndInfoId(@Param("infoId") Long infoId);
 }

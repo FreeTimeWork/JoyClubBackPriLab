@@ -26,7 +26,6 @@ public class RootConfig {
         requestFactory.setReadTimeout(10000);
         requestFactory.setConnectTimeout(5000);
         RestTemplate restTemplate = new RestTemplate(requestFactory);
-
         return restTemplate;
     }
 }

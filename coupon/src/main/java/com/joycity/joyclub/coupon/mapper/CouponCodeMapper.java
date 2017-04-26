@@ -54,10 +54,22 @@ public interface CouponCodeMapper extends BaseMapper<CouponCode, Long, CouponCod
                                         @Param("pageUtil") PageUtil pageUtil);
 
 
-    @Update("update coupon_code set check_flag=true , check_time = now() where id=#{id}")
-    Integer setCodeChecked(Long id);
+    @Update("update coupon_code set check_flag=true , check_time = now(),checker_id=#{managerId} where id=#{couponId}")
+    Integer setCodeChecked(@Param("couponId") Long couponId,@Param("managerId") Long managerId);
 
     @Select("select id,coupon_id,code,use_status,use_time,client_id,check_flag,check_time from coupon_code where code=#{code} and coupon_id=#{couponId} limit 0,1")
     CouponCode getCodeByCodeAndCouponId(@Param("couponId") Long couponId, @Param("code") String code);
 
+    /**
+     * 获得某个卡券下未领取的最小id的卡券
+     * 包含codeId,couponId,
+     */
+    @Select("select min(id) id,coupon_id from coupon_code where coupon_id=#{couponId}  and use_status=0 and delete_flag=0")
+    CouponCode getMinCodeIdOfCoupon(Long couponId);
+
+    /**
+     * 会员领取某个卡券号
+     */
+    @Select("update coupon_code set use_status=1 , client_id = #{clientId} , use_time=now() where id=#{codeId}")
+    Integer setCodeUsed(@Param("codeId") Long codeId,@Param("clientId") Long clientId);
 }

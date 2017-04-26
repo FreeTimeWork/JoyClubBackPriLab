@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.joycity.joyclub.apiback.constant.ResultCode.ACCOUNT_EXIST;
 import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
@@ -48,13 +49,14 @@ public class ManagerServiceImpl implements ManagerService {
     public ResultData getProjectManagersByProjectId(Long projectId) {
         SysProject sysProject = sysProjectMapper.selectByPrimaryKey(projectId);
         if (sysProject == null) throw new BusinessException(DATA_NOT_EXIST, "项目不存在");
-        return new ResultData(
-                new ListResult(
-                        sysUserMapper.getManagersByUserTypeAndInfoId(
-                                sysProject.getType().equals(ProjectType.PROJECT_TYPE_PLATFORM) ?
-                                        USER_TYPE_PLATFORM :
-                                        USER_TYPE_PROJECT,
-                                projectId)));
+        List<SysUser> managers;
+        //平台的管理者应该包括平台管理员和项目管理员
+        if (sysProject.getType().equals(ProjectType.PROJECT_TYPE_PLATFORM)) {
+            managers = sysUserMapper.getPlatFormManagersByUserTypeAndInfoId(projectId);
+        } else {
+            managers = sysUserMapper.getManagersByUserTypeAndInfoId(USER_TYPE_PROJECT, projectId);
+        }
+        return new ResultData(new ListResult(managers));
     }
 
     /**
@@ -67,6 +69,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResultData createProjectManager(Long projectId, SysUser user) {
         SysProject sysProject = sysProjectMapper.selectByPrimaryKey(projectId);
+        //// TODO: 2017/4/22  平台会员
         if (sysProject == null) throw new BusinessException(DATA_NOT_EXIST, "项目不存在");
         user.setType(USER_TYPE_PROJECT);
         user.setInfoId(projectId);

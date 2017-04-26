@@ -625,6 +625,66 @@ public class CouponCodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andCheckerIdIsNull() {
+            addCriterion("checker_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdIsNotNull() {
+            addCriterion("checker_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdEqualTo(Long value) {
+            addCriterion("checker_id =", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdNotEqualTo(Long value) {
+            addCriterion("checker_id <>", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdGreaterThan(Long value) {
+            addCriterion("checker_id >", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("checker_id >=", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdLessThan(Long value) {
+            addCriterion("checker_id <", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdLessThanOrEqualTo(Long value) {
+            addCriterion("checker_id <=", value, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdIn(List<Long> values) {
+            addCriterion("checker_id in", values, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdNotIn(List<Long> values) {
+            addCriterion("checker_id not in", values, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdBetween(Long value1, Long value2) {
+            addCriterion("checker_id between", value1, value2, "checkerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckerIdNotBetween(Long value1, Long value2) {
+            addCriterion("checker_id not between", value1, value2, "checkerId");
+            return (Criteria) this;
+        }
+
         public Criteria andCheckTimeIsNull() {
             addCriterion("check_time is null");
             return (Criteria) this;

@@ -9,11 +9,11 @@ public class ProjectVipCard {
      */
     public static final String VIP_CARD_DIGITAL = "74";
     /**
-     * 璀璨卡
+     * 缤纷卡
      */
     public static final String VIP_CARD_TYPE1 = "01";
     /**
-     * 缤纷卡
+     * 璀璨卡
      */
     public static final String VIP_CARD_TYPE2 = "02";
     //卡状态
