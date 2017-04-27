@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.apiback.mapper.manual.ProductStoreOrderMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <resultMap id="StoreOrderWithMainOrder"
+               type="com.joycity.joyclub.apiback.modal.order.ProductOrderStoreInfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="store_id" jdbcType="BIGINT" property="storeId"/>
+        <result column="money_sum" jdbcType="INTEGER" property="moneySum"/>
+        <result column="point_sum" jdbcType="INTEGER" property="pointSum"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime"/>
+        <result column="delivery_company" jdbcType="VARCHAR" property="deliveryCompany"/>
+        <result column="delivery_code" jdbcType="VARCHAR" property="deliveryCode"/>
+        <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime"/>
+        <result column="notice_refund_time" jdbcType="TIMESTAMP" property="noticeRefundTime"/>
+        <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate"/>
+        <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
+
+
+        <result column="clientName" property="clientName"/>
+        <result column="clientPhone" property="clientPhone"/>
+        <association property="mainOrder" columnPrefix="mo_" resultMap="MainOrder"/>
+    </resultMap>
+    <resultMap id="MainOrder" type="com.joycity.joyclub.apiback.modal.order.ProductOrder">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="out_pay_code" jdbcType="VARCHAR" property="outPayCode"/>
+        <result column="project_id" jdbcType="BIGINT" property="projectId"/>
+        <result column="client_id" jdbcType="BIGINT" property="clientId"/>
+        <result column="receive_type" jdbcType="TINYINT" property="receiveType"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="money_sum" jdbcType="INTEGER" property="moneySum"/>
+        <result column="point_sum" jdbcType="INTEGER" property="pointSum"/>
+        <result column="pay_type" jdbcType="TINYINT" property="payType"/>
+        <result column="pay_time" jdbcType="TIMESTAMP" property="payTime"/>
+        <result column="cancel_time" jdbcType="TIMESTAMP" property="cancelTime"/>
+        <result column="canceler" jdbcType="TINYINT" property="canceler"/>
+        <result column="receiver_name" jdbcType="VARCHAR" property="receiverName"/>
+        <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone"/>
+        <result column="receiver_address" jdbcType="VARCHAR" property="receiverAddress"/>
+        <result column="receiver_postcode" jdbcType="VARCHAR" property="receivePostcode"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate"/>
+        <result column="delete_flag" jdbcType="BIT" property="deleteFlag"/>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
+    </resultMap>
+
+
+    <select id="selectByFilter"
+            resultMap="StoreOrderWithMainOrder">
+
+        SELECT s.*
+        ,mo.id mo_id,mo.code mo_code,mo.project_id mo_project_id,mo.client_id mo_client_id,mo.status mo_status
+        ,mo.receive_type mo_receive_type,mo.money_sum mo_money_sum,mo.point_sum mo_point_sum, mo.pay_type
+        mo_pay_type,mo.pay_time mo_pay_time
+        ,mo.cancel_time mo_cancel_time,mo.canceler mo_canceler,mo.receiver_name mo_receiver_name,mo.receiver_phone
+        mo_receiver_phone,mo.receiver_address mo_receiver_address,mo.receiver_postcode
+        mo_receiver_postcode,mo.create_time mo_create_time
+        ,c.real_name clientName,c.tel clientPhone
+        from sale_product_order_store s
+        left join sale_product_order mo on s.order_id = mo.id
+        left join client c on c.id = mo.client_id
+        WHERE s.store_id = #{storeId}
+        <choose>
+            <when test="code != null">
+                and mo.code = #{code}
+            </when>
+            <when test="name != null">
+                and c.real_name = #{name}
+            </when>
+            <when test="code != null">
+                and c.tel = #{phone}
+            </when>
+            <otherwise>
+                <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
+                <if test="status!=null">and s.status =#{status}</if>
+
+            </otherwise>
+        </choose>
+        <include refid="limit"/>
+    </select>
+
+    <select id="countByFilter"
+            resultType="java.lang.Long">
+
+        SELECT count(*) from sale_product_order_store s
+        left join sale_product_order mo on s.order_id = mo.id
+        left join client c on c.id = mo.client_id
+        WHERE s.store_id = #{storeId}
+        <choose>
+            <when test="code != null">
+                and mo.code = #{code}
+            </when>
+            <when test="name != null">
+                and c.real_name = #{name}
+            </when>
+            <when test="code != null">
+                and c.tel = #{phone}
+            </when>
+            <otherwise>
+                <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
+                <if test="status!=null">and s.status =#{status}</if>
+
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectById"
+            resultMap="StoreOrderWithMainOrder">
+
+        SELECT s.*
+        ,mo.id mo_id,mo.code mo_code,mo.project_id mo_project_id,mo.client_id mo_client_id,mo.status mo_status
+        ,mo.receive_type mo_receive_type,mo.money_sum mo_money_sum,mo.point_sum mo_point_sum, mo.pay_type mo_pay_type,mo.pay_time mo_pay_time
+        ,mo.cancel_time mo_cancel_time,mo.canceler mo_canceler,mo.receiver_name mo_receiver_name,mo.receiver_phone mo_receiver_phone,mo.receiver_address mo_receiver_address,mo.receiver_postcode mo_receiver_postcode,mo.create_time mo_create_time
+        ,c.real_name clientName,c.tel clientPhone
+        from sale_product_order_store s
+        left join sale_product_order mo on s.order_id = mo.id
+        left join client c on c.id = mo.client_id
+       where s.id = #{id}
+    </select>
+    <select id="getDetails" resultType="com.joycity.joyclub.apiback.modal.order.ProductOrderDetailInfo">
+      select d.*,attr.name attrName,product.name productName,product.portrait portrait from sale_product_order_detail d
+      join sale_product_attr attr on attr.id = d.product_attr
+      join sale_product product on product.id = attr.product_id
+      where d.store_order_id = #{storeOrderId}
+    </select>
+
+</mapper>

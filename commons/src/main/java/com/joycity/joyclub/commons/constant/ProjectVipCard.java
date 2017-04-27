@@ -27,9 +27,9 @@ public class ProjectVipCard {
      */
     public static final Byte VIP_CARD_STATUS_USED = 2;
     /**
-     * 已空置
+     * 已换卡
      */
-    public static final Byte VIP_CARD_STATUS_VACANT = 3;
+    public static final Byte VIP_CARD_STATUS_CHANGED = 3;
 
 
 }

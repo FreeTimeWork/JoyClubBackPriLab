@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * Created by CallMeXYZ on 2017/4/24.
  */
-public class MainOrderWithStores extends ProductOrder {
-    private List<StoreOrderWithDetails> storeOrders;
+public class ProductMainOrderWithStores extends ProductOrder {
+    private List<ProductStoreOrderWithDetails> storeOrders;
 
-    public List<StoreOrderWithDetails> getStoreOrders() {
+    public List<ProductStoreOrderWithDetails> getStoreOrders() {
         return storeOrders;
     }
 
-    public void setStoreOrders(List<StoreOrderWithDetails> storeOrders) {
+    public void setStoreOrders(List<ProductStoreOrderWithDetails> storeOrders) {
         this.storeOrders = storeOrders;
     }
 }

@@ -7,11 +7,10 @@ import java.util.List;
 /**
  * Created by CallMeXYZ on 2017/4/24.
  */
-public class OrderDetailInfo extends ProductOrderDetail {
+public class ProductOrderDetailInfo extends ProductOrderDetail {
     private String portrait;
     private String productName;
     private String attrName;
-    private List<StoreOrderWithDetails> details;
 
     public String getPortrait() {
         return portrait;
@@ -37,11 +36,4 @@ public class OrderDetailInfo extends ProductOrderDetail {
         this.attrName = attrName;
     }
 
-    public List<StoreOrderWithDetails> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<StoreOrderWithDetails> details) {
-        this.details = details;
-    }
 }

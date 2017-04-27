@@ -26,4 +26,7 @@ public interface SysProjectMapper extends BaseMapper<SysProject, Long, SysProjec
      */
     @Select("select id,name  from sys_project where delete_flag=0")
     List<IdName> getSimpleIdNameList();
+
+    @Select("select vip_share from sys_project where id = #{projectId}")
+    String getVipShare(Long projectId);
 }

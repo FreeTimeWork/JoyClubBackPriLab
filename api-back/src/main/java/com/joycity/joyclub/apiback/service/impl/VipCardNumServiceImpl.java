@@ -110,10 +110,11 @@ public class VipCardNumServiceImpl implements VipCardNumService {
     }
 
     @Override
-    public ResultData getFormData() {
+    public ResultData getFormData(Long projectId) {
         VipCardFormData formData = new VipCardFormData();
-        formData.setProjects(projectMapper.getSimpleIdNameList());
-        formData.setBatches(vipCardNumMapper.getBatches());
+        // TODO: 2017/4/27 对于平台的话 应该是返回所有的项目和每个项目的批次号，目前不提供给平台查看会员卡功能
+//        formData.setProjects(projectMapper.getSimpleIdNameList());
+        formData.setBatches(vipCardNumMapper.getBatches(projectId));
         return new ResultData(formData);
     }
 

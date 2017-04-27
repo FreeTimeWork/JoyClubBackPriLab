@@ -1,24 +1,28 @@
 package com.joycity.joyclub.client.service.impl;
 
+import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.modal.VipCardInfo;
-import com.joycity.joyclub.client.service.ClientFrontService;
+import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.coupon.modal.generated.Coupon;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/16.
  */
 @Service
-public class ClientFrontServiceImpl implements ClientFrontService {
+public class ClientServiceImpl implements ClientService {
     @Autowired
     KeChuanCrmService keChuanCrmService;
     @Autowired
@@ -70,6 +74,28 @@ public class ClientFrontServiceImpl implements ClientFrontService {
         String code = clientUserMapper.getVipCodeById(id);
         checkNullThrowUserNotExist(code);
         return code;
+    }
+
+    @Override
+    public ResultData getListForBack(final String group13,
+                                     final String cardType,
+                                     final Integer pointStart,
+                                     final Integer pointEnd,
+                                     final String vipNo,
+                                     final String cardNo,
+                                     final String phone,
+                                     final PageUtil pageUtil) {
+        return new AbstractGetListData<Client>() {
+            @Override
+            public Long countByFilter() {
+                return clientUserMapper.countForBack(group13, cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+            }
+
+            @Override
+            public List<Client> selectByFilter() {
+                return clientUserMapper.getListForBack(group13, cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+            }
+        }.getList(pageUtil);
     }
 
     /**

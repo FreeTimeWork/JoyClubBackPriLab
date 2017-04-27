@@ -13,6 +13,7 @@
     <properties>
         <commons>1.0-SNAPSHOT</commons>
         <coupon>1.0-SNAPSHOT</coupon>
+        <client>1.0-SNAPSHOT</client>
     </properties>
     <dependencies>
         <dependency>
@@ -24,6 +25,10 @@
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>coupon</artifactId>
             <version>${coupon}</version>
+        </dependency>  <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>client</artifactId>
+            <version>${client}</version>
         </dependency>
     </dependencies>
 

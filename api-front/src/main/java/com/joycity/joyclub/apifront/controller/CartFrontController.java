@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.CartFrontService;
-import com.joycity.joyclub.client.service.ClientFrontService;
+import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +27,7 @@ public class CartFrontController {
     @Autowired
     CartFrontService cartFrontService;
     @Autowired
-    ClientFrontService clientFrontService;
+    ClientService clientService;
     /**
      * 获取某个客户的购物车列表
      */
@@ -36,7 +36,7 @@ public class CartFrontController {
                                        @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId) {
         Map<String,Object> result = new HashMap<>();
         result.put("list",cartFrontService.getCartList(projectId,clientId));
-        result.put("point",clientFrontService.getPoint(clientId));
+        result.put("point", clientService.getPoint(clientId));
         return new ResultData(result);
     }
 

@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * Created by CallMeXYZ on 2017/4/24.
  */
-public class StoreOrderWithDetails extends ProductOrderStore {
+public class ProductStoreOrderWithDetails extends ProductOrderStore {
     private String name;
     private String pickupAddress;
     private String servicePhone;
-    private List<OrderDetailInfo> orderDetails;
+    private List<ProductOrderDetailInfo> orderDetails;
 
 
 
@@ -39,11 +39,11 @@ public class StoreOrderWithDetails extends ProductOrderStore {
         this.pickupAddress = pickupAddress;
     }
 
-    public List<OrderDetailInfo> getOrderDetails() {
+    public List<ProductOrderDetailInfo> getOrderDetails() {
         return orderDetails;
     }
 
-    public void setOrderDetails(List<OrderDetailInfo> orderDetails) {
+    public void setOrderDetails(List<ProductOrderDetailInfo> orderDetails) {
         this.orderDetails = orderDetails;
     }
 }

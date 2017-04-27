@@ -1,15 +1,11 @@
 package com.joycity.joyclub.apiback.service;
 
-import com.joycity.joyclub.apiback.modal.VipUser;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.joycity.joyclub.commons.utils.PageUtil;
 
 /**
- * Created by amosc on 2017/2/21.
+ * Created by CallMeXYZ on 2017/4/27.
  */
 public interface VipUserService {
-    ResultData export(HttpServletResponse response);
-     List<VipUser> getList();
+        ResultData getList(Long projectId, String cardType, Integer pointStart, Integer pointEnd, String vipNo, String cardNo, String phone, PageUtil pageUtil);
 }

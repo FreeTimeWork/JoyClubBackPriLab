@@ -4,8 +4,8 @@ package com.joycity.joyclub.apifront.mapper.manual.order;
 import com.joycity.joyclub.apifront.modal.order.ProductOrder;
 import com.joycity.joyclub.apifront.modal.order.ProductOrderExample;
 import com.joycity.joyclub.apifront.modal.order.ProductOrderFormDataItem;
-import com.joycity.joyclub.apifront.modal.order.list.MainOrderWithStores;
-import com.joycity.joyclub.apifront.modal.order.list.StoreOrderWithDetailsAndMainOrder;
+import com.joycity.joyclub.apifront.modal.order.list.ProductMainOrderWithStores;
+import com.joycity.joyclub.apifront.modal.order.list.ProductStoreOrderWithDetailsAndMainOrder;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
@@ -28,7 +28,7 @@ public interface ProductOrderMapper extends BaseMapper<ProductOrder, Long, Produ
      * @param pageUtil
      * @return
      */
-    List<MainOrderWithStores> selectMyOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("status") Byte status, @Param("pageUtil") PageUtil pageUtil);
+    List<ProductMainOrderWithStores> selectMyOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("status") Byte status, @Param("pageUtil") PageUtil pageUtil);
 
     /**
      * 获取我的待发货 待收货 已完成 订单
@@ -40,7 +40,7 @@ public interface ProductOrderMapper extends BaseMapper<ProductOrder, Long, Produ
      * @param pageUtil
      * @return
      */
-    List<StoreOrderWithDetailsAndMainOrder> selectMyStoreOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("status") Byte status, @Param("receiveType") Byte receiveType,@Param("pageUtil") PageUtil pageUtil);
+    List<ProductStoreOrderWithDetailsAndMainOrder> selectMyStoreOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("status") Byte status, @Param("receiveType") Byte receiveType, @Param("pageUtil") PageUtil pageUtil);
 
 
 

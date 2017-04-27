@@ -28,7 +28,7 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
 
     </resultMap>
-    <resultMap id="MainOrderWithStores" type="com.joycity.joyclub.apifront.modal.order.list.MainOrderWithStores">
+    <resultMap id="MainOrderWithStores" type="com.joycity.joyclub.apifront.modal.order.list.ProductMainOrderWithStores">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="out_pay_code" jdbcType="VARCHAR" property="outPayCode"/>
@@ -54,7 +54,7 @@
         <collection property="storeOrders" resultMap="StoreOrder" columnPrefix="so_"/>
     </resultMap>
 
-    <resultMap id="StoreOrder" type="com.joycity.joyclub.apifront.modal.order.list.StoreOrderWithDetails">
+    <resultMap id="StoreOrder" type="com.joycity.joyclub.apifront.modal.order.list.ProductStoreOrderWithDetails">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="order_id" jdbcType="BIGINT" property="orderId"/>
         <result column="store_id" jdbcType="BIGINT" property="storeId"/>
@@ -79,7 +79,7 @@
         <collection property="orderDetails" resultMap="OrderDetail" columnPrefix="d_"/>
     </resultMap>
 
-    <resultMap id="OrderDetail" type="com.joycity.joyclub.apifront.modal.order.list.OrderDetailInfo">
+    <resultMap id="OrderDetail" type="com.joycity.joyclub.apifront.modal.order.list.ProductOrderDetailInfo">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="store_order_id" jdbcType="BIGINT" property="storeOrderId"/>
         <result column="product_attr" jdbcType="BIGINT" property="productAttr"/>
@@ -99,7 +99,7 @@
     </resultMap>
 
     <resultMap id="StoreOrderWithMainOrder"
-               type="com.joycity.joyclub.apifront.modal.order.list.StoreOrderWithDetailsAndMainOrder">
+               type="com.joycity.joyclub.apifront.modal.order.list.ProductStoreOrderWithDetailsAndMainOrder">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="order_id" jdbcType="BIGINT" property="orderId"/>
         <result column="store_id" jdbcType="BIGINT" property="storeId"/>

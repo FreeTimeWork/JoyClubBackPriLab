@@ -365,6 +365,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     @Override
     public ResultData clientCancelOrder(Long orderId) {
         orderMapper.cancelOrder(orderId, CANCEL_BY_CLIENT);
+        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_CANCELED);
         return new ResultData();
     }
 
@@ -386,7 +387,10 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     @Override
     public void systemCancelOrder(Long orderId) {
+
         orderMapper.cancelOrder(orderId, CANCEL_BY_SYSTEM);
+        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_CANCELED);
+
     }
 
     /**
@@ -400,7 +404,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         if (outCode != null) {
             orderMapper.setOutPayCodeById(orderId, outCode);
         }
-        orderStoreMapper.setOrderPayedByMainOrderId(orderId);
+        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_PAYED);
 
     }
 

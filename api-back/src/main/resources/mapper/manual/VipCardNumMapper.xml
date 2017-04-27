@@ -28,7 +28,7 @@
     </select>
     <select id="selectWithFilter"
             resultType="com.joycity.joyclub.apiback.modal.vipcardnum.VipCardNumInfo">
-        select n.id,n.num,n.batch,n.project_id,n.type,n.status,p.name projectName
+        select n.id,n.num,n.batch,n.project_id,n.type,n.status,n.use_time,n.create_time,p.name projectName
         from sys_vip_card_num n
         left join sys_project p on n.project_id = p.id
         <include refid="where_sql"/>

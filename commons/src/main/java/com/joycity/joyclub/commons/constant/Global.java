@@ -28,6 +28,6 @@ public class Global {
      */
     public static final String DATE_FORM_FORMAT ="yyyy-MM-dd HH:mm:ss";
 
-    public static final String SEX_MALE = "0";
-    public static final String SEX_FEMALE = "1";
+    public static final String SEX_MALE = "1";
+    public static final String SEX_FEMALE = "0";
 }

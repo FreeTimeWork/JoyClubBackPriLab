@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.client.mapper.ClientUserMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+
+    <select id="getListForBack"
+            resultType="com.joycity.joyclub.client.modal.Client">
+
+        SELECT * from client WHERE
+        <choose>
+            <when test="vipNo != null">
+                vip_code = #{vipNo}
+            </when>
+            <when test="cardNo != null">
+                card_no = #{cardNo}
+            </when>
+            <when test="phone != null">
+                tel = #{phone}
+            </when>
+            <otherwise>
+                group13 = #{group13}
+               <if test="cardType!=null">and vip_card_grade = #{cardType} </if>
+               <if test="pointStart!=null">and vip_point &gt;= #{pointStart} </if>
+               <if test="pointEnd!=null">and vip_point &lt;= #{pointEnd} </if>
+                order by vip_point desc
+            </otherwise>
+        </choose>
+
+        <include refid="limit"/>
+    </select>
+
+    <select id="countForBack"
+            resultType="java.lang.Long">
+
+        SELECT count(*) from client WHERE
+        <choose>
+            <when test="vipNo != null">
+                vip_code = #{vipNo}
+            </when>
+            <when test="cardNo != null">
+                card_no = #{cardNo}
+            </when>
+            <when test="phone != null">
+                tel = #{phone}
+            </when>
+            <otherwise>
+                group13 = #{group13}
+               <if test="cardType!=null">and vip_card_grade = #{cardType} </if>
+               <if test="pointStart!=null">and vip_point &gt;= #{pointStart} </if>
+               <if test="pointEnd!=null">and vip_point &lt;= #{pointEnd} </if>
+
+            </otherwise>
+        </choose>
+    </select>
+
+
+</mapper>

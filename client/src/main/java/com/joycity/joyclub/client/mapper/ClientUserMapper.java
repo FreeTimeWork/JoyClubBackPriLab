@@ -5,8 +5,12 @@ import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.modal.ClientExample;
 import com.joycity.joyclub.client.modal.WechatUserInfo;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -14,17 +18,66 @@ import org.apache.ibatis.annotations.Select;
 public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample> {
     @Select("select id from client where tel=#{tel}")
     Long getIdByTel(String tel);
+
     @Select("select vip_code from client where id=#{id}")
     String getVipCodeById(Long id);
+
     @Select("select id from client where vip_code=#{vipCode} limit 0,1")
     Long getIdByVipCode(String vipCode);
+
     @Select("select wx_head_img_url headimgurl,wx_nick_name nickName,wx_gender sex,wx_language language,wx_city city, wx_country country,wx_province province from client where id=#{id}")
     WechatUserInfo getWechatInfo(Long id);
+
     @Select("select vip_point from client where id=#{id}")
     Integer getPoint(Long id);
 
     @Select("select tel from client where id=#{id}")
     String getTel(Long id);
+
     @Select("update client set vip_point=#{point}  where id=#{id}")
-    Integer setPoint(@Param("id") Long id,@Param("point") Integer point);
+    Integer setPoint(@Param("id") Long id, @Param("point") Integer point);
+
+    /**
+     * vipNo,cardNo,phone 搜索时不加group13限制
+     *
+     * @param group13
+     * @param cardType
+     * @param pointStart
+     * @param pointEnd
+     * @param vipNo
+     * @param cardNo
+     * @param phone
+     * @return
+     */
+    List<Client> getListForBack(
+            @Param("group13") String group13,
+            @Param("cardType") String cardType,
+            @Param("pointStart") Integer pointStart,
+            @Param("pointEnd") Integer pointEnd,
+            @Param("vipNo") String vipNo,
+            @Param("cardNo") String cardNo,
+            @Param("phone") String phone,
+            @Param("pageUtil")PageUtil pageUtil
+            );    /**
+     * vipNo,cardNo,phone 搜索时不加group13限制
+     *
+     * @param group13
+     * @param cardType
+     * @param pointStart
+     * @param pointEnd
+     * @param vipNo
+     * @param cardNo
+     * @param phone
+     * @return
+     */
+    Long countForBack(
+            @Param("group13") String group13,
+            @Param("cardType") String cardType,
+            @Param("pointStart") Integer pointStart,
+            @Param("pointEnd") Integer pointEnd,
+            @Param("vipNo") String vipNo,
+            @Param("cardNo") String cardNo,
+            @Param("phone") String phone,
+            @Param("pageUtil")PageUtil pageUtil
+            );
 }

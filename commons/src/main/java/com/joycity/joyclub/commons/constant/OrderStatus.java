@@ -9,43 +9,48 @@ public class OrderStatus {
      * 未支付
      */
     public static final Byte MAIN_ORDER_STATUS_NOT_PAYED = 0;
-    /**
-     * 已支付
-     */
-    public static final Byte MAIN_ORDER_STATUS_PAYED = 1;
+
     /**
      * 已取消
      */
-    public static final Byte MAIN_ORDER_STATUS_CANCELLED = 2;
+    public static final Byte MAIN_ORDER_STATUS_CANCELLED = 1;
 
-
+    /**
+     * 已支付
+     */
+    public static final Byte MAIN_ORDER_STATUS_PAYED = 2;
 //    店铺订单状态
 
     /**
      * 店铺订单 未支付 继承主订单
      */
-    public static final Byte STORE_ORDER_STATUS_NOT_PAYED = -1;
+    public static final Byte STORE_ORDER_STATUS_NOT_PAYED = 0;
+
     /**
      * 店铺订单 已支付 继承主订单
      */
-    public static final Byte STORE_ORDER_STATUS_PAYED = 0;
+    public static final Byte STORE_ORDER_STATUS_CANCELED = 1;
+    /**
+     * 店铺订单 已支付 继承主订单
+     */
+    public static final Byte STORE_ORDER_STATUS_PAYED = 2;
 
     /**
      * 店铺订单 已发货
      */
-    public static final Byte STORE_ORDER_STATUS_SENT = 1;
+    public static final Byte STORE_ORDER_STATUS_SENT = 3;
     /**
      * 店铺订单已收货（包括自提和快递收货）
      */
-    public static final Byte STORE_ORDER_STATUS_RECEIVED = 2;
+    public static final Byte STORE_ORDER_STATUS_RECEIVED = 4;
     /**
      * 店铺订单退款中
      */
-    public static final Byte STORE_ORDER_STATUS_REFUNDING = 3;
+    public static final Byte STORE_ORDER_STATUS_REFUNDING = 5;
     /**
      * 店铺订单已退款退款
      */
-    public static final Byte STORE_ORDER_STATUS_REFUNDED = 4;
+    public static final Byte STORE_ORDER_STATUS_REFUNDED = 6;
     /**
      * 自提
      */

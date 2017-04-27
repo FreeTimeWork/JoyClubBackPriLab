@@ -1,14 +1,11 @@
 package com.joycity.joyclub.apifront.modal.order.list;
 
 import com.joycity.joyclub.apifront.modal.order.ProductOrder;
-import com.joycity.joyclub.apifront.modal.order.ProductOrderStore;
-
-import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/4/24.
  */
-public class StoreOrderWithDetailsAndMainOrder extends StoreOrderWithDetails {
+public class ProductStoreOrderWithDetailsAndMainOrder extends ProductStoreOrderWithDetails {
 
     private ProductOrder mainOrder;
 

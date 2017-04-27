@@ -23,5 +23,5 @@ public interface VipCardNumService {
      * 获得筛选框所需的数据
      * @return
      */
-    ResultData getFormData();
+    ResultData getFormData(Long projectId);
 }

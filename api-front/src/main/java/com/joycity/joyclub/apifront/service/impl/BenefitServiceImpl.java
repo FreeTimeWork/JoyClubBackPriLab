@@ -3,7 +3,7 @@ package com.joycity.joyclub.apifront.service.impl;
 import com.joycity.joyclub.apifront.service.BenefitService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
-import com.joycity.joyclub.client.service.ClientFrontService;
+import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
@@ -32,7 +32,7 @@ public class BenefitServiceImpl implements BenefitService {
     @Autowired
     CouponService couponService;
     @Autowired
-    ClientFrontService clientFrontService;
+    ClientService clientService;
     @Autowired
     CouponMapper couponMapper;
     @Autowired
@@ -84,7 +84,7 @@ public class BenefitServiceImpl implements BenefitService {
 
         //减积分
         if (pointCost > 0) {
-            clientFrontService.addPoint(clientId, Double.valueOf(-pointCost));
+            clientService.addPoint(clientId, Double.valueOf(-pointCost));
         }
         return new ResultData();
     }

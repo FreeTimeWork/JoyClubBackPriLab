@@ -50,6 +50,6 @@ public interface SysVipCardNumMapper extends BaseMapper<SysVipCardNum, Long, Sys
      * 按id倒序
      * @return
      */
-    @Select("select distinct batch from sys_vip_card_num  order by id desc")
-    List<String> getBatches();
+    @Select("select distinct batch from sys_vip_card_num where project_id = #{projectId} order by id desc")
+    List<String> getBatches(Long projectId);
 }
