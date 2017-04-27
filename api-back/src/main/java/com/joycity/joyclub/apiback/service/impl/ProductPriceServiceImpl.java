@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.apiback.constant.PriceReviewStatus;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleProductPriceMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 import static com.joycity.joyclub.apiback.constant.PriceReviewStatus.STATUS_NOT_REVIEW;
-import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_PERMIT;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_PERMIT;
 
 /**
  * Created by CallMeXYZ on 2017/2/27.

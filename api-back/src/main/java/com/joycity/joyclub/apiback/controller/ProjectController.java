@@ -1,14 +1,11 @@
 package com.joycity.joyclub.apiback.controller;
 
-import com.joycity.joyclub.apiback.constant.UserType;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysProject;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
 import com.joycity.joyclub.apiback.service.ProjectService;
-import com.joycity.joyclub.apiback.service.impl.ProjectServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
-import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 /**
  * Created by CallMeXYZ on 2017/3/28.

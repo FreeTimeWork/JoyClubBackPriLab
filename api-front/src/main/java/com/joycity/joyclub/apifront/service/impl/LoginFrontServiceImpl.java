@@ -1,14 +1,14 @@
 package com.joycity.joyclub.apifront.service.impl;
 
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
-import com.joycity.joyclub.apifront.mapper.manual.ClientUserMapper;
-import com.joycity.joyclub.apifront.mapper.manual.WechatOpenIdMapper;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
-import com.joycity.joyclub.apifront.modal.client.Client;
+import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.apifront.modal.project.SysProject;
-import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
+import com.joycity.joyclub.client.modal.WechatUserInfo;
 import com.joycity.joyclub.apifront.service.*;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import static com.joycity.joyclub.apifront.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_DIGITAL;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.constant.ProjectVipCard.VIP_CARD_DIGITAL;
 
 /**
  * Created by CallMeXYZ on 2017/4/10.
@@ -32,13 +32,12 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     @Autowired
     KeChuanCrmService keChuanCrmService;
     @Autowired
-    OpenIdService openIdService;
+    WechatOpenIdService wechatOpenIdService;
     @Autowired
     ProjectMapper projectMapper;
     @Autowired
     ClientUserMapper clientMapper;
-    @Autowired
-    WechatOpenIdMapper wechatOpenIdMapper;
+
     @Autowired
     VipCardNumFrontService vipCardNumService;
     @Autowired
@@ -86,7 +85,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 //一定要抛出异常，终止后续操作
                 throw e;
             }
-            logger.info("使用电子卡"+cardNumAvailable);
+            logger.info("使用电子卡" + cardNumAvailable);
             kechuanClient.setVipCode(vipCode);
         }
 
@@ -110,10 +109,8 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         //这一步不放在userId==null里，因为后续的话有多种登陆，同步和创建将会拆成新方法，
         //可能用户在其他登陆中先创建了会员，然后再进行微信登陆
         //所以判断openid有没有存储，必须一直判断，而不是只放在userId==null时
-        if (!openIdService.checkOpenIdExist(openId)) {
-            // TODO: 2017/4/17 多个微信 
-            wechatOpenIdMapper.saveOpenId(projectId, user.getId(), openId);
-        }
+        wechatOpenIdService.saveOrUpdateProjectOpenId(projectId, user.getId(), openId);
+
         clientLoginLogMapper.addLog(user.getId(), projectId);
         //只返回用户id和用户手机号
         Client resultUser = new Client();

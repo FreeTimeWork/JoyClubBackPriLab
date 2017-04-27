@@ -1,11 +1,11 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.service.ClientFrontService;
+import com.joycity.joyclub.client.service.ClientFrontService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 
 /**
  * Created by Administrator on 2017/4/16.

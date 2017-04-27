@@ -495,63 +495,63 @@ public class ProductOrderDetailExample {
             return (Criteria) this;
         }
 
-        public Criteria andPointrateIsNull() {
-            addCriterion("pointRate is null");
+        public Criteria andPointRateIsNull() {
+            addCriterion("point_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateIsNotNull() {
-            addCriterion("pointRate is not null");
+        public Criteria andPointRateIsNotNull() {
+            addCriterion("point_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateEqualTo(Float value) {
-            addCriterion("pointRate =", value, "pointrate");
+        public Criteria andPointRateEqualTo(Float value) {
+            addCriterion("point_rate =", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateNotEqualTo(Float value) {
-            addCriterion("pointRate <>", value, "pointrate");
+        public Criteria andPointRateNotEqualTo(Float value) {
+            addCriterion("point_rate <>", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateGreaterThan(Float value) {
-            addCriterion("pointRate >", value, "pointrate");
+        public Criteria andPointRateGreaterThan(Float value) {
+            addCriterion("point_rate >", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateGreaterThanOrEqualTo(Float value) {
-            addCriterion("pointRate >=", value, "pointrate");
+        public Criteria andPointRateGreaterThanOrEqualTo(Float value) {
+            addCriterion("point_rate >=", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateLessThan(Float value) {
-            addCriterion("pointRate <", value, "pointrate");
+        public Criteria andPointRateLessThan(Float value) {
+            addCriterion("point_rate <", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateLessThanOrEqualTo(Float value) {
-            addCriterion("pointRate <=", value, "pointrate");
+        public Criteria andPointRateLessThanOrEqualTo(Float value) {
+            addCriterion("point_rate <=", value, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateIn(List<Float> values) {
-            addCriterion("pointRate in", values, "pointrate");
+        public Criteria andPointRateIn(List<Float> values) {
+            addCriterion("point_rate in", values, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateNotIn(List<Float> values) {
-            addCriterion("pointRate not in", values, "pointrate");
+        public Criteria andPointRateNotIn(List<Float> values) {
+            addCriterion("point_rate not in", values, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateBetween(Float value1, Float value2) {
-            addCriterion("pointRate between", value1, value2, "pointrate");
+        public Criteria andPointRateBetween(Float value1, Float value2) {
+            addCriterion("point_rate between", value1, value2, "pointRate");
             return (Criteria) this;
         }
 
-        public Criteria andPointrateNotBetween(Float value1, Float value2) {
-            addCriterion("pointRate not between", value1, value2, "pointrate");
+        public Criteria andPointRateNotBetween(Float value1, Float value2) {
+            addCriterion("point_rate not between", value1, value2, "pointRate");
             return (Criteria) this;
         }
 

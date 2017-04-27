@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 
 /**
  * Created by CallMeXYZ on 2017/4/10.

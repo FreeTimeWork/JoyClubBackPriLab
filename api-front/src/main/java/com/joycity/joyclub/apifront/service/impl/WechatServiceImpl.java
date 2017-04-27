@@ -1,9 +1,9 @@
 package com.joycity.joyclub.apifront.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
-import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
+import com.joycity.joyclub.client.modal.WechatUserInfo;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.service.WechatService;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-import static com.joycity.joyclub.apifront.constant.ResultCode.WECHAT_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_ERROR;
 
 /**
  * Created by CallMeXYZ on 2017/4/7.
@@ -43,7 +43,6 @@ public class WechatServiceImpl implements WechatService {
             throw new BusinessException(WECHAT_ERROR, "获取微信用户信息失败");
         }
         return info;
-
     }
 
     @Override
@@ -57,7 +56,6 @@ public class WechatServiceImpl implements WechatService {
         }
         return result;
     }
-
     /**
      * 获取accessToken
      * getToken

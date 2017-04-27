@@ -6,7 +6,7 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.joycity.joyclub.apifront.constant.Global.URL_API_FRONT;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**

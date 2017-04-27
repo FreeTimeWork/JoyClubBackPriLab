@@ -1,12 +1,14 @@
 package com.joycity.joyclub.coupon.service.impl;
 
 import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.exception.CouponException;
+import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.coupon.mapper.CouponCardTypeMapper;
 import com.joycity.joyclub.coupon.mapper.CouponCodeMapper;
 import com.joycity.joyclub.coupon.mapper.CouponMapper;
@@ -19,7 +21,6 @@ import com.joycity.joyclub.coupon.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public List<CouponCardType> getCardTypes(Long couponId) {
-        return  couponCardTypeMapper.getByCouponId(couponId);
+        return couponCardTypeMapper.getByCouponId(couponId);
     }
 
     @Override
@@ -201,7 +202,7 @@ public class CouponServiceImpl implements CouponService {
             }
         }
         if (errorText != null) {
-            throw new CouponException(errorText);
+            throw new BusinessException(ResultCode.COUPON_CHECK_ERROR, errorText);
 
         } else {
             //成功的话 设置卡券号为已核销
@@ -233,21 +234,17 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Integer clientReceiveCoupon(Long couponId, Long clientId) throws CouponException {
+    public Integer clientReceiveCoupon(Long couponId, Long clientId) {
         CouponCode code = couponCodeMapper.getMinCodeIdOfCoupon(couponId);
-        if (code == null) {
-            //没有能领取
-            throw new CouponException("卡券已被领光了");
-        }
+        ThrowBusinessExceptionUtil.checkNull(code, "卡券已被领光了");
+
         Coupon coupon = couponMapper.selectByPrimaryKey(code.getCouponId());
-        if (coupon == null) {
-            throw new CouponException("卡券已下架");
-        } else {
-            couponCodeMapper.setCodeUsed(code.getId(), clientId);
-            //并发问题
-            couponMapper.addNum(coupon.getId(), -1);
-            return coupon.getPointCost();
-        }
+        ThrowBusinessExceptionUtil.checkNull(coupon, "卡券已下架");
+        couponCodeMapper.setCodeUsed(code.getId(), clientId);
+        //并发问题
+        couponMapper.addNum(coupon.getId(), -1);
+        return coupon.getPointCost();
+
     }
 
     /**

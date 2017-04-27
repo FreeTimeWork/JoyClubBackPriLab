@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.joycity.joyclub.apiback.constant.Global.DATE_FORM_FORMAT;
+import static com.joycity.joyclub.commons.constant.Global.DATE_FORM_FORMAT;
 
 /**
  * Created by CallMeXYZ on 2017/3/30.

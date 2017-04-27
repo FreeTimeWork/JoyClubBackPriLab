@@ -15,4 +15,6 @@ public interface ProductPriceFrontMapper {
      */
     @Select("select id,product_id,price,point_rate from sale_product_price where delete_flag=0 and  product_id=#{productId} and forbid_flag=false and review_status=1 and start_time<=now() and end_time>=now() limit 0,1 ")
     ProductPrice getNowPrice(Long productId);
+
+
 }

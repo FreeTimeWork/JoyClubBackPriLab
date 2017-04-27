@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apifront.util;
 
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 import org.apache.commons.logging.Log;
@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static com.joycity.joyclub.apifront.constant.ResultCode.HTTPKIT_CONNECT_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.HTTPKIT_CONNECT_ERROR;
 
 public class HttpKit {
 

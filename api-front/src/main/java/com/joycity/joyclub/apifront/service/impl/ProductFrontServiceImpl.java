@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.joycity.joyclub.apifront.util.ThrowBusinessExceptionUtil.checkNull;
+import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
 
 /**
  * Created by CallMeXYZ on 2017/4/13.

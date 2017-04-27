@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 

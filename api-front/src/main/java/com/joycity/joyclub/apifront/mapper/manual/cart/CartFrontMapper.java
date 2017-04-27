@@ -23,6 +23,19 @@ public interface CartFrontMapper extends BaseMapper<Cart, Long, CartExample> {
     Integer setCartNum(@Param("id") Long id, @Param("num") Integer num);
 
     /**
+     * 减去购物车数量
+     * @param projectId
+     * @param clientId
+     * @param attrId
+     * @param subNum
+     * @return
+     */
+    @Update("update sale_cart set  num = num - #{subNum} where id=#{id}")
+    Integer subCartNum(@Param("projectId") Long projectId,
+                       @Param("clientId") Long clientId,
+                       @Param("attrId") Long attrId,
+                       @Param("subNum") Integer subNum);
+    /**
      * 在原有num的基础上增加
      */
     @Update("update sale_cart set  num = num+#{num} where id=#{id}")

@@ -1,17 +1,15 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.apiback.exception.BusinessException;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.util.ExcelToBeanParser;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.exception.CouponException;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.service.CouponService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
-import static com.joycity.joyclub.apiback.constant.ResultCode.COUPON_CHECK_ERROR;
-import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.apiback.constant.ResultCode.ERR_IMPORT_EXCEL;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.constant.ResultCode.ERR_IMPORT_EXCEL;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -37,7 +34,9 @@ public class CouponController extends BaseUserSessionController {
     @Autowired
     CouponService couponService;
 
-    /**{id,name}list
+    /**
+     * {id,name}list
+     *
      * @return
      */
     @RequestMapping(value = "/coupons/simple", method = GET)
@@ -68,6 +67,7 @@ public class CouponController extends BaseUserSessionController {
         checkPlatformOrProjectUser(httpSession);
         return couponService.getCouponCodeList(type, code, phone, name, pageUtil);
     }
+
     @RequestMapping(value = "/coupon/{id}/cardtypes", method = GET)
     public ResultData getCouponCodeList(@PathVariable Long id,
                                         HttpSession httpSession) {
@@ -75,6 +75,7 @@ public class CouponController extends BaseUserSessionController {
         checkPlatformOrProjectUser(httpSession);
         return new ResultData(new ListResult(couponService.getCardTypes(id)));
     }
+
     /**
      * 开始投放卡券
      *
@@ -179,11 +180,9 @@ public class CouponController extends BaseUserSessionController {
             @PathVariable Long id,
             @RequestParam String code) {
         SysUser user = checkUser(httpSession);
-        try {
-            return couponService.checkCode(id,user.getId(), code);
-        } catch (CouponException e) {
-          throw new BusinessException(COUPON_CHECK_ERROR,e.getMessage());
-        }
+
+        return couponService.checkCode(id, user.getId(), code);
+
     }
 
 }

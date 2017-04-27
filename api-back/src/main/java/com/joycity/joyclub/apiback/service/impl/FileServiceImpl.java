@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.upload.FileUploadResult;
 import com.joycity.joyclub.apiback.service.FileService;
@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.UPLOAD_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.UPLOAD_ERROR;
 
 /**
  * Created by CallMeXYZ on 2017/3/28.

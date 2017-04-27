@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.pay.wechat;
 
 
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.util.HttpKit;
 import com.joycity.joyclub.apifront.util.WechatXmlUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,7 +30,7 @@ import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.joycity.joyclub.apifront.constant.ResultCode.WECHAT_PAY_REQUEST_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_PAY_REQUEST_ERROR;
 
 @Service
 public class WxPayService {

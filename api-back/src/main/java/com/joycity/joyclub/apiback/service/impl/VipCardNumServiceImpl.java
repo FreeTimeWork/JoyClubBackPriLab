@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectVipCardRangeMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysVipCardNumMapper;
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.VIP_CARD_MAKE_ERROR;
-import static com.joycity.joyclub.commons.constants.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
+import static com.joycity.joyclub.commons.constant.ResultCode.VIP_CARD_MAKE_ERROR;
+import static com.joycity.joyclub.commons.constant.ProjectVipCard.VIP_CARD_STATUS_NOT_USED;
 
 /**
  * Created by CallMeXYZ on 2017/4/6.

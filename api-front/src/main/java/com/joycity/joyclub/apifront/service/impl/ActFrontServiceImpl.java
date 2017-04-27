@@ -12,7 +12,7 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.joycity.joyclub.apifront.util.ThrowBusinessExceptionUtil.checkNull;
+import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
 
 /**
  * Created by CallMeXYZ on 2017/4/13.

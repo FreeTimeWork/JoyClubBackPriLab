@@ -1,13 +1,13 @@
 package com.joycity.joyclub.apiback.config.security;
 
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.USER_SESSION_NULL;
+import static com.joycity.joyclub.commons.constant.ResultCode.USER_SESSION_NULL;
 
 /**
  * Created by CallMeXYZ on 2017/3/27.

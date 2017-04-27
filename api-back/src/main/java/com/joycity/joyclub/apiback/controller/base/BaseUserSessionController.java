@@ -1,14 +1,14 @@
 package com.joycity.joyclub.apiback.controller.base;
 
 import com.joycity.joyclub.apiback.constant.UserType;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
-import static com.joycity.joyclub.apiback.constant.ResultCode.USER_SESSION_NULL;
+import static com.joycity.joyclub.commons.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
+import static com.joycity.joyclub.commons.constant.ResultCode.USER_SESSION_NULL;
 import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**

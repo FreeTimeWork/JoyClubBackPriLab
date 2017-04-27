@@ -12,6 +12,7 @@
     <properties>
         <commons>1.0-SNAPSHOT</commons>
         <coupon>1.0-SNAPSHOT</coupon>
+        <client>1.0-SNAPSHOT</client>
         <httpcomponents.httpclient>4.5.2</httpcomponents.httpclient>
         <httpcomponents.httpcore>4.4.4</httpcomponents.httpcore>
         <ning.asnchttpclient>1.9.40</ning.asnchttpclient>
@@ -27,6 +28,10 @@
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>coupon</artifactId>
             <version>${coupon}</version>
+        </dependency><dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>client</artifactId>
+            <version>${client}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

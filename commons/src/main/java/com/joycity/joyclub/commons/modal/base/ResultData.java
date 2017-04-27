@@ -1,12 +1,12 @@
 package com.joycity.joyclub.commons.modal.base;
 
 
-import static com.joycity.joyclub.commons.constants.ResultCode.SUCCESS;
+import static com.joycity.joyclub.commons.constant.ResultCode.SUCCESS;
 
 /**
  * Created by CallMeXYZ on 2017/2/21.
  * api业务正确时，http数据返回的基础类
- * code类型请看{@link com.joycity.joyclub.commons.constants.ResultCode}
+ * code类型请看{@link com.joycity.joyclub.commons.constant.ResultCode}
  * 如果正确返回结构为<code>{data:object,code:200,}</code>
  * 如果出错返回结构未<code>{error:stringMsg,code:errorCode,}</code>
  */

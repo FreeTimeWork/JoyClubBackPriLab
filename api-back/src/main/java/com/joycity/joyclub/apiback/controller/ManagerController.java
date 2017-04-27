@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 /**
  * Created by CallMeXYZ on 2017/3/28.

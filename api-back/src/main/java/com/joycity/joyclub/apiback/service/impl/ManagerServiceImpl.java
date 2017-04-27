@@ -2,7 +2,7 @@ package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.apiback.constant.ProjectType;
 import com.joycity.joyclub.apiback.constant.UserType;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysUserMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.ACCOUNT_EXIST;
-import static com.joycity.joyclub.apiback.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.apiback.constant.ResultCode.OLD_PASSWORD_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.ACCOUNT_EXIST;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.constant.ResultCode.OLD_PASSWORD_ERROR;
 import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**

@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.util;
 
 
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.ResultCode.ERR_IMPORT_EXCEL;
+import static com.joycity.joyclub.commons.constant.ResultCode.ERR_IMPORT_EXCEL;
 
 public class ExcelToBeanParser {
     public final static String DEFAULT_DATE_FORMATTER = "yyyy-MM-dd";

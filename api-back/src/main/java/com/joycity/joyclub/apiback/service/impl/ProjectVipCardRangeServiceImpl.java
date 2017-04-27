@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.joycity.joyclub.apiback.constant.ResultCode;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysProjectVipCardRangeMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;

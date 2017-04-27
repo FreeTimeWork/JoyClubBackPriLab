@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.service;
 
         import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
-        import com.joycity.joyclub.apifront.modal.wechat.WechatUserInfo;
+        import com.joycity.joyclub.client.modal.WechatUserInfo;
 
 /**
  * Created by CallMeXYZ on 2017/4/7.

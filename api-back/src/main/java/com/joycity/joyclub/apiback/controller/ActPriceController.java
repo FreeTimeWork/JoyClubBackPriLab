@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SaleActPrice;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.apiback.constant.Global.URL_API_BACK;
-import static com.joycity.joyclub.apiback.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.commons.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
 import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**

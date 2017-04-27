@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
 
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultError;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

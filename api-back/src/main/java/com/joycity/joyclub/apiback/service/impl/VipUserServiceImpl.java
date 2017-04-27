@@ -1,9 +1,9 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.joycity.joyclub.apiback.constant.ResultCode;
+import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.apiback.modal.VipUser;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.VipUserMapper;
 import com.joycity.joyclub.apiback.service.VipUserService;
 import com.joycity.joyclub.apiback.util.ExcelExporter;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.joycity.joyclub.apiback.constant.Global.LOGGER_HEADER;
+import static com.joycity.joyclub.commons.constant.Global.LOGGER_HEADER;
 
 /**
  * Created by amosc on 2017/2/21.

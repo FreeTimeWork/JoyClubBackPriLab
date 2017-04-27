@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apifront.service.impl;
 
-import com.joycity.joyclub.apifront.exception.BusinessException;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.mapper.manual.MsgAuthCodeMapper;
 import com.joycity.joyclub.apifront.modal.MsgAuthCode;
 import com.joycity.joyclub.apifront.service.MsgAuthCodeService;
@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.joycity.joyclub.apifront.constant.ResultCode.MSG_AUTH_CODE_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.MSG_AUTH_CODE_ERROR;
 
 @Service
 public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
