@@ -8,6 +8,7 @@ public class ProductSimple {
     private String name;
     private String portrait;
     private Integer price;
+    private Integer basePrice;
     private Float pointRate;
     /**
      * 基于分类的积分比例
@@ -44,6 +45,14 @@ public class ProductSimple {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public Integer getBasePrice() {
+        return basePrice;
+    }
+
+    public void setBasePrice(Integer basePrice) {
+        this.basePrice = basePrice;
     }
 
     public Float getPointRate() {
