@@ -39,7 +39,7 @@
         left join sys_product_category c on a.category_id=c.id
         left join sys_store ss on a.store_id = ss.id
         where
-        ss.project_id = #{projectId} and
+        ss.project_id = #{projectId} and p.forbid_flag =0 and
         p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc
         <include refid="limit"/>
