@@ -42,13 +42,21 @@ public class CartFrontServiceImpl implements CartFrontService {
     @Override
     public ResultData setCartNum(Long id, Integer num) {
         //这里就不判断购物车是否存在了，返回值的affectNum里可以看出来
-        return new ResultData(new UpdateResult(cartMapper.setCartNum(id, num)));
+        UpdateResult updateResult = new UpdateResult();
+
+        Integer oldNum = cartMapper.getNumById(id);
+        if (!(oldNum > 0)) {
+            updateResult.setAffectNum(0);
+        } else {
+            updateResult.setAffectNum(cartMapper.setCartNum(id, num));
+        }
+        return new ResultData(updateResult);
     }
 
     @Override
     public List<CartInfo> getCartList(Long projectId, Long clientId) {
 
-        return cartMapper.getCartInfoList(projectId,clientId);
+        return cartMapper.getCartInfoList(projectId, clientId);
     }
 
     @Override
