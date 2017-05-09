@@ -2,8 +2,8 @@ package com.joycity.joyclub.apiback.service.impl;
 
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SaleActMapper;
-import com.joycity.joyclub.apiback.mapper.manual.SaleStoreDesignerMapper;
 import com.joycity.joyclub.apiback.mapper.manual.SysActCategoryMapper;
+import com.joycity.joyclub.commons.mapper.manual.SaleStoreDesignerMapper;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;

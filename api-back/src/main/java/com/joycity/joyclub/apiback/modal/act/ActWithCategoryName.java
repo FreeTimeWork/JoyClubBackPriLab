@@ -1,11 +1,11 @@
 package com.joycity.joyclub.apiback.modal.act;
 
-import com.joycity.joyclub.apiback.modal.generated.SaleProductWithBLOBs;
+import com.joycity.joyclub.apiback.modal.generated.SaleActWithBLOBs;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
  */
-public class ActWithCategoryName extends SaleProductWithBLOBs {
+public class ActWithCategoryName extends SaleActWithBLOBs {
     private String categoryName;
 
 

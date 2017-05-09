@@ -2,7 +2,7 @@ package com.joycity.joyclub.coupon.service;
 
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.exception.CouponException;
+
 import com.joycity.joyclub.coupon.modal.CouponForClient;
 import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.modal.generated.CouponCardType;

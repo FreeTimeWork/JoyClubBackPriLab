@@ -35,7 +35,9 @@ public interface CouponMapper extends BaseMapper<Coupon, Long, CouponExample> {
             @Param("clientId") Long clientId,
             @Param("cardType") String cardType,
             @Param("pageUtil") PageUtil pageUtil
-    );  List<CouponForClient> selectForFrontWithoutClientByFilter(
+    );
+
+    List<CouponForClient> selectForFrontWithoutClientByFilter(
 
             @Param("projectId") Long projectId,
             @Param("pageUtil") PageUtil pageUtil

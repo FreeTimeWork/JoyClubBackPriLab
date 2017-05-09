@@ -2,11 +2,11 @@ package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SaleProductAttr;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
-import com.joycity.joyclub.apiback.service.ProductAttrService;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.modal.generated.SaleProductAttr;
+import com.joycity.joyclub.product.service.ProductAttrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,7 +64,7 @@ public class ProductAttrController extends BaseUserSessionController {
         //确保是商户用户
         checkStoreUser(httpSession);
         productAttr.setId(id);
-        return productAttrService.updateProductAttr( productAttr);
+        return productAttrService.updateProductAttr(productAttr);
     }
 
     /**

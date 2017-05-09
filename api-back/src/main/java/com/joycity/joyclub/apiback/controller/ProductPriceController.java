@@ -3,10 +3,10 @@ package com.joycity.joyclub.apiback.controller;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SaleProductPrice;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
-import com.joycity.joyclub.apiback.service.ProductPriceService;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.modal.generated.SaleProductPrice;
+import com.joycity.joyclub.product.service.ProductPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

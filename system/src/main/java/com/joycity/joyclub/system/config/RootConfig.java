@@ -17,8 +17,8 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 /*@EnableScheduling*/
 @ComponentScan(basePackages = {"com.joycity.joyclub"}, excludeFilters = {@ComponentScan.Filter(Controller.class)})
-@PropertySource("classpath:application-dev.properties")
-//@PropertySource("classpath:application-prod.properties")
+//@PropertySource("classpath:application-dev.properties")
+@PropertySource("classpath:application-prod.properties")
 public class RootConfig {
     @Bean
     public RestTemplate restTemplate() {

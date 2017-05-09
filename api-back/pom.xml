@@ -30,6 +30,11 @@
             <artifactId>client</artifactId>
             <version>${client}</version>
         </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>product</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

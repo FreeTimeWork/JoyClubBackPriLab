@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.product.mapper.ProductMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <sql id="where_store_and_name">
+        <where>
+            p.delete_flag=0 and p.store_id=#{storeId}
+            <if test="nameLike!=null">
+                and p.name like #{nameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countByStoreIdAndName" resultType="java.lang.Long">
+
+        select count(*) from sale_product p
+        <include refid="where_store_and_name"/>
+    </select>
+    <select id="selectByStoreIdAndName"
+            resultType="com.joycity.joyclub.product.modal.ProductWithCategoryAndDesignerName">
+
+        select p.id,p.name,p.base_price,p.category_id,p.designer_id,c.name categoryName,d.name designerName
+        from sale_product p
+        left join sys_product_category c on c.id=p.category_id
+        left join sale_store_designer d on d.id=p.designer_id
+        <include refid="where_store_and_name"/>
+        order by p.id desc
+        <include refid="limit"/>
+    </select>
+    <!-- front start-->
+
+    <sql id="product_simple_columns">
+        a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.special_price_flag, c.point_rate as basePointRate
+    </sql>
+    <select id="selectByFilter"
+            resultType="com.joycity.joyclub.product.modal.ProductSimple">
+
+        select
+        <include refid="product_simple_columns"/>
+        from sale_product_price p
+        left join sale_product a on a.id = p.product_id
+        left join sys_product_category c on a.category_id=c.id
+        where
+        <if test="specialPriceFlag!=null">
+            p.special_price_flag = #{specialPriceFlag}
+        </if>
+        <if test="storeId!=null">
+            and  a.store_id = #{storeId}
+        </if>
+        <if test="designerId!=null">
+            and  a.designer_id = #{designerId}
+        </if>
+        and p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        order by a.display_weight desc,a.id desc
+        <include refid="limit"/>
+
+    </select>
+
+
+    <select id="selectByProject"
+            resultType="com.joycity.joyclub.product.modal.ProductSimple">
+
+        select
+        <include refid="product_simple_columns"/>
+        from sale_product_price p
+        left join sale_product a on a.id = p.product_id
+        left join sys_product_category c on a.category_id=c.id
+        left join sys_store ss on a.store_id = ss.id
+        where
+        ss.project_id = #{projectId}
+        <if test="specialPriceFlag!=null">
+         and p.special_price_flag = #{specialPriceFlag}
+        </if>
+        and p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        order by a.display_weight desc,a.id desc
+        <include refid="limit"/>
+
+    </select>
+
+
+    <select id="getInfo" resultType="com.joycity.joyclub.product.modal.ProductInfoPage">
+        select  p.id, p.store_id, p.category_id,p.designer_id, p.name, p.base_price, p.portrait, p.carousel,  p.html_content,c.point_rate basePointRate
+        from sale_product p
+        left join sys_product_category c on c.id = p.category_id
+
+        where p.id =#{id}
+
+    </select>
+
+</mapper>

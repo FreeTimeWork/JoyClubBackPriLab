@@ -45,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
         checkNullThrowUserNotExist(client);
         VipCardInfo info = new VipCardInfo();
         info.setCardType(client.getVipCardGrade());
-        info.setVipPoint(client.getVipPoint());
+        info.setVipPoint(getPoint(id));
         info.setPointRecords(keChuanCrmService.getScoreRecord(client.getVipCode()));
         info.setSaleRecords(keChuanCrmService.getSaleRecord(client.getVipCode()));
         return new ResultData(info);

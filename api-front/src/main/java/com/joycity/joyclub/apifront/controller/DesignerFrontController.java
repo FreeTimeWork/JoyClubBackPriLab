@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.service.DesignerFrontService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.service.DesignerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping(URL_API_FRONT)
 public class DesignerFrontController {
     @Autowired
-    DesignerFrontService designerService;
+    DesignerService designerService;
 
     @RequestMapping(value = "/designer/{id}", method = GET)
     public ResultData getInfo(@PathVariable Long id) {

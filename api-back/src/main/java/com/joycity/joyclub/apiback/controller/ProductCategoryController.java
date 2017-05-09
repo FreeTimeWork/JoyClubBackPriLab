@@ -2,9 +2,9 @@ package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SysProductCategory;
+import com.joycity.joyclub.commons.modal.generated.SysProductCategory;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
-import com.joycity.joyclub.apiback.service.ProductCategoryService;
+import com.joycity.joyclub.commons.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
