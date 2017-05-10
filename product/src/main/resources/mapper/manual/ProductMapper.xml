@@ -32,7 +32,7 @@
     <!-- front start-->
 
     <sql id="product_simple_columns">
-        a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.special_price_flag, c.point_rate as basePointRate
+        a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.special_price_flag, c.point_rate as basePointRate,p.start_time priceStartTime,p.end_time priceEndTime,sd.name designerName,sd.portrait designerPortrait
     </sql>
     <select id="selectByFilter"
             resultType="com.joycity.joyclub.product.modal.ProductSimple">
@@ -42,6 +42,7 @@
         from sale_product_price p
         left join sale_product a on a.id = p.product_id
         left join sys_product_category c on a.category_id=c.id
+        left join sale_store_designer sd on sd.id = a.designer_id
         where
         <if test="specialPriceFlag!=null">
             p.special_price_flag = #{specialPriceFlag}
@@ -68,6 +69,7 @@
         left join sale_product a on a.id = p.product_id
         left join sys_product_category c on a.category_id=c.id
         left join sys_store ss on a.store_id = ss.id
+        left join sale_store_designer sd on sd.id = a.designer_id
         where
         ss.project_id = #{projectId}
         <if test="specialPriceFlag!=null">

@@ -47,7 +47,7 @@ public interface ProductOrderStoreMapper extends BaseMapper<SaleProductOrderStor
      * @return
      */
     @Update("update sale_product_order_store set status=#{status},delivery_time = now(),delivery_company=#{deliveryCompany},delivery_code=#{deliveryCode} where id = #{storeOrderId}")
-    Integer setDelieveryInfo(@Param("storeOrderId") Long storeOrderId, @Param("status") Byte status, @Param("deliveryCompany") String deliveryCompany, @Param("deliveryCode") String deliveryCode);
+    Integer setDeliveryInfo(@Param("storeOrderId") Long storeOrderId, @Param("status") Byte status, @Param("deliveryCompany") String deliveryCompany, @Param("deliveryCode") String deliveryCode);
 
     @Update("update sale_product_order_store set status=#{status},receive_time=now() where id = #{storeOrderId}")
     Integer setReceived(@Param("storeOrderId") Long storeOrderId, @Param("status") Byte status);

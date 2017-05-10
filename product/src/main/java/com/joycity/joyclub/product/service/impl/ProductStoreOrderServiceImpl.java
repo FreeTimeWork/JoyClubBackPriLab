@@ -56,7 +56,7 @@ public class ProductStoreOrderServiceImpl implements ProductStoreOrderService {
     @Override
     public ResultData completeDelivery(Long storeOrderId, String deliveryCompany, String deliveryCode) {
         // TODO: 2017/4/27 验证该订单属于该商户 验证该订单状态为待发货
-        storeOrderMapper.setDelieveryInfo(storeOrderId, OrderStatus.STORE_ORDER_STATUS_SENT, deliveryCompany, deliveryCode);
+        storeOrderMapper.setDeliveryInfo(storeOrderId, OrderStatus.STORE_ORDER_STATUS_SENT, deliveryCompany, deliveryCode);
         return new ResultData();
     }
     ////////////////////////////api front////////////////////////////

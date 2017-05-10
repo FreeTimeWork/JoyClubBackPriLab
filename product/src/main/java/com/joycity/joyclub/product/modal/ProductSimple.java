@@ -1,5 +1,7 @@
 package com.joycity.joyclub.product.modal;
 
+import java.util.Date;
+
 /**
  * Created by CallMeXYZ on 2017/4/14.
  */
@@ -7,8 +9,8 @@ public class ProductSimple {
     private Long id;
     private String name;
     private String portrait;
-    private Integer price;
-    private Integer basePrice;
+    private Float price;
+    private Float basePrice;
     private Float pointRate;
     /**
      * 特价标志
@@ -19,6 +21,10 @@ public class ProductSimple {
      */
     private Float basePointRate;
 
+    private Date priceStartTime;
+    private Date priceEndTime;
+    private String designerPortrait;
+    private String designerName;
     public Long getId() {
         return id;
     }
@@ -43,19 +49,19 @@ public class ProductSimple {
         this.portrait = portrait;
     }
 
-    public Integer getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
-    public Integer getBasePrice() {
+    public Float getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(Integer basePrice) {
+    public void setBasePrice(Float basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -81,6 +87,39 @@ public class ProductSimple {
     }
 
     public void setSpecialPriceFlag(Boolean specialPriceFlag) {
+
         this.specialPriceFlag = specialPriceFlag;
+    }
+
+    public String getDesignerPortrait() {
+        return designerPortrait;
+    }
+
+    public void setDesignerPortrait(String designerPortrait) {
+        this.designerPortrait = designerPortrait;
+    }
+
+    public String getDesignerName() {
+        return designerName;
+    }
+
+    public void setDesignerName(String designerName) {
+        this.designerName = designerName;
+    }
+
+    public Date getPriceStartTime() {
+        return priceStartTime;
+    }
+
+    public void setPriceStartTime(Date priceStartTime) {
+        this.priceStartTime = priceStartTime;
+    }
+
+    public Date getPriceEndTime() {
+        return priceEndTime;
+    }
+
+    public void setPriceEndTime(Date priceEndTime) {
+        this.priceEndTime = priceEndTime;
     }
 }

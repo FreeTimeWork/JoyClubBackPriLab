@@ -106,6 +106,7 @@ public class ProductServiceImpl implements ProductService {
         info.setPointRate(price.getPointRate());
         //设置特价标志
         info.setSpecialPriceFlag(price.getSpecialPriceFlag());
+
         IdNamePortrait store = storeMapper.getSimpleInfo(info.getStoreId());
         checkNull(store, "商户不存在");
         info.setStore(store);
@@ -115,6 +116,7 @@ public class ProductServiceImpl implements ProductService {
                 info.setDesigner(designer);
             }
         }
+
 
         return new ResultData(info);
     }

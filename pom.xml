@@ -16,6 +16,7 @@
         <module>client</module>
         <module>act</module>
         <module>product</module>
+        <module>alipay</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

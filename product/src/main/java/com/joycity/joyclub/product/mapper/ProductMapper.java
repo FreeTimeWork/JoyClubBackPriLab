@@ -9,6 +9,7 @@ import com.joycity.joyclub.product.modal.ProductWithCategoryAndDesignerName;
 import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -53,5 +54,16 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
             @Param("pageUtil") PageUtil pageUtil
     );
 
-
+    /**
+     * 某个会员的某个商品的所有未取消订单的数量，包括已支付和未支付，但是不包括未取消
+     */
+    @Select("select count(*)" +
+            "  from sale_product_order_detail d" +
+            "  LEFT JOIN  `sale_product_attr`  attr on attr.id= d.`product_attr`" +
+            "  left join `sale_product` pro on pro.`id`= attr.product_id" +
+            "  left join `sale_product_order_store` so on so.`id`= d.`store_order_id`" +
+            "  LEFT JOIN `sale_product_order` mo on mo.`id`= so.`order_id`" +
+            " where mo.`client_id`= #{clientId}" +
+            "   and pro.`id`= #{productId} and mo.status in (0,2)")
+    Integer countProductNotCanceledOrder(@Param("productId") Long productId, @Param("clientId") Long clientId);
 }

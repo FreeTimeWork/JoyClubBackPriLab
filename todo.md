@@ -28,6 +28,7 @@
 - 压力测试，京东借口
 -  `POI`相关功能在运行时需要更多的包
 - PageUtil的pageSize增加最大值限制
+- 特价商品只能买一件，增加购物车限制，目前只是前端有限制。增加下订单时的验证，目前只是前端验证了。
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
 - formData乱码，使用`CommonsMultipartResolver`
