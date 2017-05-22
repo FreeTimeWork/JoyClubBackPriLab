@@ -42,11 +42,11 @@ public class WechatUserInfo {
     private String country;
 
     private String headimgurl;
-    /**
+/*    *//**
      * 是否订阅
-     */
+     *//*
     private Boolean subscribe;
-    private Integer subscribe_time;
+    private Integer subscribe_time;*/
 
     public String getOpenid() {
         return openid;
@@ -124,10 +124,5 @@ public class WechatUserInfo {
         this.headimgurl = headimgurl;
     }
 
-    @Override
-    public String toString() {
-        return "WeiXin [openid=" + openid + ", access_token=" + access_token + ", nickname=" + nickname + ", sex=" + sex
-                + ", language=" + language + ", city=" + city + ", province=" + province + ", country=" + country
-                + ", headimgurl=" + headimgurl + "]";
-    }
+
 }

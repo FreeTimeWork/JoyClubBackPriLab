@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.service.StoreFrontService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.service.StoreService;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping(URL_API_FRONT)
 public class StoreFrontController {
     @Autowired
-    StoreFrontService storeService;
+    StoreService storeService;
 
     @RequestMapping(value = "/store/{id}", method = GET)
     public ResultData getStoreData(@PathVariable Long id) {
@@ -24,7 +24,7 @@ public class StoreFrontController {
     }
     @RequestMapping(value = "/stores", method = GET)
     public ResultData getStoreData(@RequestParam(required = false) Long projectId, PageUtil pageUtil) {
-        return storeService.getList(projectId, pageUtil);
+        return storeService.getSimpleList(projectId, pageUtil);
     }
 
 

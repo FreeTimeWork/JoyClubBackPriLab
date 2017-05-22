@@ -117,7 +117,8 @@ public interface CouponService {
     List<CouponForClient> getCouponListForFrontClient( Long clientId,  PageUtil pageUtil);
 
     /**
+     * @param subProjectId 可以为null，如果是商业，地产项目需提供，用来记录在子项目里的卡券领取情况。
      * @return 领券需要的积分，业务需要根据这个修改用户积分
      */
-    Integer clientReceiveCoupon(Long couponId, Long clientId) ;
+    Integer clientReceiveCoupon(Long couponId, Long clientId,Long subProjectId) ;
 }

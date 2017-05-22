@@ -63,4 +63,16 @@ public class CartFrontServiceImpl implements CartFrontService {
     public ResultData deleteCart(Long id) {
         return new ResultData(new UpdateResult(cartMapper.deleteCart(id)));
     }
+
+    @Override
+    public Integer subCartNum(Long projectId, Long clientId, Long attrId, Integer num) {
+        Integer oldNum = cartMapper.getNumByFilter(projectId,clientId,attrId);
+        if(oldNum==0) {
+            return 0;
+        }
+        else {
+            return cartMapper.subCartNum(projectId,clientId,attrId,num);
+        }
+
+    }
 }

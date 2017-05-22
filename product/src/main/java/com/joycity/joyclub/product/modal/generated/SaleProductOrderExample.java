@@ -455,6 +455,66 @@ public class SaleProductOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andSubProjectIdIsNull() {
+            addCriterion("sub_project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdIsNotNull() {
+            addCriterion("sub_project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdEqualTo(Long value) {
+            addCriterion("sub_project_id =", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdNotEqualTo(Long value) {
+            addCriterion("sub_project_id <>", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdGreaterThan(Long value) {
+            addCriterion("sub_project_id >", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("sub_project_id >=", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdLessThan(Long value) {
+            addCriterion("sub_project_id <", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdLessThanOrEqualTo(Long value) {
+            addCriterion("sub_project_id <=", value, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdIn(List<Long> values) {
+            addCriterion("sub_project_id in", values, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdNotIn(List<Long> values) {
+            addCriterion("sub_project_id not in", values, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdBetween(Long value1, Long value2) {
+            addCriterion("sub_project_id between", value1, value2, "subProjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubProjectIdNotBetween(Long value1, Long value2) {
+            addCriterion("sub_project_id not between", value1, value2, "subProjectId");
+            return (Criteria) this;
+        }
+
         public Criteria andClientIdIsNull() {
             addCriterion("client_id is null");
             return (Criteria) this;

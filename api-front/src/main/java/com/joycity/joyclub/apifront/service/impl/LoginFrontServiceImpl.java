@@ -1,5 +1,7 @@
 package com.joycity.joyclub.apifront.service.impl;
 
+import com.joycity.joyclub.apifront.modal.login.LoginMethodParam;
+import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ProjectVipCard.VIP_CARD_DIGITAL;
 
@@ -51,26 +54,134 @@ public class LoginFrontServiceImpl implements LoginFrontService {
      * @return
      */
     @Override
-    public ResultData wechatLogin(String openId, Long projectId, String phone, String authCode) {
-        //todo 检查此处的accessTokenAndOpenId里的accessToken能否接下来使用
-        SysProject project = projectMapper.selectByPrimaryKey(projectId);
+    public ResultData wechatLogin(Long projectId, String phone, String authCode, String openId, String accessToken) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(projectId)
+                .setPhone(phone)
+                .setAuthCode(authCode)
+                .setWechat(projectId, openId, accessToken)
+                .build();
+        Client client = clientLogin(param);
+        clientLoginLogMapper.addLog(client.getId(), projectId);
+        return new ResultData(client);
+
+    }
+
+    @Override
+    public ResultData wapAutoLogin(Long projectId, String phone) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(projectId)
+                .setPhone(phone).build();
+        Client client = clientLogin(param);
+        clientLoginLogMapper.addLog(client.getId(), projectId);
+        return new ResultData(client);
+    }
+
+    @Override
+    public ResultData wechatAutoLogin(Long projectId, String phone, String openId, String accessToken) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(projectId)
+                .setPhone(phone)
+                .setWechat(projectId, openId, accessToken)
+                .build();
+        Client client = clientLogin(param);
+        clientLoginLogMapper.addLog(client.getId(), projectId);
+        return new ResultData(client);
+    }
+
+    @Override
+    public ResultData subProjectWapAutoLogin(Long subProjectId, String phone) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(subProjectId)
+                .setPhone(phone).build();
+        Client client = clientLogin(param);
+        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId);
+        return new ResultData(client);
+    }
+
+    @Override
+    public ResultData subProjectWechatAutoLogin(Long subProjectId, String phone, String openId, String accessToken) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(subProjectId)
+                .setPhone(phone)
+                .setWechat(PLATFORM_ID, openId, accessToken)
+                .build();
+        Client client = clientLogin(param);
+        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId);
+        return new ResultData(client);
+    }
+
+    private void updateClientFromKeChuan(Client user, Client kechuanClient) {
+        user.setVipPoint(kechuanClient.getVipPoint());//积分
+        user.setCardNo(kechuanClient.getCardNo());//卡面编号
+        user.setVipCode(kechuanClient.getVipCode());//
+        user.setSex(getStrBeforeCheck(kechuanClient.getSex()));//性别
+        user.setVipGrade(kechuanClient.getVipGrade());//会员等级
+        user.setVipCardGrade(kechuanClient.getVipCardGrade());//会员等级
+        user.setHomeAddress(getStrBeforeCheck(kechuanClient.getHomeAddress()));//家庭住址
+        user.setBirthday(kechuanClient.getBirthday());//生日
+        user.setIdCard(getStrBeforeCheck(kechuanClient.getIdCard()));//身份证号
+        user.setRealName(getStrBeforeCheck(kechuanClient.getRealName()));//真实姓名
+        user.setGroup13(kechuanClient.getGroup13());
+        user.setCreditCardProject(kechuanClient.getCreditCardProject());
+    }
+
+
+    private void updateClientWechatInfo(Client client, WechatUserInfo info) {
+        client.setWxCity(getStrBeforeCheck(info.getCity()));
+        client.setWxCountry(getStrBeforeCheck(info.getCountry()));
+        client.setWxGender(getStrBeforeCheck(info.getSex()));
+        client.setWxHeadImgUrl(getStrBeforeCheck(info.getHeadimgurl()));
+        client.setWxLanguage(getStrBeforeCheck(info.getLanguage()));
+        client.setWxNickName(getStrBeforeCheck(info.getNickname()));
+        client.setWxProvince(getStrBeforeCheck(info.getProvince()));
+    }
+// TODO: 2017/5/11 参数对象化
+
+    /**
+     * 用户登陆逻辑
+     * 商场项目使用平台的悦客会，登录时发自己项目的卡，但是记录平台的openId
+     * 正常的项目走自己的悦客会，cardProjectId和openIdProjectId相等
+     * <p>
+     * cardProjectId   是发卡的项目id,商场项目使用自己的projectId
+     * openIdProjectId 微信对应的项目id，商场项目的悦客会使用平台的，所以微信项目id使用平台id
+     * phone
+     * authCode        手机验证码 可以为null，如果提供，则在登录逻辑前先进行验证
+     * openId          可以为null，如果null,则不进行微信相关业务
+     *
+     * @return Client 只包含 id tel
+     */
+    private Client clientLogin(LoginMethodParam params) {
+        SysProject project = projectMapper.selectByPrimaryKey(params.getCardProjectId());
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");
         }
         //验证验证码正确性，不正确时authCodeService自动抛出异常
-        authCodeService.checkAuthCode(phone, authCode);
+        if (params.getAuthCode() != null) {
+            authCodeService.checkAuthCode(params.getPhone(), params.getAuthCode());
+        }
         //先从科传处查看用户注册情况
-        Client kechuanClient = keChuanCrmService.getMemberByTel(phone);
+        Client kechuanClient = keChuanCrmService.getMemberByTel(params.getPhone());
         //如果科传处没有该号码用户，立刻新建
         if (kechuanClient == null) {
             // TODO: 2017/4/18 这里是先将卡设为使用，如果创建会员失败，再设置为不可用 。而不是先找到可用的号码，创建成功后再设置为已用。
             //主要考虑是创建会员操作耗时，可能出现并发，导致一号多用。
             //如果后续进行锁记录，则这个蠢方法可以废弃。
-            Long cardNumAvailable = vipCardNumService.useDigitalVipCard(projectId);
+            Long cardNumAvailable = vipCardNumService.useDigitalVipCard(params.getCardProjectId());
 
             kechuanClient = new Client();
             kechuanClient.setCardNo(cardNumAvailable + "");
-            kechuanClient.setTel(phone);
+            kechuanClient.setTel(params.getPhone());
             kechuanClient.setGroup13(project.getVipShare());
             kechuanClient.setVipCardGrade(VIP_CARD_DIGITAL);
             //发卡项目
@@ -92,13 +203,16 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         Client user = new Client();
         //同步科传会员信息
         updateClientFromKeChuan(user, kechuanClient);
-        WechatUserInfo wechatInfo = wechatService.getUserInfo(openId, project.getWechatTokenAddress());
+        if (params.getOpenIdProjectId() != null) {
+            WechatUserInfo wechatInfo = wechatService.getUserInfo(params.getOpenId(), params.getAccessToken());
 
-        //同步会员微信信息
-        updateClientWechatInfo(user, wechatInfo);
+            //同步会员微信信息
+            updateClientWechatInfo(user, wechatInfo);
+        }
         //查看本地有没有该号码用户
-        Long userId = clientMapper.getIdByTel(phone);
-        user.setTel(phone);
+        Long userId = clientMapper.getIdByTel(params.getPhone());
+        user.setTel(params.getPhone());
+        //必须是insertSelective 和updateSelective 防止被null覆盖
         if (userId == null) {
             //插入成功后，user已经有id
             clientMapper.insertSelective(user);
@@ -109,49 +223,26 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         //这一步不放在userId==null里，因为后续的话有多种登陆，同步和创建将会拆成新方法，
         //可能用户在其他登陆中先创建了会员，然后再进行微信登陆
         //所以判断openid有没有存储，必须一直判断，而不是只放在userId==null时
-        wechatOpenIdService.saveOrUpdateProjectOpenId(projectId, user.getId(), openId);
+        if (params.getOpenIdProjectId() != null) {
+            wechatOpenIdService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
+        }
 
-        clientLoginLogMapper.addLog(user.getId(), projectId);
         //只返回用户id和用户手机号
         Client resultUser = new Client();
         resultUser.setId(user.getId());
         resultUser.setTel(user.getTel());
-        return new ResultData(resultUser);
-
-    }
-
-    private void updateClientFromKeChuan(Client user, Client kechuanClient) {
-        user.setVipPoint(kechuanClient.getVipPoint());//积分
-        user.setCardNo(kechuanClient.getCardNo());//卡面编号
-        user.setVipCode(kechuanClient.getVipCode());//
-        user.setSex(getStrBeforeCheck(kechuanClient.getSex()));//性别
-        user.setVipGrade(kechuanClient.getVipGrade());//会员等级
-        user.setVipCardGrade(kechuanClient.getVipCardGrade());//会员等级
-        user.setHomeAddress(getStrBeforeCheck(kechuanClient.getHomeAddress()));//家庭住址
-        user.setBirthday(kechuanClient.getBirthday());//生日
-        user.setIdCard(getStrBeforeCheck(kechuanClient.getIdCard()));//身份证号
-        user.setRealName(getStrBeforeCheck(kechuanClient.getRealName()));//真实姓名
-        user.setGroup13(kechuanClient.getGroup13());
-        user.setCreditCardProject(kechuanClient.getCreditCardProject());
-    }
-
-    private void updateClientWechatInfo(Client client, WechatUserInfo info) {
-        client.setWxCity(getStrBeforeCheck(info.getCity()));
-        client.setWxCountry(getStrBeforeCheck(info.getCountry()));
-        client.setWxGender(getStrBeforeCheck(info.getSex()));
-        client.setWxHeadImgUrl(getStrBeforeCheck(info.getHeadimgurl()));
-        client.setWxLanguage(getStrBeforeCheck(info.getLanguage()));
-        client.setWxNickName(getStrBeforeCheck(info.getNickname()));
-        client.setWxProvince(getStrBeforeCheck(info.getProvince()));
+        return resultUser;
     }
 
     /**
      * 返回有值的str
-     *
+     * 等下在插入的时候使用insertSelective
      * @param s
      * @return
      */
     private String getStrBeforeCheck(String s) {
         return StringUtils.isEmpty(s) ? null : s;
     }
+
+
 }

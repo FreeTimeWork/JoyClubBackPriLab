@@ -4,12 +4,14 @@ import com.joycity.joyclub.commons.mapper.manual.SaleStoreDesignerMapper;
 import com.joycity.joyclub.commons.mapper.manual.StoreMapper;
 import com.joycity.joyclub.commons.mapper.manual.SysProductCategoryMapper;
 import com.joycity.joyclub.commons.modal.base.*;
+import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.ProductAttrMapper;
 import com.joycity.joyclub.product.mapper.ProductMapper;
 
 import com.joycity.joyclub.product.mapper.ProductPriceMapper;
 import com.joycity.joyclub.product.modal.ProductInfoPage;
 import com.joycity.joyclub.product.modal.ProductSimple;
+import com.joycity.joyclub.product.modal.SpecialPriceAct;
 import com.joycity.joyclub.product.modal.generated.SaleProductPrice;
 import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
 import com.joycity.joyclub.product.modal.ProductFormData;
@@ -137,6 +139,21 @@ public class ProductServiceImpl implements ProductService {
         return  getProductList( projectId,  storeId,  designerId,true,  pageUtil);
     }
 
+    @Override
+    public ResultData getSpecialPriceAct(Long id) {
+
+        return new ResultData(productMapper.getSpecialPriceAct(id));
+    }
+
+    @Override
+    public ResultData getSpecialPriceActProducts(Long id, PageUtil pageUtil) {
+        SpecialPriceAct act = productMapper.getSpecialPriceAct(id);
+        ThrowBusinessExceptionUtil.checkNull(act,"特价活动不存在");
+        ListResult listResult = new ListResult(productMapper.selectSpecialPriceActProducts(id,act.getStartTime(),act.getEndTime(),pageUtil));
+        listResult.setByPageUtil(pageUtil);
+        return new ResultData(listResult);
+    }
+
     /**
      * @param projectId
      * @param storeId
@@ -147,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
      */
     private ResultData getProductList(Long projectId, Long storeId, Long designerId,Boolean specialPriceFlag, PageUtil pageUtil) {
         List<ProductSimple> list;
-        if (projectId != null) {
+        if (storeId == null&&designerId==null) {
             list = productMapper.selectByProject(projectId,specialPriceFlag,pageUtil);
         } else {
             list = productMapper.selectByFilter(storeId, designerId, specialPriceFlag,pageUtil);

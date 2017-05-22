@@ -101,7 +101,7 @@
             <when test="name != null">
                 and c.real_name = #{name}
             </when>
-            <when test="code != null">
+            <when test="phone != null">
                 and c.tel = #{phone}
             </when>
             <otherwise>

@@ -28,19 +28,22 @@ public interface ProductPriceMapper extends BaseMapper<SaleProductPrice, Long, S
      * @param pageUtil
      * @return
      */
-    Long countForStore(@Param("storeId") Long storeId, @Param("reviewStatus") Integer reviewStatus, @Param("productNameLike") String productNameLike, @Param("pageUtil") PageUtil pageUtil);
+    Long countForStore(@Param("storeId") Long storeId,
+                       @Param("specialPriceFlag") Boolean specialPriceFlag,
+                       @Param("reviewStatus") Integer reviewStatus,
+                       @Param("productNameLike") String productNameLike,
+                       @Param("pageUtil") PageUtil pageUtil);
 
     /**
      * 为商户用户获取list
      * By StoreId,ProductName,ReviewStatus
-     *
-     * @param storeId
-     * @param reviewStatus
-     * @param productNameLike
-     * @param pageUtil
-     * @return
      */
-    List<ProductWithCategoryAndDesignerName> selectForStore(@Param("storeId") Long storeId, @Param("reviewStatus") Integer reviewStatus, @Param("productNameLike") String productNameLike, @Param("pageUtil") PageUtil pageUtil);
+    List<ProductWithCategoryAndDesignerName> selectForStore(
+            @Param("storeId") Long storeId,
+            @Param("specialPriceFlag") Boolean specialPriceFlag,
+            @Param("reviewStatus") Integer reviewStatus,
+            @Param("productNameLike") String productNameLike,
+            @Param("pageUtil") PageUtil pageUtil);
 
     /**
      * 为商户用户计算总数
@@ -51,7 +54,11 @@ public interface ProductPriceMapper extends BaseMapper<SaleProductPrice, Long, S
      * @param pageUtil
      * @return
      */
-    Long countForProject(@Param("storeNameLike") String storeNameLike, @Param("reviewStatus") Integer reviewStatus, @Param("productNameLike") String productNameLike, @Param("pageUtil") PageUtil pageUtil);
+    Long countForProject(@Param("storeNameLike") String storeNameLike,
+                         @Param("specialPriceFlag") Boolean specialPriceFlag,
+                         @Param("reviewStatus") Integer reviewStatus,
+                         @Param("productNameLike") String productNameLike,
+                         @Param("pageUtil") PageUtil pageUtil);
 
     /**
      * 为商户用户获取list
@@ -63,7 +70,12 @@ public interface ProductPriceMapper extends BaseMapper<SaleProductPrice, Long, S
      * @param pageUtil
      * @return
      */
-    List<ProductWithCategoryAndDesignerName> selectForProject(@Param("storeNameLike") String storeNameLike, @Param("reviewStatus") Integer reviewStatus, @Param("productNameLike") String productNameLike, @Param("pageUtil") PageUtil pageUtil);
+    List<ProductWithCategoryAndDesignerName> selectForProject(
+            @Param("storeNameLike") String storeNameLike,
+            @Param("specialPriceFlag") Boolean specialPriceFlag,
+            @Param("reviewStatus") Integer reviewStatus,
+            @Param("productNameLike") String productNameLike,
+            @Param("pageUtil") PageUtil pageUtil);
 
     /**
      * @param id        如果提供id 就排除跟该id的冲突检查

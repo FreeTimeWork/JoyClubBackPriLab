@@ -2,6 +2,7 @@ package com.joycity.joyclub.product.mapper;
 
 import com.joycity.joyclub.product.modal.ProductInfoPage;
 import com.joycity.joyclub.product.modal.ProductSimple;
+import com.joycity.joyclub.product.modal.SpecialPriceAct;
 import com.joycity.joyclub.product.modal.generated.SaleProduct;
 import com.joycity.joyclub.product.modal.generated.SaleProductExample;
 import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
@@ -11,6 +12,7 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,6 +53,26 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
     List<ProductSimple> selectByProject(
             @Param("projectId") Long selectByProject,
             @Param("specialPriceFlag") Boolean specialPriceFlag,
+            @Param("pageUtil") PageUtil pageUtil
+    );
+
+    @Select("select * from sale_special_price_act where id =#{id}")
+    SpecialPriceAct getSpecialPriceAct(@Param("id") Long id);
+
+    /**
+     * 获取某个秒杀活动下所有商品的情况
+     * 如果没有特价上架审核通过，则该商品不返回，
+     * 如果活动区间里有多个特价，则商品的价格显示为最新添加的审核通过的价格
+     *
+     * @param specialPriceActId 特价活动的id，会根据特价活动与商品关系表 搜索商品
+     * @param actStartTime      特价活动的开始时间，在特价活动时间区间寻找对应的特价
+     * @param actEndTime        特价活动的结束时间
+     * @return
+     */
+    List<ProductSimple> selectSpecialPriceActProducts(
+            @Param("id") Long specialPriceActId,
+            @Param("startTime") Date actStartTime,
+            @Param("endTime") Date actEndTime,
             @Param("pageUtil") PageUtil pageUtil
     );
 

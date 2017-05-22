@@ -16,7 +16,7 @@ public class PreOrder {
 	private String outTradeNo;
 	
 	/**
-	 * 总金额 元
+	 * 总金额 精确到分
 	 */
 	private Integer totalFee;
 	

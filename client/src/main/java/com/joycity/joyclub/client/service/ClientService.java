@@ -28,5 +28,5 @@ public interface ClientService {
 
     String getVipCodeById(Long id);
 
-    ResultData getListForBack(String group13, String cardType, Integer pointStart, Integer pointEnd, String vipNo, String cardNo, String phone, PageUtil pageUtil);
+    ResultData getListForBack(/*String group13,*/ String cardType, Integer pointStart, Integer pointEnd, String vipNo, String cardNo, String phone, PageUtil pageUtil);
 }

@@ -8,6 +8,9 @@
     <sql id="where_for_store">
         <where>
             a.delete_flag=0 and p.store_id=#{storeId}
+            <if test="specialPriceFlag!=null">
+                and a.special_price_flag = #{specialPriceFlag}
+            </if>
             <if test="reviewStatus!=null">
                 and a.review_status = #{reviewStatus}
             </if>
@@ -23,10 +26,14 @@
             <if test="reviewStatus!=null">
                 and a.review_status = #{reviewStatus}
             </if>
+            <if test="specialPriceFlag!=null">
+                and a.special_price_flag = #{specialPriceFlag}
+            </if>
 
             <if test="storeNameLike!=null">
                 and s.name like #{storeNameLike}
-            </if><if test="productNameLike!=null">
+            </if>
+            <if test="productNameLike!=null">
                 and p.name like #{productNameLike}
             </if>
         </where>
@@ -41,7 +48,9 @@
     <select id="selectForStore"
             resultType="com.joycity.joyclub.product.modal.ProductPriceWithProductInfo">
 
-        select a.id,a.price,a.product_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,p.name productName,p.base_price
+        select
+        a.id,a.price,a.product_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,a.special_price_flag,p.name
+        productName,p.base_price
         from sale_product_price a
         left join sale_product p on a.product_id=p.id
         <include refid="where_for_store"/>
@@ -58,7 +67,9 @@
     <select id="selectForProject"
             resultType="com.joycity.joyclub.product.modal.ProductPriceWithProductInfo">
 
-        select a.id,a.price,a.product_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,p.name productName,p.base_price,s.name storeName
+        select
+        a.id,a.price,a.product_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,a.special_price_flag,p.name
+        productName,p.base_price,s.name storeName
         from sale_product_price a
         left join sale_product p on a.product_id=p.id
         left join sys_store s on p.store_id = s.id
@@ -75,7 +86,8 @@
         <if test="id!=null">
             and id !=#{id}
         </if>
-        and ((start_time &gt;= #{startTime} and start_time &lt; #{endTime}) or(end_time &gt; #{startTime} and start_time &lt;= #{endTime}))
+        and ((start_time &gt;= #{startTime} and start_time &lt; #{endTime}) or(end_time &gt; #{startTime} and start_time
+        &lt;= #{endTime}))
     </select>
 
 

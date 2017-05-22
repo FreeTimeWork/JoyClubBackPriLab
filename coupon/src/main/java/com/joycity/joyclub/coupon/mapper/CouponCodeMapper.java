@@ -72,4 +72,12 @@ public interface CouponCodeMapper extends BaseMapper<CouponCode, Long, CouponCod
      */
     @Select("update coupon_code set use_status=1 , client_id = #{clientId} , use_time=now() where id=#{codeId}")
     Integer setCodeUsed(@Param("codeId") Long codeId,@Param("clientId") Long clientId);
+
+    /**
+     * 记录在商业或者地产项目领取卡券
+     * @param codeId
+     * @param subProjectId
+     */
+    @Insert("insert into coupon_code_subproject(coupon_code_id,sub_project_id) values(#{codeId},#{subProjectId})")
+    void addCouponCodeSubProject(@Param("codeId") Long codeId,@Param("subProjectId") Long subProjectId);
 }

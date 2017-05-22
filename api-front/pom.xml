@@ -13,6 +13,7 @@
         <commons>1.0-SNAPSHOT</commons>
         <coupon>1.0-SNAPSHOT</coupon>
         <client>1.0-SNAPSHOT</client>
+        <alipay>1.0-SNAPSHOT</alipay>
         <httpcomponents.httpclient>4.5.2</httpcomponents.httpclient>
         <httpcomponents.httpcore>4.4.4</httpcomponents.httpcore>
         <ning.asnchttpclient>1.9.40</ning.asnchttpclient>
@@ -28,10 +29,16 @@
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>coupon</artifactId>
             <version>${coupon}</version>
-        </dependency><dependency>
+        </dependency>
+        <dependency>
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>client</artifactId>
             <version>${client}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>alipay</artifactId>
+            <version>${alipay}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -52,6 +59,16 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>product</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>act</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
 

@@ -56,6 +56,8 @@ public interface ProductOrderStoreMapper extends BaseMapper<SaleProductOrderStor
 
     @Update("update sale_product_order_store set status=#{status} where order_id=#{orderId}")
     Integer setOrderStatusByMainOrderId(@Param("orderId") Long orderId, @Param("status") Byte status);
+    @Update("update sale_product_order_store set status=#{status},pay_type=#{payType} where order_id=#{orderId}")
+    Integer setOrderStatusAndPayTypeByMainOrderId(@Param("orderId") Long orderId,@Param("payType") Byte payType, @Param("status") Byte status);
 
     /**
      * 发货超过十天的订单设置为已收货

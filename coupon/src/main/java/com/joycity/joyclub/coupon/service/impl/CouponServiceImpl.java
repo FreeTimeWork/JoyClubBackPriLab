@@ -234,14 +234,17 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Integer clientReceiveCoupon(Long couponId, Long clientId) {
+    public Integer clientReceiveCoupon(Long couponId, Long clientId,Long subProjectId) {
         CouponCode code = couponCodeMapper.getMinCodeIdOfCoupon(couponId);
         ThrowBusinessExceptionUtil.checkNull(code, "卡券已被领光了");
 
         Coupon coupon = couponMapper.selectByPrimaryKey(code.getCouponId());
         ThrowBusinessExceptionUtil.checkNull(coupon, "卡券已下架");
         couponCodeMapper.setCodeUsed(code.getId(), clientId);
-        //并发问题
+        if(subProjectId!=null) {
+            couponCodeMapper.addCouponCodeSubProject(code.getId(),subProjectId);
+        }
+        // TODO: 2017/5/12   并发问题
         couponMapper.addNum(coupon.getId(), -1);
         return coupon.getPointCost();
 

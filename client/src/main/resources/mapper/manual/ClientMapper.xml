@@ -20,7 +20,7 @@
                 tel = #{phone}
             </when>
             <otherwise>
-                group13 = #{group13}
+                1=1
                <if test="cardType!=null">and vip_card_grade = #{cardType} </if>
                <if test="pointStart!=null">and vip_point &gt;= #{pointStart} </if>
                <if test="pointEnd!=null">and vip_point &lt;= #{pointEnd} </if>
@@ -46,7 +46,7 @@
                 tel = #{phone}
             </when>
             <otherwise>
-                group13 = #{group13}
+              1=1
                <if test="cardType!=null">and vip_card_grade = #{cardType} </if>
                <if test="pointStart!=null">and vip_point &gt;= #{pointStart} </if>
                <if test="pointEnd!=null">and vip_point &lt;= #{pointEnd} </if>

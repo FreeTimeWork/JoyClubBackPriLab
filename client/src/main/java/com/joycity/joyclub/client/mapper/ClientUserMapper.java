@@ -38,46 +38,30 @@ public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample
     Integer setPoint(@Param("id") Long id, @Param("point") Integer point);
 
     /**
-     * vipNo,cardNo,phone 搜索时不加group13限制
-     *
-     * @param group13
-     * @param cardType
-     * @param pointStart
-     * @param pointEnd
-     * @param vipNo
-     * @param cardNo
-     * @param phone
-     * @return
+     * vipNo,cardNo,phone
      */
     List<Client> getListForBack(
-            @Param("group13") String group13,
+            /*@Param("group13") String group13,*/
             @Param("cardType") String cardType,
             @Param("pointStart") Integer pointStart,
             @Param("pointEnd") Integer pointEnd,
             @Param("vipNo") String vipNo,
             @Param("cardNo") String cardNo,
             @Param("phone") String phone,
-            @Param("pageUtil")PageUtil pageUtil
-            );    /**
-     * vipNo,cardNo,phone 搜索时不加group13限制
-     *
-     * @param group13
-     * @param cardType
-     * @param pointStart
-     * @param pointEnd
-     * @param vipNo
-     * @param cardNo
-     * @param phone
-     * @return
+            @Param("pageUtil") PageUtil pageUtil
+    );
+
+    /**
+     * vipNo,cardNo,phone
      */
     Long countForBack(
-            @Param("group13") String group13,
-            @Param("cardType") String cardType,
-            @Param("pointStart") Integer pointStart,
-            @Param("pointEnd") Integer pointEnd,
-            @Param("vipNo") String vipNo,
-            @Param("cardNo") String cardNo,
-            @Param("phone") String phone,
-            @Param("pageUtil")PageUtil pageUtil
-            );
+           /* @Param("group13") String group13,*/
+           @Param("cardType") String cardType,
+           @Param("pointStart") Integer pointStart,
+           @Param("pointEnd") Integer pointEnd,
+           @Param("vipNo") String vipNo,
+           @Param("cardNo") String cardNo,
+           @Param("phone") String phone,
+           @Param("pageUtil") PageUtil pageUtil
+    );
 }

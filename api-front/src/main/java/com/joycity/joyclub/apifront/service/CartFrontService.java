@@ -13,4 +13,10 @@ public interface CartFrontService {
     ResultData setCartNum(Long id,Integer num);
     List<CartInfo> getCartList(Long projectId, Long clientId);
     ResultData deleteCart(Long id);
+
+    /**
+     * 减掉购车数量，如果是0 则不减
+     * @return 影响的记录数  0、1
+     */
+    Integer subCartNum(Long projectId,Long clientId,Long  attrId, Integer num);
 }

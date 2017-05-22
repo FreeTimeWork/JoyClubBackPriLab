@@ -69,7 +69,7 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
-    public ResultData receiveCoupon(Long couponId, Long clientId) {
+    public ResultData receiveCoupon(Long couponId, Long clientId,Long subProjectId) {
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
         if (coupon == null) {
             throw new BusinessException(ResultCode.DATA_NOT_EXIST, "卡券不存在");
@@ -79,7 +79,7 @@ public class BenefitServiceImpl implements BenefitService {
         }
         Integer pointCost;
 
-        pointCost = couponService.clientReceiveCoupon(couponId, clientId);
+        pointCost = couponService.clientReceiveCoupon(couponId, clientId,subProjectId);
 
 
         //减积分

@@ -31,25 +31,25 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     ProductPriceMapper productPriceMapper;
 
     @Override
-    public ResultData getListForStore(Long storeId, Integer reviewStatus, String productName, PageUtil pageUtil) {
+    public ResultData getListForStore(Long storeId,Boolean specialPriceFlag, Integer reviewStatus, String productName, PageUtil pageUtil) {
         ListResult listResult = new ListResult();
         listResult.setByPageUtil(pageUtil);
         if (productName != null) {
             productName = getSearchLikeStr(productName);
         }
-        long sum = productPriceMapper.countForStore(storeId, reviewStatus, productName, pageUtil);
+        long sum = productPriceMapper.countForStore(storeId,  specialPriceFlag,reviewStatus, productName, pageUtil);
         listResult.setSum(sum);
         if (sum == 0) {
             listResult.setList(new ArrayList());
         } else {
 
-            listResult.setList(productPriceMapper.selectForStore(storeId, reviewStatus, productName, pageUtil));
+            listResult.setList(productPriceMapper.selectForStore(storeId,  specialPriceFlag,reviewStatus, productName, pageUtil));
         }
         return new ResultData(listResult);
     }
 
     @Override
-    public ResultData getListForProject(String storeName, Integer reviewStatus, String productName, PageUtil pageUtil) {
+    public ResultData getListForProject(String storeName,Boolean specialPriceFlag, Integer reviewStatus, String productName, PageUtil pageUtil) {
         ListResult listResult = new ListResult();
         listResult.setByPageUtil(pageUtil);
         if (storeName != null) {
@@ -58,13 +58,13 @@ public class ProductPriceServiceImpl implements ProductPriceService {
         if (productName != null) {
             productName = getSearchLikeStr(productName);
         }
-        long sum = productPriceMapper.countForProject(storeName, reviewStatus, productName, pageUtil);
+        long sum = productPriceMapper.countForProject(storeName,  specialPriceFlag,reviewStatus, productName, pageUtil);
         listResult.setSum(sum);
         if (sum == 0) {
             listResult.setList(new ArrayList());
         } else {
 
-            listResult.setList(productPriceMapper.selectForProject(storeName, reviewStatus, productName, pageUtil));
+            listResult.setList(productPriceMapper.selectForProject(storeName, specialPriceFlag, reviewStatus, productName, pageUtil));
         }
         return new ResultData(listResult);
     }

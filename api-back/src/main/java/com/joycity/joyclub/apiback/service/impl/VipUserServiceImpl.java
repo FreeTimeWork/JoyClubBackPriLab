@@ -20,10 +20,10 @@ public class VipUserServiceImpl implements VipUserService {
     SysProjectMapper projectMapper;
 
     @Override
-    public ResultData getList(Long projectId, String cardType, Integer pointStart, Integer pointEnd, String vipNo, String cardNo, String phone, PageUtil pageUtil) {
-        String vipShare = projectMapper.getVipShare(projectId);
-        ThrowBusinessExceptionUtil.checkNull(vipShare, "项目分摊不存在");
-        return clientService.getListForBack(vipShare, cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+    public ResultData getList(/*Long projectId,*/ String cardType, Integer pointStart, Integer pointEnd, String vipNo, String cardNo, String phone, PageUtil pageUtil) {
+        /*String vipShare = projectMapper.getVipShare(projectId);
+        ThrowBusinessExceptionUtil.checkNull(vipShare, "项目分摊不存在");*/
+        return clientService.getListForBack(/*vipShare,*/ cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
 
     }
 }

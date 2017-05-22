@@ -2,31 +2,38 @@ package com.joycity.joyclub.apifront.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import com.joycity.joyclub.commons.constant.ResultCode;
-import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.client.mapper.ClientUserMapper;
-import com.joycity.joyclub.apifront.mapper.manual.cart.CartFrontMapper;
+import com.joycity.joyclub.alipay.service.AliPayService;
+import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
+import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
-import com.joycity.joyclub.apifront.mapper.manual.order.ProductOrderDetailMapper;
-import com.joycity.joyclub.apifront.mapper.manual.order.ProductOrderMapper;
-import com.joycity.joyclub.apifront.mapper.manual.order.ProductOrderStoreMapper;
-import com.joycity.joyclub.apifront.mapper.manual.product.ProductAttrFrontMapper;
 import com.joycity.joyclub.apifront.modal.cart.ClientPostAddress;
-import com.joycity.joyclub.client.modal.Client;
-import com.joycity.joyclub.apifront.modal.order.*;
 import com.joycity.joyclub.apifront.pay.wechat.PreOrder;
 import com.joycity.joyclub.apifront.pay.wechat.SignUtils;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayService;
-import com.joycity.joyclub.client.service.KeChuanCrmService;
+import com.joycity.joyclub.apifront.service.ActOrderFrontService;
+import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
 import com.joycity.joyclub.apifront.service.WechatOpenIdService;
-import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.service.ClientService;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
+import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.OrderStatus;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
+import com.joycity.joyclub.product.mapper.*;
+import com.joycity.joyclub.product.modal.FormDataWithInfo;
+import com.joycity.joyclub.product.modal.ProductOrderFormDataItem;
+import com.joycity.joyclub.product.modal.generated.SaleProductOrder;
+import com.joycity.joyclub.product.modal.generated.SaleProductOrderDetail;
+import com.joycity.joyclub.product.modal.generated.SaleProductOrderExample;
+import com.joycity.joyclub.product.modal.generated.SaleProductOrderStore;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,11 +42,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.joycity.joyclub.commons.constant.OrderStatus.*;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAM_ERROR;
-import static com.joycity.joyclub.commons.constant.OrderStatus.MAIN_ORDER_STATUS_NOT_PAYED;
-import static com.joycity.joyclub.commons.constant.OrderStatus.RECEIVE_TYPE_PICKUP;
-import static com.joycity.joyclub.commons.constant.OrderStatus.RECEIVE_TYPE_POST;
 
 /**
  * Created by Administrator on 2017/4/20.
@@ -58,17 +63,27 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     @Autowired
     KeChuanCrmService keChuanCrmService;
     @Autowired
+    ClientService clientService;
+    @Autowired
     ClientUserMapper clientMapper;
     @Autowired
     PostAddressMapper postAddressMapper;
     @Autowired
-    ProductAttrFrontMapper productAttrMapper;
+    ProductAttrMapper productAttrMapper;
     @Autowired
-    CartFrontMapper cartMapper;
+    ProductMapper productMapper;
+    @Autowired
+    CartFrontService cartService;
     @Autowired
     WxPayService wxPayService;
     @Autowired
     WxPayConfig wxpayConfig;
+    @Autowired
+    AliPayConfig aliPayConfig;
+    @Autowired
+    AliPayService aliPayService;
+    @Autowired
+    ActOrderFrontService actOrderService;
     public final String LIST_TYPE_ALL = "all";
     public final String LIST_TYPE_NOT_PAYED = "notPayed";
     public final String LIST_TYPE_NOT_SENT = "notSent";
@@ -79,7 +94,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     public ResultData getList(Long projectId, Long clientId, String type, PageUtil pageUtil) {
         ResultData resultData = new ResultData();
         ListResult listResult = new ListResult();
-        List list = null;
+        List list;
         if (LIST_TYPE_ALL.equals(type)) {
             list = orderMapper.selectMyOrders(projectId, clientId, null, pageUtil);
         } else if (LIST_TYPE_NOT_PAYED.equals(type)) {
@@ -92,10 +107,14 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 //未发货快递与其他不太一样 需要是已付款并且主订单是快递的订单
                 list = orderMapper.selectMyStoreOrders(projectId, clientId, OrderStatus.STORE_ORDER_STATUS_PAYED, OrderStatus.RECEIVE_TYPE_POST, pageUtil);
 
+            } else if (LIST_TYPE_NOT_RECEIVED.equals(type)) {
+                //未收货快递与其他不太一样 需要是（主订单是快递+商户订单已发货）+（主订单是自提+商户订单已付款）的订单
+                list = orderMapper.selectMyNotReceivedStoreOrders(projectId, clientId, OrderStatus.STORE_ORDER_STATUS_PAYED, OrderStatus.RECEIVE_TYPE_POST, pageUtil);
+
             } else {
                 Byte storeStatus = null;
                 if (LIST_TYPE_NOT_RECEIVED.equals(type)) {
-                    storeStatus = OrderStatus.STORE_ORDER_STATUS_SENT;
+                    storeStatus = STORE_ORDER_STATUS_SENT;
                 } else if (LIST_TYPE_DONE.equals(type)) {
                     storeStatus = OrderStatus.STORE_ORDER_STATUS_RECEIVED;
                 } else {
@@ -112,17 +131,11 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     @Override
     public ResultData getFormData(Long clientId, String rawData) {
-        List<ProductOrderFormDataItem> list = getFormItemList(rawData);
-        //此处的积分从科传获取
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("list", list);
-        result.put("point", clientMapper.getPoint(clientId));
-        return new ResultData(result);
-    }
-
-    private List<ProductOrderFormDataItem> getFormItemList(String rawData) {
         List<Long> attrIds;
+        /**
+         * 特价商品只能购买（包括未支付）一次，会过滤购买过的特价商品
+         */
+        Boolean ifRemoveBoughtSpecialPrice = false;
         try {
             attrIds = JSON.parseArray(rawData, Long.class);
         } catch (JSONException e) {
@@ -135,15 +148,32 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         List<ProductOrderFormDataItem> list = new ArrayList<>();
         for (Long attrId : attrIds) {
             ProductOrderFormDataItem rawDataItem = orderMapper.getOrderRawDataItem(attrId);
+
             if (rawDataItem != null) {
-                list.add(rawDataItem);
+                //不是特价商品 或者是特价商品但是没买过
+                if (!rawDataItem.getSpecialPriceFlag() || productMapper.countProductNotCanceledOrder(rawDataItem.getProductId(), clientId) == 0) {
+                    list.add(rawDataItem);
+                } else {
+                    ifRemoveBoughtSpecialPrice = true;
+                }
+
             }
         }
-        if (list.size() == 0) {
+        /*if (list.size() == 0) {
             throw new BusinessException(DATA_NOT_EXIST, "订单里所有商品都已不可用");
         }
-        return list;
+        */
+
+        //此处的积分从科传获取
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("list", list);
+        result.put("point", clientService.getPoint(clientId));
+        result.put("ifRemoveSpecialPrice", ifRemoveBoughtSpecialPrice);
+        return new ResultData(result);
     }
+
+
 
 /*    */
     /**
@@ -170,32 +200,42 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     private Integer getVipPoint(String phone) {
         return getVipPoint(null, phone);
     }*/
-
-
-
+    /**
+     * 微信支付
+     */
     public static final Byte PAY_TYPE_WECHAT = 0;
+    /**
+     * 支付宝支付
+     */
+    public static final Byte PAY_TYPE_ALI = 1;
 
     public static final Byte CANCEL_BY_CLIENT = 0;
     public static final Byte CANCEL_BY_SYSTEM = 1;
 
 
-    /**
-     * @param clientId
-     * @param jsonStr       array list of { Long attrId,Integer num,Boolean moneyOrPoint;}
-     * @param pickUpOrPost
-     * @param postAddressId
-     * @return
-     */
-    //todo 优化
     @Override
-    public ResultData orderForWechat(Long projectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
-        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
-        if (openId == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
-        }
-        //积分
+    public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+        return clientOrder(PAY_TYPE_WECHAT, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
 
-        Client client = clientMapper.selectByPrimaryKey(clientId);
+    }
+
+    @Override
+    public ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+
+        return clientOrder(PAY_TYPE_ALI, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
+    }
+
+
+    //todo 优化
+
+    /**
+     * 生成主订单、次订单、店铺订单、
+     *
+     * @param subProjectId 可空
+     */
+    private SaleProductOrder createOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+
+        //积分
         Integer nowPoint = clientMapper.getPoint(clientId);
         //先获得数据
         List<FormDataWithInfo> rawDatas;
@@ -212,12 +252,13 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             rawData.setInfo(orderMapper.getOrderRawDataItem(rawData.getAttrId()));
         }
         //朱订单初始化
-        ProductOrder mainOrder = new ProductOrder();
+        SaleProductOrder mainOrder = new SaleProductOrder();
         mainOrder.setProjectId(projectId);
         mainOrder.setClientId(clientId);
         mainOrder.setCode(createTradeNo());
         mainOrder.setStatus(MAIN_ORDER_STATUS_NOT_PAYED);
-        mainOrder.setPayType(PAY_TYPE_WECHAT);
+        mainOrder.setPayType(payType);
+        mainOrder.setSubProjectId(subProjectId);
         //快递相关
         if (pickUpOrPost) {
             mainOrder.setReceiveType(RECEIVE_TYPE_PICKUP);
@@ -243,13 +284,15 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         List<StoreOrderWithDetails> storeWithDetails = new ArrayList<>();
 
 
-        Integer moneySum = 0, pointSum = 0;
+        Float moneySum = 0f;
+        Integer pointSum = 0;
         for (FormDataWithInfo rawData : rawDatas) {
 
             ProductOrderFormDataItem info = rawData.getInfo();
             Float pointRate = info.getPointRate() != null ? info.getPointRate() : info.getBasePointRate();
-            Integer itemMoney = rawData.getNum() * info.getPrice();
-            Integer itemPoint = (int) (rawData.getNum() * info.getPrice() * pointRate);
+            Float itemMoney = rawData.getNum() * info.getPrice();
+            // TODO: 2017/5/8  向上取整
+            Integer itemPoint = ((int) Math.ceil(rawData.getNum() * info.getPrice() * pointRate));
             if (rawData.getMoneyOrPoint()) {
                 moneySum += itemMoney;
 
@@ -257,7 +300,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 pointSum += itemPoint;
             }
             //初始化商品订单信息
-            ProductOrderDetail detailOrder = new ProductOrderDetail();
+            SaleProductOrderDetail detailOrder = new SaleProductOrderDetail();
             detailOrder.setProductAttr(info.getAttrId());
             detailOrder.setNum(rawData.getNum());
             detailOrder.setPrice(info.getPrice());
@@ -267,14 +310,14 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 detailOrder.setMoneyPaid(itemMoney);
                 detailOrder.setPointPaid(0);
             } else {
-                detailOrder.setMoneyPaid(0);
+                detailOrder.setMoneyPaid(0f);
                 detailOrder.setPointPaid(itemPoint);
             }
 
 
             boolean hasStore = false;
             for (StoreOrderWithDetails storeWithDetail : storeWithDetails) {
-                ProductOrderStore storeOrder = storeWithDetail.getOrderStore();
+                SaleProductOrderStore storeOrder = storeWithDetail.getOrderStore();
                 if (storeOrder.getOrderId() == info.getStoreId()) {
                     hasStore = true;
 
@@ -290,14 +333,14 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 }
             }
             if (!hasStore) {
-                ProductOrderStore storeOrder = new ProductOrderStore();
+                SaleProductOrderStore storeOrder = new SaleProductOrderStore();
                 storeOrder.setStoreId(info.getStoreId());
-                storeOrder.setPointSum(moneySum);
-                storeOrder.setMoneySum(pointSum);
+                storeOrder.setPointSum(pointSum);
+                storeOrder.setMoneySum(moneySum);
                 storeOrder.setStatus(OrderStatus.STORE_ORDER_STATUS_NOT_PAYED);
                 StoreOrderWithDetails storeWithDetail = new StoreOrderWithDetails();
                 storeWithDetail.setOrderStore(storeOrder);
-                storeWithDetail.setOrderDetails(new ArrayList<ProductOrderDetail>());
+                storeWithDetail.setOrderDetails(new ArrayList<SaleProductOrderDetail>());
                 storeWithDetail.getOrderDetails().add(detailOrder);
                 storeWithDetails.add(storeWithDetail);
 
@@ -314,107 +357,234 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         orderMapper.insertSelective(mainOrder);
         //更新商户子订单,减库存 并插入
         for (StoreOrderWithDetails storeWithDetail : storeWithDetails) {
-            ProductOrderStore storeOrder = storeWithDetail.getOrderStore();
+            SaleProductOrderStore storeOrder = storeWithDetail.getOrderStore();
             storeOrder.setOrderId(mainOrder.getId());
             orderStoreMapper.insertSelective(storeOrder);
-            for (ProductOrderDetail detail : storeWithDetail.getOrderDetails()) {
-                detail.setStoreOrderId(storeOrder.getOrderId());
+            for (SaleProductOrderDetail detail : storeWithDetail.getOrderDetails()) {
+                detail.setStoreOrderId(storeOrder.getId());
                 orderDetailMapper.insertSelective(detail);
                 //减库存
                 productAttrMapper.addNum(detail.getProductAttr(), -detail.getNum());
                 //减购物车
                 if (fromCart) {
-                    cartMapper.subCartNum(projectId, clientId, detail.getProductAttr(), detail.getNum());
+                    cartService.subCartNum(projectId, clientId, detail.getProductAttr(), detail.getNum());
                 }
             }
         }
-
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //金钱业务
-        if (moneySum > 0) {
-            //涉及金钱，应该等微信支付回调在处理积分
-            preOrderResult.setIfUseWechat(true);
-            preOrderResult.setPayParam(getWechatPayParams(openId, mainOrder.getMoneySum(), mainOrder.getCode()));
-
-        } else {
-            //总金钱为0，直接积分处理，支付成功
-            clientMapper.setPoint(clientId, -pointSum);
-            setOrderPayed(mainOrder.getCode(), null);
-            // 订单已经算支付完成了
-            preOrderResult.setIfUseWechat(false);
-        }
-
-
-        return new ResultData(preOrderResult);
-
-    }
-
-    @Override
-    public ResultData reorderForWechat(Long orderId) {
-        //纯积分业务不会在这里发生
-        ProductOrder order = orderMapper.selectByPrimaryKey(orderId);
-        ThrowBusinessExceptionUtil.checkNull(order, "订单不存在");
-        String openId = wechatOpenIdService.getOpenId(order.getProjectId(), order.getClientId());
-        ThrowBusinessExceptionUtil.checkNull(order, "获取微信信息失败");
-        PreOrderResult preOrderResult = new PreOrderResult();
-        preOrderResult.setIfUseWechat(true);
-        preOrderResult.setPayParam(getWechatPayParams(openId, order.getMoneySum(), order.getCode()));
-        return new ResultData(preOrderResult);
-    }
-
-    @Override
-    public ResultData clientCancelOrder(Long orderId) {
-        orderMapper.cancelOrder(orderId, CANCEL_BY_CLIENT);
-        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_CANCELED);
-        return new ResultData();
-    }
-
-
-    @Override
-    public void wechatNotifyPayed(String code, String outCode) {
-        ProductOrderExample exmaple = new ProductOrderExample();
-        ProductOrderExample.Criteria criteria = exmaple.createCriteria();
-        criteria.andCodeEqualTo(code);
-        List<ProductOrder> list = orderMapper.selectByExample(exmaple);
-        if (list.size() == 0) {
-            logger.error("微信回调时发现我方单号不存在：返回值为我放单号：" + code + " 微信单号：" + outCode);
-        }
-        ProductOrder order = list.get(0);
-        // TODO: 2017/4/20 用户可能在下订单时积分够了,在回调时积分用了
-        clientMapper.setPoint(order.getClientId(), -order.getPointSum());
-        setOrderPayed(code, outCode);
-    }
-
-    @Override
-    public void systemCancelOrder(Long orderId) {
-
-        orderMapper.cancelOrder(orderId, CANCEL_BY_SYSTEM);
-        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_CANCELED);
+        return mainOrder;
 
     }
 
     /**
-     * @param orderCode
-     * @param outCode   如果是微信支付，需要赋值
+     * @param payType       支付方式
+     * @param clientId
+     * @param subProjectId  可空
+     * @param jsonStr       array list of { Long attrId,Integer num,Boolean moneyOrPoint;}
+     * @param pickUpOrPost
+     * @param postAddressId
+     * @return
      */
-    private void setOrderPayed(String orderCode, String outCode) {
+    private ResultData clientOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+        SaleProductOrder order = createOrder(payType, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
+        PreOrderResult preOrderResult = null;
+        //金钱业务
+        if (order.getMoneySum() > 0) {
+            if (payType.equals(PAY_TYPE_WECHAT)) {
+                preOrderResult = getWechatPreOrderResult(projectId, clientId, order.getMoneySum(), order.getCode());
+            } else if (payType.equals(PAY_TYPE_ALI)) {
+                preOrderResult = getAliPreOrderResult(projectId, order.getMoneySum(), order.getCode());
+            }
+        } else {
+            //总金钱为0，直接积分处理，支付成功
+            clientService.addPoint(clientId, (double) -order.getPointSum());
+            setOrderPayed(order.getCode(), null,payType);
+            // 订单已经算支付完成了
+            preOrderResult = new PreOrderResult();
+            preOrderResult.setIfUseMoney(false);
+        }
+        return new ResultData(preOrderResult);
+    }
+
+    /**
+     * 生成微信支付相关的参数
+     *
+     * @param projectId
+     * @param clientId
+     * @param code
+     * @param moneySum
+     * @return
+     */
+    private PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code) {
+        //先判断openid存在性
+        //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
+        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
+        if (openId == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
+        }
+        PreOrderResult preOrderResult = new PreOrderResult();
+        //涉及金钱，应该等微信支付回调在处理积分
+        preOrderResult.setIfUseMoney(true);
+        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
+        return preOrderResult;
+    }
+
+    /**
+     * 生成支付宝支付相关的参数
+     *
+     * @param projectId
+     * @param code
+     * @param moneySum
+     * @return
+     */
+    private PreOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code) {
+        PreOrderResult preOrderResult = new PreOrderResult();
+        //涉及金钱，应该等微信支付回调在处理积分
+        preOrderResult.setIfUseMoney(true);
+        AliPayStoreInfo storeInfo = null;
+        if (projectId.equals(Global.PLATFORM_ID)) {
+
+            storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
+
+        } else {
+            // TODO: 2017/5/9 非项目用户
+        }
+        //
+        String formStr = aliPayService.wapPay(code, moneySum, storeInfo);
+        preOrderResult.setFormString(formStr);
+        return preOrderResult;
+    }
+
+    @Override
+    public ResultData reorderForWechat(Long orderId) {
+        return clientReOrder(orderId, PAY_TYPE_WECHAT);
+    }
+
+    @Override
+    public ResultData reorderForAli(Long orderId) {
+        return clientReOrder(orderId, PAY_TYPE_ALI);
+    }
+
+    private ResultData clientReOrder(Long orderId, Byte payType) {
+        //纯积分业务不会在这里发生
+        SaleProductOrder order = orderMapper.selectByPrimaryKey(orderId);
+        ThrowBusinessExceptionUtil.checkNull(order, "订单不存在");
+        PreOrderResult preOrderResult=null;
+        if (payType.equals(PAY_TYPE_WECHAT)) {
+            preOrderResult = getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode());
+        } else if (payType.equals(PAY_TYPE_ALI)) {
+            preOrderResult = getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode());
+
+        }
+
+        return new ResultData(preOrderResult);
+
+    }
+
+    @Override
+    public ResultData clientCancelOrder(Long orderId) {
+        restoreCancelledOrderAttrNum(orderId);
+        orderMapper.cancelOrder(orderId, CANCEL_BY_CLIENT);
+        orderStoreMapper.setOrderStatusByMainOrderId(orderId, OrderStatus.STORE_ORDER_STATUS_CANCELED);
+        return new ResultData();
+    }
+
+    /**
+     *
+     * 支付成功返回回调，进行订单支付成功业务处理
+     * 包括商品和活动
+     * 先检查code是否是商品订单，如果不是，则去寻找商品订单
+     * @param code
+     * @param outCode
+     */
+    private void notifyPayed(String code, String outCode, Byte payType) {
+        SaleProductOrderExample exmaple = new SaleProductOrderExample();
+        SaleProductOrderExample.Criteria criteria = exmaple.createCriteria();
+        criteria.andCodeEqualTo(code);
+        List<SaleProductOrder> list = orderMapper.selectByExample(exmaple);
+        if (list.size() == 0) {
+           Boolean actResult= actOrderService.notifyPayed(code,outCode,payType);
+            if(!actResult) {
+                logger.error("商品订单回调时发现我方单号不存在，返回值为：我方单号：" + code + " 对方单号：" + outCode + " payType:" + payType);
+            }
+            return;
+        }
+        SaleProductOrder order = list.get(0);
+        // TODO: 2017/4/20 用户可能在下订单时积分够了,在回调时积分用了
+        clientMapper.setPoint(order.getClientId(), -order.getPointSum());
+        setOrderPayed(code, outCode,payType);
+
+    }
+
+    @Override
+    public void wechatNotifyPayed(String code, String outCode) {
+        notifyPayed(code, outCode, PAY_TYPE_WECHAT);
+    }
+
+    @Override
+    public void aliNotifyPayed(String code, String outCode) {
+        notifyPayed(code, outCode,PAY_TYPE_ALI);
+    }
+
+    @Override
+    public void systemCancelOrder(Long orderId) {
+        restoreCancelledOrderAttrNum(orderId);
+        orderMapper.cancelOrder(orderId, CANCEL_BY_SYSTEM);
+        orderStoreMapper.setOrderStatusByMainOrderId(orderId, OrderStatus.STORE_ORDER_STATUS_CANCELED);
+
+    }
+
+    @Override
+    public void cancelOverOneHourOrder() {
+        List<Long> orderIds = orderMapper.getOneHourNotPayedOrder();
+        for (Long orderId : orderIds) {
+            systemCancelOrder(orderId);
+        }
+    }
+
+    @Override
+    public void receiveOverTenDayStoreOrder() {
+        orderStoreMapper.setDeliveredTenDayReceived(STORE_ORDER_STATUS_SENT, STORE_ORDER_STATUS_RECEIVED);
+    }
+
+    /**
+     * 恢复取消的订单下所有商品属性的库存
+     *
+     * @param orderId
+     */
+//// TODO: 2017/4/27 这个会被定时任务不断执行，需要优化
+    private void restoreCancelledOrderAttrNum(Long orderId) {
+        List<SaleProductOrderDetail> details = orderMapper.getAllSimpleOrderDetails(orderId);
+        for (SaleProductOrderDetail detail : details) {
+            productAttrMapper.addNum(detail.getProductAttr(), detail.getNum());
+        }
+    }
+
+    /**
+     * 一开始下单时的支付方式已经定过了，这里再次赋值payType,主要是重新下单时的支付方式可能会变化
+     * @param orderCode
+     * @param outCode
+     */
+    private void setOrderPayed(String orderCode, String outCode,Byte payType) {
         Long orderId = orderMapper.getIdByCode(orderCode);
         ThrowBusinessExceptionUtil.checkNull(orderId, "订单号不存在");
         orderMapper.setPayedById(orderId);
         if (outCode != null) {
-            orderMapper.setOutPayCodeById(orderId, outCode);
+            orderMapper.setOutPayCodeById(orderId, outCode,payType);
         }
-        orderStoreMapper.setOrderStatusByMainOrderId(orderId,OrderStatus.STORE_ORDER_STATUS_PAYED);
+        orderStoreMapper.setOrderStatusAndPayTypeByMainOrderId(orderId,payType, OrderStatus.STORE_ORDER_STATUS_PAYED);
 
     }
 
-    public Map<String, Object> getWechatPayParams(String openId, Integer moneySum, String sysOrderCode) {
+    public Map<String, Object> getWechatPayParams(Long projectId, String openId, float moneySum, String sysOrderCode) {
         //涉及金钱，应该等微信支付回调在处理积分
         PreOrder preOrder = new PreOrder();
         preOrder.setBody("悦客会");
         preOrder.setOpenId(openId);
-        preOrder.setTotalFee(moneySum);
+        //转成分
+        preOrder.setTotalFee((int) Math.ceil(moneySum * 100));
         preOrder.setOutTradeNo(sysOrderCode);
+
+        // TODO: 2017/5/11  增加项目的微信支付传参传参
         String prepayResultStr = wxPayService.precreate(preOrder);
 
         Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
@@ -470,7 +640,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         changePoint(null, vipCode, point);
     }*/
 
-
+    // TODO: 2017/4/28 优化
     private String createTradeNo() {
         String pix = String.valueOf(System.nanoTime());
         return pix + RandomStringUtils.random(8, "1234567890");
@@ -478,38 +648,43 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
 
     class StoreOrderWithDetails {
-        ProductOrderStore orderStore;
-        List<ProductOrderDetail> orderDetails;
+        SaleProductOrderStore orderStore;
+        List<SaleProductOrderDetail> orderDetails;
 
-        public List<ProductOrderDetail> getOrderDetails() {
+        public List<SaleProductOrderDetail> getOrderDetails() {
             return orderDetails;
         }
 
-        public void setOrderDetails(List<ProductOrderDetail> orderDetails) {
+        public void setOrderDetails(List<SaleProductOrderDetail> orderDetails) {
             this.orderDetails = orderDetails;
         }
 
-        public ProductOrderStore getOrderStore() {
+        public SaleProductOrderStore getOrderStore() {
             return orderStore;
         }
 
-        public void setOrderStore(ProductOrderStore orderStore) {
+        public void setOrderStore(SaleProductOrderStore orderStore) {
             this.orderStore = orderStore;
         }
     }
 
+    /**
+     * 前台下单的返回值
+     */
     class PreOrderResult {
-        //是否还要微信支付
-        Boolean ifUseWechat;
+        //是否要金钱支付
+        Boolean ifUseMoney;
         //微信支付的参数
         Map<String, Object> payParam;
+        //支付宝支付的返回参数，form表单的string
+        String formString;
 
-        public Boolean getIfUseWechat() {
-            return ifUseWechat;
+        public Boolean getIfUseMoney() {
+            return ifUseMoney;
         }
 
-        public void setIfUseWechat(Boolean ifUseWechat) {
-            this.ifUseWechat = ifUseWechat;
+        public void setIfUseMoney(Boolean ifUseMoney) {
+            this.ifUseMoney = ifUseMoney;
         }
 
         public Map<String, Object> getPayParam() {
@@ -518,6 +693,14 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
         public void setPayParam(Map<String, Object> payParam) {
             this.payParam = payParam;
+        }
+
+        public String getFormString() {
+            return formString;
+        }
+
+        public void setFormString(String formString) {
+            this.formString = formString;
         }
     }
 

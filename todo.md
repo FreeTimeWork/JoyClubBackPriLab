@@ -42,3 +42,6 @@
 - `List<String>` 并不继承 `List<Object>`,[see](http://stackoverflow.com/questions/22144671/why-liststring-is-not-acceptable-as-listobject),
   所以，一个`void test(List<Object> list)`的方法不能用`List<String>`去调用
 - 积分记录排序
+- decimalFormat '.00'对于0.0123会变成'.00'，没有个位，应该用'0.00'
+- mysql `1!=null`的结果是 `null`
+- update 也可以join

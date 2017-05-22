@@ -35,7 +35,9 @@ public class ProductPriceController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/product/prices", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) Integer reviewStatus,
+    public ResultData getList(
+                              @RequestParam(required = false) Boolean specialPriceFlag,
+                              @RequestParam(required = false) Integer reviewStatus,
                               @RequestParam(required = false) String storeName,
                               @RequestParam(required = false) String productName,
                               PageUtil pageUtil, HttpSession httpSession) {
@@ -43,9 +45,9 @@ public class ProductPriceController extends BaseUserSessionController {
         SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
         Integer userType = user.getType();
         if (userType.equals(USER_TYPE_STORE))
-            return productPriceService.getListForStore(user.getInfoId(), reviewStatus, productName, pageUtil);
+            return productPriceService.getListForStore(user.getInfoId(),specialPriceFlag, reviewStatus, productName, pageUtil);
         else if(userType.equals(USER_TYPE_PLATFORM)||userType.equals(USER_TYPE_PROJECT))
-            return productPriceService.getListForProject(storeName, reviewStatus, productName, pageUtil);
+            return productPriceService.getListForProject(storeName,specialPriceFlag, reviewStatus, productName, pageUtil);
         else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
 

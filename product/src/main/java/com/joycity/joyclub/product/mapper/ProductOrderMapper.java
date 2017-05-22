@@ -73,8 +73,8 @@ public interface ProductOrderMapper extends BaseMapper<SaleProductOrder, Long, S
     @Update("update sale_product_order set status =2 , pay_time=now() where id=#{id}")
     Integer setPayedById(Long id);
 
-    @Update("update sale_product_order set out_pay_code =#{outPayCode} where id=#{id}")
-    Integer setOutPayCodeById(@Param("id") Long id, @Param("outPayCode") String outPayCode);
+    @Update("update sale_product_order set out_pay_code =#{outPayCode},pay_type=#{payType} where id=#{id}")
+    Integer setOutPayCodeById(@Param("id") Long id, @Param("outPayCode") String outPayCode,@Param("payType") Byte payType);
 
 
     @Update("update sale_product_order set status = 1, canceler=#{cancelType},cancel_time=now() where id=#{id}")

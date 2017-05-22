@@ -44,6 +44,7 @@
         left join sys_product_category c on a.category_id=c.id
         left join sale_store_designer sd on sd.id = a.designer_id
         where
+        p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1
         <if test="specialPriceFlag!=null">
             p.special_price_flag = #{specialPriceFlag}
         </if>
@@ -53,7 +54,7 @@
         <if test="designerId!=null">
             and  a.designer_id = #{designerId}
         </if>
-        and p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc
         <include refid="limit"/>
 
@@ -77,6 +78,34 @@
         </if>
         and p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc
+        <include refid="limit"/>
+
+    </select>
+    <!--join的目的是初始化@prev为0-->
+    <select id="selectSpecialPriceActProducts"
+            resultType="com.joycity.joyclub.product.modal.ProductSimple">
+        select
+        <include refid="product_simple_columns"/>
+        from sale_special_price_act_product sp
+        join sale_product a on sp.product_id = a.id
+        join
+        (
+        select * from (
+        SELECT
+        t.*,
+        IF( @prev != product_id, @rownum := 1, @rownum := @rownum+1 ) AS rank,
+        @prev := product_id
+        FROM sale_product_price  t
+        JOIN (SELECT @rownum := NULL, @prev := 0) AS r
+        where t.delete_flag=0 and t.forbid_flag=0 and t.special_price_flag=1  and t.start_time&gt;=#{startTime} and t.end_time&lt;=#{endTime}
+        ORDER BY t.product_id,t.create_time desc) priceRank where rank=1
+        )
+        p on p.product_id = sp.product_id
+        join sys_product_category c on a.category_id=c.id
+        left join sale_store_designer sd on sd.id = a.designer_id
+        where  sp.special_price_act_id=#{id}
+        order by a.display_weight desc,p.create_time  asc
+
         <include refid="limit"/>
 
     </select>

@@ -28,18 +28,46 @@ public class LoginFrontController {
      *
      * @param phone
      * @param authCode
-     * @param openId  微信 openId
+     * @param openId    微信 openId
      * @param projectId
      * @return
      */
     @RequestMapping(value = "/login/wechat", method = {RequestMethod.POST})
     public ResultData wechatLogin(@RequestParam String phone,
-                                  @RequestParam final String authCode,
-                                  @RequestParam final String openId,
+                                  @RequestParam  String authCode,
+                                  @RequestParam  String openId,
+                                  @RequestParam  String accessToken,
                                   @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) final Long projectId
     ) {
-        return loginFrontService.wechatLogin(openId, projectId, phone, authCode);
+        return loginFrontService.wechatLogin( projectId, phone, authCode,openId,accessToken);
     }
 
-
+    /**
+     * 商业或者地产项目使用平台时的微信登陆
+     *
+     * @param phone
+     * @param openId    微信 openId
+     * @return
+     */
+    @RequestMapping(value = "/login/subproject/auto/wechat", method = {RequestMethod.POST})
+    public ResultData wechatAutoLogin(
+            @RequestParam String phone,
+            @RequestParam String openId,
+            @RequestParam String accessToken,
+            @RequestParam Long subProjectId
+    ) {
+        return loginFrontService.subProjectWechatAutoLogin(subProjectId, phone, openId,accessToken);
+    }
+    /**
+     * 商业或者地产项目使用平台时的微信登陆
+     *
+     * @return
+     */
+    @RequestMapping(value = "/login/subproject/auto/wap", method = {RequestMethod.POST})
+    public ResultData wapAutoLogin(
+            @RequestParam String phone,
+            @RequestParam Long subProjectId
+    ) {
+        return loginFrontService.subProjectWapAutoLogin(subProjectId, phone);
+    }
 }

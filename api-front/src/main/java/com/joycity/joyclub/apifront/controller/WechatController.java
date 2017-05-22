@@ -20,51 +20,23 @@ public class WechatController {
     @Autowired
     WechatService wechatService;
 
-    //todo token写死了
+ /*   //todo token写死了
     @RequestMapping("/wechat/userinfo/{openId}")
     public ResultData getUserInfoForProject(@PathVariable String openId) {
         return new ResultData(wechatService.getUserInfo(openId, "http://bjmall.stcl365.com:20000/wechat/public/getToken"));
-    }
-// TODO: 2017/4/18  openId小写 同时修改前端的路径
-    @RequestMapping("/wechat/openId")
+    }*/
+
+    /**
+     * 用于在微信端登陆获取openId
+     * 会返回openId accessToken等，accessToken在登陆时用于获取用户信息，accessToken2小时会过期，目前认为登录页不会待2小时
+     * @param code
+     * @param projectId
+     * @return
+     */
+    @RequestMapping("/wechat/openid")
     public ResultData getAuthCode(@RequestParam String code, @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId) {
         return new ResultData(wechatService.getAccessTokenAndOpenId(code,projectId));
     }
 
-/*    @RequestMapping("/wechat/pay/notify")
-    public void wechatPayNotify(HttpServletRequest request, HttpServletResponse response) {
-        try {
-
-            Map<String, String> params = WechatXmlUtil.xmlToMap(request
-                    .getInputStream());
-
-            String tradeStatus = params.get("result_code");
-            if (tradeStatus != null && tradeStatus.equals("SUCCESS")) {
-                String tradeNo = params.get("transaction_id");
-                String out_trade_no = params.get("out_trade_no");
-                System.out.println(out_trade_no);
-                System.out.println(tradeNo);
-                *//*List<Trade> ts =  tradeService.getTradeByOutTradeNo(out_trade_no);
-                for(Trade t : ts) {
-                    if(t.getPlatTradeNo() != null) {
-                        throw new BusinessException(BusinessException.PARAM_ILLEGAL);
-                    }
-                }
-                logger.info("wxpay notify,out_trade_no is... ... ... : " + out_trade_no);
-                logger.info("wxpay notify,trade_no is ... ..." + tradeNo);
-                SaleCalculDTO saleCalculDTO = new SaleCalculDTO();
-                saleCalculDTO.setOutTradeNo(out_trade_no);
-                saleService.saleHandler(saleCalculDTO,tradeNo,Trade.ORDER_PAY);*//*
-            }
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("return_code", "SUCCESS");
-            map.put("return_msg", "OK");
-            response.getWriter().write(WechatXmlUtil.mapToXml(map));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw e;
-        }
-    }*/
 
 }

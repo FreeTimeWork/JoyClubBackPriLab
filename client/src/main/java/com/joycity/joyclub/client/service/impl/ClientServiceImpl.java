@@ -77,7 +77,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ResultData getListForBack(final String group13,
+    public ResultData getListForBack(/*final String group13,*/
                                      final String cardType,
                                      final Integer pointStart,
                                      final Integer pointEnd,
@@ -88,12 +88,12 @@ public class ClientServiceImpl implements ClientService {
         return new AbstractGetListData<Client>() {
             @Override
             public Long countByFilter() {
-                return clientUserMapper.countForBack(group13, cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+                return clientUserMapper.countForBack(/*group13,*/ cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
             }
 
             @Override
             public List<Client> selectByFilter() {
-                return clientUserMapper.getListForBack(group13, cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+                return clientUserMapper.getListForBack(/*group13,*/ cardType, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
             }
         }.getList(pageUtil);
     }

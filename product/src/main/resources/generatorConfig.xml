@@ -21,7 +21,7 @@
         <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.product.mapper.generated"
                                   targetProject="D:\IDEA workspace\joyclub\product\src\main\java"/>
      -->
-        <table tableName="sale_product_price">
+        <table tableName="sale_product_order">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
        <!-- <table tableName="sale_product">

@@ -46,12 +46,17 @@ public class WxPayService {
      */
     private static final String URL_REFUND = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 
+    // TODO: 2017/5/11  增加项目的微信支付传参传参
+    /**
+     * @param precreateRequest
+     * @return
+     */
     public String precreate(PreOrder precreateRequest) {
         Map<String, Object> params = getSubmitMap();
         params.put("out_trade_no", precreateRequest.getOutTradeNo());
         params.put("body", precreateRequest.getBody());
-        //系统里的总金额都是精确到元，微信则需提供到分
-        params.put("total_fee", String.valueOf(Math.round(precreateRequest.getTotalFee() * 100))); // 总金额
+        //微信则需提供到分
+        params.put("total_fee", String.valueOf(Math.round(precreateRequest.getTotalFee() ))); // 总金额
         params.put("spbill_create_ip", "127.0.0.1"); // ip
 //		params.put("product_id", );
         params.put("notify_url", wxPayConfig.getNotifyUrl());

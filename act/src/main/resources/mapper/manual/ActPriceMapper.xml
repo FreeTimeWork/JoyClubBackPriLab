@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.act.mapper.ActPriceMapper">
+
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+    <sql id="where_for_store">
+        <where>
+            a.delete_flag=0 and p.store_id=#{storeId}
+            <if test="reviewStatus!=null">
+                and a.review_status = #{reviewStatus}
+            </if>
+            <if test="buyType!=null">
+                and a.buy_type = #{buyType}
+            </if>
+            <if test="actNameLike!=null">
+                and p.name like #{actNameLike}
+            </if>
+        </where>
+
+    </sql>
+    <sql id="where_for_project">
+        <where>
+            a.delete_flag=0
+            <if test="reviewStatus!=null">
+                and a.review_status = #{reviewStatus}
+            </if>
+            <if test="buyType!=null">
+                and a.buy_type = #{buyType}
+            </if>
+            <if test="storeNameLike!=null">
+                and s.name like #{storeNameLike}
+            </if><if test="actNameLike!=null">
+                and p.name like #{actNameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countForStore" resultType="java.lang.Long">
+
+        select count(*) from sale_act_price a
+        left join sale_act p on a.act_id=p.id
+        <include refid="where_for_store"/>
+    </select>
+    <select id="selectForStore"
+            resultType="com.joycity.joyclub.act.modal.ActPriceWithActInfo">
+
+        select a.id,a.price,a.act_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,a.buy_type,p.name actName,p.base_price
+        from sale_act_price a
+        left join sale_act p on a.act_id=p.id
+        <include refid="where_for_store"/>
+        order by a.id desc
+        <include refid="limit"/>
+    </select>
+    <select id="countForProject" resultType="java.lang.Long">
+
+        select count(*) from sale_act_price a
+        left join sale_act p on a.act_id=p.id
+        left join sys_store s on p.store_id = s.id
+        <include refid="where_for_project"/>
+    </select>
+    <select id="selectForProject"
+            resultType="com.joycity.joyclub.act.modal.ActPriceWithActInfo">
+
+        select a.id,a.price,a.act_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,a.buy_type,p.name actName,p.base_price,s.name storeName
+        from sale_act_price aselectForProject
+        left join sale_act p on a.act_id=p.id
+        left join sys_store s on p.store_id = s.id
+        <include refid="where_for_project"/>
+        order by a.id desc
+        <include refid="limit"/>
+    </select>
+    <select id="countPriceTimeOverlap" resultType="java.lang.Long">
+
+        select count(*) from sale_act_price
+        where forbid_flag=false
+        and review_status !=2
+        and act_id = #{actId}
+        <if test="id!=null">
+            and id !=#{id}
+        </if>
+        and ((start_time &gt;= #{startTime} and start_time &lt; #{endTime}) or(end_time &gt; #{startTime} and start_time &lt;= #{endTime}))
+    </select>
+
+
+</mapper>

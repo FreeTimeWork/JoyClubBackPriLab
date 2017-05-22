@@ -9,6 +9,7 @@ public class WxPayConfig {
 	
 	/**
 	 * 公众账号ID
+	 * appId等都是平台的
 	 */
 	@Value("${wxpay.appid}")
 	private String appid;

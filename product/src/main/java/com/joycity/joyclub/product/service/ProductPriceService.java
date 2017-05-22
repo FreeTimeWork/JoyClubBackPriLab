@@ -17,7 +17,7 @@ public interface ProductPriceService {
      * @param pageUtil
      * @return
      */
-    ResultData getListForProject(String storeName, Integer reviewStatus, String productName, PageUtil pageUtil);
+    ResultData getListForProject(String storeName,Boolean specialPriceFlag, Integer reviewStatus, String productName, PageUtil pageUtil);
 
     /**
      * 按增加时间倒序
@@ -28,7 +28,7 @@ public interface ProductPriceService {
      * @param pageUtil
      * @return
      */
-    public ResultData getListForStore(Long storeId, Integer reviewStatus, String productName, PageUtil pageUtil);
+    public ResultData getListForStore(Long storeId,Boolean specialPriceFlag, Integer reviewStatus, String productName, PageUtil pageUtil);
 
     /**
      * 返回某个项目的具体信息

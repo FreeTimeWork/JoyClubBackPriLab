@@ -3,6 +3,7 @@ package com.joycity.joyclub.apifront.controller;
 import com.joycity.joyclub.apifront.service.BenefitService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * Created by CallMeXYZ on 2017/4/5.
  */
 @RestController
-@RequestMapping(URL_API_FRONT+"/benefit")
+@RequestMapping(URL_API_FRONT + "/benefit")
 public class BenefitFrontController {
     @Autowired
     BenefitService benefitService;
@@ -27,9 +28,8 @@ public class BenefitFrontController {
     /**
      * 某个项目中，某个会员能领取的卡券
      * 按卡券投放时间倒序
-
+     *
      * @param clientId 如果不给clientId，就返回该项目所有的卡券，业务逻辑处理不同
-
      * @return
      */
     @RequestMapping(value = "/coupons", method = GET)
@@ -56,10 +56,11 @@ public class BenefitFrontController {
     @RequestMapping(value = "/coupon/{id}/receive", method = POST)
     public ResultData receiveCoupon(
             @PathVariable Long id,
+            @RequestParam(required = false) Long subProjectId,
             @RequestParam Long clientId
 
     ) {
-        return benefitService.receiveCoupon(id, clientId);
+        return benefitService.receiveCoupon(id, clientId, subProjectId);
     }
 
 }

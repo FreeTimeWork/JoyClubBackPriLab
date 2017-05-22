@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.act.mapper.ActOrderMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <select id="countMyActOrders" resultType="java.lang.Long">
+        select count(*) from sale_act_order where project_id = #{projectId} and client_id = #{clientId}
+        <if test="status!=null">and status=#{status}</if>
+    </select>
+    <select id="selectMyActOrders" resultType="com.joycity.joyclub.act.modal.MyActOrder">
+        select o.id,o.code,o.status,o.money_sum,o.point_sum,o.pay_type,o.num,pay_time,o.cancel_time,o.check_time,attr.name attrName,attr.id attrId,act.name actName,act.address,act.portrait,act.id actId
+        from sale_act_order o
+        join sale_act_attr attr on attr.id = o.attr_id
+        join sale_act act on act.id = attr.act_id
+        where o.project_id=#{projectId} and o.client_id=#{clientId}
+        <if test="status!=null">and o.status=#{status}</if>
+        <include refid="limit"/>
+   </select>
+
+
+    <select id="countForStore"
+            resultType="java.lang.Long">
+
+        SELECT count(*)   from sale_act_order o
+        join sale_act_attr attr on attr.id = o.attr_id
+        join sale_act act on act.id = attr.act_id
+        join client c on o.client_id = c.id
+        where act.store_id = #{storeId}
+        <choose>
+            <when test="actName != null">
+                and act.name like #{actNameLike}
+            </when>
+            <when test="code != null">
+                and o.code = #{code}
+            </when>
+            <when test="name != null">
+                and c.real_name = #{name}
+            </when>
+            <when test="phone != null">
+                and c.tel = #{phone}
+            </when>
+            <otherwise>
+                <if test="status!=null">and s.status =#{status}</if>
+
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectForStore"
+            resultType="com.joycity.joyclub.act.modal.ActOrderForBack">
+
+        SELECT o.id,o.code,o.status,o.money_sum,o.point_sum,o.pay_type,o.num,pay_time,o.cancel_time,o.check_time,attr.name attrName,attr.id attrId,act.name actName,act.address,act.portrait,act.id actId,c.real_name clientName,c.tel clientPhone
+        from sale_act_order o
+        join sale_act_attr attr on attr.id = o.attr_id
+        join sale_act act on act.id = attr.act_id
+        join client c on o.client_id = c.id
+        where act.store_id = #{storeId}
+
+        <choose>
+            <when test="actName != null">
+                and act.name like #{actNameLike}
+            </when>
+            <when test="code != null">
+                and o.code = #{code}
+            </when>
+            <when test="name != null">
+                and c.real_name = #{name}
+            </when>
+            <when test="phone != null">
+                and c.tel = #{phone}
+            </when>
+            <otherwise>
+                <if test="status!=null">and s.status =#{status}</if>
+
+            </otherwise>
+        </choose>
+        <include refid="limit"/>
+    </select>
+</mapper>

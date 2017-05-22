@@ -48,6 +48,6 @@ public class VipUserController extends BaseUserSessionController {
     ) {
 
         SysUser sysUser = checkProjectUser(session);
-        return vipUserService.getList(sysUser.getInfoId(), type, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
+        return vipUserService.getList(/*sysUser.getInfoId(),*/ type, pointStart, pointEnd, vipNo, cardNo, phone, pageUtil);
     }
 }

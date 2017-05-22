@@ -10,6 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>act</artifactId>
-
+    <properties>
+        <commons>1.0-SNAPSHOT</commons>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>commons</artifactId>
+            <version>${commons}</version>
+        </dependency>
+    </dependencies>
 
 </project>

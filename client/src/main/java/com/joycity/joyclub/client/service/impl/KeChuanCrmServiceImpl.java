@@ -177,9 +177,9 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         String time = DateFormatUtils.format(now, "HHmmss");
         String sign = DigestUtils.md5Hex(date + time + signKey);
 
-        String prama = null;
+        String param = null;
 
-        prama = KeChuanEncryption.aesEncrypt(tel, secretKey);
+        param = KeChuanEncryption.aesEncrypt(tel, secretKey);
 
 
         StringBuffer header = new StringBuffer();
@@ -189,7 +189,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         header.append("<USER>" + user + "</USER>");
 
         StringBuffer request = new StringBuffer();
-        request.append("<vipcode>" + prama + "</vipcode>");
+        request.append("<vipcode>" + param + "</vipcode>");
 
         Element result = postCrm("GetVipInfo", header.toString(), request.toString(), false);
         Element head = result.element(RESULT_TAG_HEADER);
@@ -267,6 +267,9 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
             } else if ("F".equals(sex)) {
                 member.setSex(Global.SEX_FEMALE);
             }
+            else {
+                member.setSex(sex);
+            }
         }
 
         member.setTel(tel);
@@ -332,7 +335,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         request.append("<expdate>9999-12-31</expdate>");
         request.append("<bonus>" + KeChuanEncryption.aesEncrypt(String.valueOf(changedValue.intValue()), secretKey) + "</bonus>");
         request.append("<reasoncode>00004</reasoncode>");
-//		request.append("<remark>" + prama + "</remark>");
+//		request.append("<remark>" + param + "</remark>");
 
         Element data = postCrm("BonusChange", header.toString(), request.toString());
 

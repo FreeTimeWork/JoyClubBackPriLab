@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.act.mapper.ActMapper">
+    <sql id="limit">
+      limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+    <sql id="where_store_and_name">
+        <where>
+            p.delete_flag=0 and p.store_id=#{storeId}
+            <if test="nameLike!=null">
+                and p.name like #{nameLike}
+            </if>
+        </where>
+
+    </sql>
+    <select id="countByStoreIdAndName" resultType="java.lang.Long">
+
+        select count(*) from sale_act p
+        <include refid="where_store_and_name"/>
+    </select>
+    <select id="selectByStoreIdAndName"
+            resultType="com.joycity.joyclub.act.modal.ActWithCategoryName">
+
+        select p.id,p.name,p.base_price,p.category_id,c.name categoryName
+        from sale_act p
+        left join sys_act_category c on c.id=p.category_id
+        <include refid="where_store_and_name"/>
+        order by p.id desc
+        <include refid="limit"/>
+    </select>
+
+
+    <sql id="list_column">
+        a.id,a.portrait,a.name,a.base_price,p.price,a.store_id,s.name storeName,s.pickup_address storeAddress
+    </sql>
+    <select id="selectSimpleList"
+            resultType="com.joycity.joyclub.act.modal.ActSimple">
+
+     <!-- select
+        <include refid="list_column"/>
+        from sale_act_price p
+        left join sale_act a on a.id = p.act_id
+        left join sys_store s on a.store_id=s.id
+        where
+        <if test="projectId!=null">
+            s.project_id = #{projectId} and
+        </if>
+        <if test="storeId!=null">
+            a.store_id = #{storeId} and
+        </if>
+
+        p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        order by a.display_weight desc,a.id desc-->
+
+        select a.id,a.store_id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address,store.name storeName,store.service_phone
+        from sale_act_price p
+        join sale_act a on p.act_id=a.id
+        join sys_act_category cat on a.category_id=cat.id
+        join sys_store store on a.store_id=store.id
+        where
+        p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
+        <if test="projectId!=null">
+            store.project_id = #{projectId} and
+        </if>
+        <if test="storeId!=null">
+            a.store_id = #{storeId} and
+        </if>
+        and now() between p.start_time and p.end_time
+        order by a.display_weight desc
+        <include refid="limit"/>
+    </select>
+</mapper>
