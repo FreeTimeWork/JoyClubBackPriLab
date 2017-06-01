@@ -26,7 +26,7 @@ public class ActOrderConst {
     public static final Byte STATUS_REFUNDING = 5;
     public static final Byte STATUS_REFUNDED =6;
 
-    public static final Byte BUY_TYPE_BOTH = 0;
-    public static final Byte BUY_TYPE_ONLY_MONEY = 1;
-    public static final Byte BUY_TYPE_ONLY_POINT = 2;
+    public static final Byte BUY_TYPE_BOTH = 1;
+    public static final Byte BUY_TYPE_ONLY_MONEY = 2;
+    public static final Byte BUY_TYPE_ONLY_POINT = 3;
 }
