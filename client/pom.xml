@@ -3,15 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>JoyClub</artifactId>
-        <groupId>com.joycity.joyclub</groupId>
+        <artifactId>joyclub</artifactId>
+        <groupId>com.joycity</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.joycity.joyclub</groupId>
     <artifactId>client</artifactId>
     <properties>
-        <commons>1.0-SNAPSHOT</commons>
         <coupon>1.0-SNAPSHOT</coupon>
         <httpcomponents.httpclient>4.5.2</httpcomponents.httpclient>
         <httpcomponents.httpcore>4.4.4</httpcomponents.httpcore>
@@ -19,11 +18,6 @@
         <commons.codec>1.10</commons.codec>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>commons</artifactId>
-            <version>${commons}</version>
-        </dependency>
         <dependency>
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>coupon</artifactId>

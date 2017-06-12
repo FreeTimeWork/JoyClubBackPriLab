@@ -18,6 +18,7 @@ public class ActSimple {
     private Long storeId;
     private String storeName;
     private String servicePhone;
+    private Byte buyType;
 
     public Long getId() {
         return id;
@@ -105,5 +106,13 @@ public class ActSimple {
 
     public void setServicePhone(String servicePhone) {
         this.servicePhone = servicePhone;
+    }
+
+    public Byte getBuyType() {
+        return buyType;
+    }
+
+    public void setBuyType(Byte buyType) {
+        this.buyType = buyType;
     }
 }

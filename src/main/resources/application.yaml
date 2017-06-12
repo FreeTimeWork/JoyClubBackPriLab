@@ -1,9 +1,19 @@
-jdbc:
-  className: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
-  username: root
-  password:
-
+# 默认的是生产环境的变量，开发时请在运行时追加active profiles为development
+spring:
+  datasource:
+    url: jdbc:mysql://rm-2zew10t27zxjjz7uh.mysql.rds.aliyuncs.com:3306/joyclub?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
+    username: moma
+    password: moma@#$123
+    #driver-class-name: com.mysql.jdbc.Driver
+  http:
+    multipart:
+      max-file-size: 10MB
+  jackson:
+    default-property-inclusion: non_null
+server:
+  port: 8070
+logging:
+  config: classpath:log4j2.xml
 
 encrypt:
   password:
@@ -38,14 +48,14 @@ wxpay:
   mchid: 1407360202
   # todo 修改cert地址
   cert: /sangto/jameka/wxcert/apiclient_cert.p12
-  notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
+  notifyUrl: http://ykh-bj.com/api/front/order/pay/wechat/notify
 
 alipay:
   appId: 2017051207220035
   privateKey: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC4woNfeENF4ziqbxly9d3I845/ihSdva0ImQ7FCJSY2w1rYlbflV9ho/K6TZpClZv1ros7ZEyNFD68TaT7vAZEI5x8sh+Wj7mJD0s9tYr9MsrL7U4X4cjgqcdoS8Xvr4pvZAta9ksgv2sfs/JVU/Kk6lCk8UFsXnRd1n9BHhnkrMAxmub4LjcSwIlZ3SPXGPYlGHxpSmXjHP7nywiGtXXLI6OhvtOmyN3sfLXeYpxPA4qMFMDqiCDCqIL6BW/3mrf1ncxKe/PMoRfIwLHcsWekvdc+K70idYExf2/vKEk3k6ybh6/gsE72dMszLxkFE0IsH4OB9SYTJksLdgpxudy9AgMBAAECggEBAJfTiB+I9UdWDHfJ6lDVCFcdBil6b6ycdLfPBxsVDP97atCmtBrxZbsX/dvo723uAYZn05SPvHRmgZM9/ui6vy95UBwMR/byzpV50uu35qpg9dOUg4sOiINOIUZslhB74TfeL5KlOGGFy2L2/Znu7UNmJbUVaBzElb2TCWmacc6+W/AFZ5oqHtfuYMQxLS7T6LyyEGqBDARLNsEiMtJqamFKYDYqJgGG0FLeAczwzM7yeN1yJC9Mmx0SMIoBZK14g5HE8jLlV364RT05rwxdZm0acy+HKNv7geLJwiTOz0wzAY1PmA37z8iiOglDCEhap/xT32madHdEIO6URr4wlYECgYEA72NH6wgYjM0/iwWfepgXb71DIxTdLH90QKuidtOKa2TAxT7mBaGuWbin3SA8hCAXy2aECvzh8wsOUpoOUtZcdyGk8RLzxHqUyiT+2AaeDT8Sca9KgK6iapr+tRVsQ8sn9FRz7cPoMMSJyYIBkFVCjyd2nGortgDmLbZp5GwYFmECgYEAxZTEYEM5iPfb7Llgb5wfNnVR7aLtt+vU6s1dL5bg/wpcCRgCwO4p/WKUoN2V6/7zsgcHWupmE1sVWXCAyBN3c7QUEMaBXJjrTzS64FCluCJFKWXa/jHy4VtUAl1Dn7jkyvPhcgcC5DIDVPT41rfuBG1C5gL4zl4uG3wHq1AUa90CgYAF9wJWv+fkskSQET7NDjcfSKcAm8d7EV3zMpOkxFahoGwRPiT7JPE0OR6tqtz3KdmN7usBXxW+OZtMwZvzwnWhXkw+2YsLbUaB1vQmq9uKVvT9sjF4DWHsqBoKpxMAiXJgay5MUWJavLr2M3AYiZdT+9a/xQF70n/pya7Py0W6YQKBgQCVNKITm9CQGbUQEHG99yUvB+vFzBs+oC5a3pj3fjYNA3K7P1GdBn3ZJp/c11kHLbI0h9BLHOXWyhrWPvpRnTnAu4XHoVBBcA2K8+QHz39GDUMzXwLAoVGsUz6exnVx4buNdByU8qyBTS9s8c4UwDNTTnuNnULs/PxOrxxPh5rUVQKBgQCOtyJmfiqqWay44mhptsHj4wAHgFP97o/JfQ3zWO/sCC9Uuzm8WVT/WewIG3m3nOaxs2jdMxha0DKOK3bkwa6RgsBWkpoi11LS+TxXWf33fIebHYED1JaQ759pTNF0N5+VRyzyLeypGbW6h6ALsqYEW5qWd7Xl3ZNvksJrhVSJUg==
   publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMKDX3hDReM4qm8ZcvXdyPOOf4oUnb2tCJkOxQiUmNsNa2JW35VfYaPyuk2aQpWb9a6LO2RMjRQ+vE2k+7wGRCOcfLIflo+5iQ9LPbWK/TLKy+1OF+HI4KnHaEvF76+Kb2QLWvZLIL9rH7PyVVPypOpQpPFBbF50XdZ/QR4Z5KzAMZrm+C43EsCJWd0j1xj2JRh8aUpl4xz+58sIhrV1yyOjob7Tpsjd7Hy13mKcTwOKjBTA6oggwqiC+gVv95q39Z3MSnvzzKEXyMCx3LFnpL3XPiu9InWBMX9v7yhJN5Osm4ev4LBO9nTLMy8ZBRNCLB+DgfUmEyZLC3YKcbncvQIDAQAB
-  notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/ali/notify
-  returnUrl: http://callmexyz1.ngrok.cc/alipayresult
+  notifyUrl: http://ykh-bj.com/api/front/order/pay/ali/notify
+  returnUrl: http://ykh-bj.com/alipayresult
 
 #科传 crm
 crm:
@@ -70,3 +80,19 @@ mallcoo:
   url:
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
     getInfoByToken: https://openapi10.mallcoo.cn/User/BaseInfo/v1/Get/ByToken
+
+---
+spring:
+    profiles: development
+    datasource:
+      url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
+      username: root
+      password:
+wxpay:
+  notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
+alipay:
+  notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/ali/notify
+  returnUrl: http://callmexyz1.ngrok.cc/alipayresult
+server:
+  port: 8080
+---
