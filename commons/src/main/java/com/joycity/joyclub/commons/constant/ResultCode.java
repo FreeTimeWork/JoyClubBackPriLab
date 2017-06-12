@@ -67,6 +67,7 @@ public class ResultCode {
 
     public static final int VIP_POINT_NOT_ENOUGH = 50601;
     public static final int COUPON_CHECK_ERROR = 50701;
+    public static final int MALLCOO_ERROR = 50801;
 
 
 }

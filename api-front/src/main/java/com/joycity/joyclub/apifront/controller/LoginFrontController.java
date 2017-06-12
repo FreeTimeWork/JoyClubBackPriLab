@@ -49,14 +49,44 @@ public class LoginFrontController {
      * @param openId    微信 openId
      * @return
      */
-    @RequestMapping(value = "/login/subproject/auto/wechat", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login/auto/wechat", method = {RequestMethod.POST})
     public ResultData wechatAutoLogin(
             @RequestParam String phone,
             @RequestParam String openId,
             @RequestParam String accessToken,
-            @RequestParam Long subProjectId
+            @RequestParam Long projectId,
+            @RequestParam(required = false) String from
     ) {
-        return loginFrontService.subProjectWechatAutoLogin(subProjectId, phone, openId,accessToken);
+        return loginFrontService.wechatAutoLogin(projectId, phone, openId,accessToken,from);
+    }
+    /**
+     * 商业或者地产项目使用平台时的微信登陆
+     *
+     * @return
+     */
+    @RequestMapping(value = "/login/auto/wap", method = {RequestMethod.POST})
+    public ResultData wapAutoLogin(
+            @RequestParam String phone,
+            @RequestParam Long projectId,
+            @RequestParam(required = false) String from
+    ) {
+        return loginFrontService.wapAutoLogin(projectId, phone,from);
+    }     /**
+     * 商业或者地产项目使用平台时的微信登陆
+     *
+     * @param phone
+     * @param openId    微信 openId
+     * @return
+     */
+    @RequestMapping(value = "/login/subproject/auto/wechat", method = {RequestMethod.POST})
+    public ResultData subProjectWechatAutoLogin(
+            @RequestParam String phone,
+            @RequestParam String openId,
+            @RequestParam String accessToken,
+            @RequestParam Long subProjectId,
+            @RequestParam(required = false) String from
+    ) {
+        return loginFrontService.subProjectWechatAutoLogin(subProjectId, phone, openId,accessToken,from);
     }
     /**
      * 商业或者地产项目使用平台时的微信登陆
@@ -64,10 +94,12 @@ public class LoginFrontController {
      * @return
      */
     @RequestMapping(value = "/login/subproject/auto/wap", method = {RequestMethod.POST})
-    public ResultData wapAutoLogin(
+    public ResultData subProjectWapAutoLogin(
             @RequestParam String phone,
-            @RequestParam Long subProjectId
+            @RequestParam Long subProjectId,
+            @RequestParam(required = false) String from
     ) {
-        return loginFrontService.subProjectWapAutoLogin(subProjectId, phone);
+        return loginFrontService.subProjectWapAutoLogin(subProjectId, phone,from);
     }
+
 }

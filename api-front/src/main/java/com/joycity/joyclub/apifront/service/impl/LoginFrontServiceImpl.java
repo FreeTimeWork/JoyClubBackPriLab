@@ -64,25 +64,25 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setWechat(projectId, openId, accessToken)
                 .build();
         Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId);
+        clientLoginLogMapper.addLog(client.getId(), projectId,null);
         return new ResultData(client);
 
     }
 
     @Override
-    public ResultData wapAutoLogin(Long projectId, String phone) {
+    public ResultData wapAutoLogin(Long projectId, String phone,String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
                 .setCardProjectId(projectId)
                 .setPhone(phone).build();
         Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId);
+        clientLoginLogMapper.addLog(client.getId(), projectId,from);
         return new ResultData(client);
     }
 
     @Override
-    public ResultData wechatAutoLogin(Long projectId, String phone, String openId, String accessToken) {
+    public ResultData wechatAutoLogin(Long projectId, String phone, String openId, String accessToken,String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
@@ -91,24 +91,24 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setWechat(projectId, openId, accessToken)
                 .build();
         Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId);
+        clientLoginLogMapper.addLog(client.getId(), projectId,from);
         return new ResultData(client);
     }
 
     @Override
-    public ResultData subProjectWapAutoLogin(Long subProjectId, String phone) {
+    public ResultData subProjectWapAutoLogin(Long subProjectId, String phone,String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
                 .setCardProjectId(subProjectId)
                 .setPhone(phone).build();
         Client client = clientLogin(param);
-        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId);
+        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId,from);
         return new ResultData(client);
     }
 
     @Override
-    public ResultData subProjectWechatAutoLogin(Long subProjectId, String phone, String openId, String accessToken) {
+    public ResultData subProjectWechatAutoLogin(Long subProjectId, String phone, String openId, String accessToken,String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
@@ -117,7 +117,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setWechat(PLATFORM_ID, openId, accessToken)
                 .build();
         Client client = clientLogin(param);
-        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId);
+        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId, from);
         return new ResultData(client);
     }
 

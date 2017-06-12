@@ -24,11 +24,10 @@ public class DesignerController extends BaseUserSessionController {
     private DesignerService designerService;
     @Autowired
     private ManagerService managerService;
-
+// TODO: 2017/6/7 增加筛选分页 
     /**
-     * 只有商户用户可以访问
      *
-     * @return data为按创建时间倒序的所有项目列表
+     * @return data
      */
     @RequestMapping(value = "/designers", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {

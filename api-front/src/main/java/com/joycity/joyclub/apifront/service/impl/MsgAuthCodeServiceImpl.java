@@ -53,7 +53,7 @@ public class MsgAuthCodeServiceImpl implements MsgAuthCodeService {
     private Integer msgDailyNum;
 
     //短信验证码的有效期
-    @Value("${message.period}")
+    @Value("${message.send.period}")
     private Integer msgPeriod;
 
     @Autowired

@@ -173,6 +173,7 @@ public class CouponController extends BaseUserSessionController {
 
     }
 
+    //todo 用户只能核销自己所属项目的卡券
     //核销
     @RequestMapping(value = "/coupon/{id}/check", method = POST)
     public ResultData checkCode(

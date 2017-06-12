@@ -15,9 +15,9 @@ public class TinyTest {
         System.out.println(getTwoStr(0.01f));
         System.out.println(getTwoStr(1.01f));
         System.out.println("decimal format");
-        System.out.println(getTwoStr2(0.001f));
-        System.out.println(getTwoStr2(0.01f));
-        System.out.println(getTwoStr2(0.01f));
+        System.out.println(getTwoStr2(123123.001f));
+        System.out.println(getTwoStr2(123123.01f));
+        System.out.println(getTwoStr2(123123123.01f));
 
 
     }

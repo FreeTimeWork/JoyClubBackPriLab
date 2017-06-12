@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 @Configuration
 @EnableScheduling
 @ComponentScan(basePackages = {"com.joycity.joyclub"}, excludeFilters = {@ComponentScan.Filter(Controller.class)})
-@PropertySource("classpath:application-dev.properties")
+@PropertySource("classpath:application.yaml")
 //@PropertySource("classpath:application-prod.properties")
 public class RootConfig {
     @Bean

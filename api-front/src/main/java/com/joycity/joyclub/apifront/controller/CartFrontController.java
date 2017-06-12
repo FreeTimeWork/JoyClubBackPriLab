@@ -23,7 +23,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 // TODO: 2017/4/6
 @RestController
 @RequestMapping(URL_API_FRONT)
-public class CartFrontController {
+public class
+CartFrontController {
     @Autowired
     CartFrontService cartFrontService;
     @Autowired
