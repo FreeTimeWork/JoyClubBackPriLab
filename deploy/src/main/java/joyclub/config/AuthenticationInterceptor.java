@@ -1,8 +1,7 @@
-package com.joycity.joyclub.config;
+package joyclub.config;
 
 import com.joycity.joyclub.commons.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-# Ä¬ÈÏµÄÊÇÉú²ú»·¾³µÄ±äÁ¿£¬¿ª·¢Ê±ÇëÔÚÔËĞĞÊ±×·¼Óactive profilesÎªdevelopment
+# é»˜è®¤çš„æ˜¯ç”Ÿäº§ç¯å¢ƒçš„å˜é‡ï¼Œå¼€å‘æ—¶è¯·åœ¨è¿è¡Œæ—¶è¿½åŠ active profilesä¸ºdevelopment
 spring:
   datasource:
     url: jdbc:mysql://rm-2zew10t27zxjjz7uh.mysql.rds.aliyuncs.com:3306/joyclub?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
@@ -17,39 +17,39 @@ logging:
 
 encrypt:
   password:
-    #ºó¶ËÓÃ»§ÃÜÂëMD5¼ÓÃÜµÄÑÎ
+    #åç«¯ç”¨æˆ·å¯†ç MD5åŠ å¯†çš„ç›
     salt: joyclub$%^@
-    #ÖØÖÃÃÜÂë
+    #é‡ç½®å¯†ç 
     reset: 888888
 session:
   api-back:
     attr:
-      #ºó¶ËµÄÓÃ»§µÄsessionÃû
+      #åç«¯çš„ç”¨æˆ·çš„sessionå
       user: USER
 formdata:
-  #formData ±àÂë£¬·ÀÖ¹formdata´«²ÎÂÒÂë
+  #formData ç¼–ç ï¼Œé˜²æ­¢formdataä¼ å‚ä¹±ç 
   encording: UTF-8
 image:
   upload:
     api-back:
-      #Í¼Æ¬ÉÏ´«µÄÎÄ¼ş¼Ğ
+      #å›¾ç‰‡ä¸Šä¼ çš„æ–‡ä»¶å¤¹
       path: /joyclub/image/
-      #Í¼Æ¬ÉÏ´«µÄ»ù´¡µØÖ·
+      #å›¾ç‰‡ä¸Šä¼ çš„åŸºç¡€åœ°å€
       result-base-url: /image/
-      #µ¥¸öÎÄ¼ş×î´óÊÇ10M
+      #å•ä¸ªæ–‡ä»¶æœ€å¤§æ˜¯10M
       max-per-file: 10485760
 wexin:
   openidUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
   userinfoUrl: https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
-#ÔÃ¿Í»á¹«ÖÚºÅµÄµÄwexin pay
+#æ‚¦å®¢ä¼šå…¬ä¼—å·çš„çš„wexin pay
 wxpay:
   appid: wx567b2af01e4b31a1
   appsecret: b2ba4d5a6d1467cd1fc1fd2da6a3a29a
   mchid: 1407360202
-  # todo ĞŞ¸ÄcertµØÖ·
+  # todo ä¿®æ”¹certåœ°å€
   cert: /sangto/jameka/wxcert/apiclient_cert.p12
   notifyUrl: http://ykh-bj.com/api/front/order/pay/wechat/notify
-
+  sign: YkhBjcofco1407360202Joycity12000
 alipay:
   appId: 2017051207220035
   privateKey: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC4woNfeENF4ziqbxly9d3I845/ihSdva0ImQ7FCJSY2w1rYlbflV9ho/K6TZpClZv1ros7ZEyNFD68TaT7vAZEI5x8sh+Wj7mJD0s9tYr9MsrL7U4X4cjgqcdoS8Xvr4pvZAta9ksgv2sfs/JVU/Kk6lCk8UFsXnRd1n9BHhnkrMAxmub4LjcSwIlZ3SPXGPYlGHxpSmXjHP7nywiGtXXLI6OhvtOmyN3sfLXeYpxPA4qMFMDqiCDCqIL6BW/3mrf1ncxKe/PMoRfIwLHcsWekvdc+K70idYExf2/vKEk3k6ybh6/gsE72dMszLxkFE0IsH4OB9SYTJksLdgpxudy9AgMBAAECggEBAJfTiB+I9UdWDHfJ6lDVCFcdBil6b6ycdLfPBxsVDP97atCmtBrxZbsX/dvo723uAYZn05SPvHRmgZM9/ui6vy95UBwMR/byzpV50uu35qpg9dOUg4sOiINOIUZslhB74TfeL5KlOGGFy2L2/Znu7UNmJbUVaBzElb2TCWmacc6+W/AFZ5oqHtfuYMQxLS7T6LyyEGqBDARLNsEiMtJqamFKYDYqJgGG0FLeAczwzM7yeN1yJC9Mmx0SMIoBZK14g5HE8jLlV364RT05rwxdZm0acy+HKNv7geLJwiTOz0wzAY1PmA37z8iiOglDCEhap/xT32madHdEIO6URr4wlYECgYEA72NH6wgYjM0/iwWfepgXb71DIxTdLH90QKuidtOKa2TAxT7mBaGuWbin3SA8hCAXy2aECvzh8wsOUpoOUtZcdyGk8RLzxHqUyiT+2AaeDT8Sca9KgK6iapr+tRVsQ8sn9FRz7cPoMMSJyYIBkFVCjyd2nGortgDmLbZp5GwYFmECgYEAxZTEYEM5iPfb7Llgb5wfNnVR7aLtt+vU6s1dL5bg/wpcCRgCwO4p/WKUoN2V6/7zsgcHWupmE1sVWXCAyBN3c7QUEMaBXJjrTzS64FCluCJFKWXa/jHy4VtUAl1Dn7jkyvPhcgcC5DIDVPT41rfuBG1C5gL4zl4uG3wHq1AUa90CgYAF9wJWv+fkskSQET7NDjcfSKcAm8d7EV3zMpOkxFahoGwRPiT7JPE0OR6tqtz3KdmN7usBXxW+OZtMwZvzwnWhXkw+2YsLbUaB1vQmq9uKVvT9sjF4DWHsqBoKpxMAiXJgay5MUWJavLr2M3AYiZdT+9a/xQF70n/pya7Py0W6YQKBgQCVNKITm9CQGbUQEHG99yUvB+vFzBs+oC5a3pj3fjYNA3K7P1GdBn3ZJp/c11kHLbI0h9BLHOXWyhrWPvpRnTnAu4XHoVBBcA2K8+QHz39GDUMzXwLAoVGsUz6exnVx4buNdByU8qyBTS9s8c4UwDNTTnuNnULs/PxOrxxPh5rUVQKBgQCOtyJmfiqqWay44mhptsHj4wAHgFP97o/JfQ3zWO/sCC9Uuzm8WVT/WewIG3m3nOaxs2jdMxha0DKOK3bkwa6RgsBWkpoi11LS+TxXWf33fIebHYED1JaQ759pTNF0N5+VRyzyLeypGbW6h6ALsqYEW5qWd7Xl3ZNvksJrhVSJUg==
@@ -57,7 +57,7 @@ alipay:
   notifyUrl: http://ykh-bj.com/api/front/order/pay/ali/notify
   returnUrl: http://ykh-bj.com/alipayresult
 
-#¿Æ´« crm
+#ç§‘ä¼  crm
 crm:
   tech:
     url: http://joycitycrmws2.cofco.com:8082/CRM_VIP_Proxy.asmx
@@ -65,17 +65,17 @@ crm:
     secretKey: 89622015104709087435617163207900
     user: YKH
     xml: <?xml version="1.0" encoding="UTF-8"?> <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> <soap:Body> <method xmlns="http://www.tech-trans.com.cn/"> <request> <Header> header-parma </Header> <Data> data-parma </Data> </request> </method> </soap:Body> </soap:Envelope>
-#ÑéÖ¤Âë¶ÌĞÅ
+#éªŒè¯ç çŸ­ä¿¡
 message:
   send:
     url: http://new.yxuntong.com/emmpdata/sms/Submit
     username: 200262
     password: N~80;:Rz
-    #Ã¿ÈËÃ¿ÈÕ×î´ó¶ÌĞÅÊıÄ¿
+    #æ¯äººæ¯æ—¥æœ€å¤§çŸ­ä¿¡æ•°ç›®
     num: 5
-    #ÑéÖ¤ÂëÓĞĞ§Ê±³¤£¬µ¥Î»s
+    #éªŒè¯ç æœ‰æ•ˆæ—¶é•¿ï¼Œå•ä½s
     period: 300
-#Ã¨¿áÏà¹Ø
+#çŒ«é…·ç›¸å…³
 mallcoo:
   url:
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
@@ -85,7 +85,7 @@ mallcoo:
 spring:
     profiles: development
     datasource:
-      url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
       username: root
       password:
 wxpay:

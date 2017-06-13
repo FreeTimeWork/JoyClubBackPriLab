@@ -21,7 +21,8 @@
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>coupon</artifactId>
             <version>${coupon}</version>
-        </dependency>  <dependency>
+        </dependency>
+        <dependency>
             <groupId>com.joycity.joyclub</groupId>
             <artifactId>client</artifactId>
             <version>${client}</version>
@@ -36,6 +37,12 @@
             <artifactId>act</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>
