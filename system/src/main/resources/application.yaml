@@ -4,7 +4,8 @@ spring:
     url: jdbc:mysql://rm-2zew10t27zxjjz7uh.mysql.rds.aliyuncs.com:3306/joyclub?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
     username: moma
     password: moma@#$123
-    #driver-class-name: com.mysql.jdbc.Driver
+    # 默认的是过时的com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   http:
     multipart:
       max-file-size: 10MB
@@ -14,6 +15,7 @@ server:
   port: 8070
 logging:
   config: classpath:log4j2.xml
+
 
 encrypt:
   password:
@@ -80,7 +82,12 @@ mallcoo:
   url:
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
     getInfoByToken: https://openapi10.mallcoo.cn/User/BaseInfo/v1/Get/ByToken
-
+# 积分充值相关
+point:
+  recharge:
+    url: http://api.madaikr.com:50080/API
+    user: test
+    key: 56648E20F6712C5F
 ---
 spring:
     profiles: development
@@ -88,6 +95,7 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
       username: root
       password:
+
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
 alipay:

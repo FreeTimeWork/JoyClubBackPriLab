@@ -29,6 +29,7 @@
 -  `POI`相关功能在运行时需要更多的包
 - PageUtil的pageSize增加最大值限制
 - 特价商品只能买一件，增加购物车限制，目前只是前端有限制。增加下订单时的验证，目前只是前端验证了。
+- 将某些常量变为枚举类型
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
 - formData乱码，使用`CommonsMultipartResolver`
@@ -42,6 +43,7 @@
 - `List<String>` 并不继承 `List<Object>`,[see](http://stackoverflow.com/questions/22144671/why-liststring-is-not-acceptable-as-listobject),
   所以，一个`void test(List<Object> list)`的方法不能用`List<String>`去调用
 - 积分记录排序
++
 - decimalFormat '.00'对于0.0123会变成'.00'，没有个位，应该用'0.00'
 - mysql `1!=null`的结果是 `null`
 - update 也可以join
