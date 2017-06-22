@@ -59,7 +59,7 @@
         select c.*,code.code,code.use_status,code.use_time,code.check_flag,code.check_time
         from coupon_code code
         join coupon c on code.coupon_id=c.id
-        where code.delete_flag=0 and code.client_id=#{clientId} and code.use_status=1 and code.check_flag=0 and  now() between c.show_start_time and c.show_end_time
+        where code.delete_flag=0 and code.client_id=#{clientId} and code.use_status=1 and code.check_flag=0 and  now() between c.available_start_time and c.available_end_time
         order by code.use_time desc
         <include refid="limit"/>
     </select>
