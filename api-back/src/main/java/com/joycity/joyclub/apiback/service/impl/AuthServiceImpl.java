@@ -26,10 +26,12 @@ public class AuthServiceImpl implements AuthService {
     public ResultData login(String account, String password) {
         SysUser sysUser = sysSysUserMapper.getByAccount(account);
         if (sysUser == null) throw new BusinessException(ResultCode.LOGIN_ERROR, "账户不存在");
-        else if (!MD5Util.MD5(password, PASSWORD_SALT).equals(sysUser.getPassword()))
+        else if (sysUser.getForbidFlag()) {
+            throw new BusinessException(ResultCode.LOGIN_ERROR, "该账户已被禁用");
+        } else if (!MD5Util.MD5(password, PASSWORD_SALT).equals(sysUser.getPassword())) {
             throw new BusinessException(ResultCode.LOGIN_ERROR, "密码错误");
-        else if (sysUser.getForbidFlag())
-           throw new BusinessException(ResultCode.LOGIN_ERROR, "该账户已被禁用");
+        }
+
         //清空密码
         sysUser.setPassword(null);
         return new ResultData(sysUser);
