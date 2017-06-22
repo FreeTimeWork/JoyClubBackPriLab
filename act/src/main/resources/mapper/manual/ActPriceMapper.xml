@@ -64,7 +64,7 @@
             resultType="com.joycity.joyclub.act.modal.ActPriceWithActInfo">
 
         select a.id,a.price,a.act_id,a.point_rate,a.start_time,a.end_time,a.forbid_flag,a.review_status,a.review_info,a.buy_type,p.name actName,p.base_price,s.name storeName
-        from sale_act_price aselectForProject
+        from sale_act_price a
         left join sale_act p on a.act_id=p.id
         left join sys_store s on p.store_id = s.id
         <include refid="where_for_project"/>
