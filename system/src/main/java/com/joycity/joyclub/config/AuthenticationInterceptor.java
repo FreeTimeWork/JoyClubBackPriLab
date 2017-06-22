@@ -1,31 +1,38 @@
-package joyclub.config;
+package com.joycity.joyclub.config;
 
 import com.joycity.joyclub.commons.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.joycity.joyclub.commons.constant.ResultCode.USER_SESSION_NULL;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 /**
  * Created by CallMeXYZ on 2017/3/27.
  */
-
-
-
+@Component
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     /**
      * api back的userSession对应的属性名
      */
     @Value("${session.api-back.attr.user}")
     private String apiBackSessionAttrUser;
+
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
+
+
         String uri = request.getRequestURI();
-//        for api back
+        //后端不是登陆的请求都要有session
         if ( uri.startsWith("/api/back/")&&!uri.endsWith("/api/back/login")) {
             if (request.getSession().getAttribute(apiBackSessionAttrUser) == null) {
                 throw new BusinessException(USER_SESSION_NULL);
@@ -33,4 +40,5 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
         return true;
     }
+
 }
