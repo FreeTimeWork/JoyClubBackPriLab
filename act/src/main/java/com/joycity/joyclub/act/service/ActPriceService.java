@@ -18,7 +18,7 @@ public interface ActPriceService {
      * @param pageUtil
      * @return
      */
-    ResultData getListForProject(String storeName, Integer reviewStatus, String actName,Byte buyType, PageUtil pageUtil);
+    ResultData getListForProject(Long projectId,String storeName, Integer reviewStatus, String actName,Byte buyType, PageUtil pageUtil);
 
     /**
      * 按增加时间倒序

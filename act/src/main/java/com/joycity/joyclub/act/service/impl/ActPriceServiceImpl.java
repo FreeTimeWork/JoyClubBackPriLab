@@ -55,7 +55,7 @@ public class ActPriceServiceImpl implements ActPriceService {
     }
 
     @Override
-    public ResultData getListForProject(String storeName, final Integer reviewStatus, String actName,final Byte buyType, final PageUtil pageUtil) {
+    public ResultData getListForProject(Long projectId,String storeName, final Integer reviewStatus, String actName,final Byte buyType, final PageUtil pageUtil) {
         ListResult listResult = new ListResult();
         listResult.setByPageUtil(pageUtil);
         if (storeName != null) {
@@ -66,19 +66,18 @@ public class ActPriceServiceImpl implements ActPriceService {
         }
         final String storeNameLike = storeName;
         final String actNameLike = actName;
-        new AbstractGetListData<ActPriceWithActInfo>() {
+      return  new AbstractGetListData<ActPriceWithActInfo>() {
             @Override
             public Long countByFilter() {
-                return  actPriceMapper.countForProject(storeNameLike, reviewStatus, actNameLike, buyType, pageUtil);
+                return  actPriceMapper.countForProject(projectId,storeNameLike, reviewStatus, actNameLike, buyType, pageUtil);
             }
 
             @Override
             public List<ActPriceWithActInfo> selectByFilter() {
-                return actPriceMapper.selectForProject(storeNameLike, reviewStatus, actNameLike,buyType, pageUtil);
+                return actPriceMapper.selectForProject(projectId,storeNameLike, reviewStatus, actNameLike,buyType, pageUtil);
             }
         }.getList(pageUtil);
 
-        return new ResultData(listResult);
     }
 
     private String getSearchLikeStr(String likeStr) {

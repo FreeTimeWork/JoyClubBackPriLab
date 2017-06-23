@@ -60,6 +60,7 @@ public interface ActPriceMapper extends BaseMapper<SaleActPrice, Long, SaleActPr
      * @return
      */
     Long countForProject(
+            @Param("projectId") Long projectId,
             @Param("storeNameLike") String storeNameLike,
             @Param("reviewStatus") Integer reviewStatus,
             @Param("actNameLike") String actNameLike,
@@ -77,6 +78,7 @@ public interface ActPriceMapper extends BaseMapper<SaleActPrice, Long, SaleActPr
      * @return
      */
     List<ActPriceWithActInfo> selectForProject(
+            @Param("projectId") Long projectId,
             @Param("storeNameLike") String storeNameLike,
             @Param("reviewStatus") Integer reviewStatus,
             @Param("actNameLike") String actNameLike,

@@ -22,7 +22,7 @@
     </sql>
     <sql id="where_for_project">
         <where>
-            a.delete_flag=0
+            a.delete_flag=0 and s.project_id = #{projectId}
             <if test="reviewStatus!=null">
                 and a.review_status = #{reviewStatus}
             </if>
