@@ -59,6 +59,7 @@ public interface ProductService {
 
     ResultData getSpecialPriceProductList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil);
     ResultData getSpecialPriceAct(Long id);
+    ResultData getProjectLatestSpecialPriceAct(Long projectId);
     ResultData getSpecialPriceActProducts(Long id,PageUtil pageUtil);
 
 

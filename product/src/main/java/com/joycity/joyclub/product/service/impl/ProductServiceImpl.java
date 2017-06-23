@@ -131,12 +131,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResultData getProductList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil) {
 
-        return  getProductList( projectId,  storeId,  designerId,null,  pageUtil);
+        return getProductList(projectId, storeId, designerId, null, pageUtil);
     }
+
     @Override
     public ResultData getSpecialPriceProductList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil) {
 
-        return  getProductList( projectId,  storeId,  designerId,true,  pageUtil);
+        return getProductList(projectId, storeId, designerId, true, pageUtil);
     }
 
     @Override
@@ -146,10 +147,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ResultData getProjectLatestSpecialPriceAct(Long projectId) {
+        SpecialPriceAct act = productMapper.getProjectLatestSpecialPriceAct(projectId);
+        if (act == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "目前没有任何优选活动");
+        }
+        return new ResultData(act);
+    }
+
+    @Override
     public ResultData getSpecialPriceActProducts(Long id, PageUtil pageUtil) {
         SpecialPriceAct act = productMapper.getSpecialPriceAct(id);
-        ThrowBusinessExceptionUtil.checkNull(act,"特价活动不存在");
-        ListResult listResult = new ListResult(productMapper.selectSpecialPriceActProducts(id,act.getStartTime(),act.getEndTime(),pageUtil));
+        ThrowBusinessExceptionUtil.checkNull(act, "特价活动不存在");
+        ListResult listResult = new ListResult(productMapper.selectSpecialPriceActProducts(id, act.getStartTime(), act.getEndTime(), pageUtil));
         listResult.setByPageUtil(pageUtil);
         return new ResultData(listResult);
     }
@@ -162,12 +172,12 @@ public class ProductServiceImpl implements ProductService {
      * @param pageUtil
      * @return
      */
-    private ResultData getProductList(Long projectId, Long storeId, Long designerId,Boolean specialPriceFlag, PageUtil pageUtil) {
+    private ResultData getProductList(Long projectId, Long storeId, Long designerId, Boolean specialPriceFlag, PageUtil pageUtil) {
         List<ProductSimple> list;
-        if (storeId == null&&designerId==null) {
-            list = productMapper.selectByProject(projectId,specialPriceFlag,pageUtil);
+        if (storeId == null && designerId == null) {
+            list = productMapper.selectByProject(projectId, specialPriceFlag, pageUtil);
         } else {
-            list = productMapper.selectByFilter(storeId, designerId, specialPriceFlag,pageUtil);
+            list = productMapper.selectByFilter(storeId, designerId, specialPriceFlag, pageUtil);
         }
         ListResult listResult = new ListResult(list);
         listResult.setByPageUtil(pageUtil);

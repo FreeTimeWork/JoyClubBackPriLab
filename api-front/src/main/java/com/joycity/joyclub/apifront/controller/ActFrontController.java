@@ -13,7 +13,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
  */
 @RestController
 @RequestMapping(URL_API_FRONT)
-public class ActFronController {
+public class ActFrontController {
     @Autowired
     ActService actService;
 

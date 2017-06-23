@@ -35,45 +35,8 @@ public class ProductFrontController {
         return productService.getProductList(projectId, storeId, designerId, pageUtil);
     }
 
-    /**
-     * 获取当前的秒杀商品
-     * @param projectId
-     * @param storeId
-     * @param designerId
-     * @param pageUtil
-     * @return
-     */
-    @RequestMapping(value = "/products/specialprice", method = RequestMethod.GET)
-    public ResultData getSpecialPriceProducts(@RequestParam(required = false,defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-                                  @RequestParam(required = false) Long storeId,
-                                  @RequestParam(required = false) Long designerId,
-                                  PageUtil pageUtil
-    ) {
-        //projectId,store designer 取一个就好
-        return productService.getSpecialPriceProductList(projectId, storeId, designerId, pageUtil);
-    }
 
-    /**
-     * 获取某个特价活动的详情
-     */
-    @RequestMapping(value = "/specialpriceact/{id}", method = RequestMethod.GET)
-    public ResultData getSpecialPriceProductsAct(
-            @PathVariable Long id
-    ) {
 
-        return productService.getSpecialPriceAct(id);
-    }
-  /**
-     * 获取某个特价活动的商品列表
-     */
-    @RequestMapping(value = "/specialpriceact/{id}/products", method = RequestMethod.GET)
-    public ResultData getSpecialPriceProductsAct(
-            @PathVariable Long id,
-            PageUtil pageUtil
-    ) {
-
-        return productService.getSpecialPriceActProducts(id,pageUtil);
-    }
 
     /**
      * 获得商品的属性

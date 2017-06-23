@@ -58,7 +58,8 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
 
     @Select("select * from sale_special_price_act where id =#{id}")
     SpecialPriceAct getSpecialPriceAct(@Param("id") Long id);
-
+    @Select("select * from sale_special_price_act where project_id =#{projectId} order by create_time desc limit 0,1")
+    SpecialPriceAct getProjectLatestSpecialPriceAct(@Param("projectId") Long projectId);
     /**
      * 获取某个秒杀活动下所有商品的情况
      * 如果没有特价上架审核通过，则该商品不返回，
