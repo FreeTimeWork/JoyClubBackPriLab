@@ -1,20 +1,20 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
+import com.joycity.joyclub.act.service.ActPriceService;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SysUser;
-import com.joycity.joyclub.act.service.ActPriceService;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.joycity.joyclub.apiback.constant.UserType.*;
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static com.joycity.joyclub.commons.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
-import static com.joycity.joyclub.apiback.constant.UserType.*;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -38,13 +38,12 @@ public class ActPriceController extends BaseUserSessionController {
                               @RequestParam(required = false) String actName,
                               @RequestParam(required = false) Byte buyType,
                               PageUtil pageUtil, HttpSession httpSession) {
-        //确保是商户用户
-        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
+        SysUser user = checkUser(httpSession);
         Integer userType = user.getType();
         if (userType.equals(USER_TYPE_STORE))
             return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName,buyType, pageUtil);
         else if(userType.equals(USER_TYPE_PLATFORM)||userType.equals(USER_TYPE_PROJECT))
-            return actPriceService.getListForProject(storeName, reviewStatus, actName,buyType, pageUtil);
+            return actPriceService.getListForProject(user.getInfoId(), storeName, reviewStatus, actName, buyType, pageUtil);
         else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
 
