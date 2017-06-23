@@ -1,22 +1,20 @@
-package joyclub;
+package com.joycity.joyclub.system;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.system.ApplicationPidFileWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * Created by CallMeXYZ on 2017/5/3.
@@ -24,8 +22,11 @@ import java.util.Arrays;
 @SpringBootApplication(scanBasePackages = {"com.joycity.joyclub"})
 @MapperScan("com.joycity.joyclub.**.mapper")
 public class App {
+
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
+        SpringApplication app = new SpringApplication(App.class);
+        app.addListeners(new ApplicationPidFileWriter());
+        app.run(args);
     }
 
     @Bean

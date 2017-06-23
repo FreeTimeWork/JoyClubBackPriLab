@@ -7,42 +7,53 @@
         <groupId>com.joycity.joyclub</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <!--这个模块主要是给管理端提供api-->
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.joycity.joyclub</groupId>
-    <artifactId>api-back</artifactId>
+    <artifactId>system</artifactId>
     <properties>
-        <coupon>1.0-SNAPSHOT</coupon>
-        <client>1.0-SNAPSHOT</client>
+        <start-class>com.joycity.joyclub.system.App</start-class>
     </properties>
     <dependencies>
 
         <dependency>
             <groupId>com.joycity.joyclub</groupId>
-            <artifactId>coupon</artifactId>
-            <version>${coupon}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>client</artifactId>
-            <version>${client}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>product</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>act</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>api-front</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>api-back</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>recharge</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <!--Your existing archive will be enhanced by Spring Boot during the package phase. -->
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <finalName>JoyClub-${project.version}</finalName>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

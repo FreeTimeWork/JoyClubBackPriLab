@@ -1,11 +1,11 @@
 package com.joycity.joyclub.apiback.service.impl;
 
-import com.joycity.joyclub.commons.constant.ResultCode;
-import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apiback.mapper.manual.SysUserMapper;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.AuthService;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
         } else if (!MD5Util.MD5(password, PASSWORD_SALT).equals(sysUser.getPassword())) {
             throw new BusinessException(ResultCode.LOGIN_ERROR, "密码错误");
         }
-
         //清空密码
         sysUser.setPassword(null);
         return new ResultData(sysUser);

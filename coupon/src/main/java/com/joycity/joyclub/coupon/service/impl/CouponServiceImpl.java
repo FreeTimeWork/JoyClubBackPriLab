@@ -227,7 +227,7 @@ public class CouponServiceImpl implements CouponService {
     public List<CouponForClient> getCouponListForFront(Long projectId, PageUtil pageUtil) {
         return couponMapper.selectForFrontWithoutClientByFilter(projectId, pageUtil);
     }
-
+// TODO: 2017/6/22  增加项目
     @Override
     public List<CouponForClient> getCouponListForFrontClient(Long clientId, PageUtil pageUtil) {
         return couponMapper.selectClientCouponsByFilter(clientId, pageUtil);
