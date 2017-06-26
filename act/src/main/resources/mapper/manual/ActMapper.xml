@@ -60,10 +60,10 @@
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
         <if test="projectId!=null">
-            store.project_id = #{projectId} and
+            and store.project_id = #{projectId}
         </if>
         <if test="storeId!=null">
-            a.store_id = #{storeId} and
+            and a.store_id = #{storeId}
         </if>
         and now() between p.start_time and p.end_time
         order by a.display_weight desc,p.id desc
