@@ -66,7 +66,7 @@
             a.store_id = #{storeId} and
         </if>
         and now() between p.start_time and p.end_time
-        order by a.display_weight desc
+        order by a.display_weight desc,p.id desc
         <include refid="limit"/>
     </select>
 </mapper>
