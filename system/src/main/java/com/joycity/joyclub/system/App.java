@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
@@ -65,6 +66,17 @@ public class App {
         // TODO: 2017/2/21 classpath for multi modules
         sessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath*:mapper/**/*.xml"));
         return sessionFactoryBean;
+    }
+
+    /**
+     * add to enable transaction for mybatis
+     *
+     * @param dataSource
+     * @return
+     */
+    @Bean
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 
 }
