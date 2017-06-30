@@ -66,6 +66,7 @@ public class ResultCode {
     public static final int MALLCOO_ERROR = 50801;
     /**
      * token不存在
+     * 和CLIENT_TOKEN_EXPIRE区别不大，系统每天会将过期的删除
      */
     public static final int CLIENT_TOKEN_NULL = 50901;
     /**

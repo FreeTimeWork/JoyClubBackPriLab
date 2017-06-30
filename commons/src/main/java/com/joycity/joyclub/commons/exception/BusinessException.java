@@ -34,8 +34,8 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
         map.put(ResultCode.REQUEST_PARAM_ERROR, "请求参数错误");
 
-        map.put(ResultCode.CLIENT_TOKEN_NULL, "token不存在");
-        map.put(ResultCode.CLIENT_TOKEN_EXPIRE, "token已过期");
+        map.put(ResultCode.CLIENT_TOKEN_NULL, "会话已过期，请重新登陆");
+        map.put(ResultCode.CLIENT_TOKEN_EXPIRE, "会话已过期，请重新登陆");
 
     }
 
