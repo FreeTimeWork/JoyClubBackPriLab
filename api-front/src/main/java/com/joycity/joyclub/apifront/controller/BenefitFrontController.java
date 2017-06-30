@@ -1,17 +1,15 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.BenefitService;
+import com.joycity.joyclub.client_token.service.ClientTokenService;
+import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID_REQUEST_PARAM;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -24,6 +22,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class BenefitFrontController {
     @Autowired
     BenefitService benefitService;
+    @Autowired
+    ClientTokenService clientTokenService;
 
     /**
      * 某个项目中，某个会员能领取的卡券
@@ -45,22 +45,22 @@ public class BenefitFrontController {
      * 某个会员的领取过的、未核销的、能使用的卡券
      * 按领取时间倒序
      */
-    @RequestMapping(value = "/coupons/client/{clientId}", method = GET)
+    @RequestMapping(value = "/coupons/client", method = GET)
     public ResultData getCouponsOfClient(
-            @PathVariable Long clientId,
+            @CookieValue(Global.COOKIE_TOKEN) String token,
             PageUtil pageUtil
     ) {
-        return benefitService.getClientCoupons(clientId, pageUtil);
+        return benefitService.getClientCoupons(clientTokenService.getIdOrThrow(token), pageUtil);
     }
 
     @RequestMapping(value = "/coupon/{id}/receive", method = POST)
     public ResultData receiveCoupon(
+            @CookieValue(Global.COOKIE_TOKEN) String token,
             @PathVariable Long id,
-            @RequestParam(required = false) Long subProjectId,
-            @RequestParam Long clientId
+            @RequestParam(required = false) Long subProjectId
 
     ) {
-        return benefitService.receiveCoupon(id, clientId, subProjectId);
+        return benefitService.receiveCoupon(id, clientTokenService.getIdOrThrow(token), subProjectId);
     }
 
 }

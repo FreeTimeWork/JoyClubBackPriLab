@@ -2,6 +2,7 @@ package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
 import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -9,10 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +18,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID_REQUEST_PARAM;
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
-import static com.joycity.joyclub.commons.constant.Global.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -31,9 +29,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping(URL_API_FRONT)
 public class ProductOrderFrontController {
-    private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
     @Autowired
     ProductOrderFrontService productOrderService;
+    @Autowired
+    ClientTokenService clientTokenService;
+    private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
 
     /**
      * @param type all:所有订单，notPayed:待支付订单，notSent:待发货，notReceived:待收货,completed:已完成（自提或者快递收货）
@@ -42,11 +42,11 @@ public class ProductOrderFrontController {
     @RequestMapping(value = "/orders", method = GET)
     public ResultData getOrders(
             @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-            @RequestParam Long clientId,
+            @CookieValue(Global.COOKIE_TOKEN) String token,
             @RequestParam String type,
             PageUtil pageUtil) {
 
-        return productOrderService.getList(projectId, clientId, type, pageUtil);
+        return productOrderService.getList(projectId, clientTokenService.getIdOrThrow(token), type, pageUtil);
     }
 
     /**
@@ -55,9 +55,9 @@ public class ProductOrderFrontController {
      * @return
      */
     @RequestMapping(value = "/order/formdata", method = GET)
-    public ResultData getListForPreOrder(@RequestParam Long clientId, @RequestParam String formData) {
+    public ResultData getListForPreOrder(@CookieValue(Global.COOKIE_TOKEN) String token, @RequestParam String formData) {
 
-        return productOrderService.getFormData(clientId, formData);
+        return productOrderService.getFormData(clientTokenService.getIdOrThrow(token), formData);
     }
 
     /**
@@ -65,10 +65,7 @@ public class ProductOrderFrontController {
      * 如果需要支付金钱，返回微信支付参数
      * 如果不需要，扣分后直接返回，
      *
-     * @param projectId
-     * @param clientId
      * @param attrsJson     [{attrId,num,moneyOrPoint}]的json串
-     * @param pickupOrPost
      * @param fromCart      是否是从购物车下的订单 如果是则需要对购物车减数量
      * @param postAddressId
      * @return
@@ -77,12 +74,12 @@ public class ProductOrderFrontController {
     public ResultData orderForWechat(
             @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
             @RequestParam(required = false) Long subProjectId,
-            @RequestParam Long clientId,
+            @CookieValue(Global.COOKIE_TOKEN) String token,
             @RequestParam String attrsJson,
             @RequestParam Boolean pickupOrPost,
             @RequestParam(required = false, defaultValue = "false") Boolean fromCart,
             @RequestParam(required = false) Long postAddressId) {
-        return productOrderService.orderForWechat(projectId,subProjectId, clientId, attrsJson, pickupOrPost, postAddressId, fromCart);
+        return productOrderService.orderForWechat(projectId, subProjectId, clientTokenService.getIdOrThrow(token), attrsJson, pickupOrPost, postAddressId, fromCart);
     }
 
     /**
@@ -92,12 +89,12 @@ public class ProductOrderFrontController {
     public ResultData orderForAli(
             @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
             @RequestParam(required = false) Long subProjectId,
-            @RequestParam Long clientId,
+            @CookieValue(Global.COOKIE_TOKEN) String token,
             @RequestParam String attrsJson,
             @RequestParam Boolean pickupOrPost,
             @RequestParam(required = false, defaultValue = "false") Boolean fromCart,
             @RequestParam(required = false) Long postAddressId) {
-        return productOrderService.orderForAli(projectId,subProjectId, clientId, attrsJson, pickupOrPost, postAddressId, fromCart);
+        return productOrderService.orderForAli(projectId, subProjectId, clientTokenService.getIdOrThrow(token), attrsJson, pickupOrPost, postAddressId, fromCart);
     }
 
     /**

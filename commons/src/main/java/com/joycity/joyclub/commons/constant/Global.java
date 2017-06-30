@@ -30,4 +30,6 @@ public class Global {
 
     public static final String SEX_MALE = "1";
     public static final String SEX_FEMALE = "0";
+
+    public static final String COOKIE_TOKEN = "token";
 }

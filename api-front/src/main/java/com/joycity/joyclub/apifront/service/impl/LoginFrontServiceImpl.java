@@ -1,16 +1,17 @@
 package com.joycity.joyclub.apifront.service.impl;
 
+import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
+import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
 import com.joycity.joyclub.apifront.modal.login.LoginMethodParam;
+import com.joycity.joyclub.apifront.modal.project.SysProject;
+import com.joycity.joyclub.apifront.service.*;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.modal.Client;
+import com.joycity.joyclub.client.modal.WechatUserInfo;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
+import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.apifront.mapper.manual.ClientLoginLogMapper;
-import com.joycity.joyclub.client.mapper.ClientUserMapper;
-import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
-import com.joycity.joyclub.client.modal.Client;
-import com.joycity.joyclub.apifront.modal.project.SysProject;
-import com.joycity.joyclub.client.modal.WechatUserInfo;
-import com.joycity.joyclub.apifront.service.*;
-import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,16 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID;
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ProjectVipCard.VIP_CARD_DIGITAL;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 
 /**
  * Created by CallMeXYZ on 2017/4/10.
  */
 @Service
 public class LoginFrontServiceImpl implements LoginFrontService {
-    private Log logger = LogFactory.getLog(LoginFrontServiceImpl.class);
     @Autowired
     WechatService wechatService;
     @Autowired
@@ -40,11 +43,13 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     ProjectMapper projectMapper;
     @Autowired
     ClientUserMapper clientMapper;
-
     @Autowired
     VipCardNumFrontService vipCardNumService;
     @Autowired
     ClientLoginLogMapper clientLoginLogMapper;
+    @Autowired
+    ClientTokenService clientTokenService;
+    private Log logger = LogFactory.getLog(LoginFrontServiceImpl.class);
 
     /**
      * @param openId
@@ -54,7 +59,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
      * @return
      */
     @Override
-    public ResultData wechatLogin(Long projectId, String phone, String authCode, String openId, String accessToken) {
+    public ResultData wechatLogin(HttpServletResponse response, Long projectId, String phone, String authCode, String openId, String accessToken) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
@@ -63,26 +68,26 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setAuthCode(authCode)
                 .setWechat(projectId, openId, accessToken)
                 .build();
-        Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId,null);
-        return new ResultData(client);
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLog(userId, projectId, null);
+        return new ResultData();
 
     }
 
     @Override
-    public ResultData wapAutoLogin(Long projectId, String phone,String from) {
+    public ResultData wapAutoLogin(HttpServletResponse response, Long projectId, String phone, String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
                 .setCardProjectId(projectId)
                 .setPhone(phone).build();
-        Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId,from);
-        return new ResultData(client);
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLog(userId, projectId, from);
+        return new ResultData();
     }
 
     @Override
-    public ResultData wechatAutoLogin(Long projectId, String phone, String openId, String accessToken,String from) {
+    public ResultData wechatAutoLogin(HttpServletResponse response, Long projectId, String phone, String openId, String accessToken, String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
@@ -90,25 +95,25 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setPhone(phone)
                 .setWechat(projectId, openId, accessToken)
                 .build();
-        Client client = clientLogin(param);
-        clientLoginLogMapper.addLog(client.getId(), projectId,from);
-        return new ResultData(client);
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLog(userId, projectId, from);
+        return new ResultData();
     }
 
     @Override
-    public ResultData subProjectWapAutoLogin(Long subProjectId, String phone,String from) {
+    public ResultData subProjectWapAutoLogin(HttpServletResponse response, Long subProjectId, String phone, String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
                 .setCardProjectId(subProjectId)
                 .setPhone(phone).build();
-        Client client = clientLogin(param);
-        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId,from);
-        return new ResultData(client);
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLogWithSubProject(userId, PLATFORM_ID, subProjectId, from);
+        return new ResultData();
     }
 
     @Override
-    public ResultData subProjectWechatAutoLogin(Long subProjectId, String phone, String openId, String accessToken,String from) {
+    public ResultData subProjectWechatAutoLogin(HttpServletResponse response, Long subProjectId, String phone, String openId, String accessToken, String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
                 .create()
@@ -116,10 +121,18 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                 .setPhone(phone)
                 .setWechat(PLATFORM_ID, openId, accessToken)
                 .build();
-        Client client = clientLogin(param);
-        clientLoginLogMapper.addLogWithSubProject(client.getId(), PLATFORM_ID, subProjectId, from);
-        return new ResultData(client);
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLogWithSubProject(userId, PLATFORM_ID, subProjectId, from);
+        return new ResultData();
     }
+
+    @Override
+    public ResultData logout(String token) {
+        clientTokenService.removeToken(token);
+        return new ResultData();
+    }
+
+
 
     private void updateClientFromKeChuan(Client user, Client kechuanClient) {
         user.setVipPoint(kechuanClient.getVipPoint());//积分
@@ -161,7 +174,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
      *
      * @return Client 只包含 id tel
      */
-    private Client clientLogin(LoginMethodParam params) {
+    private Long clientLogin(LoginMethodParam params, HttpServletResponse response) {
         SysProject project = projectMapper.selectByPrimaryKey(params.getCardProjectId());
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");
@@ -227,16 +240,20 @@ public class LoginFrontServiceImpl implements LoginFrontService {
             wechatOpenIdService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
         }
 
-        //只返回用户id和用户手机号
-        Client resultUser = new Client();
-        resultUser.setId(user.getId());
-        resultUser.setTel(user.getTel());
-        return resultUser;
+        addTokenCookie(response, user.getId());
+        return user.getId();
+    }
+
+    private void addTokenCookie(HttpServletResponse response, Long clientId) {
+        Cookie cookie = new Cookie(Global.COOKIE_TOKEN, clientTokenService.setToken(clientId));
+        cookie.setMaxAge(3600 * 24 * 30);
+        response.addCookie(cookie);
     }
 
     /**
      * 返回有值的str
      * 等下在插入的时候使用insertSelective
+     *
      * @param s
      * @return
      */

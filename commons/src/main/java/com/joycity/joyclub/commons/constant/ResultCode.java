@@ -34,10 +34,6 @@ public class ResultCode {
     public static final int REQUEST_PARAM_ERROR = 30204;
 
 
-
-
-
-
     public static final int HTTPKIT_CONNECT_ERROR = 50000;
 
     public static final int WECHAT_PAY_REQUEST_ERROR = 50001;
@@ -45,7 +41,7 @@ public class ResultCode {
     /**
      * 科传返回的结果是错误，但是实际上并不是错误。
      * 现在的情况只有一个，就是会员积分记录为0时，返回结果出错，其实不能算错误。
-     * */
+     */
     public static final int KECHUAN_INFO_ERROR_BUT_RIGHT = 50103;
 
     /**
@@ -68,6 +64,13 @@ public class ResultCode {
     public static final int VIP_POINT_NOT_ENOUGH = 50601;
     public static final int COUPON_CHECK_ERROR = 50701;
     public static final int MALLCOO_ERROR = 50801;
-
+    /**
+     * token不存在
+     */
+    public static final int CLIENT_TOKEN_NULL = 50901;
+    /**
+     * token过期
+     */
+    public static final int CLIENT_TOKEN_EXPIRE = 50902;
 
 }

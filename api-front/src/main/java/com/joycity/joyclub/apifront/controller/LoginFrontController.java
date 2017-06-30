@@ -1,16 +1,16 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.apifront.service.LoginFrontService;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
+import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
+import javax.servlet.http.HttpServletResponse;
+
 import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID_REQUEST_PARAM;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 
 /**
  * Created by CallMeXYZ on 2017/4/6.
@@ -34,19 +34,21 @@ public class LoginFrontController {
      */
     @RequestMapping(value = "/login/wechat", method = {RequestMethod.POST})
     public ResultData wechatLogin(@RequestParam String phone,
-                                  @RequestParam  String authCode,
-                                  @RequestParam  String openId,
-                                  @RequestParam  String accessToken,
-                                  @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) final Long projectId
+                                  @RequestParam String authCode,
+                                  @RequestParam String openId,
+                                  @RequestParam String accessToken,
+                                  @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) final Long projectId,
+                                  HttpServletResponse response
     ) {
-        return loginFrontService.wechatLogin( projectId, phone, authCode,openId,accessToken);
+
+        return loginFrontService.wechatLogin(response, projectId, phone, authCode, openId, accessToken);
     }
 
     /**
      * 商业或者地产项目使用平台时的微信登陆
      *
      * @param phone
-     * @param openId    微信 openId
+     * @param openId 微信 openId
      * @return
      */
     @RequestMapping(value = "/login/auto/wechat", method = {RequestMethod.POST})
@@ -55,10 +57,12 @@ public class LoginFrontController {
             @RequestParam String openId,
             @RequestParam String accessToken,
             @RequestParam Long projectId,
-            @RequestParam(required = false) String from
+            @RequestParam(required = false) String from,
+            HttpServletResponse response
     ) {
-        return loginFrontService.wechatAutoLogin(projectId, phone, openId,accessToken,from);
+        return loginFrontService.wechatAutoLogin(response, projectId, phone, openId, accessToken, from);
     }
+
     /**
      * 商业或者地产项目使用平台时的微信登陆
      *
@@ -68,14 +72,17 @@ public class LoginFrontController {
     public ResultData wapAutoLogin(
             @RequestParam String phone,
             @RequestParam Long projectId,
-            @RequestParam(required = false) String from
+            @RequestParam(required = false) String from,
+            HttpServletResponse response
     ) {
-        return loginFrontService.wapAutoLogin(projectId, phone,from);
-    }     /**
+        return loginFrontService.wapAutoLogin(response, projectId, phone, from);
+    }
+
+    /**
      * 商业或者地产项目使用平台时的微信登陆
      *
      * @param phone
-     * @param openId    微信 openId
+     * @param openId 微信 openId
      * @return
      */
     @RequestMapping(value = "/login/subproject/auto/wechat", method = {RequestMethod.POST})
@@ -84,10 +91,12 @@ public class LoginFrontController {
             @RequestParam String openId,
             @RequestParam String accessToken,
             @RequestParam Long subProjectId,
-            @RequestParam(required = false) String from
+            @RequestParam(required = false) String from,
+            HttpServletResponse response
     ) {
-        return loginFrontService.subProjectWechatAutoLogin(subProjectId, phone, openId,accessToken,from);
+        return loginFrontService.subProjectWechatAutoLogin(response, subProjectId, phone, openId, accessToken, from);
     }
+
     /**
      * 商业或者地产项目使用平台时的微信登陆
      *
@@ -97,9 +106,16 @@ public class LoginFrontController {
     public ResultData subProjectWapAutoLogin(
             @RequestParam String phone,
             @RequestParam Long subProjectId,
-            @RequestParam(required = false) String from
+            @RequestParam(required = false) String from,
+            HttpServletResponse response
     ) {
-        return loginFrontService.subProjectWapAutoLogin(subProjectId, phone,from);
+        return loginFrontService.subProjectWapAutoLogin(response, subProjectId, phone, from);
     }
 
+    @RequestMapping(value = "/logout", method = {RequestMethod.POST})
+    public ResultData logout(
+            @CookieValue(Global.COOKIE_TOKEN) String token
+    ) {
+        return loginFrontService.logout(token);
+    }
 }
