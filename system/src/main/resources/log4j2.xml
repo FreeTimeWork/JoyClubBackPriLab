@@ -12,7 +12,9 @@
             <PatternLayout pattern="[%level] %d{yyy-MM-dd HH:mm:ss.SSS} [%t]  %logger{36}.%M() @%L  - %msg%n"/>
             <ThresholdFilter level="error"  onMatch="ACCEPT"   onMismatch="DENY"/>
         </File>
-
+        <File name="taskFile" fileName="logs/task.log">
+            <PatternLayout pattern="[%level] %d{yyy-MM-dd HH:mm:ss.SSS} %msg%n"/>
+        </File>
     </Appenders>
     <Loggers>
         <Root level="info">
@@ -20,6 +22,8 @@
             <AppenderRef ref="infoFile" />
             <AppenderRef ref="errorFile" />
         </Root>
-
+        <Logger name="task" level="info">
+            <AppenderRef ref="taskFile"/>
+        </Logger>
     </Loggers>
 </Configuration>
