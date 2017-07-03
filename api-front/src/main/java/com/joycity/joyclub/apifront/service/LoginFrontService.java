@@ -14,6 +14,8 @@ public interface LoginFrontService {
      */
     ResultData wechatLogin(HttpServletResponse response, Long projectId, String phone, String authCode, String wechatOpenId, String accessToken);
 
+    ResultData wapLogin(HttpServletResponse response, Long projectId, String phone, String authCode);
+
     /**
      * @param from 记录登陆来源
      * @return

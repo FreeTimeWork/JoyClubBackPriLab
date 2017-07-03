@@ -37,11 +37,20 @@ public class LoginFrontController {
                                   @RequestParam String authCode,
                                   @RequestParam String openId,
                                   @RequestParam String accessToken,
-                                  @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) final Long projectId,
+                                  @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
                                   HttpServletResponse response
     ) {
 
         return loginFrontService.wechatLogin(response, projectId, phone, authCode, openId, accessToken);
+    }
+
+    @RequestMapping(value = "/login/wap", method = {RequestMethod.POST})
+    public ResultData wapLogin(@RequestParam String phone,
+                               @RequestParam String authCode,
+                               @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
+                               HttpServletResponse response
+    ) {
+        return loginFrontService.wapLogin(response, projectId, phone, authCode);
     }
 
     /**

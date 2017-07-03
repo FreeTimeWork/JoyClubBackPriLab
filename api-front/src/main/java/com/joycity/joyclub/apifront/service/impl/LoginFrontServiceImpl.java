@@ -75,6 +75,20 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     }
 
     @Override
+    public ResultData wapLogin(HttpServletResponse response, Long projectId, String phone, String authCode) {
+        LoginMethodParam param = LoginMethodParam
+                .LoginMethodParamBuilder
+                .create()
+                .setCardProjectId(projectId)
+                .setPhone(phone)
+                .setAuthCode(authCode)
+                .build();
+        Long userId = clientLogin(param, response);
+        clientLoginLogMapper.addLog(userId, projectId, null);
+        return new ResultData();
+
+    }
+    @Override
     public ResultData wapAutoLogin(HttpServletResponse response, Long projectId, String phone, String from) {
         LoginMethodParam param = LoginMethodParam
                 .LoginMethodParamBuilder
@@ -247,6 +261,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     private void addTokenCookie(HttpServletResponse response, Long clientId) {
         Cookie cookie = new Cookie(Global.COOKIE_TOKEN, clientTokenService.setToken(clientId));
         cookie.setMaxAge(3600 * 24 * 30);
+        cookie.setPath("/");
         response.addCookie(cookie);
     }
 
