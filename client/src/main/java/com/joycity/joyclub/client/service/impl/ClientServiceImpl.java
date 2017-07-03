@@ -1,18 +1,16 @@
 package com.joycity.joyclub.client.service.impl;
 
-import com.joycity.joyclub.commons.AbstractGetListData;
-import com.joycity.joyclub.commons.constant.ResultCode;
-import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.modal.VipCardInfo;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
+import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.modal.generated.Coupon;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

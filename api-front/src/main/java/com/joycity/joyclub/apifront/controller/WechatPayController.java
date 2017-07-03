@@ -1,6 +1,5 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayService;
 import com.joycity.joyclub.apifront.util.WechatXmlUtil;
@@ -32,8 +31,6 @@ public class WechatPayController {
         try {
             Map<String, String> params = WechatXmlUtil.xmlToMap(request
                     .getInputStream());
-            System.out.println(JSON.toJSONString(params));
-
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("return_code", "SUCCESS");
             map.put("return_msg", "OK");

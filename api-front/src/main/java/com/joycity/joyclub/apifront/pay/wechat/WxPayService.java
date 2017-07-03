@@ -1,9 +1,9 @@
 package com.joycity.joyclub.apifront.pay.wechat;
 
 
-import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.util.HttpKit;
 import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -34,9 +34,6 @@ import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_PAY_REQUEST
 
 @Service
 public class WxPayService {
-    private Log logger = LogFactory.getLog(WxPayService.class);
-    @Autowired
-    private WxPayConfig wxPayConfig;
     /**
      * 生成prepayid的网址
      */
@@ -45,8 +42,12 @@ public class WxPayService {
      * 退款网址
      */
     private static final String URL_REFUND = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+    private Log logger = LogFactory.getLog(WxPayService.class);
+    @Autowired
+    private WxPayConfig wxPayConfig;
 
     // TODO: 2017/5/11  增加项目的微信支付传参传参
+
     /**
      * @param precreateRequest
      * @return
@@ -153,15 +154,12 @@ public class WxPayService {
                     ContentType.create("text/html", "GBK"));
             httppost.setEntity(requestEntity);
 
-            System.out.println("executing request" + httppost.getRequestLine());
 
             CloseableHttpResponse response = httpclient.execute(httppost);
             try {
                 StringBuffer sb = new StringBuffer();
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
-                    System.out.println("Response content length: "
-                            + entity.getContentLength());
                     BufferedReader bufferedReader = new BufferedReader(
                             new InputStreamReader(entity.getContent()));
                     String text;

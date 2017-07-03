@@ -6,15 +6,11 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-
-import static com.joycity.joyclub.commons.constant.ResultCode.KECHUAN_INFO_ERROR;
 
 /**
  * 类名：KeChuanEncryption <br>
@@ -66,10 +62,6 @@ public class KeChuanEncryption {
     }
 
     public static boolean validate(String signature, String token, String timestamp, String nonce) {
-        System.out.println("signature:" + signature);
-        System.out.println("token:" + token);
-        System.out.println("timestamp:" + timestamp);
-        System.out.println("nonce:" + nonce);
 
         List<String> key = new ArrayList<String>();
         key.add(token);
