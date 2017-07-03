@@ -6,11 +6,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.system.ApplicationPidFileWriter;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
@@ -22,6 +28,7 @@ import java.nio.charset.Charset;
  */
 @SpringBootApplication(scanBasePackages = {"com.joycity.joyclub"})
 @MapperScan("com.joycity.joyclub.**.mapper")
+@EnableScheduling
 public class App {
 
     public static void main(String[] args) {
@@ -66,6 +73,20 @@ public class App {
         // TODO: 2017/2/21 classpath for multi modules
         sessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath*:mapper/**/*.xml"));
         return sessionFactoryBean;
+    }
+
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate template = new RedisTemplate();
+        template.setConnectionFactory(factory);
+        template.setDefaultSerializer(new StringRedisSerializer());
+        return template;
+    }
+
+    @Bean
+    public CacheManager cacheManager(RedisTemplate redisTemplate) {
+        RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
+        return cacheManager;
     }
 
     /**

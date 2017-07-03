@@ -20,6 +20,7 @@ import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.OrderStatus;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
@@ -51,7 +52,21 @@ import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAM_ERRO
  */
 @Service
 public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
-    private Log logger = LogFactory.getLog(ProductOrderFrontServiceImpl.class);
+    /**
+     * 微信支付
+     */
+    public static final Byte PAY_TYPE_WECHAT = 0;
+    /**
+     * 支付宝支付
+     */
+    public static final Byte PAY_TYPE_ALI = 1;
+    public static final Byte CANCEL_BY_CLIENT = 0;
+    public static final Byte CANCEL_BY_SYSTEM = 1;
+    public final String LIST_TYPE_ALL = "all";
+    public final String LIST_TYPE_NOT_PAYED = "notPayed";
+    public final String LIST_TYPE_NOT_SENT = "notSent";
+    public final String LIST_TYPE_NOT_RECEIVED = "notReceived";
+    public final String LIST_TYPE_DONE = "done";
     @Autowired
     WechatOpenIdService wechatOpenIdService;
     @Autowired
@@ -84,11 +99,36 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     AliPayService aliPayService;
     @Autowired
     ActOrderFrontService actOrderService;
-    public final String LIST_TYPE_ALL = "all";
-    public final String LIST_TYPE_NOT_PAYED = "notPayed";
-    public final String LIST_TYPE_NOT_SENT = "notSent";
-    public final String LIST_TYPE_NOT_RECEIVED = "notReceived";
-    public final String LIST_TYPE_DONE = "done";
+
+
+
+/*    */
+    /**
+     * @param clientId
+     * @param telParam 可以为null
+     * @return
+     *//*
+    private Integer getVipPoint(Long clientId, String telParam) {
+        String tel = telParam != null ? telParam : clientMapper.getTel(clientId);
+        if (tel == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
+        }
+        Client client = keChuanCrmService.getMemberByTel(tel);
+        if (client == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
+        }
+        return client.getVipPoint();
+    }
+
+    private Integer getVipPoint(Long clientId) {
+        return getVipPoint(clientId, null);
+    }
+
+    private Integer getVipPoint(String phone) {
+        return getVipPoint(null, phone);
+    }*/
+    private Log logger = LogFactory.getLog(ProductOrderFrontServiceImpl.class);
+    private Log taskLogger = LogFactory.getLog(LogConst.LOG_TASK);
 
     @Override
     public ResultData getList(Long projectId, Long clientId, String type, PageUtil pageUtil) {
@@ -172,46 +212,6 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         result.put("ifRemoveSpecialPrice", ifRemoveBoughtSpecialPrice);
         return new ResultData(result);
     }
-
-
-
-/*    */
-    /**
-     * @param clientId
-     * @param telParam 可以为null
-     * @return
-     *//*
-    private Integer getVipPoint(Long clientId, String telParam) {
-        String tel = telParam != null ? telParam : clientMapper.getTel(clientId);
-        if (tel == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
-        }
-        Client client = keChuanCrmService.getMemberByTel(tel);
-        if (client == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
-        }
-        return client.getVipPoint();
-    }
-
-    private Integer getVipPoint(Long clientId) {
-        return getVipPoint(clientId, null);
-    }
-
-    private Integer getVipPoint(String phone) {
-        return getVipPoint(null, phone);
-    }*/
-    /**
-     * 微信支付
-     */
-    public static final Byte PAY_TYPE_WECHAT = 0;
-    /**
-     * 支付宝支付
-     */
-    public static final Byte PAY_TYPE_ALI = 1;
-
-    public static final Byte CANCEL_BY_CLIENT = 0;
-    public static final Byte CANCEL_BY_SYSTEM = 1;
-
 
     @Override
     public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
@@ -538,6 +538,9 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         List<Long> orderIds = orderMapper.getOneHourNotPayedOrder();
         for (Long orderId : orderIds) {
             systemCancelOrder(orderId);
+        }
+        if (orderIds.size() > 0) {
+            taskLogger.info("取消超时未支付活动订单 " + orderIds.size() + " 个");
         }
     }
 

@@ -6,7 +6,9 @@ import com.joycity.joyclub.act.mapper.ActOrderMapper;
 import com.joycity.joyclub.act.mapper.ActPriceMapper;
 import com.joycity.joyclub.act.modal.ActInfoForOrder;
 import com.joycity.joyclub.act.modal.MyActOrder;
-import com.joycity.joyclub.act.modal.generated.*;
+import com.joycity.joyclub.act.modal.generated.SaleActOrder;
+import com.joycity.joyclub.act.modal.generated.SaleActOrderExample;
+import com.joycity.joyclub.act.modal.generated.SaleActPrice;
 import com.joycity.joyclub.alipay.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
@@ -26,19 +28,24 @@ import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ActOrderConst;
 import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
-import com.joycity.joyclub.product.mapper.*;
+import com.joycity.joyclub.product.mapper.ProductAttrMapper;
+import com.joycity.joyclub.product.mapper.ProductMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.joycity.joyclub.apifront.service.impl.ProductOrderFrontServiceImpl.CANCEL_BY_CLIENT;
 import static com.joycity.joyclub.apifront.service.impl.ProductOrderFrontServiceImpl.CANCEL_BY_SYSTEM;
@@ -50,7 +57,14 @@ import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
  */
 @Service
 public class ActOrderFrontServiceImpl implements ActOrderFrontService {
-    private Log logger = LogFactory.getLog(ActOrderFrontServiceImpl.class);
+    /**
+     * 微信支付
+     */
+    public static final Byte PAY_TYPE_WECHAT = 0;
+    /**
+     * 支付宝支付
+     */
+    public static final Byte PAY_TYPE_ALI = 1;
     @Autowired
     WechatOpenIdService wechatOpenIdService;
 
@@ -84,6 +98,37 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
     ActOrderMapper actOrderMapper;
     @Autowired
     ActAttrMapper actAttrMapper;
+    private Log logger = LogFactory.getLog(ActOrderFrontServiceImpl.class);
+    private Log taskLogger = LogFactory.getLog(LogConst.LOG_TASK);
+
+
+
+/*    */
+
+    /**
+     * @param clientId
+     * @param telParam 可以为null
+     * @return
+     *//*
+    private Integer getVipPoint(Long clientId, String telParam) {
+        String tel = telParam != null ? telParam : clientMapper.getTel(clientId);
+        if (tel == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
+        }
+        Client client = keChuanCrmService.getMemberByTel(tel);
+        if (client == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
+        }
+        return client.getVipPoint();
+    }
+
+    private Integer getVipPoint(Long clientId) {
+        return getVipPoint(clientId, null);
+    }
+
+    private Integer getVipPoint(String phone) {
+        return getVipPoint(null, phone);
+    }*/
 
     @Override
     public ResultData getList(final Long projectId, final Long clientId,final Byte status, final PageUtil pageUtil) {
@@ -158,43 +203,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         result.put("point", clientService.getPoint(clientId));
         return new ResultData(result);
     }
-
-
-
-/*    */
-    /**
-     * @param clientId
-     * @param telParam 可以为null
-     * @return
-     *//*
-    private Integer getVipPoint(Long clientId, String telParam) {
-        String tel = telParam != null ? telParam : clientMapper.getTel(clientId);
-        if (tel == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
-        }
-        Client client = keChuanCrmService.getMemberByTel(tel);
-        if (client == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
-        }
-        return client.getVipPoint();
-    }
-
-    private Integer getVipPoint(Long clientId) {
-        return getVipPoint(clientId, null);
-    }
-
-    private Integer getVipPoint(String phone) {
-        return getVipPoint(null, phone);
-    }*/
-    /**
-     * 微信支付
-     */
-    public static final Byte PAY_TYPE_WECHAT = 0;
-    /**
-     * 支付宝支付
-     */
-    public static final Byte PAY_TYPE_ALI = 1;
-
 
     @Override
     public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint) {
@@ -405,6 +413,9 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
             actOrderMapper.cancelOrder(orderId, CANCEL_BY_SYSTEM);
             //恢复库存
             restoreCancelledOrderAttrNum(orderId);
+        }
+        if (orderIds.size() > 0) {
+            taskLogger.info("取消超时未支付活动订单 " + orderIds.size() + " 个");
         }
     }
 
