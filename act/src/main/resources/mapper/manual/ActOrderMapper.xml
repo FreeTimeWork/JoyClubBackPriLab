@@ -41,7 +41,7 @@
                 and c.tel = #{phone}
             </when>
             <otherwise>
-                <if test="status!=null">and s.status =#{status}</if>
+                <if test="status!=null">and o.status =#{status}</if>
 
             </otherwise>
         </choose>
