@@ -84,7 +84,10 @@ public class ClientTokenServiceImpl implements ClientTokenService {
                 clearNum++;
             }
         }
-        taskLogger.info("清除过期clientToken " + clearNum + " 条，耗时" + (System.currentTimeMillis() - startTime) + "毫秒");
+        if (clearNum > 0) {
+            taskLogger.info("清除过期clientToken " + clearNum + " 条，耗时" + (System.currentTimeMillis() - startTime) + "毫秒");
+
+        }
     }
 
     private Long getId(String token, Boolean ifThrow) {
