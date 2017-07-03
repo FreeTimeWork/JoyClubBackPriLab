@@ -29,15 +29,16 @@ public class BenefitFrontController {
      * 某个项目中，某个会员能领取的卡券
      * 按卡券投放时间倒序
      *
-     * @param clientId 如果不给clientId，就返回该项目所有的卡券，业务逻辑处理不同
+     * @param token 如果不给token，就返回该项目所有的卡券，业务逻辑处理不同
      * @return
      */
     @RequestMapping(value = "/coupons", method = GET)
     public ResultData getCouponsClientCanReceive(
+            @CookieValue(name = Global.COOKIE_TOKEN, required = false) String token,
             @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-            @RequestParam(required = false) Long clientId,
             PageUtil pageUtil
     ) {
+        Long clientId = token == null ? null : clientTokenService.getId(token);
         return benefitService.getCoupons(projectId, clientId, pageUtil);
     }
 
