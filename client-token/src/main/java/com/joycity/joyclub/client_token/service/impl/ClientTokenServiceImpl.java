@@ -79,7 +79,7 @@ public class ClientTokenServiceImpl implements ClientTokenService {
         int clearNum = 0;
         boolean singleResult;
         while (cursor.hasNext()) {
-            singleResult = checkToken(cursor.next().getKey());
+            singleResult = !checkToken(cursor.next().getKey());
             if (singleResult) {
                 clearNum++;
             }
@@ -108,7 +108,7 @@ public class ClientTokenServiceImpl implements ClientTokenService {
             }
 
         }
-        return Long.parseLong(token);
+        return Long.parseLong(clientId);
     }
 
     private String getExpireKey(String token) {
