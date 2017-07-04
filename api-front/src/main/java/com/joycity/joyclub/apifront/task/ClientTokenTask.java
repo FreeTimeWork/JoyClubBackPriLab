@@ -14,7 +14,7 @@ public class ClientTokenTask {
     ClientTokenService clientTokenService;
 
     /**
-     * 每天12点 查找发货超过十天的store order，设置为已经收货
+     * 每天12点 查找过期30天的token并清空
      */
     @Scheduled(cron = "0 0 12 * * ?")
     public void autoReceiveOrder() {
