@@ -2,7 +2,7 @@
 -- 主机:                           127.0.0.1
 -- 服务器版本:                        5.7.12-log - MySQL Community Server (GPL)
 -- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  9.4.0.5125
+-- HeidiSQL 版本:                  9.4.0.5173
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,10 +13,12 @@
 
 
 -- 导出 joyclub 的数据库结构
+DROP DATABASE IF EXISTS `joyclub`;
 CREATE DATABASE IF NOT EXISTS `joyclub` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `joyclub`;
 
 -- 导出  表 joyclub.client 结构
+DROP TABLE IF EXISTS `client`;
 CREATE TABLE IF NOT EXISTS `client` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `real_name` varchar(15) DEFAULT NULL COMMENT '真实姓名',
@@ -48,29 +50,70 @@ CREATE TABLE IF NOT EXISTS `client` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='沿用商通的设计';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='沿用商通的设计';
 
 -- 正在导出表  joyclub.client 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
 INSERT INTO `client` (`id`, `real_name`, `sex`, `status`, `tel`, `type`, `birthday`, `vip_grade`, `vip_point`, `card_no`, `id_card`, `vip_code`, `vip_card_grade`, `edu_his`, `wx_city`, `wx_country`, `wx_gender`, `wx_head_img_url`, `wx_language`, `wx_nick_name`, `wx_province`, `credit_card_project`, `group13`, `home_address`, `home_post_code`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(2, '王俊', NULL, NULL, '15001060933', NULL, NULL, NULL, 29027, '1010100020010004', NULL, '0500307360', '74', NULL, NULL, '中国', '1', 'http://wx.qlogo.cn/mmopen/rzhskjsG3Qz2343T1gAjSKh9geuwdsGT9BKyhgKK1RcVghSTDKdruRhTNWib3tMkAWpoh7k9A5cKzsFJQWQrsN8Lf1A4UunFc/0', 'zh_CN', 'Til', NULL, '05', '00', NULL, NULL, '2017-04-11 16:01:34', '2017-05-08 17:49:56', 0, NULL);
+	(1, '王俊', NULL, NULL, '15001060933', NULL, NULL, NULL, 29053, '1010100020000051', NULL, '0500307360', '74', NULL, NULL, 'ä¸­å½', '1', 'http://wx.qlogo.cn/mmopen/rzhskjsG3Qz2343T1gAjSKh9geuwdsGT9BKyhgKK1RcVghSTDKdruRhTNWib3tMkAWpoh7k9A5cKzsFJQWQrsN8Lf1A4UunFc/0', 'zh_CN', 'Til', NULL, '05', '00', NULL, NULL, '2017-04-11 16:01:34', '2017-06-30 17:05:05', 0, NULL);
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 
 -- 导出  表 joyclub.client_login_log 结构
+DROP TABLE IF EXISTS `client_login_log`;
 CREATE TABLE IF NOT EXISTS `client_login_log` (
   `client_id` bigint(20) NOT NULL,
   `project_id` bigint(20) NOT NULL,
+  `from` varchar(20) DEFAULT NULL COMMENT '来源',
   `time` datetime DEFAULT CURRENT_TIMESTAMP,
   `sub_project_id` bigint(20) DEFAULT NULL COMMENT '当是其他项目使用平台商城的时候，需要提供其他项目的id'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录日志\r\n';
 
--- 正在导出表  joyclub.client_login_log 的数据：~1 rows (大约)
+-- 正在导出表  joyclub.client_login_log 的数据：~39 rows (大约)
 /*!40000 ALTER TABLE `client_login_log` DISABLE KEYS */;
-INSERT INTO `client_login_log` (`client_id`, `project_id`, `time`, `sub_project_id`) VALUES
-	(2, 1, '2017-04-17 00:55:21', NULL);
+INSERT INTO `client_login_log` (`client_id`, `project_id`, `from`, `time`, `sub_project_id`) VALUES
+	(2, 1, NULL, '2017-04-17 00:55:21', NULL),
+	(2, 1, NULL, '2017-05-11 16:19:18', 1),
+	(2, 1, NULL, '2017-05-11 16:19:49', 1),
+	(2, 1, NULL, '2017-05-11 16:27:37', 1),
+	(1, 1, NULL, '2017-05-12 13:08:12', 1),
+	(1, 1, NULL, '2017-05-12 19:45:07', 1),
+	(1, 1, NULL, '2017-05-12 23:28:47', 1),
+	(1, 1, NULL, '2017-05-12 23:28:52', 1),
+	(1, 1, NULL, '2017-05-12 23:29:57', 1),
+	(1, 1, NULL, '2017-05-12 23:30:04', 1),
+	(1, 1, NULL, '2017-05-12 23:30:08', 1),
+	(1, 1, NULL, '2017-06-06 20:14:39', 1),
+	(1, 1, NULL, '2017-06-06 20:15:21', 1),
+	(1, 1, NULL, '2017-06-06 20:16:37', 1),
+	(1, 1, NULL, '2017-06-07 10:06:31', NULL),
+	(1, 1, NULL, '2017-06-07 10:06:36', NULL),
+	(1, 1, NULL, '2017-06-07 10:11:55', NULL),
+	(1, 1, NULL, '2017-06-07 10:12:06', NULL),
+	(1, 1, NULL, '2017-06-07 10:13:08', NULL),
+	(1, 1, NULL, '2017-06-07 10:16:34', NULL),
+	(1, 1, NULL, '2017-06-07 10:17:26', 1),
+	(1, 1, NULL, '2017-06-07 12:21:32', NULL),
+	(1, 1, NULL, '2017-06-07 12:23:01', NULL),
+	(1, 1, NULL, '2017-06-07 12:23:04', NULL),
+	(1, 1, NULL, '2017-06-07 12:46:31', NULL),
+	(1, 1, 'test', '2017-06-07 12:51:51', NULL),
+	(1, 1, NULL, '2017-06-21 15:33:26', 1),
+	(1, 1, NULL, '2017-06-21 15:35:26', 1),
+	(1, 1, NULL, '2017-06-21 15:36:50', 1),
+	(1, 1, NULL, '2017-06-30 16:07:16', NULL),
+	(1, 1, NULL, '2017-06-30 16:07:24', NULL),
+	(1, 1, NULL, '2017-06-30 16:14:31', NULL),
+	(1, 1, NULL, '2017-06-30 16:15:17', NULL),
+	(1, 1, NULL, '2017-06-30 16:16:25', NULL),
+	(1, 1, NULL, '2017-06-30 16:17:36', NULL),
+	(1, 1, NULL, '2017-06-30 16:29:13', NULL),
+	(1, 1, NULL, '2017-06-30 16:53:21', NULL),
+	(1, 1, NULL, '2017-06-30 17:28:25', 1),
+	(1, 1, NULL, '2017-06-30 17:28:46', 1);
 /*!40000 ALTER TABLE `client_login_log` ENABLE KEYS */;
 
 -- 导出  表 joyclub.client_post_address 结构
+DROP TABLE IF EXISTS `client_post_address`;
 CREATE TABLE IF NOT EXISTS `client_post_address` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `client_id` bigint(20) NOT NULL,
@@ -84,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `client_post_address` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='客户收货地址表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户收货地址表';
 
 -- 正在导出表  joyclub.client_post_address 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `client_post_address` DISABLE KEYS */;
@@ -95,6 +138,7 @@ INSERT INTO `client_post_address` (`id`, `client_id`, `name`, `phone`, `address`
 /*!40000 ALTER TABLE `client_post_address` ENABLE KEYS */;
 
 -- 导出  表 joyclub.client_wx_openid 结构
+DROP TABLE IF EXISTS `client_wx_openid`;
 CREATE TABLE IF NOT EXISTS `client_wx_openid` (
   `open_id` varchar(32) NOT NULL COMMENT '微信 openid',
   `client_id` bigint(20) NOT NULL COMMENT '客户id',
@@ -102,15 +146,16 @@ CREATE TABLE IF NOT EXISTS `client_wx_openid` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`open_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户和项目相关的微信openid\r\nz注意一个项目一个客户只能有一个微信openid';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户和项目相关的微信openid\r\n\r\n这里的项目id，如果商业项目使用平台项目的商城，这里的project_id平台项目';
 
 -- 正在导出表  joyclub.client_wx_openid 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `client_wx_openid` DISABLE KEYS */;
 INSERT INTO `client_wx_openid` (`open_id`, `client_id`, `project_id`, `create_time`, `last_update`) VALUES
-	('oBDYawi1UjKoNXeDDeunHbqUn3As', 2, 1, '2017-04-11 15:05:36', '2017-04-20 09:46:52');
+	('oBDYawi1UjKoNXeDDeunHbqUn3As', 1, 1, '2017-04-11 15:05:36', '2017-05-11 21:06:46');
 /*!40000 ALTER TABLE `client_wx_openid` ENABLE KEYS */;
 
 -- 导出  表 joyclub.coupon 结构
+DROP TABLE IF EXISTS `coupon`;
 CREATE TABLE IF NOT EXISTS `coupon` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) NOT NULL COMMENT '项目id',
@@ -133,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `coupon` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='卡券表，优惠券等';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券表，优惠券等';
 
 -- 正在导出表  joyclub.coupon 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `coupon` DISABLE KEYS */;
@@ -146,6 +191,7 @@ INSERT INTO `coupon` (`id`, `project_id`, `name`, `type`, `show_start_time`, `sh
 /*!40000 ALTER TABLE `coupon` ENABLE KEYS */;
 
 -- 导出  表 joyclub.coupon_card_type 结构
+DROP TABLE IF EXISTS `coupon_card_type`;
 CREATE TABLE IF NOT EXISTS `coupon_card_type` (
   `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
   `card_type` varchar(10) NOT NULL COMMENT '允许领取的会员卡类型'
@@ -164,6 +210,7 @@ INSERT INTO `coupon_card_type` (`coupon_id`, `card_type`) VALUES
 /*!40000 ALTER TABLE `coupon_card_type` ENABLE KEYS */;
 
 -- 导出  表 joyclub.coupon_code 结构
+DROP TABLE IF EXISTS `coupon_code`;
 CREATE TABLE IF NOT EXISTS `coupon_code` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
@@ -179,15 +226,29 @@ CREATE TABLE IF NOT EXISTS `coupon_code` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='卡券号码表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券号码表';
 
 -- 正在导出表  joyclub.coupon_code 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `coupon_code` DISABLE KEYS */;
 INSERT INTO `coupon_code` (`id`, `coupon_id`, `code`, `use_status`, `use_time`, `client_id`, `check_flag`, `checker_id`, `check_time`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(4, 2, '0', 1, '2017-04-21 21:31:49', 2, 1, 2, '2017-04-21 21:50:30', '2017-04-20 14:23:43', '2017-04-21 21:50:30', 0, NULL);
+	(4, 2, '0', 1, '2017-04-21 21:31:49', 1, 0, 2, '2017-04-21 21:50:30', '2017-04-20 14:23:43', '2017-06-22 15:48:54', 0, NULL);
 /*!40000 ALTER TABLE `coupon_code` ENABLE KEYS */;
 
+-- 导出  表 joyclub.coupon_code_subproject 结构
+DROP TABLE IF EXISTS `coupon_code_subproject`;
+CREATE TABLE IF NOT EXISTS `coupon_code_subproject` (
+  `sub_project_id` bigint(20) NOT NULL,
+  `coupon_code_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='记录在商业等项目上领取平台的信息';
+
+-- 正在导出表  joyclub.coupon_code_subproject 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `coupon_code_subproject` DISABLE KEYS */;
+INSERT INTO `coupon_code_subproject` (`sub_project_id`, `coupon_code_id`) VALUES
+	(1, 1);
+/*!40000 ALTER TABLE `coupon_code_subproject` ENABLE KEYS */;
+
 -- 导出  过程 joyclub.p_update_product_price_point 结构
+DROP PROCEDURE IF EXISTS `p_update_product_price_point`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `p_update_product_price_point`()
     COMMENT '修改sal_product_price的积分比例，大于500为继承分类null，150~500为120，小于150为150'
@@ -213,13 +274,15 @@ END//
 DELIMITER ;
 
 -- 导出  表 joyclub.sale_act 结构
+DROP TABLE IF EXISTS `sale_act`;
 CREATE TABLE IF NOT EXISTS `sale_act` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `store_id` bigint(20) NOT NULL COMMENT '项目id',
+  `project_id` bigint(20) DEFAULT '0' COMMENT '项目id 暂时废弃',
+  `store_id` bigint(20) NOT NULL COMMENT '商户id',
   `category_id` bigint(20) NOT NULL COMMENT '分类id',
   `name` varchar(20) DEFAULT NULL COMMENT '商品名',
-  `display_weight` int(11) DEFAULT '0' COMMENT '显示权重，默认为0，越大越靠前',
-  `base_price` int(11) DEFAULT NULL COMMENT '基础价格',
+  `display_weight` float DEFAULT '0' COMMENT '显示权重，默认为0，越大越靠前',
+  `base_price` float DEFAULT NULL COMMENT '基础价格',
   `portrait` varchar(200) DEFAULT NULL COMMENT '封面图',
   `carousel` varchar(800) DEFAULT NULL COMMENT '轮播图,JSON数组',
   `refund_forbid_flag` tinyint(1) DEFAULT '0' COMMENT '不可退货标志',
@@ -227,20 +290,37 @@ CREATE TABLE IF NOT EXISTS `sale_act` (
   `delivery_flag` tinyint(1) DEFAULT '0' COMMENT '需要快递物品标志',
   `html_content` mediumtext COMMENT '商品详情在React draftJs里的data对象',
   `json_content` mediumtext COMMENT '商品详情的html',
+  `address` varchar(100) DEFAULT NULL,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='活动表\r\n将活动上升到项目';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动表\r\n\r\n商品所需积分兑换比例\r\n';
 
--- 正在导出表  joyclub.sale_act 的数据：~0 rows (大约)
+-- 正在导出表  joyclub.sale_act 的数据：~16 rows (大约)
 /*!40000 ALTER TABLE `sale_act` DISABLE KEYS */;
-INSERT INTO `sale_act` (`id`, `store_id`, `category_id`, `name`, `display_weight`, `base_price`, `portrait`, `carousel`, `refund_forbid_flag`, `reserve_need_flag`, `delivery_flag`, `html_content`, `json_content`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-04-05 17:13:26', '2017-04-13 19:42:25', 0, NULL);
+INSERT INTO `sale_act` (`id`, `project_id`, `store_id`, `category_id`, `name`, `display_weight`, `base_price`, `portrait`, `carousel`, `refund_forbid_flag`, `reserve_need_flag`, `delivery_flag`, `html_content`, `json_content`, `address`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(2, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(3, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(4, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(5, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(6, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(7, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(8, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(9, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(10, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(11, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(12, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(13, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(14, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(15, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL),
+	(16, 1, 14, 1, 'test', 5, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', 0, 1, 0, '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n', '{"entityMap":{},"blocks":[{"key":"b0h56","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', 'testAddress', '2017-04-05 17:13:26', '2017-05-22 11:02:26', 0, NULL);
 /*!40000 ALTER TABLE `sale_act` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_act_attr 结构
+DROP TABLE IF EXISTS `sale_act_attr`;
 CREATE TABLE IF NOT EXISTS `sale_act_attr` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `act_id` bigint(20) NOT NULL COMMENT '活动id',
@@ -252,19 +332,56 @@ CREATE TABLE IF NOT EXISTS `sale_act_attr` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='活动属性表，同商品属性';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动属性表，同商品属性';
 
 -- 正在导出表  joyclub.sale_act_attr 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `sale_act_attr` DISABLE KEYS */;
 INSERT INTO `sale_act_attr` (`id`, `act_id`, `name`, `num`, `remark`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(3, 1, '1', 123, NULL, '2017-04-05 17:30:28', '2017-04-05 17:30:28', 0, NULL);
+	(3, 1, '1', 241, NULL, '2017-04-05 17:30:28', '2017-06-01 10:23:37', 0, NULL);
 /*!40000 ALTER TABLE `sale_act_attr` ENABLE KEYS */;
 
+-- 导出  表 joyclub.sale_act_order 结构
+DROP TABLE IF EXISTS `sale_act_order`;
+CREATE TABLE IF NOT EXISTS `sale_act_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `code` varchar(32) NOT NULL COMMENT '目前是nanoTime加三位随机数',
+  `out_pay_code` varchar(64) DEFAULT NULL COMMENT '支付成功的外部单号,如果是纯积分，可以为空',
+  `project_id` bigint(20) NOT NULL COMMENT '项目id',
+  `sub_project_id` bigint(20) DEFAULT NULL COMMENT '子项目id 用于给商业项目标记',
+  `client_id` bigint(20) NOT NULL COMMENT '客户id',
+  `attr_id` bigint(20) NOT NULL COMMENT '活动属性id',
+  `num` int(11) NOT NULL COMMENT '目前都是1',
+  `status` tinyint(4) NOT NULL COMMENT '0 待支付 1已取消 2 已支付 4已核销 5退款中，6 已退款',
+  `money_sum` float NOT NULL COMMENT '用户为该单所需支付的总金钱，注意是订单下所有选择现金支付的商品金钱总额',
+  `point_sum` int(11) NOT NULL COMMENT '用户为该单所需支付的总积分，注意是订单下所有选择积分支付的商品积分总额',
+  `pay_type` tinyint(4) DEFAULT NULL COMMENT '0微信 1支付宝',
+  `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+  `cancel_time` datetime DEFAULT NULL COMMENT '取消时间',
+  `check_time` datetime DEFAULT NULL COMMENT '核销时间',
+  `canceler` tinyint(4) DEFAULT NULL COMMENT '用来标记谁取消了，0是用户，1是系统自动（用于系统定时删除未支付订单）',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表\r\n系统定时删除未支付订单，恢复库存，防止库存一直被占用\r\n\r\n子项目id，';
+
+-- 正在导出表  joyclub.sale_act_order 的数据：~4 rows (大约)
+/*!40000 ALTER TABLE `sale_act_order` DISABLE KEYS */;
+INSERT INTO `sale_act_order` (`id`, `code`, `out_pay_code`, `project_id`, `sub_project_id`, `client_id`, `attr_id`, `num`, `status`, `money_sum`, `point_sum`, `pay_type`, `pay_time`, `cancel_time`, `check_time`, `canceler`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, '37628892330564243636487', NULL, 1, NULL, 1, 3, 1, 1, 0.01, 0, 1, NULL, '2017-05-22 13:05:00', NULL, 1, '2017-05-19 18:46:19', '2017-05-22 13:05:00', 0, NULL),
+	(2, '37651903084196261632291', NULL, 1, NULL, 1, 3, 1, 1, 0.01, 0, 1, NULL, '2017-05-22 11:52:22', NULL, 0, '2017-05-19 18:50:09', '2017-05-22 11:52:57', 0, NULL),
+	(3, '60550397460806016192505', NULL, 1, NULL, 1, 3, 1, 4, 0, 1, 1, '2017-05-22 10:26:05', NULL, '2017-05-22 15:08:19', NULL, '2017-05-22 10:26:05', '2017-05-22 15:08:19', 0, NULL),
+	(4, '60624106897114909609452', '2017052221001004980292679898', 1, NULL, 1, 3, 1, 2, 0.01, 0, 1, '2017-05-22 10:47:13', NULL, NULL, NULL, '2017-05-22 10:38:22', '2017-05-22 10:47:13', 0, NULL);
+/*!40000 ALTER TABLE `sale_act_order` ENABLE KEYS */;
+
 -- 导出  表 joyclub.sale_act_price 结构
+DROP TABLE IF EXISTS `sale_act_price`;
 CREATE TABLE IF NOT EXISTS `sale_act_price` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `act_id` bigint(20) NOT NULL COMMENT '互动id',
-  `price` int(11) NOT NULL COMMENT '价格',
+  `buy_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 金钱和积分 2 仅金钱 3仅积分',
+  `price` float NOT NULL COMMENT '价格',
   `point_rate` float DEFAULT NULL COMMENT '消费金钱后，兑换积分比例 如果不赋值则继承商品分类的比例，也可以赋值',
   `start_time` datetime(3) NOT NULL COMMENT '开始时间',
   `end_time` datetime(3) NOT NULL COMMENT '结束时间',
@@ -276,15 +393,29 @@ CREATE TABLE IF NOT EXISTS `sale_act_price` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='活动价格表，同商品价格';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动价格表，同商品价格\r\n';
 
--- 正在导出表  joyclub.sale_act_price 的数据：~0 rows (大约)
+-- 正在导出表  joyclub.sale_act_price 的数据：~14 rows (大约)
 /*!40000 ALTER TABLE `sale_act_price` DISABLE KEYS */;
-INSERT INTO `sale_act_price` (`id`, `act_id`, `price`, `point_rate`, `start_time`, `end_time`, `forbid_flag`, `review_status`, `review_info`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(5, 1, 1, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-04-13 18:34:14', 0, NULL);
+INSERT INTO `sale_act_price` (`id`, `act_id`, `buy_type`, `price`, `point_rate`, `start_time`, `end_time`, `forbid_flag`, `review_status`, `review_info`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(5, 3, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:25', 0, NULL),
+	(6, 15, 3, 0.01, NULL, '2017-07-08 13:41:26.000', '2017-07-09 13:41:26.000', 0, 1, NULL, '2017-05-18 13:41:36', '2017-06-26 19:30:43', 0, NULL),
+	(7, 2, 3, 0.02, NULL, '2017-07-08 13:41:26.000', '2017-07-09 13:41:26.000', 0, 1, NULL, '2017-05-18 13:41:36', '2017-06-22 18:59:30', 0, NULL),
+	(8, 4, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:26', 0, NULL),
+	(9, 5, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:27', 0, NULL),
+	(10, 6, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:28', 0, NULL),
+	(11, 7, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:30', 0, NULL),
+	(12, 8, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:31', 0, NULL),
+	(13, 9, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:33', 0, NULL),
+	(14, 10, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:35', 0, NULL),
+	(15, 11, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:37', 0, NULL),
+	(16, 12, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:39', 0, NULL),
+	(17, 13, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:40', 0, NULL),
+	(18, 14, 1, 0.01, NULL, '2017-04-07 00:00:00.000', '2017-07-07 00:00:00.000', 0, 1, NULL, '2017-04-07 17:57:46', '2017-06-26 19:30:41', 0, NULL);
 /*!40000 ALTER TABLE `sale_act_price` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_cart 结构
+DROP TABLE IF EXISTS `sale_cart`;
 CREATE TABLE IF NOT EXISTS `sale_cart` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `client_id` bigint(20) NOT NULL COMMENT '客户id',
@@ -296,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `sale_cart` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='商品购物车表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品购物车表';
 
 -- 正在导出表  joyclub.sale_cart 的数据：~5 rows (大约)
 /*!40000 ALTER TABLE `sale_cart` DISABLE KEYS */;
@@ -309,6 +440,7 @@ INSERT INTO `sale_cart` (`id`, `client_id`, `project_id`, `attr_id`, `num`, `cre
 /*!40000 ALTER TABLE `sale_cart` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product 结构
+DROP TABLE IF EXISTS `sale_product`;
 CREATE TABLE IF NOT EXISTS `sale_product` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `store_id` bigint(20) NOT NULL COMMENT '商户id',
@@ -326,7 +458,7 @@ CREATE TABLE IF NOT EXISTS `sale_product` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在导出表  joyclub.sale_product 的数据：~24 rows (大约)
 /*!40000 ALTER TABLE `sale_product` DISABLE KEYS */;
@@ -354,10 +486,13 @@ INSERT INTO `sale_product` (`id`, `store_id`, `category_id`, `designer_id`, `nam
 	(28, 14, 2, 1, '测试商品名称', 3, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n\r\n\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-03-29 20:06:49', '2017-05-09 21:10:38', 0, NULL),
 	(29, 14, 2, 1, '测试商品名称', 3, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n\r\n\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-03-29 20:06:49', '2017-05-09 21:10:38', 0, NULL),
 	(30, 14, 2, 1, '测试商品名称', 3, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n\r\n\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-03-29 20:06:49', '2017-05-09 21:10:38', 0, NULL),
-	(31, 14, 2, 1, '测试商品名称', 3, 1.12, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>123</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-03-29 20:06:49', '2017-05-09 21:10:38', 0, NULL);
+	(31, 14, 2, 1, '测试商品名称', 3, 1.12, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>123</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-03-29 20:06:49', '2017-05-09 21:10:38', 0, NULL),
+	(32, 14, 2, 1, '测试商品名称', 3, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n\r\n\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-05-17 15:34:25', '2017-05-17 15:34:25', 0, NULL),
+	(33, 14, 2, 1, '秒杀-测试商品名称', 3, 1, 'http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg', '["http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg","http://bjmallback.stcl365.com:8071/image/2aa851cd2441402bb7e4be4e8c645484.jpg"]', '<p>爱要大声说出来，不要错过才后悔没有珍惜，对朋友的关心和呵护要用行动去证明，哪怕是一句问候，微信不该让彼此疏远，而是更亲近知道彼此的思念。</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/6fa221d8fee2406abdd64ea508cb387a.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/e28831b2bc1c4c4787a91dcb6d9023dc.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p>&nbsp;</p>\r\n<p>我们相识于干花</p>\r\n<p>体验押花香薰蜡过程</p>\r\n<p>制作简单漂亮的包装圆柱形礼物</p>\r\n<img src="http://bjmallback.stcl365.com:8071/image/d09dc0b6b03946fd88d94ae457762663.jpg" style="float:none;height: auto;width: 100%"/>\r\n<p></p>\r\n<ol>\r\n<li>活动时长：3小时左右</li>\r\n<li>参与凭证：购买订单        </li>\r\n<li>活动时间：2017年2月25日至2017年5月31日 </li>\r\n<li>预约电话：15910816157</li>\r\n<li>参加活动时需提前三天预约</li>\r\n<li>团购后请致电预约参加时间和参加地点<br>\r\n</li>\r\n</ol>\r\n<p>​&nbsp;</p>\r\n\r\n\r\n\r\n', '{"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://bjmallback.stcl365.com:8071/image/659ce78a885b4cb1a8d37af2cadd53fe.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9n1b5","text":"123","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"cvh5v","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"8kcfl","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}', '2017-05-17 15:38:36', '2017-05-17 15:38:36', 0, NULL);
 /*!40000 ALTER TABLE `sale_product` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product_attr 结构
+DROP TABLE IF EXISTS `sale_product_attr`;
 CREATE TABLE IF NOT EXISTS `sale_product_attr` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) NOT NULL COMMENT '商品id',
@@ -369,23 +504,26 @@ CREATE TABLE IF NOT EXISTS `sale_product_attr` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='商品的属性表，基于属性（比如尺码、颜色，一维，如果同时有颜色、尺码，需要展开为一维）进行库存管理\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品的属性表，基于属性（比如尺码、颜色，一维，如果同时有颜色、尺码，需要展开为一维）进行库存管理\r\n';
 
 -- 正在导出表  joyclub.sale_product_attr 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `sale_product_attr` DISABLE KEYS */;
 INSERT INTO `sale_product_attr` (`id`, `product_id`, `name`, `num`, `remark`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(2, 1, 'shuxing属性11', -3, '21', '2017-03-30 01:18:39', '2017-05-10 18:53:33', 0, NULL),
-	(3, 1, 'shuxing属性11', 122, '21', '2017-03-30 01:18:39', '2017-04-28 03:34:01', 0, NULL),
-	(4, 1, 'shuxing属性11', 122, '21', '2017-03-30 01:18:39', '2017-04-28 03:34:01', 0, NULL),
-	(5, 21, 'shuxing属性11', 109, '21', '2017-03-30 01:18:39', '2017-04-28 03:45:24', 0, NULL);
+	(2, 1, 'shuxing属性11', 7, '21', '2017-03-30 01:18:39', '2017-06-06 18:05:00', 0, NULL),
+	(3, 1, 'shuxing属性11', 123, '21', '2017-03-30 01:18:39', '2017-06-06 18:05:00', 0, NULL),
+	(4, 1, 'shuxing属性11', 123, '21', '2017-03-30 01:18:39', '2017-06-06 18:05:00', 0, NULL),
+	(5, 21, 'shuxing属性11', 115, '21', '2017-03-30 01:18:39', '2017-06-06 18:05:00', 0, NULL),
+	(6, 18, 'shuxing属性11', 13, '21', '2017-03-30 01:18:39', '2017-06-30 17:06:28', 0, NULL);
 /*!40000 ALTER TABLE `sale_product_attr` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product_order 结构
+DROP TABLE IF EXISTS `sale_product_order`;
 CREATE TABLE IF NOT EXISTS `sale_product_order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `code` varchar(32) NOT NULL COMMENT '目前是nanoTime加三位随机数',
   `out_pay_code` varchar(64) DEFAULT NULL COMMENT '支付成功的外部单号,如果是纯积分，可以为空',
   `project_id` bigint(20) NOT NULL COMMENT '项目id',
+  `sub_project_id` bigint(20) DEFAULT NULL COMMENT '子项目id 用于给商业项目标记',
   `client_id` bigint(20) NOT NULL COMMENT '客户id',
   `receive_type` tinyint(4) NOT NULL COMMENT '收货类型 0自提 1快递',
   `status` tinyint(4) NOT NULL COMMENT '0 待支付 1已取消 2 已支付 ',
@@ -404,38 +542,55 @@ CREATE TABLE IF NOT EXISTS `sale_product_order` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COMMENT='商品订单表\r\n系统定时删除未支付订单，恢复库存，防止库存一直被占用\r\n\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品订单表\r\n系统定时删除未支付订单，恢复库存，防止库存一直被占用\r\n\r\n子项目id，';
 
--- 正在导出表  joyclub.sale_product_order 的数据：~20 rows (大约)
+-- 正在导出表  joyclub.sale_product_order 的数据：~36 rows (大约)
 /*!40000 ALTER TABLE `sale_product_order` DISABLE KEYS */;
-INSERT INTO `sale_product_order` (`id`, `code`, `out_pay_code`, `project_id`, `client_id`, `receive_type`, `status`, `money_sum`, `point_sum`, `pay_type`, `pay_time`, `cancel_time`, `canceler`, `receiver_name`, `receiver_phone`, `receiver_address`, `receiver_postcode`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(1, '62174599612522678842480', '123123123', 1, 2, 1, 0, 1, 1, 1, '2017-04-25 10:25:03', '2017-04-26 16:08:24', 0, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-28 14:58:02', 0, NULL),
-	(17, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(33, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(34, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(35, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(36, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(37, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(38, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(39, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(40, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(41, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(42, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(43, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(44, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(45, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(46, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(47, '1232141234', '123123123', 1, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
-	(48, '58043713704373951514288', NULL, 1, 2, 0, 2, 0, 1, 0, '2017-04-28 03:29:57', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:29:57', '2017-04-28 03:29:57', 0, NULL),
-	(49, '58068170170310682521568', NULL, 1, 2, 0, 2, 0, 8, 0, '2017-04-28 03:34:02', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
-	(50, '904767155620085721004258', '123', 1, 2, 0, 2, 0, 1, 0, '2017-04-28 04:42:56', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:45:24', '2017-04-28 04:42:56', 0, NULL),
-	(51, '11432187051677288291469', NULL, 1, 2, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:27', '2017-05-10 17:47:27', 0, NULL),
-	(52, '11432936191177839928352', NULL, 1, 2, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:35', '2017-05-10 17:47:35', 0, NULL),
-	(53, '11433646910225646215492', NULL, 1, 2, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:42', '2017-05-10 17:47:42', 0, NULL),
-	(54, '11828712230801099587384', NULL, 1, 2, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 18:53:33', '2017-05-10 18:53:33', 0, NULL);
+INSERT INTO `sale_product_order` (`id`, `code`, `out_pay_code`, `project_id`, `sub_project_id`, `client_id`, `receive_type`, `status`, `money_sum`, `point_sum`, `pay_type`, `pay_time`, `cancel_time`, `canceler`, `receiver_name`, `receiver_phone`, `receiver_address`, `receiver_postcode`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, '62174599612522678842480', '1', 1, NULL, 2, 1, 1, 1, 1, 1, '2017-04-25 10:25:03', '2017-05-16 10:20:00', 1, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-05-19 16:40:56', 0, NULL),
+	(17, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(33, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(34, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(35, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(36, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(37, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(38, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(39, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(40, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(41, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(42, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(43, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(44, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(45, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(46, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(47, '1232141234', '123123123', 1, NULL, 2, 1, 2, 1, 1, 1, '2017-04-25 10:25:03', NULL, NULL, '1', '15001060933', NULL, NULL, '2017-04-25 10:25:02', '2017-04-27 19:39:19', 0, NULL),
+	(48, '58043713704373951514288', NULL, 1, NULL, 2, 0, 2, 0, 1, 0, '2017-04-28 03:29:57', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:29:57', '2017-04-28 03:29:57', 0, NULL),
+	(49, '58068170170310682521568', NULL, 1, NULL, 2, 0, 2, 0, 8, 0, '2017-04-28 03:34:02', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
+	(50, '904767155620085721004258', '123', 1, NULL, 2, 0, 2, 0, 1, 0, '2017-04-28 04:42:56', NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:45:24', '2017-04-28 04:42:56', 0, NULL),
+	(51, '11432187051677288291469', NULL, 1, NULL, 2, 0, 1, 0, 1, 0, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-10 17:47:27', '2017-05-16 10:20:01', 0, NULL),
+	(52, '11432936191177839928352', NULL, 1, NULL, 2, 0, 1, 0, 1, 0, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-10 17:47:35', '2017-05-16 10:20:01', 0, NULL),
+	(53, '11433646910225646215492', NULL, 1, NULL, 2, 0, 1, 0, 1, 0, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-10 17:47:42', '2017-05-16 10:20:01', 0, NULL),
+	(54, '11828712230801099587384', NULL, 1, NULL, 2, 0, 1, 0, 1, 0, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-10 18:53:33', '2017-05-16 10:20:01', 0, NULL),
+	(55, '3816508033473889515729', NULL, 1, NULL, 2, 0, 2, 0, 2, 1, '2017-05-11 10:59:00', NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-11 10:58:59', '2017-05-11 10:59:00', 0, NULL),
+	(56, '13244560946240165704466', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-12 13:09:59', '2017-05-16 10:20:01', 0, NULL),
+	(57, '14336840432618672570565', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:12:02', '2017-05-16 10:20:01', 0, NULL),
+	(58, '14432823128183151710326', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:28:01', '2017-05-16 10:20:01', 0, NULL),
+	(59, '14436452432292032003292', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:28:38', '2017-05-16 10:20:01', 0, NULL),
+	(60, '14438401647767384897244', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:01', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:28:57', '2017-05-16 10:20:01', 0, NULL),
+	(61, '14442117783169494363349', NULL, 1, 1, 1, 0, 1, 1, 0, 1, NULL, '2017-05-16 10:20:02', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:29:34', '2017-05-16 10:20:02', 0, NULL),
+	(62, '14453712805550945389375', NULL, 1, 1, 1, 0, 1, 0.01, 0, 1, NULL, '2017-05-12 16:31:55', 0, NULL, NULL, NULL, NULL, '2017-05-12 16:31:30', '2017-05-12 16:31:55', 0, NULL),
+	(63, '14514803194325815831058', NULL, 1, 1, 1, 0, 1, 0.01, 0, 1, NULL, '2017-05-16 10:20:02', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:41:41', '2017-05-16 10:20:02', 0, NULL),
+	(64, '14516550745968982424284', NULL, 1, 1, 1, 0, 1, 0.1, 0, 1, NULL, '2017-05-16 10:20:02', 1, NULL, NULL, NULL, NULL, '2017-05-12 16:41:58', '2017-05-16 10:20:02', 0, NULL),
+	(65, '14827795921792520033961', NULL, 1, NULL, 1, 0, 1, 0.01, 0, 1, NULL, '2017-05-16 10:20:02', 1, NULL, NULL, NULL, NULL, '2017-05-12 17:33:51', '2017-05-16 10:20:02', 0, NULL),
+	(66, '24632042566125190122033', NULL, 1, NULL, 1, 0, 1, 0.01, 0, 1, NULL, '2017-05-26 14:00:00', 1, NULL, NULL, NULL, NULL, '2017-05-26 12:57:05', '2017-05-26 14:00:00', 0, NULL),
+	(67, '24637981977451962288546', NULL, 1, NULL, 1, 0, 1, 0.01, 0, 1, NULL, '2017-05-26 14:00:00', 1, NULL, NULL, NULL, NULL, '2017-05-26 12:58:05', '2017-05-26 14:00:00', 0, NULL),
+	(68, '8811021850428495297045', NULL, 1, NULL, 1, 0, 1, 0.01, 0, 1, NULL, '2017-06-06 18:05:00', 1, NULL, NULL, NULL, NULL, '2017-06-01 17:14:35', '2017-06-06 18:05:00', 0, NULL),
+	(69, '97499014224820552436327', NULL, 1, NULL, 1, 0, 2, 0, 1, 1, '2017-06-30 17:05:05', NULL, NULL, NULL, NULL, NULL, NULL, '2017-06-30 17:05:04', '2017-06-30 17:05:05', 0, NULL),
+	(70, '97501107001629221724608', NULL, 1, NULL, 1, 0, 1, 0.01, 0, 1, NULL, '2017-06-30 17:06:28', 0, NULL, NULL, NULL, NULL, '2017-06-30 17:05:25', '2017-06-30 17:06:28', 0, NULL);
 /*!40000 ALTER TABLE `sale_product_order` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product_order_detail 结构
+DROP TABLE IF EXISTS `sale_product_order_detail`;
 CREATE TABLE IF NOT EXISTS `sale_product_order_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `store_order_id` bigint(20) NOT NULL COMMENT '商户子订单号',
@@ -450,9 +605,9 @@ CREATE TABLE IF NOT EXISTS `sale_product_order_detail` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='商品订单详情表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品订单详情表';
 
--- 正在导出表  joyclub.sale_product_order_detail 的数据：~28 rows (大约)
+-- 正在导出表  joyclub.sale_product_order_detail 的数据：~40 rows (大约)
 /*!40000 ALTER TABLE `sale_product_order_detail` DISABLE KEYS */;
 INSERT INTO `sale_product_order_detail` (`id`, `store_order_id`, `product_attr`, `num`, `price`, `point_rate`, `money_paid`, `point_paid`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
 	(1, 1, 2, 1, 1, 1, 0, 123100, '2017-04-25 10:26:11', '2017-04-26 11:14:10', 0, NULL),
@@ -486,10 +641,27 @@ INSERT INTO `sale_product_order_detail` (`id`, `store_order_id`, `product_attr`,
 	(42, 32, 2, 1, 1, 1, 0, 1, '2017-05-10 17:47:28', '2017-05-10 17:47:28', 0, NULL),
 	(43, 33, 2, 1, 1, 1, 0, 1, '2017-05-10 17:47:35', '2017-05-10 17:47:35', 0, NULL),
 	(44, 34, 2, 1, 1, 1, 0, 1, '2017-05-10 17:47:42', '2017-05-10 17:47:42', 0, NULL),
-	(45, 35, 2, 1, 1, 1, 0, 1, '2017-05-10 18:53:33', '2017-05-10 18:53:33', 0, NULL);
+	(45, 35, 2, 1, 1, 1, 0, 1, '2017-05-10 18:53:33', '2017-05-10 18:53:33', 0, NULL),
+	(46, 36, 6, 2, 1, 1, 0, 2, '2017-05-11 10:58:59', '2017-05-11 10:58:59', 0, NULL),
+	(47, 37, 6, 1, 1, 1, 1, 0, '2017-05-12 13:09:59', '2017-05-12 13:09:59', 0, NULL),
+	(48, 38, 6, 1, 1, 1, 1, 0, '2017-05-12 16:12:02', '2017-05-12 16:12:02', 0, NULL),
+	(49, 39, 6, 1, 1, 1, 1, 0, '2017-05-12 16:28:01', '2017-05-12 16:28:01', 0, NULL),
+	(50, 40, 6, 1, 1, 1, 1, 0, '2017-05-12 16:28:38', '2017-05-12 16:28:38', 0, NULL),
+	(51, 41, 6, 1, 1, 1, 1, 0, '2017-05-12 16:28:57', '2017-05-12 16:28:57', 0, NULL),
+	(52, 42, 6, 1, 1, 1, 1, 0, '2017-05-12 16:29:35', '2017-05-12 16:29:35', 0, NULL),
+	(53, 43, 6, 1, 0.01, 1, 0.01, 0, '2017-05-12 16:31:30', '2017-05-12 16:31:30', 0, NULL),
+	(54, 44, 6, 1, 0.01, 1, 0.01, 0, '2017-05-12 16:41:41', '2017-05-12 16:41:41', 0, NULL),
+	(55, 45, 6, 1, 0.01, 1, 0.01, 0, '2017-05-12 16:41:59', '2017-05-12 16:41:59', 0, NULL),
+	(56, 46, 6, 1, 0.01, 1, 0.01, 0, '2017-05-12 17:33:51', '2017-05-12 17:33:51', 0, NULL),
+	(57, 47, 6, 1, 0.01, 1, 0.01, 0, '2017-05-26 12:57:06', '2017-05-26 12:57:06', 0, NULL),
+	(58, 48, 6, 1, 0.01, 1, 0.01, 0, '2017-05-26 12:58:05', '2017-05-26 12:58:05', 0, NULL),
+	(59, 49, 5, 1, 0.01, 1, 0.01, 0, '2017-06-01 17:14:35', '2017-06-01 17:14:35', 0, NULL),
+	(60, 50, 6, 1, 0.01, 1, 0, 1, '2017-06-30 17:05:05', '2017-06-30 17:05:05', 0, NULL),
+	(61, 51, 6, 1, 0.01, 1, 0.01, 0, '2017-06-30 17:05:26', '2017-06-30 17:05:26', 0, NULL);
 /*!40000 ALTER TABLE `sale_product_order_detail` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product_order_store 结构
+DROP TABLE IF EXISTS `sale_product_order_store`;
 CREATE TABLE IF NOT EXISTS `sale_product_order_store` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) NOT NULL COMMENT '订单id',
@@ -499,6 +671,7 @@ CREATE TABLE IF NOT EXISTS `sale_product_order_store` (
   `status` tinyint(4) NOT NULL COMMENT '0 待支付 1已取消 2 已支付 3已发货  4 已收货 5 退款中 6已退款',
   `delivery_time` datetime DEFAULT NULL COMMENT '发货时间',
   `delivery_company` varchar(20) DEFAULT NULL COMMENT '如果是快递并且已发货，提供快递公司名称',
+  `pay_type` tinyint(4) DEFAULT NULL,
   `delivery_code` varchar(50) DEFAULT NULL COMMENT '如果是快递并且已发货，提供快递单号',
   `receive_time` datetime DEFAULT NULL COMMENT '收获时间（自提和快递）',
   `notice_refund_time` datetime DEFAULT NULL COMMENT '商户确认退款时间',
@@ -508,45 +681,62 @@ CREATE TABLE IF NOT EXISTS `sale_product_order_store` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='商品订单表-商户子订单\r\n\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品订单表-商户子订单\r\n\r\n';
 
--- 正在导出表  joyclub.sale_product_order_store 的数据：~27 rows (大约)
+-- 正在导出表  joyclub.sale_product_order_store 的数据：~44 rows (大约)
 /*!40000 ALTER TABLE `sale_product_order_store` DISABLE KEYS */;
-INSERT INTO `sale_product_order_store` (`id`, `order_id`, `store_id`, `money_sum`, `point_sum`, `status`, `delivery_time`, `delivery_company`, `delivery_code`, `receive_time`, `notice_refund_time`, `refund_time`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(1, 1, 14, 1, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(6, 33, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:11', 0, NULL),
-	(7, 18, 14, 0, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-26 11:46:40', '2017-04-28 04:46:46', 0, NULL),
-	(8, 19, 14, 0, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-27 20:25:48', '2017-04-28 04:46:46', 0, NULL),
-	(9, 20, 14, 0, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-27 20:27:50', '2017-04-28 04:46:46', 0, NULL),
-	(10, 34, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(11, 35, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(12, 36, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(13, 37, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(14, 38, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(15, 39, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(16, 40, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(17, 41, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(18, 42, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(19, 43, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(20, 44, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(21, 45, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(22, 46, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(23, 47, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(24, 17, 14, 1, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(25, 33, 14, 1, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
-	(26, 48, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:29:57', '2017-04-28 03:29:58', 0, NULL),
-	(27, 49, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
-	(28, 49, 14, 2, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
-	(29, 49, 14, 3, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
-	(30, 49, 14, 8, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:02', '2017-04-28 03:34:02', 0, NULL),
-	(31, 50, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:45:24', '2017-04-28 03:45:25', 0, NULL),
-	(32, 51, 14, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:27', '2017-05-10 17:47:27', 0, NULL),
-	(33, 52, 14, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:35', '2017-05-10 17:47:35', 0, NULL),
-	(34, 53, 14, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:42', '2017-05-10 17:47:42', 0, NULL),
-	(35, 54, 14, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 18:53:33', '2017-05-10 18:53:33', 0, NULL);
+INSERT INTO `sale_product_order_store` (`id`, `order_id`, `store_id`, `money_sum`, `point_sum`, `status`, `delivery_time`, `delivery_company`, `pay_type`, `delivery_code`, `receive_time`, `notice_refund_time`, `refund_time`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, 1, 14, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-05-16 10:20:01', 0, NULL),
+	(6, 33, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:11', 0, NULL),
+	(7, 18, 14, 0, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-26 11:46:40', '2017-04-28 04:46:46', 0, NULL),
+	(8, 19, 14, 0, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-27 20:25:48', '2017-04-28 04:46:46', 0, NULL),
+	(9, 20, 14, 0, 3, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-27 20:27:50', '2017-04-28 04:46:46', 0, NULL),
+	(10, 34, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(11, 35, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(12, 36, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(13, 37, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(14, 38, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(15, 39, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(16, 40, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(17, 41, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(18, 42, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(19, 43, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(20, 44, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(21, 45, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(22, 46, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(23, 47, 14, 1, 1, 2, '2017-04-27 19:37:02', 'test', NULL, '123', '2017-04-27 19:37:48', NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(24, 17, 14, 1, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(25, 33, 14, 1, 1, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-25 10:25:43', '2017-04-28 04:46:46', 0, NULL),
+	(26, 48, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:29:57', '2017-04-28 03:29:58', 0, NULL),
+	(27, 49, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
+	(28, 49, 14, 2, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
+	(29, 49, 14, 3, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:01', '2017-04-28 03:34:02', 0, NULL),
+	(30, 49, 14, 8, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:34:02', '2017-04-28 03:34:02', 0, NULL),
+	(31, 50, 14, 1, 0, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-04-28 03:45:24', '2017-04-28 03:45:25', 0, NULL),
+	(32, 51, 14, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:27', '2017-05-16 10:20:01', 0, NULL),
+	(33, 52, 14, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:35', '2017-05-16 10:20:01', 0, NULL),
+	(34, 53, 14, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 17:47:42', '2017-05-16 10:20:01', 0, NULL),
+	(35, 54, 14, 0, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-10 18:53:33', '2017-05-16 10:20:01', 0, NULL),
+	(36, 55, 14, 0, 2, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-11 10:58:59', '2017-05-11 10:59:00', 0, NULL),
+	(37, 56, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 13:09:59', '2017-05-16 10:20:01', 0, NULL),
+	(38, 57, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:12:02', '2017-05-16 10:20:01', 0, NULL),
+	(39, 58, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:28:01', '2017-05-16 10:20:01', 0, NULL),
+	(40, 59, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:28:38', '2017-05-16 10:20:01', 0, NULL),
+	(41, 60, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:28:57', '2017-05-16 10:20:01', 0, NULL),
+	(42, 61, 14, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:29:35', '2017-05-16 10:20:02', 0, NULL),
+	(43, 62, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:31:30', '2017-05-12 16:31:55', 0, NULL),
+	(44, 63, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:41:41', '2017-05-16 10:20:02', 0, NULL),
+	(45, 64, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 16:41:59', '2017-05-16 10:20:02', 0, NULL),
+	(46, 65, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-12 17:33:51', '2017-05-16 10:20:02', 0, NULL),
+	(47, 66, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-26 12:57:05', '2017-05-26 14:00:00', 0, NULL),
+	(48, 67, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-05-26 12:58:05', '2017-05-26 14:00:01', 0, NULL),
+	(49, 68, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-06-01 17:14:35', '2017-06-06 18:05:00', 0, NULL),
+	(50, 69, 14, 0, 1, 2, NULL, NULL, 1, NULL, NULL, NULL, NULL, '2017-06-30 17:05:04', '2017-06-30 17:05:05', 0, NULL),
+	(51, 70, 14, 0.01, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-06-30 17:05:26', '2017-06-30 17:06:28', 0, NULL);
 /*!40000 ALTER TABLE `sale_product_order_store` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sale_product_price 结构
+DROP TABLE IF EXISTS `sale_product_price`;
 CREATE TABLE IF NOT EXISTS `sale_product_price` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) NOT NULL COMMENT '商品id',
@@ -563,30 +753,74 @@ CREATE TABLE IF NOT EXISTS `sale_product_price` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='商品价格管理\r\nstartTime endTime 决定了生效时间，forbid_flag用于强行下架\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品价格管理\r\nstartTime endTime 决定了生效时间，forbid_flag用于强行下架\r\n';
 
 -- 正在导出表  joyclub.sale_product_price 的数据：~14 rows (大约)
 /*!40000 ALTER TABLE `sale_product_price` DISABLE KEYS */;
 INSERT INTO `sale_product_price` (`id`, `product_id`, `price`, `point_rate`, `start_time`, `end_time`, `forbid_flag`, `special_price_flag`, `review_status`, `review_info`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
-	(9, 1, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-17 17:56:40', '2017-04-26 11:42:09', 0, NULL),
-	(10, 9, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-13 21:44:31', 0, NULL),
-	(11, 10, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-13 21:44:31', 0, NULL),
-	(12, 11, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(13, 12, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(14, 13, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(15, 14, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(16, 15, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(17, 16, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(18, 17, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(19, 18, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-04-16 14:34:18', 0, NULL),
-	(20, 19, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-08 16:55:36', 0, NULL),
-	(21, 20, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-08 16:55:35', 0, NULL),
-	(22, 21, 1, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-08 16:55:34', 0, NULL),
-	(23, 31, 123, 123, '2017-05-08 00:00:00.000', '2017-05-09 23:59:59.000', 0, 1, 1, NULL, '2017-05-08 16:25:24', '2017-05-08 16:26:25', 0, NULL),
-	(24, 31, 1, NULL, '2017-05-11 14:51:18.000', '2017-06-07 14:52:19.000', 0, 1, 0, NULL, '2017-05-10 11:48:26', '2017-05-10 11:48:26', 0, NULL);
+	(9, 1, 0.01, 1, '2017-04-07 00:00:00.000', '2017-06-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-17 17:56:40', '2017-07-03 11:06:00', 0, NULL),
+	(10, 31, 0.01, 1, '2017-04-07 00:00:00.000', '2017-04-08 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-16 11:35:51', 0, NULL),
+	(11, 10, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(12, 11, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(13, 12, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(14, 13, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(15, 14, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(16, 15, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(17, 16, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(18, 17, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(19, 18, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 0, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(20, 19, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(21, 20, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(22, 21, 0.01, 1, '2017-04-07 00:00:00.000', '2017-09-07 23:59:59.999', 0, 1, 1, NULL, '2017-04-07 17:56:40', '2017-05-12 16:31:04', 0, NULL),
+	(23, 31, 0.01, 123, '2017-05-08 00:00:00.000', '2017-05-09 23:59:59.000', 0, 1, 1, NULL, '2017-05-08 16:25:24', '2017-05-12 16:31:04', 0, NULL),
+	(24, 31, 0.01, NULL, '2017-05-12 20:00:00.000', '2017-05-12 20:10:00.000', 0, 1, 0, NULL, '2017-05-10 11:48:26', '2017-05-16 14:44:23', 0, NULL);
 /*!40000 ALTER TABLE `sale_product_price` ENABLE KEYS */;
 
+-- 导出  表 joyclub.sale_special_price_act 结构
+DROP TABLE IF EXISTS `sale_special_price_act`;
+CREATE TABLE IF NOT EXISTS `sale_special_price_act` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `project_id` bigint(20) NOT NULL,
+  `head_img` varchar(200) NOT NULL COMMENT '标题',
+  `info` varchar(200) NOT NULL COMMENT '介绍文字',
+  `start_time` datetime NOT NULL COMMENT '开始时间',
+  `end_time` datetime NOT NULL COMMENT '结束时间',
+  `pickup_address` varchar(100) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='特价活动表\r\n活动商品手工录入\r\nINSERT INTO `sale_product`(`store_id` ,`category_id` ,`designer_id` ,name,`display_weight` ,`base_price` ,`portrait` ,`carousel` ,`html_content` ,`json_content` ) \r\n select `store_id` ,`category_id` ,`designer_id` ,concat(''秒杀-'',name),`display_weight` ,`base_price` ,`portrait` ,`carousel` ,`html_content` ,`json_content`  from `sale_product` WHERE id in (1)';
+
+-- 正在导出表  joyclub.sale_special_price_act 的数据：~1 rows (大约)
+/*!40000 ALTER TABLE `sale_special_price_act` DISABLE KEYS */;
+INSERT INTO `sale_special_price_act` (`id`, `project_id`, `head_img`, `info`, `start_time`, `end_time`, `pickup_address`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, 1, '/image/1165530b6d85489bb1a034d34bbef88c.jpg', '恋上美物，更爱妈妈。\r\n妈妈的好生活，\r\n可以是你的陪伴，\r\n可以是你的成就，\r\n也可以是一件贴心的礼物\r\n悦客会母亲节好礼限时秒杀', '2017-07-12 20:00:00', '2017-07-12 20:30:00', NULL, '2017-05-16 11:07:52', '2017-06-22 15:23:38', 0, NULL);
+/*!40000 ALTER TABLE `sale_special_price_act` ENABLE KEYS */;
+
+-- 导出  表 joyclub.sale_special_price_act_product 结构
+DROP TABLE IF EXISTS `sale_special_price_act_product`;
+CREATE TABLE IF NOT EXISTS `sale_special_price_act_product` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `special_price_act_id` varchar(200) NOT NULL COMMENT '特价活动',
+  `product_id` varchar(200) NOT NULL COMMENT '产品id',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='特价活动-商品关系表';
+
+-- 正在导出表  joyclub.sale_special_price_act_product 的数据：~2 rows (大约)
+/*!40000 ALTER TABLE `sale_special_price_act_product` DISABLE KEYS */;
+INSERT INTO `sale_special_price_act_product` (`id`, `special_price_act_id`, `product_id`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, '1', '21', '2017-05-16 11:31:21', '2017-05-16 11:31:59', 0, NULL),
+	(2, '1', '31', '2017-05-16 11:31:43', '2017-05-16 11:31:46', 0, NULL);
+/*!40000 ALTER TABLE `sale_special_price_act_product` ENABLE KEYS */;
+
 -- 导出  表 joyclub.sale_store_designer 结构
+DROP TABLE IF EXISTS `sale_store_designer`;
 CREATE TABLE IF NOT EXISTS `sale_store_designer` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `store_id` bigint(20) NOT NULL COMMENT '商户id',
@@ -601,7 +835,7 @@ CREATE TABLE IF NOT EXISTS `sale_store_designer` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商户设计师';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户设计师';
 
 -- 正在导出表  joyclub.sale_store_designer 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `sale_store_designer` DISABLE KEYS */;
@@ -610,6 +844,7 @@ INSERT INTO `sale_store_designer` (`id`, `store_id`, `head_img`, `portrait`, `na
 /*!40000 ALTER TABLE `sale_store_designer` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_act_category 结构
+DROP TABLE IF EXISTS `sys_act_category`;
 CREATE TABLE IF NOT EXISTS `sys_act_category` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -619,7 +854,7 @@ CREATE TABLE IF NOT EXISTS `sys_act_category` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='活动分类';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动分类';
 
 -- 正在导出表  joyclub.sys_act_category 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `sys_act_category` DISABLE KEYS */;
@@ -628,6 +863,7 @@ INSERT INTO `sys_act_category` (`id`, `name`, `point_rate`, `create_time`, `last
 /*!40000 ALTER TABLE `sys_act_category` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_msg_auth_code 结构
+DROP TABLE IF EXISTS `sys_msg_auth_code`;
 CREATE TABLE IF NOT EXISTS `sys_msg_auth_code` (
   `phone` varchar(15) NOT NULL COMMENT '手机号码',
   `code` varchar(15) NOT NULL COMMENT '验证码，目前是6位',
@@ -637,7 +873,7 @@ CREATE TABLE IF NOT EXISTS `sys_msg_auth_code` (
 -- 正在导出表  joyclub.sys_msg_auth_code 的数据：~9 rows (大约)
 /*!40000 ALTER TABLE `sys_msg_auth_code` DISABLE KEYS */;
 INSERT INTO `sys_msg_auth_code` (`phone`, `code`, `create_time`) VALUES
-	('15001060933', '895819', '2017-04-11 10:41:12'),
+	('15001060933', '111111', '2017-06-30 17:40:12'),
 	('15001060933', '870405', '2017-04-12 16:53:08'),
 	('17600690737', '870405', '2017-04-12 19:53:08'),
 	('15001060933', '363855', '2017-04-16 17:22:07'),
@@ -645,10 +881,13 @@ INSERT INTO `sys_msg_auth_code` (`phone`, `code`, `create_time`) VALUES
 	('15001060933', '366167', '2017-04-16 17:23:56'),
 	('15001060933', '111111', '2017-04-17 01:26:20'),
 	('17600690739', '111111', '2017-04-17 17:30:31'),
-	('13641047453', '111111', '2017-04-19 17:30:31');
+	('13641047453', '111111', '2017-04-19 17:30:31'),
+	('15001060933', '886448', '2017-05-11 20:43:06'),
+	('15001060933', '856749', '2017-05-11 20:43:44');
 /*!40000 ALTER TABLE `sys_msg_auth_code` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_product_category 结构
+DROP TABLE IF EXISTS `sys_product_category`;
 CREATE TABLE IF NOT EXISTS `sys_product_category` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -658,7 +897,7 @@ CREATE TABLE IF NOT EXISTS `sys_product_category` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='商品分类';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类';
 
 -- 正在导出表  joyclub.sys_product_category 的数据：~4 rows (大约)
 /*!40000 ALTER TABLE `sys_product_category` DISABLE KEYS */;
@@ -670,6 +909,7 @@ INSERT INTO `sys_product_category` (`id`, `name`, `point_rate`, `create_time`, `
 /*!40000 ALTER TABLE `sys_product_category` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_project 结构
+DROP TABLE IF EXISTS `sys_project`;
 CREATE TABLE IF NOT EXISTS `sys_project` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `type` int(11) NOT NULL COMMENT '项目类型 0 平台 1 商业项目 2写字楼项目项目 3 住宅项目 10 第三方合作项目',
@@ -690,7 +930,7 @@ CREATE TABLE IF NOT EXISTS `sys_project` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统项目表 1 商业项目 2写字楼项目项目 3 住宅项目 10 第三方合作项目  0 平台（平台也当作一个项目来处理，但是平台类型项目有且只能有一个）';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统项目表 1 商业项目 2写字楼项目项目 3 住宅项目 10 第三方合作项目  0 平台（平台也当作一个项目来处理，但是平台类型项目有且只能有一个）';
 
 -- 正在导出表  joyclub.sys_project 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `sys_project` DISABLE KEYS */;
@@ -698,7 +938,29 @@ INSERT INTO `sys_project` (`id`, `type`, `name`, `headquarters`, `code`, `vip_sh
 	(1, 0, '11', '27', '1', '00', '05', '1', '1', '1231', '1', 'wx567b2af01e4b31a1', 'b2ba4d5a6d1467cd1fc1fd2da6a3a29a', 'http://bjmall.stcl365.com:20000/wechat/public/getToken', '2017-03-28 19:10:16', '2017-04-11 17:03:44', 0, NULL);
 /*!40000 ALTER TABLE `sys_project` ENABLE KEYS */;
 
+-- 导出  表 joyclub.sys_project_mallcoo 结构
+DROP TABLE IF EXISTS `sys_project_mallcoo`;
+CREATE TABLE IF NOT EXISTS `sys_project_mallcoo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) NOT NULL,
+  `app_id` varchar(30) NOT NULL,
+  `public_key` varchar(20) NOT NULL,
+  `private_key` varchar(20) NOT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目的猫酷信息';
+
+-- 正在导出表  joyclub.sys_project_mallcoo 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `sys_project_mallcoo` DISABLE KEYS */;
+INSERT INTO `sys_project_mallcoo` (`id`, `project_id`, `app_id`, `public_key`, `private_key`, `create_time`, `last_update`, `delete_flag`, `delete_time`) VALUES
+	(1, 1, '58b63b1788ce7e2c647a3c97', 'a48728e26454dcd6', '28791813e49eacd6', '2017-06-06 17:59:23', '2017-06-06 17:59:23', 0, NULL);
+/*!40000 ALTER TABLE `sys_project_mallcoo` ENABLE KEYS */;
+
 -- 导出  表 joyclub.sys_project_vip_card_range 结构
+DROP TABLE IF EXISTS `sys_project_vip_card_range`;
 CREATE TABLE IF NOT EXISTS `sys_project_vip_card_range` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) NOT NULL,
@@ -710,7 +972,7 @@ CREATE TABLE IF NOT EXISTS `sys_project_vip_card_range` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='项目卡号段';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目卡号段';
 
 -- 正在导出表  joyclub.sys_project_vip_card_range 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `sys_project_vip_card_range` DISABLE KEYS */;
@@ -719,6 +981,7 @@ INSERT INTO `sys_project_vip_card_range` (`id`, `project_id`, `type`, `min`, `ma
 /*!40000 ALTER TABLE `sys_project_vip_card_range` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_store 结构
+DROP TABLE IF EXISTS `sys_store`;
 CREATE TABLE IF NOT EXISTS `sys_store` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) NOT NULL COMMENT '所属的商业项目或者平台项目',
@@ -735,7 +998,7 @@ CREATE TABLE IF NOT EXISTS `sys_store` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='商户表，归属于商城项目或者平台';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户表，归属于商城项目或者平台';
 
 -- 正在导出表  joyclub.sys_store 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `sys_store` DISABLE KEYS */;
@@ -745,6 +1008,7 @@ INSERT INTO `sys_store` (`id`, `project_id`, `head_img`, `portrait`, `intro`, `n
 /*!40000 ALTER TABLE `sys_store` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_user 结构
+DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE IF NOT EXISTS `sys_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `info_id` bigint(20) unsigned DEFAULT NULL COMMENT '关联者id,平台或项目账户关联项目id,商户账户关联商户id',
@@ -761,7 +1025,7 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户表';
 
 -- 正在导出表  joyclub.sys_user 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
@@ -773,6 +1037,7 @@ INSERT INTO `sys_user` (`id`, `info_id`, `account`, `password`, `type`, `sub_typ
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
 -- 导出  表 joyclub.sys_vip_card_num 结构
+DROP TABLE IF EXISTS `sys_vip_card_num`;
 CREATE TABLE IF NOT EXISTS `sys_vip_card_num` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) NOT NULL COMMENT '号段开始值',
@@ -786,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `sys_vip_card_num` (
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delate_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8 COMMENT='vip卡号\r\n';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='vip卡号\r\n';
 
 -- 正在导出表  joyclub.sys_vip_card_num 的数据：~130 rows (大约)
 /*!40000 ALTER TABLE `sys_vip_card_num` DISABLE KEYS */;
@@ -924,23 +1189,21 @@ INSERT INTO `sys_vip_card_num` (`id`, `project_id`, `num`, `type`, `batch`, `sta
 /*!40000 ALTER TABLE `sys_vip_card_num` ENABLE KEYS */;
 
 -- 导出  表 joyclub.test 结构
+DROP TABLE IF EXISTS `test`;
 CREATE TABLE IF NOT EXISTS `test` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `test` float(10,2) DEFAULT NULL,
+  `test` char(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='test';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='test';
 
--- 正在导出表  joyclub.test 的数据：~5 rows (大约)
+-- 正在导出表  joyclub.test 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
 INSERT INTO `test` (`id`, `test`) VALUES
-	(1, 12.00),
-	(2, 12.00),
-	(3, 3.00),
-	(4, 4.00),
-	(5, 4.00);
+	(21, '1,2,3,4,5');
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 
 -- 导出  表 joyclub.test_time 结构
+DROP TABLE IF EXISTS `test_time`;
 CREATE TABLE IF NOT EXISTS `test_time` (
   `test` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
