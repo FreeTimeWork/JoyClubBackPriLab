@@ -30,13 +30,7 @@ public class TitleCarouselController extends BaseUserSessionController {
         return titleCarouselService.updateTitleCarousel(titleCarousels);
     }
 
-    @RequestMapping(value = "/system/product/carousel", method = RequestMethod.POST)
-    public ResultData createTitleCarousel(SaleTitleCarousel titleCarousel, HttpSession session) {
-        checkProjectUser(session);
-        return titleCarouselService.createTitleCarousel(titleCarousel);
-    }
-
-    @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
+        @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
     public ResultData getAllTitleCarousel(HttpSession session) {
         checkProjectUser(session);
         return titleCarouselService.getAllTitleCarousel();
