@@ -1,0 +1,7 @@
+*.iml
+/.idea
+*.log
+*.pid
+application.pid
+generatorConfig.xml
+
