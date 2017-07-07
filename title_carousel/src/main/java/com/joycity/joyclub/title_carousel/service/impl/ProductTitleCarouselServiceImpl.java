@@ -6,6 +6,7 @@ import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.title_carousel.mapper.TitleCarouselMapper;
+import com.joycity.joyclub.title_carousel.modal.generated.SaleProductTitleCarousel;
 import com.joycity.joyclub.title_carousel.modal.generated.SaleTitleCarousel;
 import com.joycity.joyclub.title_carousel.service.TitleCarouselService;
 import org.apache.commons.logging.Log;
@@ -18,15 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by fangchen.chai on 2017/7/5.
  */
 @Service
-public class TitleCarouselServiceImpl implements TitleCarouselService {
-    private final Log log = LogFactory.getLog(TitleCarouselServiceImpl.class);
+public class ProductTitleCarouselServiceImpl implements TitleCarouselService {
+    private final Log log = LogFactory.getLog(ProductTitleCarouselServiceImpl.class);
 
     @Autowired
     TitleCarouselMapper titleCarouselMapper;
 
     @Override
     public ResultData getAllTitleCarousel() {
-        List<SaleTitleCarousel> saleTitleCarousels =  titleCarouselMapper.selectAllSaleTitleCarousel();
+        List<SaleProductTitleCarousel> saleTitleCarousels =  titleCarouselMapper.selectAllSaleTitleCarousel();
         return new ResultData(saleTitleCarousels);
     }
 
