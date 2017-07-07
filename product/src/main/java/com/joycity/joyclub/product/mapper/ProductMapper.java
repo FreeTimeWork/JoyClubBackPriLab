@@ -1,19 +1,16 @@
 package com.joycity.joyclub.product.mapper;
 
-import com.joycity.joyclub.product.modal.ProductInfoPage;
-import com.joycity.joyclub.product.modal.ProductSimple;
-import com.joycity.joyclub.product.modal.SpecialPriceAct;
+import java.util.Date;
+import java.util.List;
+
+import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.modal.*;
 import com.joycity.joyclub.product.modal.generated.SaleProduct;
 import com.joycity.joyclub.product.modal.generated.SaleProductExample;
 import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
-import com.joycity.joyclub.product.modal.ProductWithCategoryAndDesignerName;
-import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
-import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -25,6 +22,12 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
     Long countByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
 
     List<ProductWithCategoryAndDesignerName> selectByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+
+    Long countByProductNameAndStoreName(@Param("projectId") Long projectId, @Param("productName") String productName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
+
+    List<ProductWithStoreName> selectByProductNameAndStoreName(@Param("projectId") Long projectId, @Param("productName") String productName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
+
+
 
     ///////////////////////////////// api front//////////////////////////////////////////////
 

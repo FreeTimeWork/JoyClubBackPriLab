@@ -13,6 +13,20 @@
         </where>
 
     </sql>
+
+    <sql id="where_product_name_and_store_name">
+        <where>
+            p.delete_flag=0 and ss.project_id=#{projectId}
+            <if test="productName!=null">
+                and p.name like #{productName}
+            </if>
+            <if test="storeName!=null">
+                and ss.name like #{storeName}
+            </if>
+        </where>
+
+    </sql>
+
     <select id="countByStoreIdAndName" resultType="java.lang.Long">
 
         select count(*) from sale_product p
@@ -26,6 +40,24 @@
         left join sys_product_category c on c.id=p.category_id
         left join sale_store_designer d on d.id=p.designer_id
         <include refid="where_store_and_name"/>
+        order by p.id desc
+        <include refid="limit"/>
+    </select>
+
+    <select id="countByProductNameAndStoreName" resultType="java.lang.Long">
+
+        select count(*) from sale_product p
+        LEFT JOIN sys_store ss ON p.store_id = ss.id
+        <include refid="where_product_name_and_store_name"/>
+    </select>
+
+    <select id="selectByProductNameAndStoreName"
+            resultType="com.joycity.joyclub.product.modal.ProductWithStoreName">
+
+        select p.id, p.name, p.carousel, ss.name AS store_name
+        from sale_product p
+        LEFT JOIN sys_store ss ON p.store_id = ss.id
+        <include refid="where_product_name_and_store_name"/>
         order by p.id desc
         <include refid="limit"/>
     </select>

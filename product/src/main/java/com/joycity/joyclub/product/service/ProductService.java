@@ -17,6 +17,13 @@ public interface ProductService {
     ResultData getListByStoreIdAndName(Long storeId, String name, PageUtil pageUtil);
 
     /**
+     * @return data返回按搜索条件返回的列表
+     */
+    ResultData getListByProductNameAndStoreName(Long projectId,String productName, String storeName, PageUtil pageUtil);
+
+
+
+    /**
      * 返回某个项目的具体信息
      *
      * @param id

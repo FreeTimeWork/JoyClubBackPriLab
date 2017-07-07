@@ -20,9 +20,8 @@
         <module>mallcoo</module>
         <module>system</module>
         <module>recharge</module>
-        <module>coupon-cy</module>
-        <module>test</module>
         <module>client-token</module>
+        <module>title_carousel</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
