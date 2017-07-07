@@ -1,33 +1,30 @@
 package com.joycity.joyclub.product.service.impl;
 
-import com.joycity.joyclub.commons.mapper.manual.SaleStoreDesignerMapper;
-import com.joycity.joyclub.commons.mapper.manual.StoreMapper;
-import com.joycity.joyclub.commons.mapper.manual.SysProductCategoryMapper;
-import com.joycity.joyclub.commons.modal.base.*;
-import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
-import com.joycity.joyclub.product.mapper.ProductAttrMapper;
-import com.joycity.joyclub.product.mapper.ProductMapper;
-
-import com.joycity.joyclub.product.mapper.ProductPriceMapper;
-import com.joycity.joyclub.product.modal.ProductInfoPage;
-import com.joycity.joyclub.product.modal.ProductSimple;
-import com.joycity.joyclub.product.modal.SpecialPriceAct;
-import com.joycity.joyclub.product.modal.generated.SaleProductPrice;
-import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
-import com.joycity.joyclub.product.modal.ProductFormData;
-import com.joycity.joyclub.product.service.ProductService;
-import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.commons.utils.PageUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
+import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.exception.BusinessException;
+import com.joycity.joyclub.commons.mapper.manual.SaleStoreDesignerMapper;
+import com.joycity.joyclub.commons.mapper.manual.StoreMapper;
+import com.joycity.joyclub.commons.mapper.manual.SysProductCategoryMapper;
+import com.joycity.joyclub.commons.modal.base.*;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
+import com.joycity.joyclub.product.mapper.ProductAttrMapper;
+import com.joycity.joyclub.product.mapper.ProductMapper;
+import com.joycity.joyclub.product.mapper.ProductPriceMapper;
+import com.joycity.joyclub.product.modal.*;
+import com.joycity.joyclub.product.modal.generated.SaleProductPrice;
+import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
+import com.joycity.joyclub.product.service.ProductService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by CallMeXYZ on 2017/2/27.
@@ -67,6 +64,32 @@ public class ProductServiceImpl implements ProductService {
             listResult.setList(productMapper.selectByStoreIdAndName(storeId, name, pageUtil));
         }
         return new ResultData(listResult);
+    }
+
+    @Override
+    public ResultData getListByProductNameAndStoreName(Long projectId, String productName, String storeName, PageUtil pageUtil) {
+
+        if (productName != null) {
+            productName = "%" + productName + "%";
+        }
+        if (storeName != null) {
+            storeName = "%" + storeName + "%";
+        }
+        final String finalProductName = productName;
+        final String finalStoreName = storeName;
+
+        return new AbstractGetListData<ProductWithStoreName>() {
+            @Override
+            public Long countByFilter() {
+                return productMapper.countByProductNameAndStoreName(projectId, finalProductName, finalStoreName, pageUtil);
+            }
+
+            @Override
+            public List<ProductWithStoreName> selectByFilter() {
+                return productMapper.selectByProductNameAndStoreName(projectId, finalProductName, finalStoreName, pageUtil);
+
+            }
+        }.getList(pageUtil);
     }
 
     @Override

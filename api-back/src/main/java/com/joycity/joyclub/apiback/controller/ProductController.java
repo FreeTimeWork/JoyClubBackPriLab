@@ -1,18 +1,18 @@
 package com.joycity.joyclub.apiback.controller;
 
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
+
+import javax.servlet.http.HttpSession;
+
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
 import com.joycity.joyclub.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-
-import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -92,6 +92,12 @@ public class ProductController extends BaseUserSessionController {
         SysUser user = checkStoreUser(httpSession);
         product.setStoreId(user.getInfoId());
         return productService.createProduct(product);
+    }
+
+    @RequestMapping(value = "/project/carousel/products", method = RequestMethod.GET)
+    public ResultData getCurrentProduct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
+        SysUser user = checkProjectUser(httpSession);
+        return productService.getListByProductNameAndStoreName(user.getInfoId(), name, storeName, pageUtil);
     }
 
 }
