@@ -27,19 +27,6 @@
             <artifactId>api-back</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>recharge</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.joycity.joyclub</groupId>
-            <artifactId>title_carousel</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
     <build>
         <plugins>
@@ -56,7 +43,6 @@
                 </executions>
                 <configuration>
                     <finalName>JoyClub-${project.version}</finalName>
-
                 </configuration>
             </plugin>
         </plugins>
