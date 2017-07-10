@@ -3,3 +3,5 @@
 *.log
 *.pid
 application.pid
+generatorConfig.xml
+/**/target
