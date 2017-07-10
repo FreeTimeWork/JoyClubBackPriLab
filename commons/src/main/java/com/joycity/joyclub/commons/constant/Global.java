@@ -26,10 +26,14 @@ public class Global {
     /**
      * 日期表单的格式
      */
-    public static final String DATE_FORM_FORMAT ="yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORM_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final String SEX_MALE = "1";
     public static final String SEX_FEMALE = "0";
 
     public static final String COOKIE_TOKEN = "token";
+
+    public static final String PROFILE_DEVELOPMENT = "development";
+    public static final String PROFILE_NOT_DEVELOPMENT = "!" + PROFILE_DEVELOPMENT;
+
 }
