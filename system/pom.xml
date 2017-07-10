@@ -43,6 +43,7 @@
                 </executions>
                 <configuration>
                     <finalName>JoyClub-${project.version}</finalName>
+
                 </configuration>
             </plugin>
         </plugins>
