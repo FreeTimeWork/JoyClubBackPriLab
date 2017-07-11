@@ -1,8 +1,9 @@
 package com.joycity.joyclub;
 
-import com.joycity.joyclub.product.service.ProductService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.system.App;
-import com.joycity.joyclub.title_carousel.service.TitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ public class TestApp {
 //    @Autowired
 //    RechargeService rechargeService;
     @Autowired
-    ProductService productService;
+    ProductTitleCarouselService productTitleCarouselService;
 
     @Autowired
-    TitleCarouselService titleCarouselService;
+    ActTitleCarouselService actTitleCarouselService;
 
 //    @Test
 //    public void testRechargeFlow() {
@@ -39,7 +40,12 @@ public class TestApp {
 
     @Test
     public void testTitleCarousel() {
-//        ResultData data = titleCarouselService.getAllTitleCarousel();
+//        ResultData data = actTitleCarouselService.getAllActTitleCarousel();
+//        System.out.println();
+
+        ResultData data = productTitleCarouselService.getAllProductTitleCarousel();
         System.out.println();
     }
+
+
 }

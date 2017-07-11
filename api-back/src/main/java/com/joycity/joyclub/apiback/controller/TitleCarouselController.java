@@ -7,8 +7,8 @@ import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.title_carousel.modal.generated.SaleTitleCarousel;
-import com.joycity.joyclub.title_carousel.service.TitleCarouselService;
+import com.joycity.joyclub.title_carousel.modal.generated.SaleProductTitleCarousel;
+import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,17 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TitleCarouselController extends BaseUserSessionController {
 
     @Autowired
-    private TitleCarouselService titleCarouselService;
+    private ProductTitleCarouselService titleCarouselService;
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.POST)
-    public ResultData updateTitleCarousel(List<SaleTitleCarousel> titleCarousels, HttpSession session) {
+    public ResultData updateProductTitleCarousel(List<SaleProductTitleCarousel> titleCarousels, HttpSession session) {
         checkProjectUser(session);
-        return titleCarouselService.updateTitleCarousel(titleCarousels);
+        return titleCarouselService.updateProductTitleCarousel(titleCarousels);
     }
 
         @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
-    public ResultData getAllTitleCarousel(HttpSession session) {
+    public ResultData getAllProductTitleCarousel(HttpSession session) {
         checkProjectUser(session);
-        return titleCarouselService.getAllTitleCarousel();
+        return titleCarouselService.getAllProductTitleCarousel();
     }
 }

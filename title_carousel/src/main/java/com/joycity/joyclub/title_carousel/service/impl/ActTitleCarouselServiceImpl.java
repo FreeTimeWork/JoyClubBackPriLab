@@ -5,8 +5,8 @@ import java.util.List;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
-import com.joycity.joyclub.title_carousel.mapper.TitleCarouselMapper;
-import com.joycity.joyclub.title_carousel.modal.generated.SaleTitleCarousel;
+import com.joycity.joyclub.title_carousel.mapper.ActTitleCarouselMapper;
+import com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarousel;
 import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,28 +22,28 @@ public class ActTitleCarouselServiceImpl implements ActTitleCarouselService {
     private final Log log = LogFactory.getLog(ActTitleCarouselServiceImpl.class);
 
     @Autowired
-    TitleCarouselMapper titleCarouselMapper;
+    private ActTitleCarouselMapper actTitleCarouselMapper;
 
     @Override
-    public ResultData getAllTitleCarousel() {
-        List<SaleTitleCarousel> saleTitleCarousels =  titleCarouselMapper.selectAllSaleTitleCarousel();
+    public ResultData getAllActTitleCarousel() {
+        List<SaleActTitleCarousel> saleTitleCarousels =  actTitleCarouselMapper.selectAllActTitleCarousel();
         return new ResultData(saleTitleCarousels);
     }
 
     @Override
     @Transactional
-    public ResultData updateTitleCarousel(List<SaleTitleCarousel> saleTitleCarousels) {
-        for (SaleTitleCarousel carousel : saleTitleCarousels) {
-            titleCarouselMapper.deleteByPrimaryKey(carousel.getId());
-            titleCarouselMapper.insertSelective(carousel);
+    public ResultData updateActTitleCarousel(List<SaleActTitleCarousel> actTitleCarousels) {
+        for (SaleActTitleCarousel carousel : actTitleCarousels) {
+            actTitleCarouselMapper.deleteByPrimaryKey(carousel.getId());
+            actTitleCarouselMapper.insertSelective(carousel);
         }
-        return new ResultData(new UpdateResult(saleTitleCarousels.size()));
+        return new ResultData(new UpdateResult(actTitleCarousels.size()));
     }
 
     @Override
-    public ResultData createTitleCarousel(SaleTitleCarousel titleCarousel) {
-        titleCarouselMapper.insert(titleCarousel);
-        return new ResultData(new CreateResult(titleCarousel.getId()));
+    public ResultData createActTitleCarousel(SaleActTitleCarousel actTitleCarousel) {
+        actTitleCarouselMapper.insert(actTitleCarousel);
+        return new ResultData(new CreateResult(actTitleCarousel.getId()));
     }
 
 }

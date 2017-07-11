@@ -94,7 +94,7 @@ spring:
     datasource:
       url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
       username: root
-      password:
+      password: root
 
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
