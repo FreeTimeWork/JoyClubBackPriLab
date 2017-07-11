@@ -1,6 +1,8 @@
 package com.joycity.joyclub;
 
+import com.joycity.joyclub.act.service.ActService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.system.App;
 import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
 import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
@@ -26,6 +28,9 @@ public class TestApp {
     @Autowired
     ActTitleCarouselService actTitleCarouselService;
 
+    @Autowired
+    ActService actService;
+
 //    @Test
 //    public void testRechargeFlow() {
 ////        rechargeService.rechargeFlow("17600690739",1,true);
@@ -43,7 +48,10 @@ public class TestApp {
 //        ResultData data = actTitleCarouselService.getAllActTitleCarousel();
 //        System.out.println();
 
-        ResultData data = productTitleCarouselService.getAllProductTitleCarousel();
+//        ResultData data = productTitleCarouselService.getAllProductTitleCarousel();
+//        System.out.println();
+
+        ResultData data = actService.getListByActNameAndStoreName(new Integer(1).longValue(), "test", "哈哈", new PageUtil(1, 10));
         System.out.println();
     }
 

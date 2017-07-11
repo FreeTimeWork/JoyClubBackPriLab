@@ -1,11 +1,17 @@
 package com.joycity.joyclub.act.service.impl;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
+
+import java.util.List;
+
 import com.joycity.joyclub.act.mapper.ActAttrMapper;
 import com.joycity.joyclub.act.mapper.ActMapper;
 import com.joycity.joyclub.act.mapper.ActPriceMapper;
 import com.joycity.joyclub.act.modal.ActFormData;
 import com.joycity.joyclub.act.modal.ActInfoPage;
 import com.joycity.joyclub.act.modal.ActWithCategoryName;
+import com.joycity.joyclub.act.modal.ActWithStoreName;
 import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
@@ -21,11 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
-import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
 
 /**
  * Created by CallMeXYZ on 2017/5/5.
@@ -62,6 +63,30 @@ public class ActServiceImpl implements ActService {
             @Override
             public List<ActWithCategoryName> selectByFilter() {
                 return actMapper.selectByStoreIdAndName(storeId, nameValue, pageUtil);
+            }
+        }.getList(pageUtil);
+    }
+
+    @Override
+    public ResultData getListByActNameAndStoreName(Long projectId, String actName, String storeName, PageUtil pageUtil) {
+        if (actName != null) {
+            actName = "%" + actName + "%";
+        }
+        if (storeName != null) {
+            storeName = "%" + storeName + "%";
+        }
+        final String finalActName = actName;
+        final String finalStoreName = storeName;
+        return new AbstractGetListData<ActWithStoreName>(){
+
+            @Override
+            public Long countByFilter() {
+                return actMapper.countByActNameAndStoreName(projectId, finalActName, finalStoreName, pageUtil);
+            }
+
+            @Override
+            public List<ActWithStoreName> selectByFilter() {
+                return actMapper.selectByActNameAndStoreName(projectId, finalActName, finalStoreName, pageUtil);
             }
         }.getList(pageUtil);
     }

@@ -17,6 +17,11 @@ public interface ActService {
     ResultData getListByStoreIdAndName(Long storeId, String name, PageUtil pageUtil);
 
     /**
+     * @return data返回按搜索条件返回的列表
+     */
+    ResultData getListByActNameAndStoreName(Long projectId,String actName, String storeName, PageUtil pageUtil);
+
+    /**
      * 返回某个项目的具体信息
      *
      * @param id
@@ -50,5 +55,7 @@ public interface ActService {
     ResultData getList(Long projectId, Long storeId, PageUtil pageUtil);
 
     ResultData getAttrs(Long id);
+
+
 }
 

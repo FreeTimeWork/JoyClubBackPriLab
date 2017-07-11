@@ -1,8 +1,11 @@
 package com.joycity.joyclub.act.mapper;
 
+import java.util.List;
+
 import com.joycity.joyclub.act.modal.ActInfoForOrder;
 import com.joycity.joyclub.act.modal.ActSimple;
 import com.joycity.joyclub.act.modal.ActWithCategoryName;
+import com.joycity.joyclub.act.modal.ActWithStoreName;
 import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActExample;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
@@ -10,8 +13,6 @@ import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/5/17.
@@ -21,6 +22,11 @@ public interface ActMapper extends BaseMapperWithBLOBS<SaleAct, SaleActWithBLOBs
     Long countByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
 
     List<ActWithCategoryName> selectByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+
+    Long countByActNameAndStoreName(@Param("projectId") Long projectId, @Param("actName") String actName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
+
+    List<ActWithStoreName> selectByActNameAndStoreName(@Param("projectId") Long projectId, @Param("actName") String actName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
+
 
     //////////////////////////api front//////////////////
     @Select("select  * from sale_act where id =#{id}")

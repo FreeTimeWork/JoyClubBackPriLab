@@ -1,18 +1,18 @@
 package com.joycity.joyclub.apiback.controller;
 
-import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
-import com.joycity.joyclub.act.service.ActService;
-import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SysUser;
-import com.joycity.joyclub.apiback.service.ManagerService;
-import com.joycity.joyclub.commons.utils.PageUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 import javax.servlet.http.HttpSession;
 
-import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
+import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
+import com.joycity.joyclub.act.service.ActService;
+import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -92,6 +92,12 @@ public class ActController extends BaseUserSessionController {
         SysUser user = checkStoreUser(httpSession);
         act.setStoreId(user.getInfoId());
         return actService.createAct(act);
+    }
+
+    @RequestMapping(value = "/project/carousel/acts", method = RequestMethod.GET)
+    public ResultData getCurrentAct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
+        SysUser user = checkProjectUser(httpSession);
+        return actService.getListByActNameAndStoreName(user.getInfoId(), name, storeName, pageUtil);
     }
 
 }
