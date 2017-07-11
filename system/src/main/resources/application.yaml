@@ -82,6 +82,7 @@ mallcoo:
   url:
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
     getInfoByToken: https://openapi10.mallcoo.cn/User/BaseInfo/v1/Get/ByToken
+    getShop: https://openapi10.mallcoo.cn/Shop/V1/GetList
 # 积分充值相关
 point:
   recharge:

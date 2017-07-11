@@ -12,6 +12,10 @@ public interface MallCooService {
      * @return
      */
     public Map getUserToken(Long projectId,String ticket);
+
+    public Map getShops(Long projectId);
+
+
   /*  *//**
      * 获取用户信息
      * @param userToken

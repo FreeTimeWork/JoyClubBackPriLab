@@ -19,6 +19,11 @@
             <artifactId>commons</artifactId>
             <version>${commons}</version>
         </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>mallcoo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

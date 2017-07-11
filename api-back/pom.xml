@@ -47,6 +47,11 @@
             <artifactId>title_carousel</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.joycity.joyclub</groupId>
+            <artifactId>card-coupon</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

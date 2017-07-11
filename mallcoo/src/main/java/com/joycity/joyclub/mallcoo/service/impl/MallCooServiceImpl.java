@@ -1,5 +1,18 @@
 package com.joycity.joyclub.mallcoo.service.impl;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
+
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
@@ -19,19 +32,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sun.misc.BASE64Decoder;
-
-import javax.annotation.Resource;
-import javax.crypto.*;
-import javax.crypto.spec.DESKeySpec;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by CallMeXYZ on 2017/6/6.
@@ -59,6 +59,10 @@ public class MallCooServiceImpl implements MallCooService {
     private String URL_GET_TOKEN_BY_TICKET;
     @Value("${mallcoo.url.getInfoByToken}")
     private String URL_GET_INFO_BY_TOKEN;
+    @Value("${mallcoo.url.getShop}")
+    private String URL_GET_SHOPS;
+
+
     @Autowired
     ProjectMallcooMapper projectMallcooMapper;
     @Resource
@@ -77,6 +81,21 @@ public class MallCooServiceImpl implements MallCooService {
 
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<Map> response = restTemplate.exchange(URL_GET_TOKEN_BY_TICKET, HttpMethod.POST, requestEntity, Map.class);
+        return getBody(response);
+    }
+
+    @Override
+    public Map getShops(Long projectId) {
+        ProjectMallcoo projectMallcoo = projectMallcooMapper.getProjectMallcooInfo(projectId);
+        ThrowBusinessExceptionUtil.checkNull(projectMallcoo, "该项目猫酷信息不存在");
+        //请求参数
+        Map<String, String> body = new HashMap<String, String>();
+        body.put("PageIndex","1");
+        //请求头
+        HttpHeaders headers = getHeader(projectMallcoo, body);
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<Map> response = restTemplate.exchange(URL_GET_SHOPS, HttpMethod.POST, requestEntity, Map.class);
         return getBody(response);
     }
 
