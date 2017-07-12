@@ -15,8 +15,8 @@ public interface ShopService {
 
     ResultData syncMallCooShop(Long projectId);
 
-    ResultData getListByCodeAndSubCommercial(String code, String subCommercial, PageUtil pageUtil);
+    ResultData getListByCodeAndName(String code, String name, PageUtil pageUtil);
 
-    ResultData getShopsGroupBySubCommercial(String code, String subCommercial);
+    ResultData getShopsGroupBySubCommercial();
 
 }

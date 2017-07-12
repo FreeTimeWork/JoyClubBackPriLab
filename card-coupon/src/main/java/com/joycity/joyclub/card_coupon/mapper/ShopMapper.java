@@ -16,9 +16,9 @@ public interface ShopMapper extends BaseMapper<SysShop, Long, SysShopExample> {
 
     int batchInsertShop(@Param("sql") String sql);
 
-    Long countShopByCodeAndSubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial, @Param("pageUtil") PageUtil pageUtil);
+    Long countShopByCodeAndSubCommercial(@Param("code") String code, @Param("name") String name, @Param("pageUtil") PageUtil pageUtil);
 
-    List<SysShop> selectShopByCodeAndSubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial, @Param("pageUtil") PageUtil pageUtil);
+    List<SysShop> selectShopByCodeAndSubCommercial(@Param("code") String code, @Param("name") String name, @Param("pageUtil") PageUtil pageUtil);
 
-    List<SubCommercialShopInfo> selectShopGroupBySubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial);
+    List<SubCommercialShopInfo> selectShopGroupBySubCommercial();
 }

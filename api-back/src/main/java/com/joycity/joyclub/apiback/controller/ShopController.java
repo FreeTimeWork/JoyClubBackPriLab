@@ -23,14 +23,14 @@ public class ShopController extends BaseUserSessionController {
     private ShopService shopService;
 
     @RequestMapping(value = "/shops")
-    public ResultData getShopsByCodeAndSubCommercial(@RequestParam String code, @RequestParam String subCommercial, PageUtil pageUtil, HttpSession session) {
+    public ResultData getShopsByCodeAndSubCommercial(@RequestParam String code, @RequestParam String name, PageUtil pageUtil, HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
-        return shopService.getListByCodeAndSubCommercial(code, subCommercial, pageUtil);
+        return shopService.getListByCodeAndName(code, name, pageUtil);
     }
 
     @RequestMapping(value = "group/SubCommercial/shops")
-    public ResultData getShopsByCodeAndSubCommercial(@RequestParam String code, @RequestParam String subCommercial, HttpSession session) {
+    public ResultData getShopsByCodeAndSubCommercial(HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
-        return shopService.getShopsGroupBySubCommercial(code, subCommercial);
+        return shopService.getShopsGroupBySubCommercial();
     }
 }

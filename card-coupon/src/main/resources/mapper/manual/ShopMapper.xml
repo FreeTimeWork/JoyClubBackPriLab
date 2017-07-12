@@ -11,8 +11,8 @@
         <if test="code != null">
             AND code = #{code, jdbcType=BIGINT}
         </if>
-        <if test="subCommercial != null">
-            AND sub_commercial_type_name = #{subCommercial, jdbcType=VARCHAR}
+        <if test="name != null">
+            AND name LIKE #{name, jdbcType=VARCHAR}
         </if>
     </sql>
 
@@ -69,12 +69,6 @@
         INNER JOIN sys_shop s2 ON s1.sub_commercial_type_name = s2.sub_commercial_type_name  AND  s1.code = s2.code
         <where>
             s1.delete_flag = 0 AND s2.delete_flag = 0
-            <if test="code != null">
-                AND s1.code = #{code, jdbcType=BIGINT}
-            </if>
-            <if test="subCommercial != null">
-                AND s1.sub_commercial_type_name = #{subCommercial, jdbcType=VARCHAR}
-            </if>
         </where>
         ORDER BY s1.create_time DESC
     </select>

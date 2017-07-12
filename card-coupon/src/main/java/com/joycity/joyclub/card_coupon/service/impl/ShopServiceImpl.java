@@ -127,23 +127,29 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ResultData getListByCodeAndSubCommercial(String code, String subCommercial, PageUtil pageUtil) {
+    public ResultData getListByCodeAndName(String code, String name, PageUtil pageUtil) {
+
+        if (name != null) {
+            name = "%" + name + "%";
+        }
+        final String  finalName = name;
+
         return new AbstractGetListData<SysShop>() {
             @Override
             public Long countByFilter() {
-                return shopMapper.countShopByCodeAndSubCommercial(code, subCommercial, pageUtil);
+                return shopMapper.countShopByCodeAndSubCommercial(code, finalName, pageUtil);
             }
 
             @Override
             public List<SysShop> selectByFilter() {
-                return shopMapper.selectShopByCodeAndSubCommercial(code, subCommercial, pageUtil);
+                return shopMapper.selectShopByCodeAndSubCommercial(code, finalName, pageUtil);
             }
         }.getList(pageUtil);
     }
 
     @Override
-    public ResultData getShopsGroupBySubCommercial(String code, String subCommercial) {
-        return new ResultData(shopMapper.selectShopGroupBySubCommercial(code, subCommercial));
+    public ResultData getShopsGroupBySubCommercial() {
+        return new ResultData(shopMapper.selectShopGroupBySubCommercial());
     }
 
 }
