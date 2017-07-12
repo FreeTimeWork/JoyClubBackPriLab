@@ -1,10 +1,20 @@
 package com.joycity.joyclub.card_coupon.service;
 
-import org.springframework.stereotype.Service;
+import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 
 /**
  * Created by fangchen.chai on 2017/7/11.
  */
-@Service
+
 public interface CardCouponService {
+
+    /**
+     *  创建优惠券
+     * @param info
+     * @return
+     */
+    ResultData createCardCoupon(CreateCouponInfo info);
+
+    ResultData getListByNameAndType(String name, Integer type);
 }

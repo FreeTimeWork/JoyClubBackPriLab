@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ShopMapper extends BaseMapper<SysShop, Long, SysShopExample> {
 
-    int batchInsert(@Param("sql") String sql);
+    int batchInsertShop(@Param("sql") String sql);
 
 }

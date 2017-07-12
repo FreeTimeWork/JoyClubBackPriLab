@@ -32,7 +32,7 @@ public class ShopServiceImpl implements ShopService {
 
             @Override
             public int executeInsert(String longInsertSql) {
-                return shopMapper.batchInsert(longInsertSql);
+                return shopMapper.batchInsertShop(longInsertSql);
             }
 
             @Override

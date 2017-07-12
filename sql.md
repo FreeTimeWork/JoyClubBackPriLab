@@ -187,3 +187,25 @@
     commit;
 
 ```
+
+### 存入猫酷的商家表
+
+- 线下商家表
+  CREATE TABLE `sys_shop` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `code` bigint(20) DEFAULT NULL COMMENT 'CRM系统商家ID',
+    `name` varchar(50) NOT NULL COMMENT '商家名称',
+    `logo` varchar(200) NOT NULL COMMENT 'logo照片',
+    `shop_type` tinyint(4) NOT NULL COMMENT '商家类型，1,普通 2,餐饮 3,影院 4,KTV 5,冰场',
+    `commercial_type_id` bigint(20) NOT NULL COMMENT '一级业态ID',
+    `sub_commercial_type_name` varchar(50) NOT NULL COMMENT '二级业态名称',
+    `floor_id` tinyint(4) NOT NULL COMMENT '楼层id',
+    `floor_name` varchar(50) NOT NULL COMMENT '楼层名称',
+    `door_no` varchar(50) NOT NULL COMMENT '铺位号',
+    `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+    `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `delete_flag` tinyint(1) unsigned DEFAULT '0',
+    `delete_time` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_sys_shop_code` (`code`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线下商家表';
