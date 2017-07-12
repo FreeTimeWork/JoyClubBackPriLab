@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper">
+    <sql id="limit">
+        limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+
+    <sql id="CardCouponColumn">
+        cc.id, cc.project_id, cc.name, cc.type, cc.portrait, cc.num, cc.amount, cc.subtract_amount, cc.max_receive,
+        cc.support_refund_flag, cc.info, cc.create_time, cc.last_update, cc.delete_flag, cc.delete_time
+    </sql>
+
+    <sql id="CardCouponLaunchColumn">
+        ccl.id AS ccl_id, ccl.coupon_id AS ccl_coupon_id, ccl.name AS ccl_name, ccl.type AS ccl_type, ccl.condition_amount AS condition_amount,
+        ccl.status AS ccl_status, ccl.pay_type AS ccl_pay_type, ccl.pay_amount AS ccl_pay_type, ccl.launch_num AS ccl_launch_num,
+        ccl.remain_num AS ccl_remain_num, ccl.launch_start_time AS ccl_launch_start_time, ccl.launch_end_time AS ccl_launch_end_time,
+        ccl.effective_start_time AS ccl_effective_start_time, ccl.effective_end_time,ccl.review_status AS ccl_review_status,
+        ccl.review_info AS ccl_review_info, ccl.confirm_flag AS ccl_confirm_flag, ccl.forbid_flag AS ccl_forbid_flag, ccl.confirm_time AS ccl_confirm_time,
+        ccl.forbid_time AS ccl_forbid_time, ccl.last_update AS ccl_last_update, ccl.delete_flag AS ccl_delete_flag, ccl.delete_time AS ccl_delete_time
+    </sql>
+    <sql id="name_and_type">
+        cc.delete_flag = 0
+        <if test="name != null">
+            AND cc.name LIKE #{name}
+        </if>
+        <if test="type != null">
+            AND cc.type = #{type}
+        </if>
+    </sql>
+    <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="project_id" jdbcType="BIGINT" property="projectId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="TINYINT" property="type" />
+        <result column="portrait" jdbcType="VARCHAR" property="portrait" />
+        <result column="num" jdbcType="INTEGER" property="num" />
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="subtract_amount" jdbcType="DECIMAL" property="subtractAmount" />
+        <result column="max_receive" jdbcType="INTEGER" property="maxReceive" />
+        <result column="support_refund_flag" jdbcType="BIT" property="supportRefundFlag" />
+        <result column="info" jdbcType="VARCHAR" property="info" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+        <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+
+        <collection property="launchs" resultMap="CardCouponLaunch" columnPrefix="ccl_"/>
+    </resultMap>
+
+    <resultMap id="CardCouponLaunch" type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch">
+
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="TINYINT" property="type" />
+        <result column="condition_amount" jdbcType="DECIMAL" property="conditionAmount" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="pay_type" jdbcType="TINYINT" property="payType" />
+        <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+        <result column="launch_num" jdbcType="INTEGER" property="launchNum" />
+        <result column="remain_num" jdbcType="INTEGER" property="remainNum" />
+        <result column="launch_start_time" jdbcType="TIMESTAMP" property="launchStartTime" />
+        <result column="launch_end_time" jdbcType="TIMESTAMP" property="launchEndTime" />
+        <result column="effective_start_time" jdbcType="TIMESTAMP" property="effectiveStartTime" />
+        <result column="effective_end_time" jdbcType="TIMESTAMP" property="effectiveEndTime" />
+        <result column="review_status" jdbcType="TINYINT" property="reviewStatus" />
+        <result column="review_info" jdbcType="VARCHAR" property="reviewInfo" />
+        <result column="confirm_flag" jdbcType="BIT" property="confirmFlag" />
+        <result column="forbid_flag" jdbcType="BIT" property="forbidFlag" />
+        <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
+        <result column="forbid_time" jdbcType="TIMESTAMP" property="forbidTime" />
+        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+        <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+    </resultMap>
+
+    <select id="countCardCouponByNameAndType" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM card_coupon cc
+        <where>
+            <include refid="name_and_type"/>
+        </where>
+    </select>
+
+    <select id="selectCardCouponByNameAndType" resultMap="ShowCouponInfo">
+        SELECT
+            <include refid="CardCouponColumn"/>,
+            <include refid="CardCouponLaunchColumn"/>
+        FROM (
+            SELECT *
+            FROM card_coupon
+            ORDER BY create_time DESC
+            <include refid="limit"/>
+        ) cc
+        LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id
+        <where>
+            <include refid="name_and_type"/>
+        </where>
+    </select>
+</mapper>
