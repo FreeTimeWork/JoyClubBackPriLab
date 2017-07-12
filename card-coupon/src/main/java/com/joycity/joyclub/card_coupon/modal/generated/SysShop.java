@@ -19,7 +19,7 @@ public class SysShop {
      *
      * @mbg.generated
      */
-    private Long code;
+    private String code;
 
     /**
      *
@@ -161,7 +161,7 @@ public class SysShop {
      *
      * @mbg.generated
      */
-    public Long getCode() {
+    public String getCode() {
         return code;
     }
 
@@ -173,7 +173,7 @@ public class SysShop {
      *
      * @mbg.generated
      */
-    public void setCode(Long code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

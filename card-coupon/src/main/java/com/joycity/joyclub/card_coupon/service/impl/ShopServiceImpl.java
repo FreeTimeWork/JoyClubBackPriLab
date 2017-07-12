@@ -7,9 +7,12 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.card_coupon.mapper.ShopMapper;
 import com.joycity.joyclub.card_coupon.modal.MallcooShop;
+import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.service.ShopService;
+import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,7 +95,7 @@ public class ShopServiceImpl implements ShopService {
                 "      {\n" +
                 "        \"ID\": 1000030,\n" +
                 "        \"Name\": \"VERO MODA\",\n" +
-                "        \"CrmShopID\": \"454522\",\n" +
+                "        \"CrmShopID\": \"454524\",\n" +
                 "        \"Logo\": \"http://i1.mallcoo.cn/sp_mall/82de37a0-db14-4c23-aca9-58900758c2e7.jpg\",\n" +
                 "        \"ShopType\": 1,\n" +
                 "        \"CommercialTypeID\": 14024,\n" +
@@ -105,7 +108,7 @@ public class ShopServiceImpl implements ShopService {
                 "\t  {\n" +
                 "        \"ID\": 1000031,\n" +
                 "        \"Name\": \"VERO MODA\",\n" +
-                "        \"CrmShopID\": \"454523\",\n" +
+                "        \"CrmShopID\": \"454525\",\n" +
                 "        \"Logo\": \"http://i1.mallcoo.cn/sp_mall/82de37a0-db14-4c23-aca9-58900758c2e7.jpg\",\n" +
                 "        \"ShopType\": 1,\n" +
                 "        \"CommercialTypeID\": 14024,\n" +
@@ -122,4 +125,25 @@ public class ShopServiceImpl implements ShopService {
         resultData.setData(result.getData());
         return resultData;
     }
+
+    @Override
+    public ResultData getListByCodeAndSubCommercial(String code, String subCommercial, PageUtil pageUtil) {
+        return new AbstractGetListData<SysShop>() {
+            @Override
+            public Long countByFilter() {
+                return shopMapper.countShopByCodeAndSubCommercial(code, subCommercial, pageUtil);
+            }
+
+            @Override
+            public List<SysShop> selectByFilter() {
+                return shopMapper.selectShopByCodeAndSubCommercial(code, subCommercial, pageUtil);
+            }
+        }.getList(pageUtil);
+    }
+
+    @Override
+    public ResultData getShopsGroupBySubCommercial(String code, String subCommercial) {
+        return new ResultData(shopMapper.selectShopGroupBySubCommercial(code, subCommercial));
+    }
+
 }

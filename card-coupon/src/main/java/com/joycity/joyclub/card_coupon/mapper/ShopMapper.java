@@ -1,8 +1,12 @@
 package com.joycity.joyclub.card_coupon.mapper;
 
+import java.util.List;
+
+import com.joycity.joyclub.card_coupon.modal.SubCommercialShopInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShopExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -12,4 +16,9 @@ public interface ShopMapper extends BaseMapper<SysShop, Long, SysShopExample> {
 
     int batchInsertShop(@Param("sql") String sql);
 
+    Long countShopByCodeAndSubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial, @Param("pageUtil") PageUtil pageUtil);
+
+    List<SysShop> selectShopByCodeAndSubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial, @Param("pageUtil") PageUtil pageUtil);
+
+    List<SubCommercialShopInfo> selectShopGroupBySubCommercial(@Param("code") String code, @Param("subCommercial") String subCommercial);
 }
