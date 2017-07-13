@@ -6,7 +6,7 @@
     </sql>
 
     <sql id="CardCouponColumn">
-        cc.id, cc.project_id, cc.name, cc.type, cc.portrait, cc.num, cc.amount, cc.subtract_amount,
+        cc.id, cc.project_id, cc.name, cc.type, cc.batch, cc.thirdparty_shop_id, cc.sysgen_flag, cc.portrait, cc.num, cc.amount, cc.subtract_amount,
         cc.support_refund_flag, cc.info, cc.create_time, cc.last_update, cc.delete_flag, cc.delete_time
     </sql>
 
@@ -33,21 +33,9 @@
             type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch"
             extends="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper.CardCouponLaunch">
     </resultMap>
-    <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="project_id" jdbcType="BIGINT" property="projectId" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="type" jdbcType="TINYINT" property="type" />
-        <result column="portrait" jdbcType="VARCHAR" property="portrait" />
-        <result column="num" jdbcType="INTEGER" property="num" />
-        <result column="amount" jdbcType="DECIMAL" property="amount" />
-        <result column="subtract_amount" jdbcType="DECIMAL" property="subtractAmount" />
-        <result column="support_refund_flag" jdbcType="BIT" property="supportRefundFlag" />
-        <result column="info" jdbcType="VARCHAR" property="info" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
-        <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
-        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
+
+    <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper.BaseResultMap">
 
         <collection property="launchs" resultMap="CardCouponLaunch" columnPrefix="ccl_"/>
     </resultMap>
@@ -75,4 +63,27 @@
             <include refid="name_and_type"/>
         </where>
     </select>
+
+    <resultMap id="StoreScopes" type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponStoreScope"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper.BaseResultMap"/>
+
+    <resultMap id="VipScopes" type="string" >
+        <result column="vip_type" jdbcType="VARCHAR" property="vipType"/>
+    </resultMap>
+
+    <resultMap id="CreateCouponInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponInfo" extends="BaseResultMap">
+        <collection property="storeScopes" resultMap="StoreScopes" columnPrefix="ccss_"/>
+        <collection property="vipScopes" resultMap="VipScopes"  columnPrefix="ccvs_"/>
+    </resultMap>
+
+    <select id="selectCardCouponById" resultMap="CreateCouponInfo" >
+        SELECT
+        <include refid="CardCouponColumn"/>,
+        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type
+        FROM card_coupon cc
+        LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id
+        LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id
+        WHERE cc.id = #{id}
+    </select>
+
 </mapper>

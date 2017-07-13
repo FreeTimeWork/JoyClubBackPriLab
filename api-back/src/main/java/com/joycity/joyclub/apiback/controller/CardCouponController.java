@@ -52,7 +52,7 @@ public class CardCouponController extends BaseUserSessionController {
     @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
     public ResultData createCardCoupon(CreateCouponInfo info, HttpSession session) {
         SysUser user = checkProjectUser(session);
-        info.getCardCoupon().setProjectId(user.getInfoId());
+        info.setProjectId(user.getInfoId());
         return cardCouponService.createCardCoupon(info);
     }
 }

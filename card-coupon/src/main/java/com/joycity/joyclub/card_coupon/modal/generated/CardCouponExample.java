@@ -446,6 +446,196 @@ public class CardCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andBatchIsNull() {
+            addCriterion("batch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchIsNotNull() {
+            addCriterion("batch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchEqualTo(String value) {
+            addCriterion("batch =", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNotEqualTo(String value) {
+            addCriterion("batch <>", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchGreaterThan(String value) {
+            addCriterion("batch >", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("batch >=", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchLessThan(String value) {
+            addCriterion("batch <", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchLessThanOrEqualTo(String value) {
+            addCriterion("batch <=", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchLike(String value) {
+            addCriterion("batch like", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNotLike(String value) {
+            addCriterion("batch not like", value, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchIn(List<String> values) {
+            addCriterion("batch in", values, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNotIn(List<String> values) {
+            addCriterion("batch not in", values, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchBetween(String value1, String value2) {
+            addCriterion("batch between", value1, value2, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNotBetween(String value1, String value2) {
+            addCriterion("batch not between", value1, value2, "batch");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdIsNull() {
+            addCriterion("thirdparty_shop_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdIsNotNull() {
+            addCriterion("thirdparty_shop_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id =", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id <>", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdGreaterThan(Long value) {
+            addCriterion("thirdparty_shop_id >", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id >=", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdLessThan(Long value) {
+            addCriterion("thirdparty_shop_id <", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdLessThanOrEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id <=", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdIn(List<Long> values) {
+            addCriterion("thirdparty_shop_id in", values, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotIn(List<Long> values) {
+            addCriterion("thirdparty_shop_id not in", values, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdBetween(Long value1, Long value2) {
+            addCriterion("thirdparty_shop_id between", value1, value2, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotBetween(Long value1, Long value2) {
+            addCriterion("thirdparty_shop_id not between", value1, value2, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagIsNull() {
+            addCriterion("sysgen_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagIsNotNull() {
+            addCriterion("sysgen_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagEqualTo(Boolean value) {
+            addCriterion("sysgen_flag =", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagNotEqualTo(Boolean value) {
+            addCriterion("sysgen_flag <>", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagGreaterThan(Boolean value) {
+            addCriterion("sysgen_flag >", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("sysgen_flag >=", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagLessThan(Boolean value) {
+            addCriterion("sysgen_flag <", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagLessThanOrEqualTo(Boolean value) {
+            addCriterion("sysgen_flag <=", value, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagIn(List<Boolean> values) {
+            addCriterion("sysgen_flag in", values, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagNotIn(List<Boolean> values) {
+            addCriterion("sysgen_flag not in", values, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagBetween(Boolean value1, Boolean value2) {
+            addCriterion("sysgen_flag between", value1, value2, "sysgenFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andSysgenFlagNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("sysgen_flag not between", value1, value2, "sysgenFlag");
+            return (Criteria) this;
+        }
+
         public Criteria andPortraitIsNull() {
             addCriterion("portrait is null");
             return (Criteria) this;

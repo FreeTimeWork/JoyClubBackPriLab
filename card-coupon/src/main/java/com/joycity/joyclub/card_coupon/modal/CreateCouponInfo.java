@@ -4,24 +4,14 @@ import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponStoreScope;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponVipScope;
 
 /**
  * Created by fangchen.chai on 2017/7/12.
  * 新建券页面信息
  */
-public class CreateCouponInfo {
-    private CardCoupon cardCoupon;
+public class CreateCouponInfo extends CardCoupon{
     private List<CardCouponStoreScope> storeScopes;
-    private List<CardCouponVipScope> vipScopes;
-
-    public CardCoupon getCardCoupon() {
-        return cardCoupon;
-    }
-
-    public void setCardCoupon(CardCoupon cardCoupon) {
-        this.cardCoupon = cardCoupon;
-    }
+    private List<String> vipScopes;
 
     public List<CardCouponStoreScope> getStoreScopes() {
         return storeScopes;
@@ -31,11 +21,11 @@ public class CreateCouponInfo {
         this.storeScopes = storeScopes;
     }
 
-    public List<CardCouponVipScope> getVipScopes() {
+    public List<String> getVipScopes() {
         return vipScopes;
     }
 
-    public void setVipScopes(List<CardCouponVipScope> vipScopes) {
+    public void setVipScopes(List<String> vipScopes) {
         this.vipScopes = vipScopes;
     }
 }

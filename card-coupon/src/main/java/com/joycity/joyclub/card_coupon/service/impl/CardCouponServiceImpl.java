@@ -41,16 +41,19 @@ public class CardCouponServiceImpl implements CardCouponService {
     @Override
     @Transactional
     public ResultData createCardCoupon(CreateCouponInfo info) {
-        couponMapper.insertSelective(info.getCardCoupon());
+        couponMapper.insertSelective(info);
         for (CardCouponStoreScope storeScopes : info.getStoreScopes()) {
-            storeScopes.setCouponId(info.getCardCoupon().getId());
+            storeScopes.setCouponId(info.getId());
             couponStoreScopeMapper.insertSelective(storeScopes);
         }
-        for (CardCouponVipScope vipScopes : info.getVipScopes()) {
-            vipScopes.setCouponId(info.getCardCoupon().getId());
-            couponVipScopeMapper.insertSelective(vipScopes);
+
+        CardCouponVipScope vipScope = new CardCouponVipScope();
+        vipScope.setCouponId(info.getId());
+        for (String type : info.getVipScopes()) {
+            vipScope.setVipType(type);
+            couponVipScopeMapper.insertSelective(vipScope);
         }
-        return new ResultData(new CreateResult(info.getCardCoupon().getId()));
+        return new ResultData(new CreateResult(info.getId()));
     }
 
     @Override
