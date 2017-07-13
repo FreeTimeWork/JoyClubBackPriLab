@@ -23,6 +23,6 @@ public interface CardCouponMapper extends BaseMapper<CardCoupon, Long, CardCoupo
     @Update("update card_coupon set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponById(@Param("id") Long id);
 
-    List<CreateCouponInfo> selectCardCouponById(@Param("id") Long id);
+    CreateCouponInfo selectCardCouponById(@Param("id") Long id);
 
 }

@@ -52,7 +52,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
                 StringBuilder builder = new StringBuilder();
                 builder.append("(")
                         .append("'"+vipBatch.getClientId()+"', ")
-                        .append("'"+vipBatch.getBatch()+"', ")
+                        .append("'"+vipBatch.getBatch()+"' ")
                         .append(") ")
                 ;
 

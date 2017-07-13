@@ -219,6 +219,9 @@ CREATE TABLE `card_coupon` (
   `project_id` bigint(20) NOT NULL COMMENT '项目id',
   `name` varchar(50) NOT NULL COMMENT '卡券名称',
   `type` tinyint(4) NOT NULL COMMENT '卡券类别，1,满减券 2,代金券 3,第三方',
+  `batch` varchar(50) NOT NULL COMMENT '第三方卡券号批次号',
+  `thirdparty_shop_id` bigint(20) NOT NULL COMMENT '第三方商家id',
+  `sysgen_flag` tinyint(1) unsigned DEFAULT '1',
   `portrait` varchar(200) DEFAULT NULL COMMENT '卡券图',
   `num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总数，该卡券发行量',
   `amount` decimal(14,4) NOT NULL DEFAULT '0' COMMENT '满额',
@@ -231,6 +234,17 @@ CREATE TABLE `card_coupon` (
   `delete_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券表';
+
+CREATE TABLE `card_thirdparty_coupon_code` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) DEFAULT NULL COMMENT '第三方卡券号',
+  `batch` varchar(50) NOT NULL COMMENT '第三方卡券号批次号',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='第三方卡券号中间表';
 
 CREATE TABLE `card_coupon_store_scope` (
   `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
