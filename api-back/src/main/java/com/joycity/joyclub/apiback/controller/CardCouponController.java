@@ -25,31 +25,31 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.GET)
     public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
+        checkProjectUser(session);
         return cardCouponService.getCardCouponById(id);
     }
 
     @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
     public ResultData updateCardCoupons(CardCoupon cardCoupon, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
+        checkProjectUser(session);
         return cardCouponService.updateCardCoupon(cardCoupon);
     }
 
-    @RequestMapping(value = "/card/coupons", method = RequestMethod.POST)
+    @RequestMapping(value = "/card/coupons", method = RequestMethod.GET)
     public ResultData getCardCoupons(@RequestParam(required = false) String name, @RequestParam(required = false) Integer type, PageUtil pageUtil, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
+        checkProjectUser(session);
         return cardCouponService.getListByNameAndType(name, type, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/{id}/delete", method = RequestMethod.POST)
     public ResultData deleteById(@PathVariable Long id, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
+        checkProjectUser(session);
         return cardCouponService.deleteCardCoupon(id);
     }
 
     @RequestMapping(value = "/card/coupon/create", method = RequestMethod.POST)
     public ResultData createCardCoupon(CreateCouponInfo info, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
+        checkProjectUser(session);
         return cardCouponService.createCardCoupon(info);
     }
 }

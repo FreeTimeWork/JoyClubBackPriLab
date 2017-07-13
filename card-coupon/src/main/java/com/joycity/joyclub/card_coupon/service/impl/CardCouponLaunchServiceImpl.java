@@ -3,6 +3,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.joycity.joyclub.card_coupon.constant.CouponLaunchReviewStatus;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
@@ -12,6 +13,7 @@ import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +64,45 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             }
         }
         return data;
+    }
+
+    @Override
+    public ResultData confirmLaunch(Long id) {
+        CardCouponLaunch launch = new CardCouponLaunch();
+        launch.setId(id);
+        launch.setConfirmFlag(true);
+        launch.setConfirmTime(new Date());
+        return new ResultData(new UpdateResult(launchMapper.updateByPrimaryKeySelective(launch)));
+    }
+
+    @Override
+    public ResultData forbidLaunch(Long id) {
+        CardCouponLaunch launch = new CardCouponLaunch();
+        launch.setId(id);
+        launch.setForbidFlag(true);
+        launch.setForbidTime(new Date());
+        return new ResultData(new UpdateResult(launchMapper.updateByPrimaryKeySelective(launch)));
+    }
+
+    @Override
+    public ResultData permitLaunch(Long id) {
+        CardCouponLaunch launch = new CardCouponLaunch();
+        launch.setId(id);
+        launch.setReviewStatus(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT);
+        return new ResultData(new UpdateResult(launchMapper.updateByPrimaryKeySelective(launch)));
+    }
+
+    @Override
+    public ResultData rejectLaunch(Long id, String reviewInfo) {
+        CardCouponLaunch launch = new CardCouponLaunch();
+        launch.setId(id);
+        launch.setReviewStatus(CouponLaunchReviewStatus.STATUS_REVIEW_REJECT);
+        launch.setReviewInfo(reviewInfo);
+        return new ResultData(new UpdateResult(launchMapper.updateByPrimaryKeySelective(launch)));
+    }
+
+    @Override
+    public ResultData deleteCardCouponLaunch(Long id) {
+        return new ResultData(new UpdateResult(launchMapper.deleteCardCouponLaunchById(id)));
     }
 }

@@ -9,6 +9,7 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * Created by fangchen.chai on 2017/7/11.
@@ -19,5 +20,6 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
 
     List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
-
+    @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
+    int deleteCardCouponLaunchById(@Param("id") Long id);
 }

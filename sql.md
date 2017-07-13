@@ -191,6 +191,7 @@
 ### 存入猫酷的商家表
 
 - 线下商家表
+```
   CREATE TABLE `sys_shop` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `code` bigint(20) DEFAULT NULL COMMENT 'CRM系统商家ID',
@@ -209,3 +210,125 @@
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_sys_shop_code` (`code`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线下商家表';
+```
+
+### 新卡券相关表
+```$xslt
+CREATE TABLE `card_coupon` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) NOT NULL COMMENT '项目id',
+  `name` varchar(50) NOT NULL COMMENT '卡券名称',
+  `type` tinyint(4) NOT NULL COMMENT '卡券类别，1,满减券 2,代金券 3,第三方',
+  `portrait` varchar(200) DEFAULT NULL COMMENT '卡券图',
+  `num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总数，该卡券发行量',
+  `amount` decimal(14,4) NOT NULL DEFAULT '0' COMMENT '满额',
+  `subtract_amount` decimal(14,4) NOT NULL DEFAULT '0' COMMENT '减额',
+  `support_refund_flag` tinyint(1) unsigned DEFAULT '1' COMMENT '该券是否可以退货',
+  `info` varchar(500) DEFAULT NULL COMMENT '卡券介绍',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券表';
+
+CREATE TABLE `card_coupon_store_scope` (
+  `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
+  `store_id` bigint(20) NOT NULL COMMENT '商户id',
+  `ratio` decimal(8,6) NOT NULL COMMENT '分担比例，小数点后六位',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='使用店铺范围';
+
+CREATE TABLE `card_coupon_vip_scope` (
+  `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
+  `vip_type` varchar(4) NOT NULL COMMENT 'vip类型 01璀璨卡 02缤纷卡 74电子卡',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员等级范围';
+
+
+CREATE TABLE `card_coupon_launch` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
+  `name` varchar(50) NOT NULL COMMENT '投放名称',
+  `type` tinyint(4) NOT NULL COMMENT '投放类型，1,条件投放 2,线上投放 3,批量投放',
+  `condition_amount` decimal(14,4) DEFAULT NULL COMMENT '触发条件投放的总额',
+  `max_receive` int(11) unsigned DEFAULT NULL COMMENT '每人每日最大获劵量',
+  `pay_type` tinyint(4) NOT NULL COMMENT '支付方式 1,金钱 2,积分',
+  `pay_amount` decimal(14,4) NOT NULL COMMENT '支付值 0代表免费',
+  `launch_num` int(11) unsigned NOT NULL COMMENT '投放数量',
+  `remain_num` int(11) unsigned NOT NULL COMMENT '剩余数量',
+  `launch_start_time` datetime DEFAULT NULL COMMENT '投放开始时间',
+  `launch_end_time` datetime DEFAULT NULL COMMENT '投放截止时间',
+  `effective_start_time` datetime DEFAULT NULL COMMENT '有效开始时间',
+  `effective_end_time` datetime DEFAULT NULL COMMENT '有效截止时间',
+  `review_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态 0 待审核，1 审核通过 ，2 审核拒绝 ',
+  `review_info` varchar(50) DEFAULT NULL COMMENT '审核相关文本，主要用于拒绝，无法记录历史',
+  `confirm_flag` tinyint(1) unsigned DEFAULT '0' COMMENT '确认投放标志，默认未投放',
+  `forbid_flag` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '强制下架标志',
+  `confirm_time` datetime DEFAULT NULL COMMENT '确认投放时间',
+  `forbid_time` datetime DEFAULT NULL COMMENT '强制下架时间',
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券投放表';
+
+CREATE TABLE `card_coupon_trigger_scope` (
+  `launch_id` bigint(20) NOT NULL COMMENT '卡券投放id',
+  `store_id` bigint(20) NOT NULL COMMENT '商户id',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='触发店铺范围';
+
+
+CREATE TABLE `card_coupon_code` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) DEFAULT NULL COMMENT '卡券号',
+  `launch_id` bigint(20) NOT NULL COMMENT '卡券投放id',
+  `pos_sale_detail_id` bigint(20) DEFAULT NULL COMMENT '支付流水id',
+  `belong` int(11) NOT NULL COMMENT '卡券所属，-1 系统自身卡券， 第三方卡券中的商家id',
+  `client_id` bigint(20) DEFAULT NULL COMMENT '会员号id',
+  `receive_time` datetime DEFAULT NULL COMMENT '领取时间',
+  `use_time` datetime DEFAULT NULL COMMENT '使用时间',
+  `use_status` tinyint(4) NOT NULL COMMENT '使用状态，1,未使用 2,已使用 3,已作废',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_card_coupon_code_belong` (`code`,`belong`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券号';
+
+CREATE TABLE `card_vip_batch` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) DEFAULT NULL COMMENT '会员号id',
+  `batch` varchar(50) NOT NULL COMMENT '批次号',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_card_vip_batch` (`client_id`,`batch`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='批量插入会员号的中间表';
+
+CREATE TABLE `pos_sale_detail` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) DEFAULT NULL COMMENT '会员号id',
+  `paid` decimal(14,4) NOT NULL COMMENT '实际支付',
+  `refund_flag` tinyint(1) unsigned DEFAULT '0' COMMENT '是否退款',
+  `refund_time` datetime DEFAULT NULL COMMENT '退款时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
+```
