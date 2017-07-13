@@ -1,5 +1,6 @@
 package com.joycity.joyclub.card_coupon.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
@@ -14,9 +15,9 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Long, CardCouponLaunchExample> {
 
-    Long countByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("pageUtil") PageUtil pageUtil);
+    Long countByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("pageUtil") PageUtil pageUtil);
+    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
 
 }

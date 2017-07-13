@@ -40,7 +40,7 @@
                 AND ccl.review_status = 1
                 AND ccl.confirm_flag = 1
                 AND ccl.forbid_flag = 0
-                AND now() <![CDATA[ >= ]]> ccl.launch_start_time
+                AND now() <![CDATA[ > ]]> ccl.launch_start_time
                 AND now() <![CDATA[ < ]]> ccl.launch_end_time
             </if>
             <if test="status == 5">
@@ -82,7 +82,7 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
     </resultMap>
 
-    <select id="countByCouponNameAndCouponType" resultType="java.lang.Long">
+    <select id="countByCouponNameAndCouponTypeAndStatus" resultType="java.lang.Long">
         SELECT count(*)
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
