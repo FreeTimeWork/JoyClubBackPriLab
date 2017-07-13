@@ -5,6 +5,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -42,11 +43,11 @@ public class CardCouponLaunchController extends BaseUserSessionController {
         return cardCouponLaunchService.deleteCardCouponLaunch(id);
     }
 
-//    @RequestMapping(value = "/card/coupon/create", method = RequestMethod.POST)
-//    public ResultData createCardCoupon(CardCouponLaunch info, HttpSession session) {
-//        checkProjectUser(session);
-//        return cardCouponLaunchService.createCardCouponLaunch(info);
-//    }
+    @RequestMapping(value = "/card/coupon/create", method = RequestMethod.POST)
+    public ResultData createCardCoupon(CardCouponLaunch info, HttpSession session) {
+        checkProjectUser(session);
+        return cardCouponLaunchService.createCardCouponLaunch(info);
+    }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/review/permit", method = RequestMethod.POST)
     public ResultData permitLaunch(@PathVariable Long id, HttpSession session) {
