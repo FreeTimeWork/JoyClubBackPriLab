@@ -43,7 +43,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
         return cardCouponLaunchService.deleteCardCouponLaunch(id);
     }
 
-    @RequestMapping(value = "/card/coupon/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/card/coupon/launch/create", method = RequestMethod.POST)
     public ResultData createCardCoupon(CardCouponLaunch info, HttpSession session) {
         checkProjectUser(session);
         return cardCouponLaunchService.createCardCouponLaunch(info);
