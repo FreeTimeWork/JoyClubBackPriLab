@@ -5,6 +5,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.service.CardCouponService;
@@ -29,9 +30,10 @@ public class CardCouponController extends BaseUserSessionController {
         return cardCouponService.getCardCouponById(id);
     }
 
-    @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
-    public ResultData updateCardCoupons(CardCoupon cardCoupon, HttpSession session) {
+    @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.POST)
+    public ResultData updateCardCoupons(@PathVariable Long id, CardCoupon cardCoupon, HttpSession session) {
         checkProjectUser(session);
+        cardCoupon.setId(id);
         return cardCouponService.updateCardCoupon(cardCoupon);
     }
 
@@ -47,9 +49,10 @@ public class CardCouponController extends BaseUserSessionController {
         return cardCouponService.deleteCardCoupon(id);
     }
 
-    @RequestMapping(value = "/card/coupon/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
     public ResultData createCardCoupon(CreateCouponInfo info, HttpSession session) {
-        checkProjectUser(session);
+        SysUser user = checkProjectUser(session);
+        info.getCardCoupon().setProjectId(user.getInfoId());
         return cardCouponService.createCardCoupon(info);
     }
 }
