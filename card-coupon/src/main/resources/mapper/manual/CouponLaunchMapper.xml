@@ -7,7 +7,7 @@
 
     <sql id="CardCouponLaunchColumn">
         ccl.id , ccl.coupon_id , ccl.name , ccl.type , ccl.condition_amount ,
-        ccl.pay_type  , ccl.pay_amount  , ccl.launch_num  ,
+        ccl.pay_type  , ccl.pay_amount  , ccl.launch_num  ,ccl.max_receive,
         ccl.remain_num  , ccl.launch_start_time  , ccl.launch_end_time  ,
         ccl.effective_start_time  , ccl.effective_end_time,ccl.review_status  ,
         ccl.review_info  , ccl.confirm_flag  , ccl.forbid_flag  , ccl.confirm_time  ,
@@ -63,6 +63,7 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="type" jdbcType="TINYINT" property="type" />
         <result column="condition_amount" jdbcType="DECIMAL" property="conditionAmount" />
+        <result column="max_receive" jdbcType="INTEGER" property="maxReceive" />
         <result column="pay_type" jdbcType="TINYINT" property="payType" />
         <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
         <result column="launch_num" jdbcType="INTEGER" property="launchNum" />
