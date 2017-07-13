@@ -506,6 +506,66 @@ public class CardCouponLaunchExample {
             return (Criteria) this;
         }
 
+        public Criteria andMaxReceiveIsNull() {
+            addCriterion("max_receive is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveIsNotNull() {
+            addCriterion("max_receive is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveEqualTo(Integer value) {
+            addCriterion("max_receive =", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveNotEqualTo(Integer value) {
+            addCriterion("max_receive <>", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveGreaterThan(Integer value) {
+            addCriterion("max_receive >", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveGreaterThanOrEqualTo(Integer value) {
+            addCriterion("max_receive >=", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveLessThan(Integer value) {
+            addCriterion("max_receive <", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveLessThanOrEqualTo(Integer value) {
+            addCriterion("max_receive <=", value, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveIn(List<Integer> values) {
+            addCriterion("max_receive in", values, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveNotIn(List<Integer> values) {
+            addCriterion("max_receive not in", values, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveBetween(Integer value1, Integer value2) {
+            addCriterion("max_receive between", value1, value2, "maxReceive");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxReceiveNotBetween(Integer value1, Integer value2) {
+            addCriterion("max_receive not between", value1, value2, "maxReceive");
+            return (Criteria) this;
+        }
+
         public Criteria andPayTypeIsNull() {
             addCriterion("pay_type is null");
             return (Criteria) this;
