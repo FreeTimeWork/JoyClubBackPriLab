@@ -31,9 +31,13 @@ public class CardCouponController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.POST)
-    public ResultData updateCardCoupons(@PathVariable Long id, CardCoupon cardCoupon, HttpSession session) {
+    public ResultData updateCardCoupons(@PathVariable Long id, @RequestParam String name, @RequestParam String info, @RequestParam String portrait, HttpSession session) {
         checkProjectUser(session);
+        CardCoupon cardCoupon = new CardCoupon();
         cardCoupon.setId(id);
+        cardCoupon.setName(name);
+        cardCoupon.setInfo(info);
+        cardCoupon.setPortrait(portrait);
         return cardCouponService.updateCardCoupon(cardCoupon);
     }
 
