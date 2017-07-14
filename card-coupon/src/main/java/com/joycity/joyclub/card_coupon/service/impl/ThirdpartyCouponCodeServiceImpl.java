@@ -15,6 +15,8 @@ import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,9 +27,13 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
     @Autowired
     private CardThirdpartyCouponCodeMapper thirdpartyCouponCodeMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public ResultData createThirdpartyCouponCode(List<List<String>> list) {
+
+        ValueOperations<String, String> thirdpartyCouponBatchCache = redisTemplate.opsForValue();
 
         Set<String> cardNos = new HashSet<>();
         List<String> rows;
@@ -42,12 +48,15 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
         }
 
-        Long count = 0L;
-        String batch = null;
-        do {
-            batch = RandomUtil.generateString(16);
-            count = thirdpartyCouponCodeMapper.countByBatch(batch);
-        } while (count > 0);
+        Long count;
+        String batch;
+        synchronized (this) {
+            do {
+                batch = RandomUtil.generateString(16);
+                count = thirdpartyCouponCodeMapper.countByBatch(batch);
+            } while (redisTemplate.hasKey(batch) || count > 0);
+            thirdpartyCouponBatchCache.set(batch,batch);
+        }
         List<CardThirdpartyCouponCode> thirdpartyCouponCodes = prepareThirdpartyCouponCode(cardNos,batch);
 
         int sum = 0;
@@ -93,6 +102,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
             }.batchInsert(thirdpartyCouponCodes.size());
 
         }
+        redisTemplate.delete(batch);
         return new ResultData(new BatchAndSum(batch, sum));
     }
 

@@ -1,16 +1,23 @@
 package com.joycity.joyclub.apiback.controller;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
+import static com.joycity.joyclub.commons.constant.ResultCode.ERR_IMPORT_EXCEL;
 
+import java.io.IOException;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.util.ExcelToBeanParser;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
+import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by fangchen.chai on 2017/7/12.
@@ -21,6 +28,8 @@ public class CardCouponLaunchController extends BaseUserSessionController {
 
     @Autowired
     private CardCouponLaunchService cardCouponLaunchService;
+    @Autowired
+    private CardVipBatchService cardVipBatchService;
 
     @RequestMapping(value = "/card/coupon/launch/{id}", method = RequestMethod.GET)
     public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
@@ -71,5 +80,22 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     public ResultData forbidLaunch(@PathVariable Long id, HttpSession session) {
         checkProjectUser(session);
         return cardCouponLaunchService.forbidLaunch(id);
+    }
+
+    @RequestMapping(value = "/card/coupon/launch/vip/codes/excel", method = {RequestMethod.POST})
+    public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
+                                           HttpSession httpSession) {
+
+        checkProjectUser(httpSession);
+        List<List<String>> list;
+        try {
+            list = ExcelToBeanParser.loadDataFromExcel(file.getInputStream(), file.getOriginalFilename(), 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BusinessException(ERR_IMPORT_EXCEL, "导入excel失败");
+        }
+
+        return cardVipBatchService.createCardVipBatch(list);
+
     }
 }
