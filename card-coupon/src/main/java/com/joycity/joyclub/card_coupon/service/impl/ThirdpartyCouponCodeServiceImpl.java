@@ -1,6 +1,7 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import com.joycity.joyclub.card_coupon.util.RandomUtil;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,21 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
     private CardThirdpartyCouponCodeMapper thirdpartyCouponCodeMapper;
 
     @Override
-    public ResultData createThirdpartyCouponCode(Set<String> cardNos) {
+    public ResultData createThirdpartyCouponCode(List<List<String>> list) {
+
+        Set<String> cardNos = new HashSet<>();
+        List<String> rows;
+        for (int i = 0; i < list.size(); i++) {
+            rows = list.get(i);
+            if (rows != null && rows.size() > 0) {
+                String cardNo = rows.get(0);
+                if (!StringUtils.isBlank(cardNo)) {
+                    cardNos.add(cardNo);
+                }
+            }
+
+        }
+
         Long count = 0L;
         String batch = null;
         do {

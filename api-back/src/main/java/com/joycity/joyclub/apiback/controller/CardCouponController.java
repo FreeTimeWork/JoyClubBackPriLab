@@ -4,9 +4,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static com.joycity.joyclub.commons.constant.ResultCode.ERR_IMPORT_EXCEL;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
@@ -19,7 +17,6 @@ import com.joycity.joyclub.card_coupon.service.ThirdpartyCouponCodeService;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,7 +71,6 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/thirdparty/coupon/codes/excel", method = {RequestMethod.POST})
     public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
-                                           @PathVariable Long id,
                                            HttpSession httpSession) {
 
         checkProjectUser(httpSession);
@@ -85,20 +81,8 @@ public class CardCouponController extends BaseUserSessionController {
             e.printStackTrace();
             throw new BusinessException(ERR_IMPORT_EXCEL, "导入excel失败");
         }
-        Set<String> cardNos = new HashSet<>();
-        List<String> rows;
-        for (int i = 0; i < list.size(); i++) {
-            rows = list.get(i);
-            if (rows != null && rows.size() > 0) {
-                String cardNo = rows.get(0);
-                if (!StringUtils.isBlank(cardNo)) {
-                    cardNos.add(cardNo);
-                }
-            }
 
-        }
-
-        return thirdpartyCouponCodeService.createThirdpartyCouponCode(cardNos);
+        return thirdpartyCouponCodeService.createThirdpartyCouponCode(list);
 
     }
 }

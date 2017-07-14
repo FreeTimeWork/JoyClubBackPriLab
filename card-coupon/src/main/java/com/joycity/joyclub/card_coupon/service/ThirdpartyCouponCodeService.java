@@ -1,6 +1,6 @@
 package com.joycity.joyclub.card_coupon.service;
 
-import java.util.Set;
+import java.util.List;
 
 import com.joycity.joyclub.commons.modal.base.ResultData;
 
@@ -9,6 +9,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
  */
 public interface ThirdpartyCouponCodeService {
 
-    ResultData createThirdpartyCouponCode(Set<String> cardNos);
+    ResultData createThirdpartyCouponCode(List<List<String>> list);
 
 }
