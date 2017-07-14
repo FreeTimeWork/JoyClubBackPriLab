@@ -50,13 +50,12 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
         String findBatch;
         Long count;
-        synchronized (this) {
             do {
                 findBatch = RandomUtil.generateString(16);
-                count = cardVipBatchMapper.countCardVipBatchByBatch(findBatch);
+               count = cardVipBatchMapper.countCardVipBatchByBatch(findBatch);
             } while (redisTemplate.hasKey(findBatch) || count > 0);
             cardVipBatchCache.set(findBatch,findBatch);
-        }
+
         List<CardVipBatch> cardVipBatches = prepareCardVipBatch(vipNos,findBatch);
 
         int sum = 0;

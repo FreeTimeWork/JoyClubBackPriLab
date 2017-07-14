@@ -1,7 +1,11 @@
 package com.joycity.joyclub.client_token.service.impl;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.LogConst;
+import com.joycity.joyclub.commons.constant.RedisKeyConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import org.apache.commons.logging.Log;
@@ -12,9 +16,6 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.UUID;
 // TODO: 2017/6/29 用户量过大时应该采取定时任务删除过期token
 
 /**
@@ -24,8 +25,6 @@ import java.util.UUID;
  */
 @Service
 public class ClientTokenServiceImpl implements ClientTokenService {
-    private final String KEY_CLIENT_TOKEN = "clientToken";
-    private final String KEY_CLIENT_TOKEN_EXPIRE = "clientTokenExpire";
     private final String KEY_SUFFIX_CLIENT_TOKEN_EXPIRE = "_EXPIRE";
     /**
      * 过时的时间，毫秒
@@ -38,8 +37,8 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 
     @Autowired
     public ClientTokenServiceImpl(RedisTemplate redisTemplate) {
-        tokenHO = redisTemplate.boundHashOps(KEY_CLIENT_TOKEN);
-        expireHO = redisTemplate.boundHashOps(KEY_CLIENT_TOKEN_EXPIRE);
+        tokenHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN);
+        expireHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN_EXPIRE);
     }
 
     @Override
