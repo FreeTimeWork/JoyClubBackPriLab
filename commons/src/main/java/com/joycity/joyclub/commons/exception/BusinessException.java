@@ -1,9 +1,9 @@
 package com.joycity.joyclub.commons.exception;
 
-import com.joycity.joyclub.commons.constant.ResultCode;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.joycity.joyclub.commons.constant.ResultCode;
 
 
 /**
@@ -36,6 +36,8 @@ public class BusinessException extends BaseBusinessException {
 
         map.put(ResultCode.CLIENT_TOKEN_NULL, "会话已过期，请重新登陆");
         map.put(ResultCode.CLIENT_TOKEN_EXPIRE, "会话已过期，请重新登陆");
+        map.put(ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
+        map.put(ResultCode.COUPON_LAUNCH_TYPE_ERROR, "投放类型错误");
 
     }
 

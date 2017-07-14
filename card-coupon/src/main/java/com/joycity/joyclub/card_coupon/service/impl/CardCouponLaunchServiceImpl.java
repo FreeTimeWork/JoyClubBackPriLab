@@ -1,15 +1,22 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM;
+
 import java.util.Date;
 import java.util.List;
 
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchReviewStatus;
+import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
+import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
+import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
@@ -27,9 +34,12 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Autowired
     private CardCouponLaunchMapper launchMapper;
+    @Autowired
+    private CardCouponMapper cardCouponMapper;
 
     @Override
     public ResultData createCardCouponLaunch(CardCouponLaunch launch) {
+        checkLaunchNum(launch);
         launchMapper.insertSelective(launch);
         return new ResultData(new CreateResult(launch.getId()));
     }
@@ -104,5 +114,23 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     @Override
     public ResultData deleteCardCouponLaunch(Long id) {
         return new ResultData(new UpdateResult(launchMapper.deleteCardCouponLaunchById(id)));
+    }
+
+    private void checkLaunchNum(CardCouponLaunch launch){
+        CreateCouponInfo couponInfo = cardCouponMapper.selectCardCouponById(launch.getCouponId());
+        int launchSum = launchMapper.selectlaunchNumByCouponId(couponInfo.getId());
+        int remainNum = couponInfo.getNum() - launchSum;
+        if (remainNum < launch.getLaunchNum()) {
+            throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
+        }
+        if (couponInfo.getType().equals(CouponType.DEDUCTION_COUPON)) {
+            if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+                throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "满减券只能选择批量投放和线上投放");
+            }
+        } else if (couponInfo.getType().equals(CouponType.CASH_COUPON)) {
+            if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+                throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "代金券只能选择条件投放");
+            }
+        }
     }
 }

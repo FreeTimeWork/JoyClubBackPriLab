@@ -9,6 +9,7 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
@@ -22,4 +23,7 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
 
     @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponLaunchById(@Param("id") Long id);
+
+    @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId}")
+    int selectlaunchNumByCouponId(@Param("couponId") Long couponId);
 }

@@ -74,4 +74,10 @@ public class ResultCode {
      */
     public static final int CLIENT_TOKEN_EXPIRE = 50902;
 
+    /**
+     *  投放数量超过剩余发行量
+     */
+    public static final int LAUNCH_NUM_EXCEED_COUPON_NUM = 60000;
+    public static final int COUPON_LAUNCH_TYPE_ERROR = 60001;
+
 }
