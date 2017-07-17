@@ -235,6 +235,16 @@ CREATE TABLE `card_coupon` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券表';
 
+CREATE TABLE `card_thirdparty_shop` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL COMMENT '商铺名称',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='第三方商铺';
+
 CREATE TABLE `card_thirdparty_coupon_code` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `code` varchar(20) DEFAULT NULL COMMENT '第三方卡券号',

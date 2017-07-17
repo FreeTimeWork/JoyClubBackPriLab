@@ -1,5 +1,6 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_ERROR;
 import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM;
 
 import java.util.Date;
@@ -49,7 +50,15 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
-        checkLaunchNum(launch);
+        if (launch.getType().equals(CouponType.DEDUCTION_COUPON)) {
+            if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+                throw new BusinessException(LAUNCH_ERROR, "满减券只能选择批量投放和线上投放");
+            }
+        } else if (launch.getType().equals(CouponType.CASH_COUPON)) {
+            if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+                throw new BusinessException(LAUNCH_ERROR, "代金券只能选择条件投放");
+            }
+        }
         launchMapper.insertSelective(launch);
         if (CollectionUtils.isNotEmpty(launch.getCouponTriggerScopes())) {
             for (CardCouponTriggerScope triggerScope : launch.getCouponTriggerScopes()) {
@@ -102,6 +111,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     @Override
     public ResultData confirmLaunch(Long id) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
+        checkLaunchNum(launchDb);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
         }
@@ -160,15 +170,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             if (remainNum < launch.getLaunchNum()) {
                 throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
             }
-            if (couponInfo.getType().equals(CouponType.DEDUCTION_COUPON)) {
-                if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
-                    throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "满减券只能选择批量投放和线上投放");
-                }
-            } else if (couponInfo.getType().equals(CouponType.CASH_COUPON)) {
-                if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
-                    throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "代金券只能选择条件投放");
-                }
-            }
+
         }
     }
 

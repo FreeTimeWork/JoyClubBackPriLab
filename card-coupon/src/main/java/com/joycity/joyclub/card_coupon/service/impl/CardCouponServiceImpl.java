@@ -9,7 +9,6 @@ import com.joycity.joyclub.card_coupon.mapper.CardCouponVipScopeMapper;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponStoreScope;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponVipScope;
 import com.joycity.joyclub.card_coupon.service.CardCouponService;
@@ -21,7 +20,6 @@ import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,13 +80,8 @@ public class CardCouponServiceImpl implements CardCouponService {
             ListResult listResult = (ListResult) data.getData();
             List<ShowCouponInfo> showCouponInfos = (List<ShowCouponInfo>) listResult.getList();
             for (ShowCouponInfo info : showCouponInfos) {
-                if (CollectionUtils.isNotEmpty(info.getLaunchs())) {
-                    int launchNumSum = 0;
-                    for (CardCouponLaunch launch : info.getLaunchs()) {
-                        launchNumSum += launch.getLaunchNum();
-                    }
-
-                    info.setAvailableNum(info.getNum() - launchNumSum);
+                if (info.getSumLaunchNum() != null) {
+                    info.setAvailableNum(info.getNum() - info.getSumLaunchNum());
                 }
             }
 

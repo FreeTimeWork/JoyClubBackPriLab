@@ -34,7 +34,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     @RequestMapping(value = "/card/coupon/launch/{id}", method = RequestMethod.GET)
     public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
         checkProjectUser(session);
-        return null;
+        return cardCouponLaunchService.getCardCouponLaunchById(id);
     }
 
     @RequestMapping(value = "/card/coupon/launchs", method = RequestMethod.GET)

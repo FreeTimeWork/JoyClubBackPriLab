@@ -1,9 +1,6 @@
 package com.joycity.joyclub.card_coupon.modal;
 
-import java.util.List;
-
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 
 /**
  * Created by fangchen.chai on 2017/7/12.
@@ -12,8 +9,24 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 public class ShowCouponInfo extends CardCoupon{
 
     private Integer availableNum;   //可用库存
+    private Integer sumLaunchNum;   //投放总量
+    private String thirdpartyShopName;
 
-    private List<CardCouponLaunch> launchs;
+    public String getThirdpartyShopName() {
+        return thirdpartyShopName;
+    }
+
+    public void setThirdpartyShopName(String thirdpartyShopName) {
+        this.thirdpartyShopName = thirdpartyShopName;
+    }
+
+    public Integer getSumLaunchNum() {
+        return sumLaunchNum;
+    }
+
+    public void setSumLaunchNum(Integer sumLaunchNum) {
+        this.sumLaunchNum = sumLaunchNum;
+    }
 
     public Integer getAvailableNum() {
         return availableNum;
@@ -23,11 +36,4 @@ public class ShowCouponInfo extends CardCoupon{
         this.availableNum = availableNum;
     }
 
-    public List<CardCouponLaunch> getLaunchs() {
-        return launchs;
-    }
-
-    public void setLaunchs(List<CardCouponLaunch> launchs) {
-        this.launchs = launchs;
-    }
 }

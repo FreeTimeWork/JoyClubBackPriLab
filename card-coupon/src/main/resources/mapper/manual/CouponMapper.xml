@@ -37,7 +37,8 @@
     <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo"
                extends="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper.BaseResultMap">
 
-        <collection property="launchs" resultMap="CardCouponLaunch" columnPrefix="ccl_"/>
+        <result column="thirdparty_shop_name" jdbcType="VARCHAR" property="thirdpartyShopName"/>
+        <result column="sum_launch_num" jdbcType="INTEGER" property="sumLaunchNum"/>
     </resultMap>
 
     <select id="countCardCouponByNameAndType" resultType="java.lang.Long">
@@ -50,15 +51,17 @@
 
     <select id="selectCardCouponByNameAndType" resultMap="ShowCouponInfo">
         SELECT
-            <include refid="CardCouponColumn"/>,
-            <include refid="CardCouponLaunchColumn"/>
+            <include refid="CardCouponColumn"/>, SUM (launch_num) AS sum_launch_num, cts.name AS thirdparty_shop_name
         FROM (
             SELECT *
             FROM card_coupon
+            WHERE delete_flag = 0
             ORDER BY create_time DESC
             <include refid="limit"/>
         ) cc
-        LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id
+        LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0
+        INNER JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id cts ccts.delete_flag = 0
+        and ccl.confirm_flag = 1 AND  ccl.review_status = 1
         <where>
             <include refid="name_and_type"/>
         </where>
@@ -74,6 +77,7 @@
         <result column="vip_type" jdbcType="VARCHAR" property="vipType"/>
     </resultMap>
     <resultMap id="CreateCouponInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponInfo" extends="BaseResultMap">
+        <result column="thirdparty_shop_name" jdbcType="VARCHAR" property="thirdpartyShopName"/>
         <collection property="storeScopes" resultMap="CouponStoreScopeWithShop" columnPrefix="ccss_"/>
         <collection property="vipScopes" resultMap="VipScopes"  columnPrefix="ccvs_"/>
     </resultMap>
@@ -81,11 +85,14 @@
     <select id="selectCardCouponById" resultMap="CreateCouponInfo" >
         SELECT
         <include refid="CardCouponColumn"/>,
-        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type, ss.name AS ccss_shop_name, ss.sub_commercial_type_name AS ccss_sub_commercial_type_name
+        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type,
+        ss.name AS ccss_shop_name, ss.sub_commercial_type_name AS ccss_sub_commercial_type_name,
+        cts.name AS thirdparty_shop_name
         FROM card_coupon cc
-        LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id
-        LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id
-        INNER JOIN sys_shop ss ON ss.id = ccss.store_id
+        LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id AND ccss.delete_flag = 0
+        LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id AND ccvs.delete_flag = 0
+        INNER JOIN sys_shop ss ON ss.id = ccss.store_id AND ss.delete_flag = 0
+        INNER JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
         WHERE cc.id = #{id}  AND cc.delete_flag = 0
     </select>
 

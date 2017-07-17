@@ -9,8 +9,17 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
  * 新建券页面信息
  */
 public class CreateCouponInfo extends CardCoupon{
+    private String thirdpartyShopName;
     private List<CouponStoreScopeWithShop> storeScopes;
     private List<String> vipScopes;
+
+    public String getThirdpartyShopName() {
+        return thirdpartyShopName;
+    }
+
+    public void setThirdpartyShopName(String thirdpartyShopName) {
+        this.thirdpartyShopName = thirdpartyShopName;
+    }
 
     public List<CouponStoreScopeWithShop> getStoreScopes() {
         return storeScopes;

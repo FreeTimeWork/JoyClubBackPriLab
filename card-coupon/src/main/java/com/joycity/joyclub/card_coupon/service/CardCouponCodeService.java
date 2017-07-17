@@ -5,4 +5,7 @@ package com.joycity.joyclub.card_coupon.service;
  */
 public interface CardCouponCodeService {
 
+    //TODO: cfc 批量插入
+//    batchCreateCouponCode()
+
 }
