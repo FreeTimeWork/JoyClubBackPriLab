@@ -78,6 +78,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData confirmLaunch(Long id) {
+        CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
+        if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
+            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+        }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
         launch.setConfirmFlag(true);
@@ -87,6 +91,11 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData forbidLaunch(Long id) {
+        CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
+        if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
+            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+        }
+
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
         launch.setForbidFlag(true);

@@ -1,5 +1,9 @@
 package com.joycity.joyclub.system;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import javax.sql.DataSource;
+
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
@@ -18,10 +22,6 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
-
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * Created by CallMeXYZ on 2017/5/3.

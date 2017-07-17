@@ -2,6 +2,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import java.util.List;
 
+import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponVipScopeMapper;
@@ -14,6 +15,7 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponVipScope;
 import com.joycity.joyclub.card_coupon.service.CardCouponService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
@@ -36,6 +38,8 @@ public class CardCouponServiceImpl implements CardCouponService {
     private CardCouponStoreScopeMapper couponStoreScopeMapper;
     @Autowired
     private CardCouponVipScopeMapper couponVipScopeMapper;
+    @Autowired
+    private CardCouponLaunchMapper launchMapper;
 
 
     @Override
@@ -104,7 +108,11 @@ public class CardCouponServiceImpl implements CardCouponService {
 
     @Override
     public ResultData deleteCardCoupon(Long id) {
+        if (launchMapper.countCardCouponLaunchByCouponId(id) > 0) {
+            throw new BusinessException(ResultCode.EXIST_LAUNCH);
+        }
         return new ResultData(new UpdateResult(couponMapper.deleteCardCouponById(id)));
     }
+
 
 }

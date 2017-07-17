@@ -38,6 +38,8 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.CLIENT_TOKEN_EXPIRE, "会话已过期，请重新登陆");
         map.put(ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
         map.put(ResultCode.COUPON_LAUNCH_TYPE_ERROR, "投放类型错误");
+        map.put(ResultCode.EXIST_LAUNCH, "该券存在投放");
+        map.put(ResultCode.LAUNCH_ERROR, "投放错误");
 
     }
 

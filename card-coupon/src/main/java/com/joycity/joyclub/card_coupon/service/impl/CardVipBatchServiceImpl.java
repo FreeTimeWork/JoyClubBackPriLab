@@ -9,15 +9,16 @@ import com.joycity.joyclub.card_coupon.mapper.CardVipBatchMapper;
 import com.joycity.joyclub.card_coupon.modal.BatchAndSum;
 import com.joycity.joyclub.card_coupon.modal.generated.CardVipBatch;
 import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
-import com.joycity.joyclub.card_coupon.util.RandomUtil;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.commons.constant.RedisKeyConst;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,8 +34,14 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    private final BoundHashOperations<String, String, String> cardVipBatchCache;
+
+    @Autowired
+    public CardVipBatchServiceImpl(RedisTemplate redisTemplate) {
+        cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH);
+    }
+
     public ResultData createCardVipBatch(List<List<String>> list){
-        ValueOperations<String, String> cardVipBatchCache = redisTemplate.opsForValue();
         Set<String> vipNos = new HashSet<>();
         List<String> rows;
         for (int i = 0; i < list.size(); i++) {
@@ -51,10 +58,11 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
         String findBatch;
         Long count;
             do {
-                findBatch = RandomUtil.generateString(16);
+                String pix = String.valueOf(System.nanoTime());
+                findBatch =  pix + RandomStringUtils.random(8, "1234567890");
                count = cardVipBatchMapper.countCardVipBatchByBatch(findBatch);
             } while (redisTemplate.hasKey(findBatch) || count > 0);
-            cardVipBatchCache.set(findBatch,findBatch);
+            cardVipBatchCache.put(findBatch,findBatch);
 
         List<CardVipBatch> cardVipBatches = prepareCardVipBatch(vipNos,findBatch);
 
@@ -101,7 +109,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
                 }
             }.batchInsert(cardVipBatches.size());
         }
-        redisTemplate.delete(findBatch);
+        cardVipBatchCache.delete(findBatch);
         return new ResultData(new BatchAndSum(findBatch, sum));
     }
 

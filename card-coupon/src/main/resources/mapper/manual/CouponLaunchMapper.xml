@@ -102,4 +102,13 @@
             <include refid="name_type_status"/>
         </where>
     </select>
+
+    <select id="selectLaunchWithCouponByCouponId" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo">
+        SELECT
+        <include refid="CardCouponLaunchColumn"/>,
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.batch, cc.thirdparty_shop_id
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
+        WHERE coupon_id = #{couponId}
+    </select>
 </mapper>

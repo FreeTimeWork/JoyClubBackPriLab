@@ -3,6 +3,7 @@ package com.joycity.joyclub.card_coupon.mapper;
 import java.util.Date;
 import java.util.List;
 
+import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
@@ -26,4 +27,9 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
 
     @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId}")
     int selectlaunchNumByCouponId(@Param("couponId") Long couponId);
+
+    @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId}")
+    int countCardCouponLaunchByCouponId(@Param("couponId") Long couponId);
+
+    CouponLaunchWithCouponInfo selectLaunchWithCouponByCouponId(@Param("couponId") Long couponId);
 }
