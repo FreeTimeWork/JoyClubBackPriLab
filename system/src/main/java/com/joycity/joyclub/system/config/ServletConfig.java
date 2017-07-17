@@ -1,7 +1,6 @@
 package com.joycity.joyclub.system.config;
 
 
-import com.joycity.joyclub.system.profile.NotDevProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @date 2016/6/23
  */
 @Configuration
-@NotDevProfile
 public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
