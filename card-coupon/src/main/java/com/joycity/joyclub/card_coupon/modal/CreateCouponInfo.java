@@ -3,21 +3,20 @@ package com.joycity.joyclub.card_coupon.modal;
 import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponStoreScope;
 
 /**
  * Created by fangchen.chai on 2017/7/12.
  * 新建券页面信息
  */
 public class CreateCouponInfo extends CardCoupon{
-    private List<CardCouponStoreScope> storeScopes;
+    private List<CouponStoreScopeWithShop> storeScopes;
     private List<String> vipScopes;
 
-    public List<CardCouponStoreScope> getStoreScopes() {
+    public List<CouponStoreScopeWithShop> getStoreScopes() {
         return storeScopes;
     }
 
-    public void setStoreScopes(List<CardCouponStoreScope> storeScopes) {
+    public void setStoreScopes(List<CouponStoreScopeWithShop> storeScopes) {
         this.storeScopes = storeScopes;
     }
 

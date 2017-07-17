@@ -1,6 +1,6 @@
 package com.joycity.joyclub.card_coupon.service;
 
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
+import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 
@@ -9,9 +9,11 @@ import com.joycity.joyclub.commons.utils.PageUtil;
  */
 public interface CardCouponLaunchService {
 
-    ResultData createCardCouponLaunch(CardCouponLaunch launch);
+    ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch);
 
     ResultData getListByCouponNameAndCouponTypeAndStatus(String name, Integer type, Integer status, PageUtil pageUtil);
+
+    ResultData getCardCouponLaunchById(Long id);
 
     ResultData confirmLaunch(Long id);
 

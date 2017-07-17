@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.util.ExcelToBeanParser;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
+import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
 import com.joycity.joyclub.commons.exception.BusinessException;
@@ -53,7 +53,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/launch/create", method = RequestMethod.POST)
-    public ResultData createCardCoupon(CardCouponLaunch info, HttpSession session) {
+    public ResultData createCardCoupon(CreateCouponLaunchInfo info, HttpSession session) {
         checkProjectUser(session);
         return cardCouponLaunchService.createCardCouponLaunch(info);
     }

@@ -446,6 +446,76 @@ public class CardCouponLaunchExample {
             return (Criteria) this;
         }
 
+        public Criteria andVipBatchIsNull() {
+            addCriterion("vip_batch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchIsNotNull() {
+            addCriterion("vip_batch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchEqualTo(String value) {
+            addCriterion("vip_batch =", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchNotEqualTo(String value) {
+            addCriterion("vip_batch <>", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchGreaterThan(String value) {
+            addCriterion("vip_batch >", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("vip_batch >=", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchLessThan(String value) {
+            addCriterion("vip_batch <", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchLessThanOrEqualTo(String value) {
+            addCriterion("vip_batch <=", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchLike(String value) {
+            addCriterion("vip_batch like", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchNotLike(String value) {
+            addCriterion("vip_batch not like", value, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchIn(List<String> values) {
+            addCriterion("vip_batch in", values, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchNotIn(List<String> values) {
+            addCriterion("vip_batch not in", values, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchBetween(String value1, String value2) {
+            addCriterion("vip_batch between", value1, value2, "vipBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVipBatchNotBetween(String value1, String value2) {
+            addCriterion("vip_batch not between", value1, value2, "vipBatch");
+            return (Criteria) this;
+        }
+
         public Criteria andConditionAmountIsNull() {
             addCriterion("condition_amount is null");
             return (Criteria) this;

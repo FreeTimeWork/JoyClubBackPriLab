@@ -13,7 +13,7 @@ public interface CardVipBatchMapper extends BaseMapper<CardVipBatch, Long, CardV
 
     int batchInsertCardVipBatch(@Param("sql") String sql);
 
-    @Select("select count(*) from card_vip_batch where batch = #{batch}")
+    @Select("select count(*) from card_vip_batch where batch = #{batch} and delete_flag = 0")
     Long countCardVipBatchByBatch(@Param("batch") String batch);
 
 

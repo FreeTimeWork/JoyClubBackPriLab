@@ -14,15 +14,15 @@ public interface CardThirdpartyCouponCodeMapper extends BaseMapper<CardThirdpart
 
     int batchInsertCardThirdpartyCouponCode(@Param("sql") String sql);
 
-    @Select("select count(*) from card_thirdparty_coupon_code where batch = #{batch}")
+    @Select("select count(*) from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0")
     Long countByBatch(@Param("batch") String batch);
 
     @Select("select count(*) from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0")
     Long countNotDeleteByBatch(@Param("batch") String batch);
 
-    @Select("select id, code, batch from card_thirdparty_coupon_code where id = #{id}")
+    @Select("select id, code, batch from card_thirdparty_coupon_code where id = #{id} and delete_flag = 0")
     CardThirdpartyCouponCode selectById(@Param("id") Long id);
 
-    @Update("update card_thirdparty_coupon_code set delete_flag = 1, delete_time = now() where id = #{id}")
+    @Update("update card_thirdparty_coupon_code set delete_flag = 1, delete_time = now() where id = #{id} and delete_flag = 0")
     int deleteById(@Param("id") Long id);
 }

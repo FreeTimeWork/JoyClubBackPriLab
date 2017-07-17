@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo;
+import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
@@ -25,11 +26,13 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponLaunchById(@Param("id") Long id);
 
-    @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId}")
+    @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
     int selectlaunchNumByCouponId(@Param("couponId") Long couponId);
 
-    @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId}")
+    @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
     int countCardCouponLaunchByCouponId(@Param("couponId") Long couponId);
 
     CouponLaunchWithCouponInfo selectLaunchWithCouponByCouponId(@Param("couponId") Long couponId);
+
+    CreateCouponLaunchInfo selectCouponLaunchInfoById(@Param("id") Long id);
 }

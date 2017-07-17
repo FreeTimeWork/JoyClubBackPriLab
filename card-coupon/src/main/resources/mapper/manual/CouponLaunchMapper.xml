@@ -6,7 +6,7 @@
     </sql>
 
     <sql id="CardCouponLaunchColumn">
-        ccl.id , ccl.coupon_id , ccl.name , ccl.type , ccl.condition_amount ,
+        ccl.id , ccl.coupon_id , ccl.name , ccl.type , ccl.vip_batch, ccl.condition_amount ,
         ccl.pay_type  , ccl.pay_amount  , ccl.launch_num  ,ccl.max_receive,
         ccl.remain_num  , ccl.launch_start_time  , ccl.launch_end_time  ,
         ccl.effective_start_time  , ccl.effective_end_time,ccl.review_status  ,
@@ -56,33 +56,6 @@
     </sql>
 
 
-    <resultMap id="CardCouponLaunch" type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch">
-
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="type" jdbcType="TINYINT" property="type" />
-        <result column="condition_amount" jdbcType="DECIMAL" property="conditionAmount" />
-        <result column="max_receive" jdbcType="INTEGER" property="maxReceive" />
-        <result column="pay_type" jdbcType="TINYINT" property="payType" />
-        <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
-        <result column="launch_num" jdbcType="INTEGER" property="launchNum" />
-        <result column="remain_num" jdbcType="INTEGER" property="remainNum" />
-        <result column="launch_start_time" jdbcType="TIMESTAMP" property="launchStartTime" />
-        <result column="launch_end_time" jdbcType="TIMESTAMP" property="launchEndTime" />
-        <result column="effective_start_time" jdbcType="TIMESTAMP" property="effectiveStartTime" />
-        <result column="effective_end_time" jdbcType="TIMESTAMP" property="effectiveEndTime" />
-        <result column="review_status" jdbcType="TINYINT" property="reviewStatus" />
-        <result column="review_info" jdbcType="VARCHAR" property="reviewInfo" />
-        <result column="confirm_flag" jdbcType="BIT" property="confirmFlag" />
-        <result column="forbid_flag" jdbcType="BIT" property="forbidFlag" />
-        <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
-        <result column="forbid_time" jdbcType="TIMESTAMP" property="forbidTime" />
-        <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
-        <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
-        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
-    </resultMap>
-
     <select id="countByCouponNameAndCouponTypeAndStatus" resultType="java.lang.Long">
         SELECT count(*)
         FROM card_coupon_launch ccl
@@ -109,6 +82,25 @@
         cc.name AS coupon_name, cc.type AS coupon_type, cc.batch, cc.thirdparty_shop_id
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
-        WHERE coupon_id = #{couponId}
+        WHERE ccl.coupon_id = #{couponId} AND ccl.delete_flag = 0
+    </select>
+
+    <resultMap id="CouponTriggerScopeWithShop" type="com.joycity.joyclub.card_coupon.modal.CouponTriggerScopeWithShop"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponTriggerScopeMapper.BaseResultMap">
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="sub_commercial_type_name" jdbcType="VARCHAR" property="subCommercialTypeName"/>
+    </resultMap>
+
+    <resultMap id="CreateCouponLaunchInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo" extends="BaseResultMap">
+        <collection property="couponTriggerScopes" resultMap="CouponTriggerScopeWithShop" columnPrefix="ccts_"/>
+    </resultMap>
+
+    <select id="selectCouponLaunchInfoById" resultMap="CreateCouponLaunchInfo">
+        SELECT
+        <include refid="CardCouponLaunchColumn"/>,
+        ccts.store_id AS ccts_store_id, ccts.ratio AS ccts_ratio, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
+        FROM card_coupon_launch ccl
+        LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id
+        WHERE ccl.id = #{id} AND ccl.delete_flag = 0
     </select>
 </mapper>

@@ -73,21 +73,20 @@
     <resultMap id="VipScopes" type="string" >
         <result column="vip_type" jdbcType="VARCHAR" property="vipType"/>
     </resultMap>
-
     <resultMap id="CreateCouponInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponInfo" extends="BaseResultMap">
-        <collection property="storeScopes" resultMap="StoreScopes" columnPrefix="ccss_"/>
+        <collection property="storeScopes" resultMap="CouponStoreScopeWithShop" columnPrefix="ccss_"/>
         <collection property="vipScopes" resultMap="VipScopes"  columnPrefix="ccvs_"/>
     </resultMap>
 
     <select id="selectCardCouponById" resultMap="CreateCouponInfo" >
         SELECT
         <include refid="CardCouponColumn"/>,
-        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type, ss.name AS ccss_shop_name, ss.sub_commercial_type_name AS sccss_sub_commercial_type_name
+        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type, ss.name AS ccss_shop_name, ss.sub_commercial_type_name AS ccss_sub_commercial_type_name
         FROM card_coupon cc
         LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id
         LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id
         INNER JOIN sys_shop ss ON ss.id = ccss.store_id
-        WHERE cc.id = #{id}
+        WHERE cc.id = #{id}  AND cc.delete_flag = 0
     </select>
 
 </mapper>
