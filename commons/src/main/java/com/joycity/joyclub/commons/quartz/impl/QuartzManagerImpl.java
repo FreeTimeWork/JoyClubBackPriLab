@@ -33,4 +33,14 @@ public class QuartzManagerImpl implements QuartzManager{
         logger.info( "add job " + triggerKey + " success,start at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
     }
 
+    @Override
+    public void removeJob(TriggerKey triggerKey) throws SchedulerException {
+        quartzScheduler.unscheduleJob(triggerKey);
+    }
+
+    @Override
+    public boolean checkExist(TriggerKey triggerKey) throws SchedulerException {
+        return quartzScheduler.checkExists(triggerKey);
+    }
+
 }

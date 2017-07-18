@@ -12,4 +12,9 @@ import org.quartz.TriggerKey;
 public interface QuartzManager {
 
     void addJob(Class<? extends Job> jobClazz, TriggerKey triggerKey, String dataKey, long dataValue, Date date) throws SchedulerException;
+
+    void removeJob(TriggerKey triggerKey) throws SchedulerException;
+
+    boolean checkExist(TriggerKey triggerKey) throws SchedulerException;
+
 }

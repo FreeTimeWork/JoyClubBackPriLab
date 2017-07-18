@@ -126,7 +126,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
         }
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
-            quartzManager.addJob(BatchLaunchJob.class, new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
+            quartzManager.addJob(BatchLaunchJob.class, getTriggerKey(id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
@@ -136,10 +136,16 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     }
 
     @Override
-    public ResultData forbidLaunch(Long id) {
+    public ResultData forbidLaunch(Long id) throws SchedulerException {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+        }
+        if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)
+                && launchDb.getConfirmFlag()
+                && quartzManager.checkExist(getTriggerKey(id))) {
+
+            quartzManager.removeJob(getTriggerKey(id));
         }
 
         CardCouponLaunch launch = new CardCouponLaunch();
@@ -206,4 +212,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         info.setUsedNum(usedNum);
     }
 
+    private TriggerKey getTriggerKey(Long launchId) {
+        return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + launchId);
+    }
 }

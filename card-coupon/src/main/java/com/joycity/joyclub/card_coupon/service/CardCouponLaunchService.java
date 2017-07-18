@@ -18,7 +18,7 @@ public interface CardCouponLaunchService {
 
     ResultData confirmLaunch(Long id) throws SchedulerException;
 
-    ResultData forbidLaunch(Long id);
+    ResultData forbidLaunch(Long id) throws SchedulerException;
     /**
      * 通过审核
      *
