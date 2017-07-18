@@ -1,5 +1,7 @@
 package com.joycity.joyclub.card_coupon.mapper;
 
+import java.util.List;
+
 import com.joycity.joyclub.card_coupon.modal.generated.CardVipBatch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardVipBatchExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
@@ -15,6 +17,9 @@ public interface CardVipBatchMapper extends BaseMapper<CardVipBatch, Long, CardV
 
     @Select("select count(*) from card_vip_batch where batch = #{batch} and delete_flag = 0")
     Long countCardVipBatchByBatch(@Param("batch") String batch);
+
+    @Select("select client_id from card_vip_batch where batch = #{batch} and delete_flag = 0")
+    List<Long> selectClientIdByBatch(@Param("batch") String batch);
 
 
 }

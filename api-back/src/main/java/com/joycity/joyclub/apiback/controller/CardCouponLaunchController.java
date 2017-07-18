@@ -15,6 +15,7 @@ import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,7 +72,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/confirm", method = RequestMethod.POST)
-    public ResultData confirmLaunch(@PathVariable Long id, HttpSession session) {
+    public ResultData confirmLaunch(@PathVariable Long id, HttpSession session) throws SchedulerException {
         checkProjectUser(session);
         return cardCouponLaunchService.confirmLaunch(id);
     }

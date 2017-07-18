@@ -10,7 +10,7 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="launch_id" jdbcType="BIGINT" property="launchId" />
     <result column="pos_sale_detail_id" jdbcType="BIGINT" property="posSaleDetailId" />
-    <result column="belong" jdbcType="INTEGER" property="belong" />
+    <result column="belong" jdbcType="BIGINT" property="belong" />
     <result column="client_id" jdbcType="BIGINT" property="clientId" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="use_time" jdbcType="TIMESTAMP" property="useTime" />
@@ -151,7 +151,7 @@
       last_update, delete_flag, delete_time
       )
     values (#{code,jdbcType=VARCHAR}, #{launchId,jdbcType=BIGINT}, #{posSaleDetailId,jdbcType=BIGINT}, 
-      #{belong,jdbcType=INTEGER}, #{clientId,jdbcType=BIGINT}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{belong,jdbcType=BIGINT}, #{clientId,jdbcType=BIGINT}, #{receiveTime,jdbcType=TIMESTAMP}, 
       #{useTime,jdbcType=TIMESTAMP}, #{useStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{lastUpdate,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT}, #{deleteTime,jdbcType=TIMESTAMP}
       )
@@ -211,7 +211,7 @@
         #{posSaleDetailId,jdbcType=BIGINT},
       </if>
       <if test="belong != null">
-        #{belong,jdbcType=INTEGER},
+        #{belong,jdbcType=BIGINT},
       </if>
       <if test="clientId != null">
         #{clientId,jdbcType=BIGINT},
@@ -269,7 +269,7 @@
         pos_sale_detail_id = #{record.posSaleDetailId,jdbcType=BIGINT},
       </if>
       <if test="record.belong != null">
-        belong = #{record.belong,jdbcType=INTEGER},
+        belong = #{record.belong,jdbcType=BIGINT},
       </if>
       <if test="record.clientId != null">
         client_id = #{record.clientId,jdbcType=BIGINT},
@@ -310,7 +310,7 @@
       code = #{record.code,jdbcType=VARCHAR},
       launch_id = #{record.launchId,jdbcType=BIGINT},
       pos_sale_detail_id = #{record.posSaleDetailId,jdbcType=BIGINT},
-      belong = #{record.belong,jdbcType=INTEGER},
+      belong = #{record.belong,jdbcType=BIGINT},
       client_id = #{record.clientId,jdbcType=BIGINT},
       receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
       use_time = #{record.useTime,jdbcType=TIMESTAMP},
@@ -340,7 +340,7 @@
         pos_sale_detail_id = #{posSaleDetailId,jdbcType=BIGINT},
       </if>
       <if test="belong != null">
-        belong = #{belong,jdbcType=INTEGER},
+        belong = #{belong,jdbcType=BIGINT},
       </if>
       <if test="clientId != null">
         client_id = #{clientId,jdbcType=BIGINT},
@@ -378,7 +378,7 @@
     set code = #{code,jdbcType=VARCHAR},
       launch_id = #{launchId,jdbcType=BIGINT},
       pos_sale_detail_id = #{posSaleDetailId,jdbcType=BIGINT},
-      belong = #{belong,jdbcType=INTEGER},
+      belong = #{belong,jdbcType=BIGINT},
       client_id = #{clientId,jdbcType=BIGINT},
       receive_time = #{receiveTime,jdbcType=TIMESTAMP},
       use_time = #{useTime,jdbcType=TIMESTAMP},

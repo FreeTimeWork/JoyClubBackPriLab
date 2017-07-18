@@ -455,52 +455,52 @@ public class CardCouponCodeExample {
             return (Criteria) this;
         }
 
-        public Criteria andBelongEqualTo(Integer value) {
+        public Criteria andBelongEqualTo(Long value) {
             addCriterion("belong =", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongNotEqualTo(Integer value) {
+        public Criteria andBelongNotEqualTo(Long value) {
             addCriterion("belong <>", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongGreaterThan(Integer value) {
+        public Criteria andBelongGreaterThan(Long value) {
             addCriterion("belong >", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongGreaterThanOrEqualTo(Integer value) {
+        public Criteria andBelongGreaterThanOrEqualTo(Long value) {
             addCriterion("belong >=", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongLessThan(Integer value) {
+        public Criteria andBelongLessThan(Long value) {
             addCriterion("belong <", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongLessThanOrEqualTo(Integer value) {
+        public Criteria andBelongLessThanOrEqualTo(Long value) {
             addCriterion("belong <=", value, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongIn(List<Integer> values) {
+        public Criteria andBelongIn(List<Long> values) {
             addCriterion("belong in", values, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongNotIn(List<Integer> values) {
+        public Criteria andBelongNotIn(List<Long> values) {
             addCriterion("belong not in", values, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongBetween(Integer value1, Integer value2) {
+        public Criteria andBelongBetween(Long value1, Long value2) {
             addCriterion("belong between", value1, value2, "belong");
             return (Criteria) this;
         }
 
-        public Criteria andBelongNotBetween(Integer value1, Integer value2) {
+        public Criteria andBelongNotBetween(Long value1, Long value2) {
             addCriterion("belong not between", value1, value2, "belong");
             return (Criteria) this;
         }

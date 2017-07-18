@@ -213,7 +213,7 @@
 ```
 
 ### 新卡券相关表
-```$xslt
+```
 CREATE TABLE `card_coupon` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `project_id` bigint(20) NOT NULL COMMENT '项目id',
@@ -247,13 +247,15 @@ CREATE TABLE `card_thirdparty_shop` (
 
 CREATE TABLE `card_thirdparty_coupon_code` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `thirdparty_shop_id` bigint(20) DEFAULT NULL COMMENT '第三方商家id',
   `code` varchar(20) DEFAULT NULL COMMENT '第三方卡券号',
   `batch` varchar(50) NOT NULL COMMENT '第三方卡券号批次号',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_card_thirdparty_coupon_code_thirdparty_shop` (`code`,`thirdparty_shop_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='第三方卡券号中间表';
 
 CREATE TABLE `card_coupon_store_scope` (
@@ -319,7 +321,7 @@ CREATE TABLE `card_coupon_code` (
   `code` varchar(20) DEFAULT NULL COMMENT '卡券号',
   `launch_id` bigint(20) NOT NULL COMMENT '卡券投放id',
   `pos_sale_detail_id` bigint(20) DEFAULT NULL COMMENT '支付流水id',
-  `belong` int(11) NOT NULL COMMENT '卡券所属，-1 系统自身卡券， 第三方卡券中的商家id',
+  `belong` bigint(20) NOT NULL COMMENT '卡券所属，-1 系统自身卡券， 第三方卡券中的商家id',
   `client_id` bigint(20) NOT NULL COMMENT '会员号id',
   `receive_time` datetime DEFAULT NULL COMMENT '领取时间',
   `use_time` datetime DEFAULT NULL COMMENT '使用时间',

@@ -46,7 +46,7 @@ public class CardCouponCode {
      *
      * @mbg.generated
      */
-    private Integer belong;
+    private Long belong;
 
     /**
      *
@@ -224,7 +224,7 @@ public class CardCouponCode {
      *
      * @mbg.generated
      */
-    public Integer getBelong() {
+    public Long getBelong() {
         return belong;
     }
 
@@ -236,7 +236,7 @@ public class CardCouponCode {
      *
      * @mbg.generated
      */
-    public void setBelong(Integer belong) {
+    public void setBelong(Long belong) {
         this.belong = belong;
     }
 

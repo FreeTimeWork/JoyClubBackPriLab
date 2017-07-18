@@ -255,6 +255,66 @@ public class CardThirdpartyCouponCodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andThirdpartyShopIdIsNull() {
+            addCriterion("thirdparty_shop_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdIsNotNull() {
+            addCriterion("thirdparty_shop_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id =", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id <>", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdGreaterThan(Long value) {
+            addCriterion("thirdparty_shop_id >", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id >=", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdLessThan(Long value) {
+            addCriterion("thirdparty_shop_id <", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdLessThanOrEqualTo(Long value) {
+            addCriterion("thirdparty_shop_id <=", value, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdIn(List<Long> values) {
+            addCriterion("thirdparty_shop_id in", values, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotIn(List<Long> values) {
+            addCriterion("thirdparty_shop_id not in", values, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdBetween(Long value1, Long value2) {
+            addCriterion("thirdparty_shop_id between", value1, value2, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdpartyShopIdNotBetween(Long value1, Long value2) {
+            addCriterion("thirdparty_shop_id not between", value1, value2, "thirdpartyShopId");
+            return (Criteria) this;
+        }
+
         public Criteria andCodeIsNull() {
             addCriterion("code is null");
             return (Criteria) this;

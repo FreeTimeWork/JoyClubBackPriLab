@@ -70,6 +70,7 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/thirdparty/coupon/codes/excel", method = {RequestMethod.POST})
     public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
+                                           @RequestParam("thirdpartyShopId") Long thirdpartyShopId,
                                            HttpSession httpSession) {
 
         checkProjectUser(httpSession);
@@ -81,7 +82,7 @@ public class CardCouponController extends BaseUserSessionController {
             throw new BusinessException(ERR_IMPORT_EXCEL, "导入excel失败");
         }
 
-        return thirdpartyCouponCodeService.createThirdpartyCouponCode(list);
+        return thirdpartyCouponCodeService.createThirdpartyCouponCode(list, thirdpartyShopId);
 
     }
 }

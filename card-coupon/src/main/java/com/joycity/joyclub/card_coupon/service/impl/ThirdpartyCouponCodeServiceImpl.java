@@ -37,7 +37,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
         thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRDPARTY_COUPON_BATCH);
     }
     @Override
-    public ResultData createThirdpartyCouponCode(List<List<String>> list) {
+    public ResultData createThirdpartyCouponCode(List<List<String>> list, Long thirdpartyShopId) {
 
         Set<String> cardNos = new HashSet<>();
         List<String> rows;
@@ -57,10 +57,10 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
         do {
             String pix = String.valueOf(System.nanoTime());
             findBatch =  pix + RandomStringUtils.random(8, "1234567890");
-            count = thirdpartyCouponCodeMapper.countByBatch(findBatch);
+            count = thirdpartyCouponCodeMapper.countIncludeDeleteByBatch(findBatch);
         } while (redisTemplate.hasKey(findBatch) || count > 0);
         thirdpartyCouponBatchCache.put(findBatch,findBatch);
-        List<CardThirdpartyCouponCode> thirdpartyCouponCodes = prepareThirdpartyCouponCode(cardNos,findBatch);
+        List<CardThirdpartyCouponCode> thirdpartyCouponCodes = prepareThirdpartyCouponCode(cardNos, findBatch, thirdpartyShopId);
 
         int sum = 0;
         if (CollectionUtils.isNotEmpty(thirdpartyCouponCodes)) {
@@ -77,17 +77,17 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
                 @Override
                 public String getValuesNames() {
-                    return "(code, batch)";
+                    return "(thirdparty_shop_id, code, batch )";
                 }
 
                 @Override
                 public Boolean ifIgnoreDuplicate() {
-                    return true;
+                    return false;
                 }
 
                 @Override
                 public String getUpdateSqlWhenDuplicate() {
-                    return null;
+                    return "code = values(code)";
                 }
 
                 @Override
@@ -95,6 +95,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
                     CardThirdpartyCouponCode thirdpartyCouponCode = thirdpartyCouponCodes.get(index);
                     StringBuilder builder = new StringBuilder();
                     builder.append("(")
+                            .append("'" + thirdpartyCouponCode.getThirdpartyShopId() + "', ")
                             .append("'" + thirdpartyCouponCode.getCode() + "', ")
                             .append("'" + thirdpartyCouponCode.getBatch() + "' ")
                             .append(") ")
@@ -109,12 +110,13 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
         return new ResultData(new BatchAndSum(findBatch, sum));
     }
 
-    private List<CardThirdpartyCouponCode> prepareThirdpartyCouponCode(Set<String> cardNos, String batch) {
+    private List<CardThirdpartyCouponCode> prepareThirdpartyCouponCode(Set<String> cardNos, String batch, Long thirdpartyShopId) {
 
         List<CardThirdpartyCouponCode> thirdpartyCouponCodes = new ArrayList<>();
 
         for (String str : cardNos) {
             CardThirdpartyCouponCode thirdpartyCouponCode = new CardThirdpartyCouponCode();
+            thirdpartyCouponCode.setThirdpartyShopId(thirdpartyShopId);
             thirdpartyCouponCode.setBatch(batch);
             thirdpartyCouponCode.setCode(str);
             thirdpartyCouponCodes.add(thirdpartyCouponCode);

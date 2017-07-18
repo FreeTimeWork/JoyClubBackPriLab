@@ -19,16 +19,21 @@ import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponTriggerScope;
+import com.joycity.joyclub.card_coupon.quartz.BatchLaunchJob;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.constant.QuartzPreKeyConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.quartz.QuartzManager;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.quartz.SchedulerException;
+import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +51,8 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     private CardCouponTriggerScopeMapper cardCouponTriggerScopeMapper;
     @Autowired
     private CardCouponCodeMapper cardCouponCodeMapper;
-
+    @Autowired
+    private QuartzManager quartzManager;
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
@@ -109,11 +115,14 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     }
 
     @Override
-    public ResultData confirmLaunch(Long id) {
+    public ResultData confirmLaunch(Long id) throws SchedulerException {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         checkLaunchNum(launchDb);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+        }
+        if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
+            quartzManager.addJob(BatchLaunchJob.class, new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);

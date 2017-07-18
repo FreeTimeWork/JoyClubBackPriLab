@@ -9,6 +9,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
  */
 public interface ThirdpartyCouponCodeService {
 
-    ResultData createThirdpartyCouponCode(List<List<String>> list);
+    ResultData createThirdpartyCouponCode(List<List<String>> list, Long thirdpartyShopId);
 
 }
