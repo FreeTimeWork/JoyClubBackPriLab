@@ -28,11 +28,11 @@
         </if>
     </sql>
 
-    <resultMap
+<!--    <resultMap
             id="CardCouponLaunch"
             type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch"
-            extends="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper.CardCouponLaunch">
-    </resultMap>
+            extends="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper.BaseResultMap">
+    </resultMap>-->
 
     <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo"
                extends="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper.BaseResultMap">

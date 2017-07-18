@@ -92,14 +92,16 @@
     </resultMap>
 
     <resultMap id="CreateCouponLaunchInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo" extends="BaseResultMap">
+        <result column="coupon_name" jdbcType="VARCHAR" property="couponName"/>
         <collection property="couponTriggerScopes" resultMap="CouponTriggerScopeWithShop" columnPrefix="ccts_"/>
     </resultMap>
 
     <select id="selectCouponLaunchInfoById" resultMap="CreateCouponLaunchInfo">
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
-        ccts.store_id AS ccts_store_id, ccts.ratio AS ccts_ratio, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
+        cc.name AS coupon_name, ccts.store_id AS ccts_store_id, ccts.ratio AS ccts_ratio, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
         FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id cc.delete_flag = 0
         LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id AND ccts.delete_flag = 0
         WHERE ccl.id = #{id} AND ccl.delete_flag = 0
     </select>

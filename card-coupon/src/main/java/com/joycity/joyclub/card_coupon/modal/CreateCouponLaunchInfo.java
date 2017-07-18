@@ -2,16 +2,23 @@ package com.joycity.joyclub.card_coupon.modal;
 
 import java.util.List;
 
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
-
 /**
  * Created by fangchen.chai on 2017/7/17.
  */
-public class CreateCouponLaunchInfo extends CardCouponLaunch {
+public class CreateCouponLaunchInfo extends ShowCouponLaunchInfo {
 
-    private List<CouponTriggerScopeWithShop> couponTriggerScopes;
     private Integer receiveNum; //领取量
     private Integer usedNum;
+    private List<Long> triggerScopeIds;
+    private List<CouponTriggerScopeWithShop> couponTriggerScopes;
+
+    public List<Long> getTriggerScopeIds() {
+        return triggerScopeIds;
+    }
+
+    public void setTriggerScopeIds(List<Long> triggerScopeIds) {
+        this.triggerScopeIds = triggerScopeIds;
+    }
 
     public Integer getReceiveNum() {
         return receiveNum;

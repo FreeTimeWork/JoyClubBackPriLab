@@ -283,7 +283,7 @@ CREATE TABLE `card_coupon_launch` (
   `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
   `name` varchar(50) NOT NULL COMMENT '投放名称',
   `type` tinyint(4) NOT NULL COMMENT '投放类型，1,条件投放 2,线上投放 3,批量投放',
-  `vip_batch` varchar(50) NOT NULL COMMENT '批量投放对应的vip号的批次号',
+  `vip_batch` varchar(50) DEFAULT NULL COMMENT '批量投放对应的vip号的批次号',
   `condition_amount` decimal(14,4) DEFAULT NULL COMMENT '触发条件投放的总额',
   `max_receive` int(11) unsigned DEFAULT NULL COMMENT '每人每日最大获劵量',
   `pay_type` tinyint(4) NOT NULL COMMENT '支付方式 1,金钱 2,积分',

@@ -32,19 +32,10 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     @Autowired
     private CardVipBatchService cardVipBatchService;
 
-    @RequestMapping(value = "/card/coupon/launch/{id}", method = RequestMethod.GET)
-    public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
+    @RequestMapping(value = "/card/coupon/launch", method = RequestMethod.POST)
+    public ResultData createCardCoupon(CreateCouponLaunchInfo info, HttpSession session) {
         checkProjectUser(session);
-        return cardCouponLaunchService.getCardCouponLaunchById(id);
-    }
-
-    @RequestMapping(value = "/card/coupon/launchs", method = RequestMethod.GET)
-    public ResultData getCardCoupons(@RequestParam(required = false) String couponName,
-                                     @RequestParam(required = false) Integer couponType,
-                                     @RequestParam(required = false) Integer status,
-                                     PageUtil pageUtil, HttpSession session) {
-        checkProjectUser(session);
-        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, status, pageUtil);
+        return cardCouponLaunchService.createCardCouponLaunch(info);
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/delete", method = RequestMethod.POST)
@@ -53,10 +44,19 @@ public class CardCouponLaunchController extends BaseUserSessionController {
         return cardCouponLaunchService.deleteCardCouponLaunch(id);
     }
 
-    @RequestMapping(value = "/card/coupon/launch/create", method = RequestMethod.POST)
-    public ResultData createCardCoupon(CreateCouponLaunchInfo info, HttpSession session) {
+    @RequestMapping(value = "/card/coupon/launch/{id}", method = RequestMethod.GET)
+    public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
         checkProjectUser(session);
-        return cardCouponLaunchService.createCardCouponLaunch(info);
+        return cardCouponLaunchService.getCardCouponLaunchById(id);
+    }
+
+    @RequestMapping(value = "/card/coupon/launches", method = RequestMethod.GET)
+    public ResultData getCardCoupons(@RequestParam(required = false) String couponName,
+                                     @RequestParam(required = false) Integer couponType,
+                                     @RequestParam(required = false) Integer status,
+                                     PageUtil pageUtil, HttpSession session) {
+        checkProjectUser(session);
+        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, status, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/review/permit", method = RequestMethod.POST)

@@ -34,9 +34,6 @@ public class ShowCouponLaunchInfo extends CardCouponLaunch {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(new Byte("0").intValue() == 0);
-    }
     public String getCouponName() {
         return couponName;
     }

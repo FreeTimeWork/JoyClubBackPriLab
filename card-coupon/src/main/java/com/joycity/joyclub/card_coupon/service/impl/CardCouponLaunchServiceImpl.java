@@ -66,9 +66,11 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             }
         }
         launchMapper.insertSelective(launch);
-        if (CollectionUtils.isNotEmpty(launch.getCouponTriggerScopes())) {
-            for (CardCouponTriggerScope triggerScope : launch.getCouponTriggerScopes()) {
-                triggerScope.setLaunchId(launch.getId());
+        if (CollectionUtils.isNotEmpty(launch.getTriggerScopeIds())) {
+            CardCouponTriggerScope triggerScope = new CardCouponTriggerScope();
+            triggerScope.setLaunchId(launch.getId());
+            for (Long storeId : launch.getTriggerScopeIds()) {
+                triggerScope.setStoreId(storeId);
                 cardCouponTriggerScopeMapper.insertSelective(triggerScope);
             }
         }
@@ -109,7 +111,9 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData getCardCouponLaunchById(Long id) {
+        Date now = new Date();
         CreateCouponLaunchInfo createCouponLaunchInfo = launchMapper.selectCouponLaunchInfoById(id);
+        ShowCouponLaunchInfo.setStatus(createCouponLaunchInfo, now);
         launchResult(createCouponLaunchInfo);
         return new ResultData(createCouponLaunchInfo) ;
     }
@@ -147,6 +151,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData permitLaunch(Long id) {
+        CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
+        if (launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
+            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核通过");
+        }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
         launch.setReviewStatus(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT);
@@ -155,6 +163,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData rejectLaunch(Long id, String reviewInfo) {
+        CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
+        if (launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
+            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核不通过");
+        }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
         launch.setReviewStatus(CouponLaunchReviewStatus.STATUS_REVIEW_REJECT);
