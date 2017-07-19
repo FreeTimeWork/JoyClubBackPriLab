@@ -1,9 +1,10 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.act.PriceReviewRejectVO;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.product.modal.generated.SaleProductPrice;
 import com.joycity.joyclub.product.service.ProductPriceService;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.joycity.joyclub.apiback.constant.UserType.*;
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static com.joycity.joyclub.commons.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PLATFORM;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_PROJECT;
-import static com.joycity.joyclub.apiback.constant.UserType.USER_TYPE_STORE;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -74,7 +73,7 @@ public class ProductPriceController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product/price/{id}", method = RequestMethod.POST)
-    public ResultData updateProductPrice(@PathVariable Long id, SaleProductPrice productPrice, HttpSession httpSession) {
+    public ResultData updateProductPrice(@PathVariable Long id, @RequestBody SaleProductPrice productPrice, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         productPrice.setId(id);
@@ -114,15 +113,15 @@ public class ProductPriceController extends BaseUserSessionController {
      * 审核拒绝
      *
      * @param id
-     * @param reviewInfo
+     * @param rejectVO
      * @param httpSession
      * @return
      */
     @RequestMapping(value = "/product/price/{id}/review/reject", method = RequestMethod.POST)
-    public ResultData rejectPrice(@PathVariable Long id,@RequestParam String reviewInfo, HttpSession httpSession) {
+    public ResultData rejectPrice(@PathVariable Long id, @RequestBody PriceReviewRejectVO rejectVO, HttpSession httpSession) {
         //确保是商户用户
         checkPlatformOrProjectUser(httpSession);
-        return productPriceService.rejectProductPrice(id,reviewInfo);
+        return productPriceService.rejectProductPrice(id, rejectVO.getReviewInfo());
     }
     /**
      * 只有商户用户可以访问
@@ -132,7 +131,7 @@ public class ProductPriceController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product/price", method = RequestMethod.POST)
-    public ResultData createProductPrice(SaleProductPrice productPrice, HttpSession httpSession) {
+    public ResultData createProductPrice(@RequestBody SaleProductPrice productPrice, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         return productPriceService.createProductPrice(productPrice);

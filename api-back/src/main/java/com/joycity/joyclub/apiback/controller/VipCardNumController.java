@@ -1,14 +1,19 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.vipcard.BatchMakeCardVO;
 import com.joycity.joyclub.apiback.service.VipCardNumService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -43,20 +48,15 @@ public class VipCardNumController extends BaseUserSessionController {
      * 只有项目用户可以访问
      * 批量制卡
      *
-     * @param batch
-     * @param type
-     * @param num         制卡数
      * @param httpSession
      * @return
      */
     @RequestMapping(value = "/nums", method = POST)
     public ResultData createNums(/*@RequestParam Long projectId,*/
-                                 @RequestParam String batch,
-                                 @RequestParam String type,
-                                 @RequestParam Integer num, HttpSession httpSession) {
+                                 @Valid @RequestBody BatchMakeCardVO makeCardVO, HttpSession httpSession) {
 
-        SysUser sysUser =   checkProjectUser(httpSession);
-        return vipCardNumService.createCardNum(sysUser.getInfoId(), batch, type, num);
+        SysUser sysUser = checkProjectUser(httpSession);
+        return vipCardNumService.createCardNum(sysUser.getInfoId(), makeCardVO.getBatch(), makeCardVO.getType(), makeCardVO.getNum());
     }
 
     /**
@@ -67,7 +67,7 @@ public class VipCardNumController extends BaseUserSessionController {
     @RequestMapping(value = "/num/formdata", method = GET)
     public ResultData getFormData(HttpSession httpSession) {
         // TODO: 2017/4/27 平台用户返回所有的卡号，并且前端每条记录增加门店的信息和门店的筛选功能
-        SysUser sysUser= checkProjectUser(httpSession);
+        SysUser sysUser = checkProjectUser(httpSession);
         return vipCardNumService.getFormData(sysUser.getInfoId());
     }
 }

@@ -1,9 +1,5 @@
 package com.joycity.joyclub.apiback.controller;
 
-import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
-
-import javax.servlet.http.HttpSession;
-
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
@@ -13,6 +9,10 @@ import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
 import com.joycity.joyclub.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 /**
  * Created by CallMeXYZ on 2017/3/29.
@@ -72,7 +72,7 @@ public class ProductController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product/{id}", method = RequestMethod.POST)
-    public ResultData updateProduct(@PathVariable Long id, SaleProductWithBLOBs product, HttpSession httpSession) {
+    public ResultData updateProduct(@PathVariable Long id, @RequestBody SaleProductWithBLOBs product, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         product.setId(id);
@@ -87,7 +87,7 @@ public class ProductController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product", method = RequestMethod.POST)
-    public ResultData createProduct(SaleProductWithBLOBs product, HttpSession httpSession) {
+    public ResultData createProduct(@RequestBody SaleProductWithBLOBs product, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         product.setStoreId(user.getInfoId());

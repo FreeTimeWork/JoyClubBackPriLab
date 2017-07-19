@@ -1,10 +1,10 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.modal.generated.SaleStoreDesignerWithBLOBs;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.generated.SaleStoreDesignerWithBLOBs;
 import com.joycity.joyclub.commons.service.DesignerService;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ public class DesignerController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/designer/{id}", method = RequestMethod.POST)
-    public ResultData updateDesigner(@PathVariable Long id, SaleStoreDesignerWithBLOBs designer, HttpSession httpSession) {
+    public ResultData updateDesigner(@PathVariable Long id, @RequestBody SaleStoreDesignerWithBLOBs designer, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         designer.setId(id);
@@ -74,7 +74,7 @@ public class DesignerController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/designer", method = RequestMethod.POST)
-    public ResultData createDesigner(SaleStoreDesignerWithBLOBs
+    public ResultData createDesigner(@RequestBody SaleStoreDesignerWithBLOBs
                                                  designer, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);

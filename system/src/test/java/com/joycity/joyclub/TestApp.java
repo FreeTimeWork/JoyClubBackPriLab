@@ -1,8 +1,13 @@
 package com.joycity.joyclub;
 
-import com.joycity.joyclub.product.service.ProductService;
+import com.alibaba.fastjson.JSON;
+import com.joycity.joyclub.act.service.ActService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import com.joycity.joyclub.system.App;
-import com.joycity.joyclub.title_carousel.service.TitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +22,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = App.class)
 @ActiveProfiles(value = "development")
 public class TestApp {
-//    @Autowired
+    //    @Autowired
 //    RechargeService rechargeService;
     @Autowired
-    ProductService productService;
+    ProductTitleCarouselService productTitleCarouselService;
 
     @Autowired
-    TitleCarouselService titleCarouselService;
+    ActTitleCarouselService actTitleCarouselService;
+
+    @Autowired
+    ActService actService;
+    @Autowired
+    MallCooService mallCooService;
 
 //    @Test
 //    public void testRechargeFlow() {
@@ -39,7 +49,19 @@ public class TestApp {
 
     @Test
     public void testTitleCarousel() {
-//        ResultData data = titleCarouselService.getAllTitleCarousel();
+//        ResultData data = actTitleCarouselService.getAllActTitleCarousel();
+//        System.out.println();
+
+//        ResultData data = productTitleCarouselService.getAllProductTitleCarousel();
+//        System.out.println();
+
+        ResultData data = actService.getListByActNameAndStoreName(new Integer(1).longValue(), "test", "哈哈", new PageUtil(1, 10));
         System.out.println();
+    }
+
+    @Test
+    public void testMallcooShops() {
+        System.out.println(JSON.toJSONString(mallCooService.getShops(1L)));
+
     }
 }
