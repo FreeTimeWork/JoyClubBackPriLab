@@ -194,6 +194,7 @@
 ```
   CREATE TABLE `sys_shop` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `project_id` bigint(20) NOT NULL COMMENT '项目id',
     `code` bigint(20) DEFAULT NULL COMMENT 'CRM系统商家ID',
     `name` varchar(50) NOT NULL COMMENT '商家名称',
     `logo` varchar(200) NOT NULL COMMENT 'logo照片',
@@ -277,7 +278,6 @@ CREATE TABLE `card_coupon_vip_scope` (
   `delete_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员等级范围';
 
-
 CREATE TABLE `card_coupon_launch` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `coupon_id` bigint(20) NOT NULL COMMENT '卡券id',
@@ -300,6 +300,7 @@ CREATE TABLE `card_coupon_launch` (
   `forbid_flag` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '强制下架标志',
   `confirm_time` datetime DEFAULT NULL COMMENT '确认投放时间',
   `forbid_time` datetime DEFAULT NULL COMMENT '强制下架时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,

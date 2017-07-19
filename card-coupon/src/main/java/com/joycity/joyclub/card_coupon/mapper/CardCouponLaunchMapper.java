@@ -19,9 +19,9 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Long, CardCouponLaunchExample> {
 
-    Long countByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
+    Long countByCouponNameAndCouponTypeAndStatus(@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
+    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
     @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponLaunchById(@Param("id") Long id);

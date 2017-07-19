@@ -27,6 +27,7 @@
     <result column="forbid_flag" jdbcType="BIT" property="forbidFlag" />
     <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
     <result column="forbid_time" jdbcType="TIMESTAMP" property="forbidTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
     <result column="delete_flag" jdbcType="BIT" property="deleteFlag" />
     <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" />
@@ -105,7 +106,7 @@
     id, coupon_id, name, type, vip_batch, condition_amount, max_receive, pay_type, pay_amount, 
     launch_num, remain_num, launch_start_time, launch_end_time, effective_start_time, 
     effective_end_time, review_status, review_info, confirm_flag, forbid_flag, confirm_time, 
-    forbid_time, last_update, delete_flag, delete_time
+    forbid_time, create_time, last_update, delete_flag, delete_time
   </sql>
   <select id="selectByExample" parameterType="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample" resultMap="BaseResultMap">
     <!--
@@ -165,8 +166,8 @@
       effective_start_time, effective_end_time, 
       review_status, review_info, confirm_flag, 
       forbid_flag, confirm_time, forbid_time, 
-      last_update, delete_flag, delete_time
-      )
+      create_time, last_update, delete_flag, 
+      delete_time)
     values (#{couponId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
       #{vipBatch,jdbcType=VARCHAR}, #{conditionAmount,jdbcType=DECIMAL}, #{maxReceive,jdbcType=INTEGER}, 
       #{payType,jdbcType=TINYINT}, #{payAmount,jdbcType=DECIMAL}, #{launchNum,jdbcType=INTEGER}, 
@@ -174,8 +175,8 @@
       #{effectiveStartTime,jdbcType=TIMESTAMP}, #{effectiveEndTime,jdbcType=TIMESTAMP}, 
       #{reviewStatus,jdbcType=TINYINT}, #{reviewInfo,jdbcType=VARCHAR}, #{confirmFlag,jdbcType=BIT}, 
       #{forbidFlag,jdbcType=BIT}, #{confirmTime,jdbcType=TIMESTAMP}, #{forbidTime,jdbcType=TIMESTAMP}, 
-      #{lastUpdate,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT}, #{deleteTime,jdbcType=TIMESTAMP}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdate,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT}, 
+      #{deleteTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch" useGeneratedKeys="true">
     <!--
@@ -243,6 +244,9 @@
       </if>
       <if test="forbidTime != null">
         forbid_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="lastUpdate != null">
         last_update,
@@ -314,6 +318,9 @@
       </if>
       <if test="forbidTime != null">
         #{forbidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="lastUpdate != null">
         #{lastUpdate,jdbcType=TIMESTAMP},
@@ -406,6 +413,9 @@
       <if test="record.forbidTime != null">
         forbid_time = #{record.forbidTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.lastUpdate != null">
         last_update = #{record.lastUpdate,jdbcType=TIMESTAMP},
       </if>
@@ -447,6 +457,7 @@
       forbid_flag = #{record.forbidFlag,jdbcType=BIT},
       confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
       forbid_time = #{record.forbidTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_update = #{record.lastUpdate,jdbcType=TIMESTAMP},
       delete_flag = #{record.deleteFlag,jdbcType=BIT},
       delete_time = #{record.deleteTime,jdbcType=TIMESTAMP}
@@ -521,6 +532,9 @@
       <if test="forbidTime != null">
         forbid_time = #{forbidTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="lastUpdate != null">
         last_update = #{lastUpdate,jdbcType=TIMESTAMP},
       </if>
@@ -559,6 +573,7 @@
       forbid_flag = #{forbidFlag,jdbcType=BIT},
       confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
       forbid_time = #{forbidTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       last_update = #{lastUpdate,jdbcType=TIMESTAMP},
       delete_flag = #{deleteFlag,jdbcType=BIT},
       delete_time = #{deleteTime,jdbcType=TIMESTAMP}

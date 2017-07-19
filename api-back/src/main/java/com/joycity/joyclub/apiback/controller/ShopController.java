@@ -5,6 +5,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -24,8 +25,8 @@ public class ShopController extends BaseUserSessionController {
 
     @RequestMapping(value = "/shops")
     public ResultData getShopsByCodeAndSubCommercial(@RequestParam String code, @RequestParam String name, PageUtil pageUtil, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
-        return shopService.getListByCodeAndName(code, name, pageUtil);
+        SysUser sysUser = checkProjectUser(session);
+        return shopService.getListByCodeAndName(sysUser.getInfoId(), code, name, pageUtil);
     }
 
     @RequestMapping(value = "group/SubCommercial/shops")

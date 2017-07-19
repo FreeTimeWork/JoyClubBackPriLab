@@ -1,5 +1,9 @@
 package com.joycity.joyclub.system;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import com.joycity.joyclub.commons.constant.QuartzPreKeyConst;
 import com.joycity.joyclub.system.config.TestQuartzJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +11,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by CallMeXYZ on 2017/7/10.
@@ -76,7 +77,14 @@ public class TestJobController {
         return "remove job success";
     }
 
+    @RequestMapping("/checkExist")
+    public Boolean checkExist(int id) throws SchedulerException {
+
+
+        return quartzScheduler.checkExists(getTriggerKey(id));
+    }
+
     private TriggerKey getTriggerKey(int id) {
-        return new TriggerKey("job" + id);
+        return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + id);
     }
 }

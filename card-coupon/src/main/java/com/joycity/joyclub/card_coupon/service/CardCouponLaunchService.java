@@ -12,7 +12,7 @@ public interface CardCouponLaunchService {
 
     ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch);
 
-    ResultData getListByCouponNameAndCouponTypeAndStatus(String name, Integer type, Integer status, PageUtil pageUtil);
+    ResultData getListByCouponNameAndCouponTypeAndStatus(String couponName, Integer couponType, String name, Integer type, Integer status, PageUtil pageUtil);
 
     ResultData getCardCouponLaunchById(Long id);
 

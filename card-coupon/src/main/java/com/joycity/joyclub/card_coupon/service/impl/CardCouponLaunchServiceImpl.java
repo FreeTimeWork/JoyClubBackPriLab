@@ -26,7 +26,6 @@ import com.joycity.joyclub.commons.constant.QuartzPreKeyConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.quartz.QuartzManager;
@@ -78,43 +77,37 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     }
 
     @Override
-    public ResultData getListByCouponNameAndCouponTypeAndStatus(String name, Integer type, Integer status, PageUtil pageUtil) {
+    public ResultData getListByCouponNameAndCouponTypeAndStatus(String couponName, Integer couponType, String name, Integer type, Integer status, PageUtil pageUtil) {
         if (name != null) {
             name = "%" + name + "%";
         }
+        if (couponName != null) {
+            couponName = "%" + couponName + "%";
+        }
         final String finalName = name;
+        final String finalcouponName = couponName;
         final Date now = new Date();
-        ResultData data = new AbstractGetListData<ShowCouponLaunchInfo>() {
+        return new AbstractGetListData<ShowCouponLaunchInfo>() {
             @Override
             public Long countByFilter() {
-                return launchMapper.countByCouponNameAndCouponTypeAndStatus(finalName, type, status, now, pageUtil);
+                return launchMapper.countByCouponNameAndCouponTypeAndStatus(finalcouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
             @Override
             public List<ShowCouponLaunchInfo> selectByFilter() {
-                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(finalName, type, status, now, pageUtil);
+                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(finalcouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
         }.getList(pageUtil);
-
-        if (data.getCode().equals(ResultCode.SUCCESS)) {
-            ListResult listResult = (ListResult) data.getData();
-            List<ShowCouponLaunchInfo> infos = listResult.getList();
-            if (CollectionUtils.isNotEmpty(infos)) {
-                for (ShowCouponLaunchInfo info : infos) {
-                    ShowCouponLaunchInfo.setStatus(info, now);
-                }
-            }
-        }
-        return data;
     }
 
     @Override
     public ResultData getCardCouponLaunchById(Long id) {
-        Date now = new Date();
         CreateCouponLaunchInfo createCouponLaunchInfo = launchMapper.selectCouponLaunchInfoById(id);
-        ShowCouponLaunchInfo.setStatus(createCouponLaunchInfo, now);
-        launchResult(createCouponLaunchInfo);
+        if (createCouponLaunchInfo != null) {
+
+            launchResult(createCouponLaunchInfo);
+        }
         return new ResultData(createCouponLaunchInfo) ;
     }
 

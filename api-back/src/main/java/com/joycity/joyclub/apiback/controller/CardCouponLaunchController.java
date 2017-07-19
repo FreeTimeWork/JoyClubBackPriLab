@@ -53,10 +53,12 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     @RequestMapping(value = "/card/coupon/launches", method = RequestMethod.GET)
     public ResultData getCardCoupons(@RequestParam(required = false) String couponName,
                                      @RequestParam(required = false) Integer couponType,
+                                     @RequestParam(required = false) String name,
+                                     @RequestParam(required = false) Integer type,
                                      @RequestParam(required = false) Integer status,
                                      PageUtil pageUtil, HttpSession session) {
         checkProjectUser(session);
-        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, status, pageUtil);
+        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, name, type, status, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/review/permit", method = RequestMethod.POST)
@@ -78,7 +80,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/forbid", method = RequestMethod.POST)
-    public ResultData forbidLaunch(@PathVariable Long id, HttpSession session) {
+    public ResultData forbidLaunch(@PathVariable Long id, HttpSession session) throws SchedulerException {
         checkProjectUser(session);
         return cardCouponLaunchService.forbidLaunch(id);
     }

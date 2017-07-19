@@ -127,7 +127,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ResultData getListByCodeAndName(String code, String name, PageUtil pageUtil) {
+    public ResultData getListByCodeAndName(Long projectId, String code, String name, PageUtil pageUtil) {
 
         if (name != null) {
             name = "%" + name + "%";
@@ -137,12 +137,12 @@ public class ShopServiceImpl implements ShopService {
         return new AbstractGetListData<SysShop>() {
             @Override
             public Long countByFilter() {
-                return shopMapper.countShopByCodeAndSubCommercial(code, finalName, pageUtil);
+                return shopMapper.countShopByCodeAndSubCommercial(projectId, code, finalName, pageUtil);
             }
 
             @Override
             public List<SysShop> selectByFilter() {
-                return shopMapper.selectShopByCodeAndSubCommercial(code, finalName, pageUtil);
+                return shopMapper.selectShopByCodeAndSubCommercial(projectId, code, finalName, pageUtil);
             }
         }.getList(pageUtil);
     }

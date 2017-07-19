@@ -34,7 +34,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
     @Autowired
     public ThirdpartyCouponCodeServiceImpl(RedisTemplate redisTemplate) {
-        thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRDPARTY_COUPON_BATCH);
+        thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_BATCH);
     }
     @Override
     public ResultData createThirdpartyCouponCode(List<List<String>> list, Long thirdpartyShopId) {

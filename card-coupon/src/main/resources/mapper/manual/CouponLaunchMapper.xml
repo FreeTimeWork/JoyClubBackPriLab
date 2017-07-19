@@ -13,17 +13,48 @@
         ccl.review_info  , ccl.confirm_flag  , ccl.forbid_flag  , ccl.confirm_time  ,
         ccl.forbid_time  , ccl.last_update  , ccl.delete_flag  , ccl.delete_time
     </sql>
+    <sql id="status">
+        CASE
+        WHEN ccl.review_status = 3 THEN 0
+        WHEN ccl.review_status = 0 THEN 1
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 0 THEN 2
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND now() <![CDATA[ <= ]]> ccl.launch_start_time THEN 3
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_start_time
+                AND now() <![CDATA[ < ]]> ccl.launch_end_time    THEN 4
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_end_time    THEN 5
+        WHEN ccl.forbid_flag = 1 THEN 6
+        END AS status
+    </sql>
+
     <sql id="name_type_status">
         cc.delete_flag = 0
+        <if test="couponName != null">
+            AND cc.name LIKE #{couponName}
+        </if>
+        <if test="couponType != null">
+            AND cc.type = #{couponType}
+        </if>
         <if test="name != null">
-            AND cc.name LIKE #{name}
+            AND ccl.name LIKE #{name}
         </if>
         <if test="type != null">
-            AND cc.type = #{type}
+            AND ccl.type = #{type}
         </if>
-        -- 投放状态，1. 未审核，2 未投放，3 未开始，4 投放中，5 投放已过期，6 投放已中止
+        -- 投放状态，0.审核未通过 1. 未审核，2 未投放，3 未开始，4 投放中，5 投放已过期，6 投放已中止
         <if test="status != null ">
 
+            <if test="status == 0">
+                AND ccl.review_status = 3
+            </if>
             <if test="status == 1">
                 AND ccl.review_status = 0
             </if>
@@ -68,12 +99,14 @@
     <select id="selectByCouponNameAndCouponTypeAndStatus" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo">
         SELECT
             <include refid="CardCouponLaunchColumn"/>,
+            <include refid="status"/>,
             cc.name AS coupon_name, cc.type AS coupon_type
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND ccl.delete_flag = 0
         <where>
             <include refid="name_type_status"/>
         </where>
+        ORDER BY ccl.create_time DESC
     </select>
 
     <select id="selectLaunchWithCouponByCouponId" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo">
@@ -99,6 +132,7 @@
     <select id="selectCouponLaunchInfoById" resultMap="CreateCouponLaunchInfo">
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
+        <include refid="status"/>,
         cc.name AS coupon_name, ccts.store_id AS ccts_store_id, ccts.ratio AS ccts_ratio, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id cc.delete_flag = 0
