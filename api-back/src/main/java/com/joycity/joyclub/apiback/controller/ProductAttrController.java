@@ -1,9 +1,8 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
-import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.product.modal.generated.SaleProductAttr;
 import com.joycity.joyclub.product.service.ProductAttrService;
@@ -22,8 +21,6 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 public class ProductAttrController extends BaseUserSessionController {
     @Autowired
     private ProductAttrService productAttrService;
-    @Autowired
-    private ManagerService managerService;
 
     /**
      * 只有商户用户可以访问
@@ -60,7 +57,7 @@ public class ProductAttrController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product/attr/{id}", method = RequestMethod.POST)
-    public ResultData updateProductAttr(@PathVariable Long id, SaleProductAttr productAttr, HttpSession httpSession) {
+    public ResultData updateProductAttr(@PathVariable Long id, @RequestBody SaleProductAttr productAttr, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         productAttr.setId(id);
@@ -75,7 +72,7 @@ public class ProductAttrController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/product/attr", method = RequestMethod.POST)
-    public ResultData createProductAttr(SaleProductAttr productAttr, HttpSession httpSession) {
+    public ResultData createProductAttr(@RequestBody SaleProductAttr productAttr, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         return productAttrService.createProductAttr(productAttr);

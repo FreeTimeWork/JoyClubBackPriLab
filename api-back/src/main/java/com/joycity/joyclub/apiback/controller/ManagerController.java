@@ -1,16 +1,15 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.apiback.modal.generated.SysProject;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.auth.ResetPasswordVO;
 import com.joycity.joyclub.apiback.service.ManagerService;
-import com.joycity.joyclub.apiback.service.ProjectService;
-import org.apache.ibatis.annotations.Param;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
@@ -74,10 +73,10 @@ public class ManagerController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/manager/password", method = RequestMethod.POST)
-    public ResultData changeCurrentUserPassword(@RequestParam String oldPassword,@RequestParam String password, HttpSession httpSession) {
+    public ResultData changeCurrentUserPassword(@RequestParam String oldPassword, @Valid @RequestBody ResetPasswordVO resetPasswordVO, HttpSession httpSession) {
         //确保是登陆用户
        SysUser user= checkUser(httpSession);
-        return managerService.updateManagerPassword(user.getId(),oldPassword,password);
+        return managerService.updateManagerPassword(user.getId(), oldPassword, resetPasswordVO.getPassword());
     }
     /**
      * 只有平台用户可以访问

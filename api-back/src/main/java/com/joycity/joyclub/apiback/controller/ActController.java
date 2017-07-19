@@ -3,9 +3,9 @@ package com.joycity.joyclub.apiback.controller;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
 import com.joycity.joyclub.act.service.ActService;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +72,7 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/{id}", method = RequestMethod.POST)
-    public ResultData updateAct(@PathVariable Long id, SaleActWithBLOBs act, HttpSession httpSession) {
+    public ResultData updateAct(@PathVariable Long id, @RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         act.setId(id);
@@ -87,7 +87,7 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act", method = RequestMethod.POST)
-    public ResultData createAct(SaleActWithBLOBs act, HttpSession httpSession) {
+    public ResultData createAct(@RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         act.setStoreId(user.getInfoId());

@@ -1,15 +1,12 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.generated.SysActCategory;
-import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.commons.service.ActCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,7 +56,7 @@ public class ActCategoryController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/category/{id}", method = RequestMethod.POST)
-    public ResultData updateActCategory(@PathVariable Long id, SysActCategory actCategory, HttpSession httpSession) {
+    public ResultData updateActCategory(@PathVariable Long id, @RequestBody SysActCategory actCategory, HttpSession httpSession) {
         //确保是平台或项目用户
         checkPlatformOrProjectUser(httpSession);
         return actCategoryService.updateActCategory(id, actCategory);
@@ -71,7 +68,7 @@ public class ActCategoryController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/category", method = RequestMethod.POST)
-    public ResultData updateActCategory( SysActCategory actCategory, HttpSession httpSession) {
+    public ResultData updateActCategory(@RequestBody SysActCategory actCategory, HttpSession httpSession) {
         //确保是平台或项目用户
         checkPlatformOrProjectUser(httpSession);
         return actCategoryService.createActCategory(actCategory);

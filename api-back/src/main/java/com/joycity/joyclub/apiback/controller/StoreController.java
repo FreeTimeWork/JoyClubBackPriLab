@@ -1,17 +1,14 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.modal.generated.SysStore;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.generated.SysStore;
 import com.joycity.joyclub.commons.service.StoreService;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -73,7 +70,7 @@ public class StoreController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/store/profile", method = RequestMethod.POST)
-    public ResultData updateProfile(SysStore store, HttpSession httpSession) {
+    public ResultData updateProfile(@RequestBody SysStore store, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         store.setId(user.getInfoId());
@@ -88,7 +85,7 @@ public class StoreController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/store/{id}", method = RequestMethod.POST)
-    public ResultData updateStore(@PathVariable Long id, SysStore store, HttpSession httpSession) {
+    public ResultData updateStore(@PathVariable Long id, @RequestBody SysStore store, HttpSession httpSession) {
         //确保是平台或项目用户
         checkPlatformOrProjectUser(httpSession);
         store.setId(id);
@@ -103,7 +100,7 @@ public class StoreController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/store", method = RequestMethod.POST)
-    public ResultData createStore(SysStore store, HttpSession httpSession) {
+    public ResultData createStore(@RequestBody SysStore store, HttpSession httpSession) {
         //确保是平台或项目用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
         store.setProjectId(user.getInfoId());
@@ -132,7 +129,7 @@ public class StoreController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/store/{id}/manager", method = RequestMethod.POST)
-    public ResultData createStoreManager(@PathVariable Long id, SysUser user, HttpSession httpSession) {
+    public ResultData createStoreManager(@PathVariable Long id, @RequestBody SysUser user, HttpSession httpSession) {
         //确保是平台或项目用户
         checkPlatformOrProjectUser(httpSession);
         return managerService.createStoreManager(id, user);
