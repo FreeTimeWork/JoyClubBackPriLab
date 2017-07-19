@@ -11,12 +11,14 @@ import com.joycity.joyclub.commons.utils.PageUtil;
  */
 public interface ShopService {
 
-    ResultData batchInsertOrUpdate(List<MallcooShop> shops);
+    ResultData batchInsertOrUpdate(List<MallcooShop> shops, Long projectId);
 
     ResultData syncMallCooShop(Long projectId);
 
     ResultData getListByCodeAndName(Long projectId, String code, String name, PageUtil pageUtil);
 
-    ResultData getShopsGroupBySubCommercial();
+    ResultData getShopsGroupBySubCommercial(Long projectId);
+
+    ResultData getAllShopByNameAndSubCommercial(Long projectId, String name, String subCommercial);
 
 }

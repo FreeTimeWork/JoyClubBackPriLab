@@ -54,7 +54,7 @@
         FROM sys_shop s1
         INNER JOIN sys_shop s2 ON s1.sub_commercial_type_name = s2.sub_commercial_type_name  AND  s1.code = s2.code
         <where>
-            s1.delete_flag = 0 AND s2.delete_flag = 0
+            s1.project_id = #{projectId} AND s1.delete_flag = 0 AND s2.delete_flag = 0
         </where>
         ORDER BY s1.create_time DESC
     </select>
@@ -63,4 +63,20 @@
         ${sql}
     </insert>
 
+    <select id="selectShopByNameAndSubCommercial" resultType="com.joycity.joyclub.card_coupon.modal.generated.SysShop">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_shop
+        <where>
+            delete_flag = 0
+            project_id = #{projectId}
+            <if test="name != null">
+                AND name LIKE #{name}
+            </if>
+            <if test="subCommercial != null">
+                AND sub_commercial_type_name
+            </if>
+        </where>
+         ORDER BY id DESC
+    </select>
 </mapper>

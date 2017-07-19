@@ -30,7 +30,7 @@ public class ShopServiceImpl implements ShopService {
     private MallCooService mallcooService;
 
     @Override
-    public ResultData batchInsertOrUpdate(List<MallcooShop> shops) {
+    public ResultData batchInsertOrUpdate(List<MallcooShop> shops, Long projectId) {
         return new ResultData(new AbstractBatchInsertlUtils() {
 
             @Override
@@ -45,7 +45,7 @@ public class ShopServiceImpl implements ShopService {
 
             @Override
             public String getValuesNames() {
-                return "(code, name, logo," +
+                return "(project_id, code, name, logo," +
                         "shop_type, commercial_type_id, sub_commercial_type_name," +
                         "floor_id, floor_name, door_no)";
             }
@@ -68,6 +68,7 @@ public class ShopServiceImpl implements ShopService {
                 MallcooShop shop = shops.get(index);
                 StringBuilder builder = new StringBuilder();
                 builder.append("(")
+                .append("'"+projectId+"', ")
                 .append("'"+shop.getCrmShopId()+"', ")
                 .append("'"+shop.getName()+"', ")
                 .append("'"+shop.getLogo()+"', ")
@@ -121,7 +122,7 @@ public class ShopServiceImpl implements ShopService {
                 "  ]");
         List<MallcooShop> shops = JSONObject.parseArray(map.get("Data").toString(), MallcooShop.class);
 
-        ResultData result = batchInsertOrUpdate(shops);
+        ResultData result = batchInsertOrUpdate(shops, projectId);
         resultData.setData(result.getData());
         return resultData;
     }
@@ -148,8 +149,19 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ResultData getShopsGroupBySubCommercial() {
-        return new ResultData(shopMapper.selectShopGroupBySubCommercial());
+    public ResultData getShopsGroupBySubCommercial(Long projectId) {
+        return new ResultData(shopMapper.selectShopGroupBySubCommercial(projectId));
+    }
+
+    @Override
+    public ResultData getAllShopByNameAndSubCommercial(Long projectId, String name, String subCommercial) {
+        if (name != null) {
+            name = "%" + name + "%";
+        }
+        if (subCommercial != null) {
+            subCommercial = "%" + subCommercial + "%";
+        }
+        return new ResultData(shopMapper.selectShopByNameAndSubCommercial(projectId, name, subCommercial));
     }
 
 }

@@ -209,7 +209,7 @@
     `delete_flag` tinyint(1) unsigned DEFAULT '0',
     `delete_time` datetime DEFAULT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_sys_shop_code` (`code`)
+    UNIQUE KEY `uk_sys_shop_code_project_id` (`code`,`project_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线下商家表';
 ```
 
