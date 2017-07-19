@@ -24,8 +24,14 @@ public class ShopController extends BaseUserSessionController {
     @Autowired
     private ShopService shopService;
 
+    @RequestMapping(value = "/all/shops", method = RequestMethod.GET)
+    public ResultData getShopsByNameAndSubCommercial(@RequestParam(required = false) String name, @RequestParam(required = false) String subCommercial, HttpSession session) {
+        SysUser sysUser = checkProjectUser(session);
+        return shopService.getAllShopByNameAndSubCommercial(sysUser.getInfoId(), name, subCommercial);
+    }
+
     @RequestMapping(value = "/shops", method = RequestMethod.GET)
-    public ResultData getShopsByCodeAndSubCommercial(@RequestParam String code, @RequestParam String name, PageUtil pageUtil, HttpSession session) {
+    public ResultData getShopsByCodeAndSubCommercial(@RequestParam(required = false) String code, @RequestParam(required = false) String name, PageUtil pageUtil, HttpSession session) {
         SysUser sysUser = checkProjectUser(session);
         return shopService.getListByCodeAndName(sysUser.getInfoId(), code, name, pageUtil);
     }
@@ -34,11 +40,5 @@ public class ShopController extends BaseUserSessionController {
     public ResultData getShopsByCodeAndSubCommercial(HttpSession session) {
         SysUser sysUser = checkProjectUser(session);
         return shopService.getShopsGroupBySubCommercial(sysUser.getInfoId());
-    }
-
-    @RequestMapping(value = "/all/shops")
-    public ResultData getShopsByNameAndSubCommercial(@RequestParam(required = false) String name, @RequestParam(required = false) String subCommercial, HttpSession session) {
-        SysUser sysUser = checkProjectUser(session);
-        return shopService.getAllShopByNameAndSubCommercial(sysUser.getInfoId(), name, subCommercial);
     }
 }

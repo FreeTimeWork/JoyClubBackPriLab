@@ -12,6 +12,7 @@ import com.joycity.joyclub.title_carousel.modal.generated.SaleProductTitleCarous
 import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
 import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,10 +29,12 @@ public class TitleCarouselController extends BaseUserSessionController {
     @Autowired
     private ActTitleCarouselService actTitleCarouselService;
 
+    //TODO: cfc  如何传list
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.POST)
-    public ResultData updateProductTitleCarousel(List<SaleProductTitleCarousel> titleCarousels, HttpSession session) {
+    public ResultData updateProductTitleCarousel(@RequestBody List<SaleProductTitleCarousel> titleCarousels, HttpSession session) {
         checkProjectUser(session);
-        return productTitleCarouselService.updateProductTitleCarousel(titleCarousels);
+//        productTitleCarouselService.updateProductTitleCarousel(Arrays.asList(titleCarousels))
+        return null;
     }
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
