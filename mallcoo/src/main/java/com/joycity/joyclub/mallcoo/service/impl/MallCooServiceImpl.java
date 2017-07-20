@@ -54,21 +54,20 @@ public class MallCooServiceImpl implements MallCooService {
      * 填充内容
      */
     private final String PAD_STR = "\0";
-
-    @Value("${mallcoo.url.getTokenByTicket}")
-    private String URL_GET_TOKEN_BY_TICKET;
-    @Value("${mallcoo.url.getInfoByToken}")
-    private String URL_GET_INFO_BY_TOKEN;
     @Autowired
     ProjectMallcooMapper projectMallcooMapper;
     @Resource
     RestTemplate restTemplate;
+    @Value("${mallcoo.url.getTokenByTicket}")
+    private String URL_GET_TOKEN_BY_TICKET;
+    @Value("${mallcoo.url.getInfoByToken}")
+    private String URL_GET_INFO_BY_TOKEN;
 
     @Override
     public Map<String, Object> getUserToken(Long projectId, String ticket){
         ProjectMallcoo projectMallcoo = projectMallcooMapper.getProjectMallcooInfo(projectId);
         ThrowBusinessExceptionUtil.checkNull(projectMallcoo, "该项目猫酷信息不存在");
-        String realTicket = decrypt(ticket, projectMallcoo.getPrivateKey());
+        String realTicket = ticket;
         //请求参数
         Map<String, String> body = new HashMap<String, String>();
         body.put("Ticket", realTicket);
