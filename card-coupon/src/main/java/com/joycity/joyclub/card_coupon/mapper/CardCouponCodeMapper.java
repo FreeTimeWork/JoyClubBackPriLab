@@ -21,8 +21,6 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     @Select("select count(*) from card_coupon_code where launch_id = #{launchId} and delete_flag = 0")
     int countByLaunchId(@Param("launchId") Long launchId);
 
-
-    //TODO: cfc 实现
     List<ShowCouponCodeInfo> selectCardCouponCodeByFilter(@Param("filter") ShowCouponCodeFilter filter);
 
 

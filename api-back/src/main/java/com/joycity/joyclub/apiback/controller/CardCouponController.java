@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.card_coupon.updateCardCouponVO;
 import com.joycity.joyclub.apiback.util.ExcelToBeanParser;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
@@ -41,13 +42,13 @@ public class CardCouponController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.POST)
-    public ResultData updateCardCoupons(@PathVariable Long id, @RequestParam String name, @RequestParam String info, @RequestParam String portrait, HttpSession session) {
+    public ResultData updateCardCoupon(@PathVariable Long id, @RequestBody updateCardCouponVO vo, HttpSession session) {
         checkProjectUser(session);
         CardCoupon cardCoupon = new CardCoupon();
         cardCoupon.setId(id);
-        cardCoupon.setName(name);
-        cardCoupon.setInfo(info);
-        cardCoupon.setPortrait(portrait);
+        cardCoupon.setName(vo.getName());
+        cardCoupon.setInfo(vo.getInfo());
+        cardCoupon.setPortrait(vo.getPortrait());
         return cardCouponService.updateCardCoupon(cardCoupon);
     }
 
