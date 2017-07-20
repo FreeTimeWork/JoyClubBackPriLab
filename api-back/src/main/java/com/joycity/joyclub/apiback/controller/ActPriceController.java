@@ -41,8 +41,8 @@ public class ActPriceController extends BaseUserSessionController {
         SysUser user = checkUser(httpSession);
         Integer userType = user.getType();
         if (userType.equals(USER_TYPE_STORE))
-            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName,buyType, pageUtil);
-        else if(userType.equals(USER_TYPE_PLATFORM)||userType.equals(USER_TYPE_PROJECT))
+            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
+        else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
             return actPriceService.getListForProject(user.getInfoId(), storeName, reviewStatus, actName, buyType, pageUtil);
         else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
@@ -70,7 +70,7 @@ public class ActPriceController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/price/{id}", method = RequestMethod.POST)
-    public ResultData updateActPrice(@PathVariable Long id, SaleActPrice actPrice, HttpSession httpSession) {
+    public ResultData updateActPrice(@PathVariable Long id, @RequestBody SaleActPrice actPrice, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         actPrice.setId(id);
@@ -91,6 +91,7 @@ public class ActPriceController extends BaseUserSessionController {
         checkStoreUser(httpSession);
         return actPriceService.forbidActPrice(id);
     }
+
     /**
      * 只有平台或项目用户可以访问
      * 审核通过
@@ -105,6 +106,7 @@ public class ActPriceController extends BaseUserSessionController {
         checkPlatformOrProjectUser(httpSession);
         return actPriceService.permitActPrice(id);
     }
+
     /**
      * 只有平台或项目用户可以访问
      * 审核拒绝
@@ -115,11 +117,12 @@ public class ActPriceController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/price/{id}/review/reject", method = RequestMethod.POST)
-    public ResultData rejectPrice(@PathVariable Long id,@RequestParam String reviewInfo, HttpSession httpSession) {
+    public ResultData rejectPrice(@PathVariable Long id, @RequestBody String reviewInfo, HttpSession httpSession) {
         //确保是商户用户
         checkPlatformOrProjectUser(httpSession);
-        return actPriceService.rejectActPrice(id,reviewInfo);
+        return actPriceService.rejectActPrice(id, reviewInfo);
     }
+
     /**
      * 只有商户用户可以访问
      *
@@ -128,7 +131,7 @@ public class ActPriceController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/price", method = RequestMethod.POST)
-    public ResultData createActPrice(SaleActPrice actPrice, HttpSession httpSession) {
+    public ResultData createActPrice(@RequestBody SaleActPrice actPrice, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         return actPriceService.createActPrice(actPrice);

@@ -1,15 +1,23 @@
-package com.joycity.joyclub.product.modal;
+package com.joycity.joyclub.apifront.modal.project;
+
+import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderItemVO;
+import com.joycity.joyclub.product.modal.ProductOrderFormDataItem;
 
 /**
  * Created by Administrator on 2017/4/20.
  */
-public class FormDataWithInfo {
-    //下面三个属性是
-    Long attrId;
-    Integer num;
-    Boolean moneyOrPoint;
+public class ProductOrderItem {
+    private Long attrId;
+    private Integer num;
+    private Boolean moneyOrPoint;
 
     private ProductOrderFormDataItem info;
+
+    public ProductOrderItem(ProductOrderItemVO vo) {
+        this.attrId = vo.getAttrId();
+        this.num = vo.getNum();
+        this.moneyOrPoint = vo.getMoneyOrPoint();
+    }
 
     public ProductOrderFormDataItem getInfo() {
         return info;
@@ -18,6 +26,7 @@ public class FormDataWithInfo {
     public void setInfo(ProductOrderFormDataItem info) {
         this.info = info;
     }
+
     public Long getAttrId() {
         return attrId;
     }

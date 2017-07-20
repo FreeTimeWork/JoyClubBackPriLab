@@ -3,9 +3,9 @@ package com.joycity.joyclub.apiback.controller;
 import com.joycity.joyclub.act.modal.generated.SaleActAttr;
 import com.joycity.joyclub.act.service.ActAttrService;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +60,7 @@ public class ActAttrController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/attr/{id}", method = RequestMethod.POST)
-    public ResultData updateActAttr(@PathVariable Long id, SaleActAttr actAttr, HttpSession httpSession) {
+    public ResultData updateActAttr(@PathVariable Long id, @RequestBody SaleActAttr actAttr, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         actAttr.setId(id);
@@ -75,7 +75,7 @@ public class ActAttrController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/attr", method = RequestMethod.POST)
-    public ResultData createActAttr(SaleActAttr actAttr, HttpSession httpSession) {
+    public ResultData createActAttr(@RequestBody SaleActAttr actAttr, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         return actAttrService.createActAttr(actAttr);

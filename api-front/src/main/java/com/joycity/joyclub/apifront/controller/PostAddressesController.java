@@ -6,10 +6,7 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -33,7 +30,7 @@ public class PostAddressesController {
 
 
     @RequestMapping(value = "/postaddress", method = POST)
-    public ResultData add(@CookieValue(Global.COOKIE_TOKEN) String token, ClientPostAddress postAddress) {
+    public ResultData add(@CookieValue(Global.COOKIE_TOKEN) String token, @RequestBody ClientPostAddress postAddress) {
         postAddress.setClientId(clientTokenService.getIdOrThrow(token));
         return postAddressService.add(postAddress);
     }

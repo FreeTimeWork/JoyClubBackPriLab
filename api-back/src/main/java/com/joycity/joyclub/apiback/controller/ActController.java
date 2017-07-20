@@ -72,7 +72,7 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act/{id}", method = RequestMethod.POST)
-    public ResultData updateAct(@PathVariable Long id, SaleActWithBLOBs act, HttpSession httpSession) {
+    public ResultData updateAct(@PathVariable Long id, @RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
         //确保是商户用户
         checkStoreUser(httpSession);
         act.setId(id);
@@ -87,7 +87,7 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/act", method = RequestMethod.POST)
-    public ResultData createAct(SaleActWithBLOBs act, HttpSession httpSession) {
+    public ResultData createAct(@RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         act.setStoreId(user.getInfoId());

@@ -1,16 +1,13 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.apiback.modal.generated.SysProject;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
 import com.joycity.joyclub.apiback.service.ProjectService;
+import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -61,7 +58,7 @@ public class ProjectController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/project/{id}", method = RequestMethod.POST)
-    public ResultData updateProject(@PathVariable Long id, SysProject project, HttpSession httpSession) {
+    public ResultData updateProject(@PathVariable Long id, @RequestBody SysProject project, HttpSession httpSession) {
         //确保是平台用户
         checkPlatformUser(httpSession);
         project.setId(id);
@@ -76,7 +73,7 @@ public class ProjectController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/project/profile", method = RequestMethod.POST)
-    public ResultData updateMyProfile(SysProject project, HttpSession httpSession) {
+    public ResultData updateMyProfile(@RequestBody SysProject project, HttpSession httpSession) {
         //确保是平台用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
         project.setId(user.getInfoId());
@@ -105,7 +102,7 @@ public class ProjectController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/project", method = RequestMethod.POST)
-    public ResultData createProject(SysProject project, HttpSession httpSession) {
+    public ResultData createProject(@RequestBody SysProject project, HttpSession httpSession) {
         //确保是平台用户
         checkPlatformUser(httpSession);
         return projectService.createProject(project);
@@ -134,7 +131,7 @@ public class ProjectController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/project/{id}/manager", method = RequestMethod.POST)
-    public ResultData createProjectManager(@PathVariable Long id, SysUser user, HttpSession httpSession) {
+    public ResultData createProjectManager(@PathVariable Long id, @RequestBody SysUser user, HttpSession httpSession) {
         //确保是平台用户
         checkPlatformUser(httpSession);
         return managerService.createProjectManager(id, user);

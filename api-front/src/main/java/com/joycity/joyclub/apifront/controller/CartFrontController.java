@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.cart.CartVO;
 import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
@@ -8,6 +9,7 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +50,8 @@ CartFrontController {
      */
     @RequestMapping(value = "/cart", method = POST)
     public ResultData addToCart(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                @RequestParam Long attrId,
-                                @RequestParam Integer num,
-                                @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId) {
-        return cartFrontService.addToCart(projectId, clientTokenService.getIdOrThrow(token), attrId, num);
+                                @Valid @RequestBody CartVO cartVO) {
+        return cartFrontService.addToCart(cartVO.getProjectId(), clientTokenService.getIdOrThrow(token), cartVO.getAttrId(), cartVO.getNum());
     }
 
 

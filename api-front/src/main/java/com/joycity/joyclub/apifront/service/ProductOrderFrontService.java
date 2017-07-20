@@ -1,7 +1,10 @@
 package com.joycity.joyclub.apifront.service;
 
+import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/20.
@@ -10,23 +13,16 @@ public interface ProductOrderFrontService {
     ResultData getList(Long projectId, Long clientId, String type, PageUtil pageUtil);
 
     /**
-     * @param rawData 应该是｛attrId｝数组
-     * @return
+     * 根据attr获取订单数据
      */
-    ResultData getFormData(Long clientId, String rawData);
+    ResultData getFormData(Long clientId, List<Long> attrIds);
 
-    /**
-     * @param clientId
-     * @param subProjectId 可空
-     * @param jsonStr
-     * @param pickUpOrPost  自提还是快递
-     * @param postAddressId 如果快递 需要提供快递地址id
-     * @return
-     */
-    ResultData orderForWechat(Long projectId, Long subProjectId,Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart);
-    ResultData orderForAli(Long projectId,Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart);
+    ResultData orderForWechat(Long clientId, ProductOrderVO vo);
+
+    ResultData orderForAli(Long clientId, ProductOrderVO vo);
 
     ResultData reorderForWechat(Long orderId);
+
     ResultData reorderForAli(Long orderId);
 
     ResultData clientCancelOrder(Long orderId);
@@ -36,7 +32,9 @@ public interface ProductOrderFrontService {
      * @param outCode 对方单号
      */
     void wechatNotifyPayed(String code, String outCode);
+
     void aliNotifyPayed(String code, String outCode);
+
     ////////////////////////////////////////////////
     void systemCancelOrder(Long orderId);
 

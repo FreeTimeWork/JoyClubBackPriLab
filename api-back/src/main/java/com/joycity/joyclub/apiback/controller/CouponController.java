@@ -2,12 +2,13 @@ package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.coupon.CouponCheckVO;
+import com.joycity.joyclub.apiback.modal.vo.coupon.CouponVO;
 import com.joycity.joyclub.apiback.util.ExcelToBeanParser;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.coupon.modal.generated.Coupon;
 import com.joycity.joyclub.coupon.service.CouponService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,12 +117,11 @@ public class CouponController extends BaseUserSessionController {
     @RequestMapping(value = "/coupon/{id}", method = POST)
     public ResultData updateInfo(
             @PathVariable Long id,
-            @RequestParam String info,
-            String[] cardTypes,
+            @RequestBody CouponVO couponVO,
             HttpSession httpSession) {
         //平台或者项目成员才能访问
         checkPlatformOrProjectUser(httpSession);
-        return couponService.updateInfo(id, info, cardTypes);
+        return couponService.updateInfo(id, couponVO.getInfo(), couponVO.getCardTypes());
     }
 
     /**
@@ -129,14 +130,13 @@ public class CouponController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/coupon", method = POST)
     public ResultData add(
-            Coupon coupon,
-            String[] cardTypes,
+            @RequestBody CouponVO couponVO,
             HttpSession httpSession) {
         //平台或者项目成员才能访问
         SysUser user = checkPlatformOrProjectUser(httpSession);
-        coupon.setProjectId(user.getInfoId());
+        couponVO.setProjectId(user.getInfoId());
 
-        return couponService.insert(coupon, cardTypes);
+        return couponService.insert(couponVO, couponVO.getCardTypes());
     }
 
     @RequestMapping(value = "/coupon/{id}/codes/excel", method = {RequestMethod.POST})
@@ -179,10 +179,10 @@ public class CouponController extends BaseUserSessionController {
     public ResultData checkCode(
             HttpSession httpSession,
             @PathVariable Long id,
-            @RequestParam String code) {
+            @Valid @RequestBody CouponCheckVO checkVO) {
         SysUser user = checkUser(httpSession);
 
-        return couponService.checkCode(id, user.getId(), code);
+        return couponService.checkCode(id, user.getId(), checkVO.getCode());
 
     }
 

@@ -2,6 +2,7 @@ package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.order.DelieveryVO;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.product.service.ProductStoreOrderService;
@@ -30,7 +31,7 @@ public class ProductOrderController extends BaseUserSessionController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/product/orders",method = GET)
+    @RequestMapping(value = "/product/orders", method = GET)
     public ResultData getList(
             @RequestParam(required = false) Byte receiveType,
             @RequestParam(required = false) Byte status,
@@ -45,7 +46,7 @@ public class ProductOrderController extends BaseUserSessionController {
         return productStoreOrderService.getList(sysUser.getInfoId(), receiveType, status, code, name, phone, pageUtil);
     }
 
-    @RequestMapping(value = "/product/order/{id}",method = GET)
+    @RequestMapping(value = "/product/order/{id}", method = GET)
     public ResultData getList(
             @PathVariable Long id,
             HttpSession session
@@ -62,7 +63,7 @@ public class ProductOrderController extends BaseUserSessionController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/product/order/{id}/selffetch",method = POST)
+    @RequestMapping(value = "/product/order/{id}/selffetch", method = POST)
     public ResultData selfFetch(@PathVariable Long id, HttpSession session) {
 
         checkStoreUser(session);
@@ -74,14 +75,13 @@ public class ProductOrderController extends BaseUserSessionController {
      *
      * @return
      */
-    @RequestMapping( value = "/product/order/{id}/delivery",method = POST)
+    @RequestMapping(value = "/product/order/{id}/delivery", method = POST)
     public ResultData delivery(@PathVariable Long id,
-                               @RequestParam String deliveryCompany,
-                               @RequestParam String deliveryCode,
+                               @RequestBody DelieveryVO delieveryVO,
 
                                HttpSession session) {
 
         checkStoreUser(session);
-        return productStoreOrderService.completeDelivery(id, deliveryCompany, deliveryCode);
+        return productStoreOrderService.completeDelivery(id, delieveryVO.getDeliveryCompany(), delieveryVO.getDeliveryCode());
     }
 }

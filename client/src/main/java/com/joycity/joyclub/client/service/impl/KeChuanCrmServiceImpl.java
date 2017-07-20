@@ -1,11 +1,11 @@
 package com.joycity.joyclub.client.service.impl;
 
-import com.joycity.joyclub.commons.constant.Global;
-import com.joycity.joyclub.commons.constant.ResultCode;
-import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.client.util.KeChuanEncryption;
+import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.utils.Check;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,11 +26,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
-
-import static com.joycity.joyclub.commons.constant.Global.SEX_FEMALE;
-import static com.joycity.joyclub.commons.constant.Global.SEX_MALE;
-import static com.joycity.joyclub.commons.constant.ResultCode.KECHUAN_INFO_ERROR;
-import static com.joycity.joyclub.commons.constant.ResultCode.KECHUAN_INFO_ERROR_BUT_RIGHT;
 
 
 @Service
@@ -64,6 +59,17 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
 
     @Value("${crm.tech.xml}")
     private String xml;
+
+    public static String getMapString(Map map, Object key) {
+        if (map != null) {
+            Object answer = map.get(key);
+            if (answer != null) {
+                return answer.toString();
+            }
+        }
+
+        return null;
+    }
 
     @Override
     public void getBaseInfo() {
@@ -172,6 +178,21 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
 
     @Override
     public Client getMemberByTel(String tel) {
+        return getMemberByTelOrVipCode(tel);
+    }
+
+    @Override
+    public Client getMemberByVipCode(String code) {
+        return getMemberByTelOrVipCode(code);
+    }
+
+    /**
+     * 测试100个请求，平均耗时583ms,
+     *
+     * @param code
+     * @return
+     */
+    public Client getMemberByTelOrVipCode(String code) {
         Date now = new Date();
         String date = DateFormatUtils.format(now, "yyyyMMdd");
         String time = DateFormatUtils.format(now, "HHmmss");
@@ -179,7 +200,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
 
         String param = null;
 
-        param = KeChuanEncryption.aesEncrypt(tel, secretKey);
+        param = KeChuanEncryption.aesEncrypt(code, secretKey);
 
 
         StringBuffer header = new StringBuffer();
@@ -195,7 +216,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         Element head = result.element(RESULT_TAG_HEADER);
         //获取会员信息失败有可能是会员不存在
         if (!checkApiResult(head)) {
-            // TODO: 2017/4/11 根据字符串 “无效的会员号/手机号” 来判断会员不存在很危险 
+            // TODO: 2017/4/11 根据字符串 “无效的会员号/手机号” 来判断会员不存在很危险
             if ("无效的会员号/手机号".equals(getApiErrorMsg(head)) || "100".equals(head.element(RESULT_TAG_ERROR_CODE).getText())) {
                 return null;
             } else {
@@ -243,6 +264,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
             //会员卡等级
             member.setVipCardGrade(getMapString(map, "xf_grade"));
             member.setGroup13(getMapString(map, "xf_groupid13"));
+            member.setTel((KeChuanEncryption.aesDecrypt(getMapString(map, "xf_telephone"), secretKey)));
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(ResultCode.KECHUAN_INFO_ERROR, "获取会员信息失败");
@@ -266,13 +288,11 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
                 member.setSex(Global.SEX_MALE);
             } else if ("F".equals(sex)) {
                 member.setSex(Global.SEX_FEMALE);
-            }
-            else {
+            } else {
                 member.setSex(sex);
             }
         }
 
-        member.setTel(tel);
         return member;
     }
 
@@ -507,16 +527,5 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
 
     private String getApiErrorMsg(Element head) {
         return head.element(RESULT_TAG_ERROR_MSG).getText();
-    }
-
-    public static String getMapString(Map map, Object key) {
-        if (map != null) {
-            Object answer = map.get(key);
-            if (answer != null) {
-                return answer.toString();
-            }
-        }
-
-        return null;
     }
 }
