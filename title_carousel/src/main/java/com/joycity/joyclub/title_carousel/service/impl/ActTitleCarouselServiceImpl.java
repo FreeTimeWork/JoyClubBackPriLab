@@ -33,8 +33,8 @@ public class ActTitleCarouselServiceImpl implements ActTitleCarouselService {
     @Override
     @Transactional
     public ResultData updateActTitleCarousel(List<SaleActTitleCarousel> actTitleCarousels) {
+        actTitleCarouselMapper.deleteAll();
         for (SaleActTitleCarousel carousel : actTitleCarousels) {
-            actTitleCarouselMapper.deleteByPrimaryKey(carousel.getId());
             actTitleCarouselMapper.insertSelective(carousel);
         }
         return new ResultData(new UpdateResult(actTitleCarousels.size()));

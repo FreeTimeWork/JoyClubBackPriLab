@@ -18,7 +18,7 @@ public interface CardCouponService {
      */
     ResultData createCardCoupon(CreateCouponInfo info);
 
-    ResultData getListByNameAndType(String name, Integer type, PageUtil pageUtil);
+    ResultData getListByNameAndType(Long projectId, String name, Integer type, PageUtil pageUtil);
 
     ResultData getCardCouponById(Long id);
 

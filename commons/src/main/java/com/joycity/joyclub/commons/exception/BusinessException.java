@@ -16,7 +16,7 @@ public class BusinessException extends BaseBusinessException {
     static {
         map.put(ResultCode.SUCCESS, "请求成功");
         map.put(ResultCode.ERR_EXPORT_EXCEL, "导出excel失败");
-        map.put(ResultCode.ERR_EXPORT_EXCEL, "导出excel失败");
+        map.put(ResultCode.ERR_IMPORT_EXCEL, "导入excel失败");
         map.put(ResultCode.LOGIN_ERROR, "登陆失败");
         map.put(ResultCode.UPLOAD_ERROR, "上传失败");
         map.put(ResultCode.USER_SESSION_NULL, "用户未登录或者登陆过期，请重新登陆");

@@ -289,7 +289,7 @@ CREATE TABLE `card_coupon_launch` (
   `pay_type` tinyint(4) NOT NULL COMMENT '支付方式 1,金钱 2,积分',
   `pay_amount` decimal(14,4) NOT NULL COMMENT '支付值 0代表免费',
   `launch_num` int(11) unsigned NOT NULL COMMENT '投放数量',
-  `remain_num` int(11) unsigned NOT NULL COMMENT '剩余数量',
+  `remain_num` int(11) unsigned DEFAULT NULL COMMENT '剩余数量',
   `launch_start_time` datetime DEFAULT NULL COMMENT '投放开始时间',
   `launch_end_time` datetime DEFAULT NULL COMMENT '投放截止时间',
   `effective_start_time` datetime DEFAULT NULL COMMENT '有效开始时间',
@@ -337,7 +337,7 @@ CREATE TABLE `card_coupon_code` (
 
 CREATE TABLE `card_vip_batch` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `client_id` bigint(20) DEFAULT NULL COMMENT '会员号id',
+  `client_id` bigint(20) NOT NULL COMMENT '会员号id',
   `batch` varchar(50) NOT NULL COMMENT '批次号',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

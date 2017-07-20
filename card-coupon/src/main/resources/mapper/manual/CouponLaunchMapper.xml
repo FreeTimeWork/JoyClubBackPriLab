@@ -36,7 +36,7 @@
     </sql>
 
     <sql id="name_type_status">
-        cc.delete_flag = 0
+        ccl.delete_flag = 0
         <if test="couponName != null">
             AND cc.name LIKE #{couponName}
         </if>
@@ -90,7 +90,7 @@
     <select id="countByCouponNameAndCouponTypeAndStatus" resultType="java.lang.Long">
         SELECT count(*)
         FROM card_coupon_launch ccl
-        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_idc AND cc.delete_flag = 0
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         <where>
             <include refid="name_type_status"/>
         </where>
@@ -102,11 +102,12 @@
             <include refid="status"/>,
             cc.name AS coupon_name, cc.type AS coupon_type
         FROM card_coupon_launch ccl
-        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND ccl.delete_flag = 0
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         <where>
             <include refid="name_type_status"/>
         </where>
         ORDER BY ccl.create_time DESC
+        <include refid="limit"/>
     </select>
 
     <select id="selectLaunchWithCouponByCouponId" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo">
@@ -133,10 +134,11 @@
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
         <include refid="status"/>,
-        cc.name AS coupon_name, ccts.store_id AS ccts_store_id, ccts.ratio AS ccts_ratio, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
+        cc.name AS coupon_name, ss.id AS ccts_store_id, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
         FROM card_coupon_launch ccl
-        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id cc.delete_flag = 0
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id AND ccts.delete_flag = 0
+        LEFT JOIN sys_shop ss ON ss.id = ccts.store_id AND ss.delete_flag = 0
         WHERE ccl.id = #{id} AND ccl.delete_flag = 0
     </select>
 </mapper>

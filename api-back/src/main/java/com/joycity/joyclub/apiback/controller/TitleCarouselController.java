@@ -2,13 +2,12 @@ package com.joycity.joyclub.apiback.controller;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
-import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.vo.title_carousel.SearchActTitleCarouselsVO;
+import com.joycity.joyclub.apiback.modal.vo.title_carousel.SearchProductTitleCarouselsVO;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarousel;
-import com.joycity.joyclub.title_carousel.modal.generated.SaleProductTitleCarousel;
 import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
 import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +28,10 @@ public class TitleCarouselController extends BaseUserSessionController {
     @Autowired
     private ActTitleCarouselService actTitleCarouselService;
 
-    //TODO: cfc  如何传list
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.POST)
-    public ResultData updateProductTitleCarousel(@RequestBody List<SaleProductTitleCarousel> titleCarousels, HttpSession session) {
+    public ResultData updateProductTitleCarousel(@RequestBody SearchProductTitleCarouselsVO vo, HttpSession session) {
         checkProjectUser(session);
-//        productTitleCarouselService.updateProductTitleCarousel(Arrays.asList(titleCarousels))
-        return null;
+        return productTitleCarouselService.updateProductTitleCarousel(vo.getTitleCarousels());
     }
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
@@ -44,9 +41,9 @@ public class TitleCarouselController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/system/act/carousels", method = RequestMethod.POST)
-    public ResultData updateActTitleCarousel(List<SaleActTitleCarousel> titleCarousels, HttpSession session) {
+    public ResultData updateActTitleCarousel(@RequestBody SearchActTitleCarouselsVO vo, HttpSession session) {
         checkProjectUser(session);
-        return actTitleCarouselService.updateActTitleCarousel(titleCarousels);
+        return actTitleCarouselService.updateActTitleCarousel(vo.getTitleCarousels());
     }
 
     @RequestMapping(value = "/system/act/carousels", method = RequestMethod.GET)

@@ -10,6 +10,8 @@ import com.joycity.joyclub.card_coupon.modal.BatchAndSum;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCode;
 import com.joycity.joyclub.card_coupon.service.ThirdpartyCouponCodeService;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -34,7 +36,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
     @Autowired
     public ThirdpartyCouponCodeServiceImpl(RedisTemplate redisTemplate) {
-        thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_BATCH);
+        thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_BATCH.getName());
     }
     @Override
     public ResultData createThirdpartyCouponCode(List<List<String>> list, Long thirdpartyShopId) {
@@ -58,7 +60,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
             String pix = String.valueOf(System.nanoTime());
             findBatch =  pix + RandomStringUtils.random(8, "1234567890");
             count = thirdpartyCouponCodeMapper.countIncludeDeleteByBatch(findBatch);
-        } while (redisTemplate.hasKey(findBatch) || count > 0);
+        } while (thirdpartyCouponBatchCache.hasKey(findBatch) || count > 0);
         thirdpartyCouponBatchCache.put(findBatch,findBatch);
         List<CardThirdpartyCouponCode> thirdpartyCouponCodes = prepareThirdpartyCouponCode(cardNos, findBatch, thirdpartyShopId);
 
@@ -82,12 +84,12 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
                 @Override
                 public Boolean ifIgnoreDuplicate() {
-                    return false;
+                    return true;
                 }
 
                 @Override
                 public String getUpdateSqlWhenDuplicate() {
-                    return "code = values(code)";
+                    return null;
                 }
 
                 @Override
@@ -106,7 +108,10 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
             }.batchInsert(thirdpartyCouponCodes.size());
 
         }
-        redisTemplate.delete(findBatch);
+        thirdpartyCouponBatchCache.delete(findBatch);
+        if (sum == 0) {
+            throw new BusinessException(ResultCode.ERR_IMPORT_EXCEL,"数据已存在");
+        }
         return new ResultData(new BatchAndSum(findBatch, sum));
     }
 

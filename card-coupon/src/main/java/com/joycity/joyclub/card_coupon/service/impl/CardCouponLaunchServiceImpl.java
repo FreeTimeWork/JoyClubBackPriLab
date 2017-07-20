@@ -118,6 +118,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
         }
+        if (launchDb.getConfirmFlag()) {
+            throw new BusinessException(ResultCode.LAUNCH_ERROR, "已经投放");
+
+        }
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
             quartzManager.addJob(BatchLaunchJob.class, getTriggerKey(id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }
@@ -151,7 +155,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     @Override
     public ResultData permitLaunch(Long id) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
-        if (launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
+        if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核通过");
         }
         CardCouponLaunch launch = new CardCouponLaunch();
@@ -163,7 +167,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     @Override
     public ResultData rejectLaunch(Long id, String reviewInfo) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
-        if (launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
+        if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核不通过");
         }
         CardCouponLaunch launch = new CardCouponLaunch();

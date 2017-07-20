@@ -33,8 +33,8 @@ public class ProductTitleCarouselServiceImpl implements ProductTitleCarouselServ
     @Override
     @Transactional
     public ResultData updateProductTitleCarousel(List<SaleProductTitleCarousel> saleTitleCarousels) {
+        productTitleCarouselMapper.deleteAll();
         for (SaleProductTitleCarousel carousel : saleTitleCarousels) {
-            productTitleCarouselMapper.deleteByPrimaryKey(carousel.getId());
             productTitleCarouselMapper.insertSelective(carousel);
         }
         return new ResultData(new UpdateResult(saleTitleCarousels.size()));

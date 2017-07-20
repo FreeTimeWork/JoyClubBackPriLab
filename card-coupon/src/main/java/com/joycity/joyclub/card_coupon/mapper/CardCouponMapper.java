@@ -16,9 +16,9 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface CardCouponMapper extends BaseMapper<CardCoupon, Long, CardCouponExample> {
 
-    Long countCardCouponByNameAndType(@Param("name") String name, @Param("type") Integer type, @Param("pageUtil") PageUtil pageUtil);
+    Long countCardCouponByNameAndType(@Param("projectId") Long projectId, @Param("name") String name, @Param("type") Integer type, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ShowCouponInfo> selectCardCouponByNameAndType(@Param("name") String name, @Param("type") Integer type, @Param("pageUtil") PageUtil pageUtil);
+    List<ShowCouponInfo> selectCardCouponByNameAndType(@Param("projectId") Long projectId, @Param("name") String name, @Param("type") Integer type, @Param("pageUtil") PageUtil pageUtil);
 
     @Update("update card_coupon set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponById(@Param("id") Long id);

@@ -11,6 +11,8 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardVipBatch;
 import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,7 +40,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
     @Autowired
     public CardVipBatchServiceImpl(RedisTemplate redisTemplate) {
-        cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH);
+        cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
     }
 
     public ResultData createCardVipBatch(List<List<String>> list){
@@ -61,7 +63,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
                 String pix = String.valueOf(System.nanoTime());
                 findBatch =  pix + RandomStringUtils.random(8, "1234567890");
                count = cardVipBatchMapper.countCardVipBatchByBatch(findBatch);
-            } while (redisTemplate.hasKey(findBatch) || count > 0);
+            } while (cardVipBatchCache.hasKey(findBatch) || count > 0);
             cardVipBatchCache.put(findBatch,findBatch);
 
         List<CardVipBatch> cardVipBatches = prepareCardVipBatch(vipNos,findBatch);
@@ -110,6 +112,9 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
             }.batchInsert(cardVipBatches.size());
         }
         cardVipBatchCache.delete(findBatch);
+        if (sum == 0) {
+            throw new BusinessException(ResultCode.ERR_IMPORT_EXCEL,"数据已存在");
+        }
         return new ResultData(new BatchAndSum(findBatch, sum));
     }
 
@@ -118,7 +123,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
         for (String tel : tels) {
             Long clientId = clientUserMapper.getIdByTel(tel);
-            if (clientId != null) {
+            if (clientId == null) {
                 continue;
             }
             CardVipBatch cardVipBatch = new CardVipBatch();

@@ -16,7 +16,6 @@ import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -59,34 +58,22 @@ public class CardCouponServiceImpl implements CardCouponService {
     }
 
     @Override
-    public ResultData getListByNameAndType(String name, Integer type, PageUtil pageUtil) {
+    public ResultData getListByNameAndType(Long projectId, String name, Integer type, PageUtil pageUtil) {
         if (name != null) {
             name = "%" + name + "%";
         }
         final String finalName = name;
-        ResultData data = new AbstractGetListData<ShowCouponInfo>() {
+        return new AbstractGetListData<ShowCouponInfo>() {
             @Override
             public Long countByFilter() {
-                return couponMapper.countCardCouponByNameAndType(finalName, type, pageUtil);
+                return couponMapper.countCardCouponByNameAndType(projectId, finalName, type, pageUtil);
             }
 
             @Override
             public List<ShowCouponInfo> selectByFilter() {
-                return couponMapper.selectCardCouponByNameAndType(finalName, type, pageUtil);
+                return couponMapper.selectCardCouponByNameAndType(projectId, finalName, type, pageUtil);
             }
         }.getList(pageUtil);
-
-        if (data.getCode().equals(ResultCode.SUCCESS)) {
-            ListResult listResult = (ListResult) data.getData();
-            List<ShowCouponInfo> showCouponInfos = (List<ShowCouponInfo>) listResult.getList();
-            for (ShowCouponInfo info : showCouponInfos) {
-                if (info.getSumLaunchNum() != null) {
-                    info.setAvailableNum(info.getNum() - info.getSumLaunchNum());
-                }
-            }
-
-        }
-        return data;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
@@ -21,11 +18,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *  Created by fangchen.chai on 2017/7/13.
  */
+@Service
 public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
     private Log logger = LogFactory.getLog(LogConst.LOG_TASK);
@@ -45,7 +44,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
     @Autowired
     public CardCouponCodeServiceImpl(RedisTemplate redisTemplate) {
-        thirdPartyCouponCodeCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_CODE);
+        thirdPartyCouponCodeCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_CODE.getName());
     }
 
     @Override
@@ -53,6 +52,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     public void batchCreateCouponCode(Long launchId) {
         CardCouponLaunch cardCouponLaunch = launchMapper.selectByPrimaryKey(launchId);
         CardCoupon cardCoupon = cardCouponMapper.selectByPrimaryKey(cardCouponLaunch.getCouponId());
+        String thirdPartyCodeBatch = cardCoupon.getBatch();
         String vipBatch = cardCouponLaunch.getVipBatch();
         List<Long> clientIds =  cardVipBatchMapper.selectClientIdByBatch(vipBatch);
         Date now = new Date();
@@ -82,7 +82,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 }
             }
         } else {
-            List<CardThirdpartyCouponCode> thirdpartyCouponCodes =  cardThirdpartyCouponCodeMapper.selectByBatch(vipBatch);
+            List<CardThirdpartyCouponCode> thirdpartyCouponCodes =  cardThirdpartyCouponCodeMapper.selectByBatch(thirdPartyCodeBatch);
             int index = 0;
             for (int i = 0; i < clientIds.size(); i++) {
                 CardCouponCode cardCouponCode = new CardCouponCode();
@@ -92,9 +92,9 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 CardThirdpartyCouponCode cardThirdpartyCouponCode;
                 Set<String> codesCache;
                 synchronized (this) {
-                    codesCache = thirdPartyCouponCodeCache.get(vipBatch);
+                    codesCache = thirdPartyCouponCodeCache.get(thirdPartyCodeBatch);
                     if (codesCache == null) {
-                        thirdPartyCouponCodeCache.put(vipBatch, new HashSet<>());
+                        thirdPartyCouponCodeCache.put(thirdPartyCodeBatch, new HashSet<>());
                     }
                     do {
                         cardThirdpartyCouponCode = thirdpartyCouponCodes.get(index++);
@@ -126,5 +126,6 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         String code = RandomStringUtils.random(12, "1234567890");
         cardCouponCode.setCode(code);
     }
+
 
 }

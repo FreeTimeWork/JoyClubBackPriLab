@@ -37,8 +37,8 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 
     @Autowired
     public ClientTokenServiceImpl(RedisTemplate redisTemplate) {
-        tokenHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN);
-        expireHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN_EXPIRE);
+        tokenHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN.getName());
+        expireHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN_EXPIRE.getName());
     }
 
     @Override

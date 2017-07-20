@@ -18,6 +18,7 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,8 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.GET)
     public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
-        return cardCouponService.getCardCouponById(id);
+        checkProjectUser(session);
+        return cardCouponService.getCardCouponById( id);
     }
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.POST)
@@ -51,8 +53,8 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/coupons", method = RequestMethod.GET)
     public ResultData getCardCoupons(@RequestParam(required = false) String name, @RequestParam(required = false) Integer type, PageUtil pageUtil, HttpSession session) {
-        checkProjectUser(session);
-        return cardCouponService.getListByNameAndType(name, type, pageUtil);
+        SysUser sysUser = checkProjectUser(session);
+        return cardCouponService.getListByNameAndType(sysUser.getInfoId(), name, type, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/{id}/delete", method = RequestMethod.POST)
@@ -62,15 +64,15 @@ public class CardCouponController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
-    public ResultData createCardCoupon(CreateCouponInfo info, HttpSession session) {
+        public ResultData createCardCoupon(@Validated @RequestBody CreateCouponInfo info, HttpSession session) {
         SysUser user = checkProjectUser(session);
         info.setProjectId(user.getInfoId());
         return cardCouponService.createCardCoupon(info);
     }
 
     @RequestMapping(value = "/card/thirdparty/coupon/codes/excel", method = {RequestMethod.POST})
-    public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
-                                           @RequestParam("thirdpartyShopId") Long thirdpartyShopId,
+    public ResultData importCodesFromExcel(@RequestParam final MultipartFile file,
+                                           @RequestParam Long thirdpartyShopId,
                                            HttpSession httpSession) {
 
         checkProjectUser(httpSession);
