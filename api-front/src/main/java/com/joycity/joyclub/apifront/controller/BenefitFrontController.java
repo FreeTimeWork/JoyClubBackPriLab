@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.BaseSubProjectVO;
 import com.joycity.joyclub.apifront.service.BenefitService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
@@ -58,10 +59,10 @@ public class BenefitFrontController {
     public ResultData receiveCoupon(
             @CookieValue(Global.COOKIE_TOKEN) String token,
             @PathVariable Long id,
-            @RequestParam(required = false) Long subProjectId
+            @RequestBody BaseSubProjectVO vo
 
     ) {
-        return benefitService.receiveCoupon(id, clientTokenService.getIdOrThrow(token), subProjectId);
+        return benefitService.receiveCoupon(id, clientTokenService.getIdOrThrow(token), vo.getSubProjectId());
     }
 
 }

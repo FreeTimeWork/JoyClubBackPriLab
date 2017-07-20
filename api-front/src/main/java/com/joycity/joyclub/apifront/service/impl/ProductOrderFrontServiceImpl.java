@@ -1,12 +1,13 @@
 package com.joycity.joyclub.apifront.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
 import com.joycity.joyclub.alipay.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
 import com.joycity.joyclub.apifront.modal.cart.ClientPostAddress;
+import com.joycity.joyclub.apifront.modal.project.ProductOrderItem;
+import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderItemVO;
+import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
 import com.joycity.joyclub.apifront.pay.wechat.PreOrder;
 import com.joycity.joyclub.apifront.pay.wechat.SignUtils;
 import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
@@ -29,7 +30,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.*;
-import com.joycity.joyclub.product.modal.FormDataWithInfo;
 import com.joycity.joyclub.product.modal.ProductOrderFormDataItem;
 import com.joycity.joyclub.product.modal.generated.SaleProductOrder;
 import com.joycity.joyclub.product.modal.generated.SaleProductOrderDetail;
@@ -170,18 +170,11 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     }
 
     @Override
-    public ResultData getFormData(Long clientId, String rawData) {
-        List<Long> attrIds;
+    public ResultData getFormData(Long clientId, List<Long> attrIds) {
         /**
          * 特价商品只能购买（包括未支付）一次，会过滤购买过的特价商品
          */
         Boolean ifRemoveBoughtSpecialPrice = false;
-        try {
-            attrIds = JSON.parseArray(rawData, Long.class);
-        } catch (JSONException e) {
-            throw new BusinessException(REQUEST_PARAM_ERROR, "订单初始数据错误");
-
-        }
         if (attrIds.size() == 0) {
             throw new BusinessException(REQUEST_PARAM_ERROR, "订单商品为空");
         }
@@ -214,15 +207,15 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     }
 
     @Override
-    public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
-        return clientOrder(PAY_TYPE_WECHAT, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
+    public ResultData orderForWechat(Long clientId, ProductOrderVO vo) {
+        return clientOrder(PAY_TYPE_WECHAT, clientId, vo);
 
     }
 
     @Override
-    public ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+    public ResultData orderForAli(Long clientId, ProductOrderVO vo) {
 
-        return clientOrder(PAY_TYPE_ALI, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
+        return clientOrder(PAY_TYPE_ALI, clientId, vo);
     }
 
 
@@ -230,46 +223,38 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     /**
      * 生成主订单、次订单、店铺订单、
-     *
-     * @param subProjectId 可空
      */
-    private SaleProductOrder createOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
+    private SaleProductOrder createOrder(Byte payType, Long clientId, ProductOrderVO vo) {
 
         //积分
         Integer nowPoint = clientMapper.getPoint(clientId);
         //先获得数据
-        List<FormDataWithInfo> rawDatas;
-        try {
-            rawDatas = JSON.parseArray(jsonStr, FormDataWithInfo.class);
-        } catch (JSONException e) {
-            throw new BusinessException(REQUEST_PARAM_ERROR, "订单初始数据错误");
+        List<ProductOrderItem> items = new ArrayList<>();
 
-        }
-        //给数据增加详细信息
 
-        for (FormDataWithInfo rawData : rawDatas) {
-
-            rawData.setInfo(orderMapper.getOrderRawDataItem(rawData.getAttrId()));
+        for (ProductOrderItemVO voItem : vo.getItems()) {
+            ProductOrderItem item = new ProductOrderItem(voItem);
+            item.setInfo(orderMapper.getOrderRawDataItem(item.getAttrId()));
         }
         //朱订单初始化
         SaleProductOrder mainOrder = new SaleProductOrder();
-        mainOrder.setProjectId(projectId);
+        mainOrder.setProjectId(vo.getProjectId());
         mainOrder.setClientId(clientId);
         mainOrder.setCode(createTradeNo());
         mainOrder.setStatus(MAIN_ORDER_STATUS_NOT_PAYED);
         mainOrder.setPayType(payType);
-        mainOrder.setSubProjectId(subProjectId);
+        mainOrder.setSubProjectId(vo.getSubProjectId());
         //快递相关
-        if (pickUpOrPost) {
+        if (vo.getPickupOrPost()) {
             mainOrder.setReceiveType(RECEIVE_TYPE_PICKUP);
         } else {
             mainOrder.setReceiveType(RECEIVE_TYPE_POST);
 
-            if (postAddressId == null) {
+            if (vo.getPostAddressId() == null) {
 
                 throw new BusinessException(REQUEST_PARAM_ERROR, "订单初始数据错误");
             }
-            ClientPostAddress postAddress = postAddressMapper.selectByPrimaryKey(postAddressId);
+            ClientPostAddress postAddress = postAddressMapper.selectByPrimaryKey(vo.getPostAddressId());
             if (postAddress == null) {
 
                 throw new BusinessException(DATA_NOT_EXIST, "收货地址不存在");
@@ -286,7 +271,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
         Float moneySum = 0f;
         Integer pointSum = 0;
-        for (FormDataWithInfo rawData : rawDatas) {
+        for (ProductOrderItem rawData : items) {
 
             ProductOrderFormDataItem info = rawData.getInfo();
             Float pointRate = info.getPointRate() != null ? info.getPointRate() : info.getBasePointRate();
@@ -340,7 +325,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 storeOrder.setStatus(OrderStatus.STORE_ORDER_STATUS_NOT_PAYED);
                 StoreOrderWithDetails storeWithDetail = new StoreOrderWithDetails();
                 storeWithDetail.setOrderStore(storeOrder);
-                storeWithDetail.setOrderDetails(new ArrayList<SaleProductOrderDetail>());
+                storeWithDetail.setOrderDetails(new ArrayList<>());
                 storeWithDetail.getOrderDetails().add(detailOrder);
                 storeWithDetails.add(storeWithDetail);
 
@@ -366,8 +351,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
                 //减库存
                 productAttrMapper.addNum(detail.getProductAttr(), -detail.getNum());
                 //减购物车
-                if (fromCart) {
-                    cartService.subCartNum(projectId, clientId, detail.getProductAttr(), detail.getNum());
+                if (vo.getFromCart()) {
+                    cartService.subCartNum(vo.getProjectId(), clientId, detail.getProductAttr(), detail.getNum());
                 }
             }
         }
@@ -376,28 +361,22 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     }
 
     /**
-     * @param payType       支付方式
-     * @param clientId
-     * @param subProjectId  可空
-     * @param jsonStr       array list of { Long attrId,Integer num,Boolean moneyOrPoint;}
-     * @param pickUpOrPost
-     * @param postAddressId
-     * @return
+     * @param payType 支付方式
      */
-    private ResultData clientOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, String jsonStr, Boolean pickUpOrPost, Long postAddressId, Boolean fromCart) {
-        SaleProductOrder order = createOrder(payType, projectId, subProjectId, clientId, jsonStr, pickUpOrPost, postAddressId, fromCart);
+    private ResultData clientOrder(Byte payType, Long clientId, ProductOrderVO vo) {
+        SaleProductOrder order = createOrder(payType, clientId, vo);
         PreOrderResult preOrderResult = null;
         //金钱业务
         if (order.getMoneySum() > 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
-                preOrderResult = getWechatPreOrderResult(projectId, clientId, order.getMoneySum(), order.getCode());
+                preOrderResult = getWechatPreOrderResult(vo.getProjectId(), clientId, order.getMoneySum(), order.getCode());
             } else if (payType.equals(PAY_TYPE_ALI)) {
-                preOrderResult = getAliPreOrderResult(projectId, order.getMoneySum(), order.getCode());
+                preOrderResult = getAliPreOrderResult(vo.getProjectId(), order.getMoneySum(), order.getCode());
             }
         } else {
             //总金钱为0，直接积分处理，支付成功
             clientService.addPoint(clientId, (double) -order.getPointSum());
-            setOrderPayed(order.getCode(), null,payType);
+            setOrderPayed(order.getCode(), null, payType);
             // 订单已经算支付完成了
             preOrderResult = new PreOrderResult();
             preOrderResult.setIfUseMoney(false);
@@ -468,7 +447,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         //纯积分业务不会在这里发生
         SaleProductOrder order = orderMapper.selectByPrimaryKey(orderId);
         ThrowBusinessExceptionUtil.checkNull(order, "订单不存在");
-        PreOrderResult preOrderResult=null;
+        PreOrderResult preOrderResult = null;
         if (payType.equals(PAY_TYPE_WECHAT)) {
             preOrderResult = getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode());
         } else if (payType.equals(PAY_TYPE_ALI)) {
@@ -489,10 +468,10 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     }
 
     /**
-     *
      * 支付成功返回回调，进行订单支付成功业务处理
      * 包括商品和活动
      * 先检查code是否是商品订单，如果不是，则去寻找商品订单
+     *
      * @param code
      * @param outCode
      */
@@ -502,8 +481,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         criteria.andCodeEqualTo(code);
         List<SaleProductOrder> list = orderMapper.selectByExample(exmaple);
         if (list.size() == 0) {
-           Boolean actResult= actOrderService.notifyPayed(code,outCode,payType);
-            if(!actResult) {
+            Boolean actResult = actOrderService.notifyPayed(code, outCode, payType);
+            if (!actResult) {
                 logger.error("商品订单回调时发现我方单号不存在，返回值为：我方单号：" + code + " 对方单号：" + outCode + " payType:" + payType);
             }
             return;
@@ -511,7 +490,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         SaleProductOrder order = list.get(0);
         // TODO: 2017/4/20 用户可能在下订单时积分够了,在回调时积分用了
         clientMapper.setPoint(order.getClientId(), -order.getPointSum());
-        setOrderPayed(code, outCode,payType);
+        setOrderPayed(code, outCode, payType);
 
     }
 
@@ -522,7 +501,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     @Override
     public void aliNotifyPayed(String code, String outCode) {
-        notifyPayed(code, outCode,PAY_TYPE_ALI);
+        notifyPayed(code, outCode, PAY_TYPE_ALI);
     }
 
     @Override
@@ -564,17 +543,18 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     /**
      * 一开始下单时的支付方式已经定过了，这里再次赋值payType,主要是重新下单时的支付方式可能会变化
+     *
      * @param orderCode
      * @param outCode
      */
-    private void setOrderPayed(String orderCode, String outCode,Byte payType) {
+    private void setOrderPayed(String orderCode, String outCode, Byte payType) {
         Long orderId = orderMapper.getIdByCode(orderCode);
         ThrowBusinessExceptionUtil.checkNull(orderId, "订单号不存在");
         orderMapper.setPayedById(orderId);
         if (outCode != null) {
-            orderMapper.setOutPayCodeById(orderId, outCode,payType);
+            orderMapper.setOutPayCodeById(orderId, outCode, payType);
         }
-        orderStoreMapper.setOrderStatusAndPayTypeByMainOrderId(orderId,payType, OrderStatus.STORE_ORDER_STATUS_PAYED);
+        orderStoreMapper.setOrderStatusAndPayTypeByMainOrderId(orderId, payType, OrderStatus.STORE_ORDER_STATUS_PAYED);
 
     }
 

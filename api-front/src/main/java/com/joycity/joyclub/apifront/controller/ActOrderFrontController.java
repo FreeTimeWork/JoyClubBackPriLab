@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.act.ActOrderVO;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
@@ -9,6 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID_REQUEST_PARAM;
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
@@ -71,11 +74,8 @@ public class ActOrderFrontController {
     @RequestMapping(value = "/order/act/ali", method = POST)
     public ResultData orderForAli(
             @CookieValue(Global.COOKIE_TOKEN) String token,
-            @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-            @RequestParam(required = false) Long subProjectId,
-            @RequestParam Long attrId,
-            @RequestParam Boolean moneyOrPoint) {
-        return orderService.orderForAli(projectId, subProjectId, clientTokenService.getIdOrThrow(token), attrId, moneyOrPoint);
+            @Valid @RequestBody ActOrderVO orderVO) {
+        return orderService.orderForAli(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint());
     }
 
 /**
