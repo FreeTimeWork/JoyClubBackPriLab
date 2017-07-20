@@ -5,13 +5,18 @@ import java.util.*;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
+import com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo;
+import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCode;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
+import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
+import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,7 +82,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                     cardCouponCodeMapper.insertSelective(cardCouponCode);
                     i++;
                 } catch (Exception e) {
-                    logger.info("insert error", e);
+                    logger.info("insert repeat code error", e);
                     continue;
                 }
             }
@@ -120,6 +125,22 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
             }
         }
+    }
+
+    @Override
+    public ResultData getListByFilter(Long projectId, ShowCouponCodeFilter filter, PageUtil pageUtil) {
+
+        return new AbstractGetListData<ShowCouponCodeInfo>() {
+            @Override
+            public Long countByFilter() {
+                return cardCouponCodeMapper.countCardCouponCodeByFilter(projectId, filter);
+            }
+
+            @Override
+            public List<ShowCouponCodeInfo> selectByFilter() {
+                return cardCouponCodeMapper.selectCardCouponCodeByFilter(projectId, filter, pageUtil);
+            }
+        }.getList(pageUtil);
     }
 
     private void makeCouponCode(CardCouponCode cardCouponCode) {

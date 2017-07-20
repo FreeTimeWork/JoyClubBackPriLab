@@ -15,7 +15,7 @@ public class ShowCouponCodeFilter {
     }
 
     public void setCouponName(String couponName) {
-        this.couponName = couponName;
+        this.couponName = "%" + couponName + "%";
     }
 
     public Byte getCouponType() {
@@ -31,7 +31,7 @@ public class ShowCouponCodeFilter {
     }
 
     public void setCouponLaunchName(String couponLaunchName) {
-        this.couponLaunchName = couponLaunchName;
+        this.couponLaunchName = "%" + couponLaunchName + "%";
     }
 
     public String getCode() {
