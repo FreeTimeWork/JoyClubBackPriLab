@@ -28,7 +28,7 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
 
     @RequestMapping(value = "/card/third/coupon/codes", method = RequestMethod.GET)
     public ResultData getListByFilter(@RequestParam(required = false) String couponName,
-                                      @RequestParam(required = false) String thirdPartyName,
+                                      @RequestParam(required = false) String thirdPartyShopName,
                                       @RequestParam(required = false) String couponLaunchName,
                                       @RequestParam(required = false) String code,
                                       @RequestParam(required = false) String tel,
@@ -41,9 +41,9 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
             couponName = "%" + couponName + "%";
         filter.setCouponName(couponName);
 
-        if (thirdPartyName != null)
-            thirdPartyName = "%" + thirdPartyName + "%";
-        filter.setThirdPartyName(thirdPartyName);
+        if (thirdPartyShopName != null)
+            thirdPartyShopName = "%" + thirdPartyShopName + "%";
+        filter.setThirdPartyName(thirdPartyShopName);
 
         if (couponLaunchName != null)
             couponLaunchName = "%" + couponLaunchName + "%";

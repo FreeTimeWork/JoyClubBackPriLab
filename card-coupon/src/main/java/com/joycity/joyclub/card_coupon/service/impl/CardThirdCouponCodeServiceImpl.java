@@ -40,12 +40,12 @@ public class CardThirdCouponCodeServiceImpl implements CardThirdCouponCodeServic
         return new AbstractGetListData<ShowCouponCodeInfo>() {
             @Override
             public Long countByFilter() {
-                return cardCouponCodeMapper.countCardCouponCodeByFilter(projectId, filter);
+                return cardCouponCodeMapper.countCardThirdCouponCodeByFilter(projectId, filter);
             }
 
             @Override
             public List<ShowCouponCodeInfo> selectByFilter() {
-                return cardCouponCodeMapper.selectCardCouponCodeByFilter(projectId, filter, pageUtil);
+                return cardCouponCodeMapper.selectCardThirdCouponCodeByFilter(projectId, filter, pageUtil);
             }
         }.getList(pageUtil);
     }
