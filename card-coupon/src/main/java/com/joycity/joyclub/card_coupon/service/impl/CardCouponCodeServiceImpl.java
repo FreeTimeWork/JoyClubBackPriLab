@@ -1,7 +1,5 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
-import java.util.*;
-
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
@@ -15,7 +13,10 @@ import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
@@ -25,6 +26,11 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *  Created by fangchen.chai on 2017/7/13.
@@ -141,6 +147,30 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 return cardCouponCodeMapper.selectCardCouponCodeByFilter(projectId, filter, pageUtil);
             }
         }.getList(pageUtil);
+    }
+
+    @Override
+    public ResultData checkCouponCode(Long id) {
+        CardCouponCode cardCouponCodeDb = cardCouponCodeMapper.selectByPrimaryKey(id);
+        String errorText = null;
+        if (cardCouponCodeDb == null) {
+            errorText = "该卡券号不存在";
+        } else {
+            if (!cardCouponCodeDb.getUseStatus().equals(CouponCodeUseStatus.NOT_USED)) {
+                errorText = "该卡券号已使用或已作废";
+            }
+        }
+
+        if (errorText != null) {
+            throw new BusinessException(ResultCode.COUPON_CHECK_ERROR, errorText);
+        } else {
+            CardCouponCode cardCouponCode = new CardCouponCode();
+            cardCouponCode.setId(id);
+            cardCouponCode.setUseStatus(CouponCodeUseStatus.USED);
+            cardCouponCode.setUseTime(new Date());
+            int num = cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
+            return new ResultData(new UpdateResult(num));
+        }
     }
 
     private void makeCouponCode(CardCouponCode cardCouponCode) {

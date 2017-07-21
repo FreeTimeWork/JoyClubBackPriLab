@@ -1,14 +1,16 @@
 package com.joycity.joyclub.card_coupon.modal;
 
-import com.joycity.joyclub.coupon.modal.generated.CouponCode;
+import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 
 /**
  * Created by fangchen.chai on 2017/7/14.
  */
-public class ShowCouponCodeInfo extends CouponCode{
+public class ShowCouponCodeInfo extends CardCouponCode{
     private String couponName;
+    private String thirdPartyShopName;
     private Byte couponType;
     private String couponLaunchName;
+    private String vipCode;
 
     public String getCouponName() {
         return couponName;
@@ -16,6 +18,14 @@ public class ShowCouponCodeInfo extends CouponCode{
 
     public void setCouponName(String couponName) {
         this.couponName = couponName;
+    }
+
+    public String getThirdPartyShopName() {
+        return thirdPartyShopName;
+    }
+
+    public void setThirdPartyShopName(String thirdPartyShopName) {
+        this.thirdPartyShopName = thirdPartyShopName;
     }
 
     public Byte getCouponType() {
@@ -32,5 +42,13 @@ public class ShowCouponCodeInfo extends CouponCode{
 
     public void setCouponLaunchName(String couponLaunchName) {
         this.couponLaunchName = couponLaunchName;
+    }
+
+    public String getVipCode() {
+        return vipCode;
+    }
+
+    public void setVipCode(String vipCode) {
+        this.vipCode = vipCode;
     }
 }

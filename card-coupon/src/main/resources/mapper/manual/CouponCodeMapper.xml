@@ -8,29 +8,40 @@
 
     <sql id="CardCouponCodeFilter">
         ccc.delete_flag = 0 AND cc.project_id = #{projectId}
-        <if test="couponName != null">
-            cc.name LIKE #{couponName}
-        </if>
-        <if test="couponType != null">
-            cc.type = #{couponType}
-        </if>
-        <if test="couponLaunchName != null">
-            ccl.name LIKE #{couponLaunchName}
-        </if>
-        <if test="code != null">
-            ccc.code = #{code}
-        </if>
-        <if test="clientId != null">
-            ccc.client_id = #{clientId}
+        <if test="filter != null">
+            <if test="filter.code != null">
+                AND ccc.code = #{filter.code}
+            </if>
+            <if test="filter.tel != null">
+                AND c.tel = #{filter.tel}
+            </if>
+            <if test="filter.couponType != null">
+                AND cc.type = #{filter.couponType}
+            </if>
+            <if test="filter.couponName != null">
+                AND cc.name LIKE #{filter.couponName}
+            </if>
+            <if test="filter.couponLaunchName != null">
+                AND ccl.name LIKE #{filter.couponLaunchName}
+            </if>
+            <if test="filter.thirdPartyName != null">
+                AND cts.name LIKE #{filter.thirdPartyName}
+            </if>
         </if>
     </sql>
 
-    <select id="countCardCouponCodeByFilter" resultType="int">
+    <sql id="CardCouponCodeColumns">
+        ccc.id, ccc.code, ccc.launch_id, ccc.pos_sale_detail_id, ccc.belong, ccc.client_id, ccc.receive_time, ccc.use_time,
+        ccc.use_status, ccc.create_time, ccc.last_update, ccc.delete_flag, ccc.delete_time
+    </sql>
+
+    <select id="countCardCouponCodeByFilter" resultType="long">
         SELECT
         count(*)
         FROM card_coupon_code ccc
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        INNER JOIN client c ON c.id = ccc.client_id AND c.delete_flag = 0
         <where>
             <include refid="CardCouponCodeFilter"/>
         </where>
@@ -38,14 +49,42 @@
 
     <select id="selectCardCouponCodeByFilter" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo">
         SELECT
-        <include refid="Base_Column_List"/>,
-        cc.name AS coupon_name, cc.type AS coupon_type, ccl.name AS coupon_launch_name
-        private String couponName;
-        private Byte couponType;
-        private String couponLaunchName;
+        <include refid="CardCouponCodeColumns"/>,
+        cc.name AS coupon_name, cc.type AS coupon_type, ccl.name AS coupon_launch_name, c.vip_code
         FROM card_coupon_code ccc
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        INNER JOIN client c ON c.id = ccc.client_id AND c.delete_flag = 0
+        <where>
+            <include refid="CardCouponCodeFilter"/>
+        </where>
+        ORDER BY ccc.create_time DESC
+        <include refid="limit"/>
+    </select>
+
+
+    <select id="countCardThirdCouponCodeByFilter" resultType="long">
+        SELECT
+        count(*)
+        FROM card_coupon_code ccc
+        INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        INNER JOIN client c ON c.id = ccc.client_id AND c.delete_flag = 0
+        INNER JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        <where>
+            <include refid="CardCouponCodeFilter"/>
+        </where>
+    </select>
+
+    <select id="selectCardThirdCouponCodeByFilter" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo">
+        SELECT
+        <include refid="CardCouponCodeColumns"/>,
+        cc.name AS coupon_name, cc.type AS coupon_type, ccl.name AS coupon_launch_name, c.vip_code, cts.name AS third_party_name
+        FROM card_coupon_code ccc
+        INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        INNER JOIN client c ON c.id = ccc.client_id AND c.delete_flag = 0
+        INNER JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
         <where>
             <include refid="CardCouponCodeFilter"/>
         </where>

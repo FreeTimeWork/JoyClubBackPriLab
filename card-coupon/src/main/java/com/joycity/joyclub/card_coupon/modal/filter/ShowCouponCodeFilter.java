@@ -5,21 +5,30 @@ package com.joycity.joyclub.card_coupon.modal.filter;
  */
 public class ShowCouponCodeFilter {
     private String couponName;
+    private String thirdPartyName;
     private Byte couponType;
     private String couponLaunchName;
     private String code;
-    private String clientId;
+    private String tel;
 
     public String getCouponName() {
         return couponName;
     }
 
     public void setCouponName(String couponName) {
-        this.couponName = "%" + couponName + "%";
+        this.couponName = couponName;
     }
 
     public Byte getCouponType() {
         return couponType;
+    }
+
+    public String getThirdPartyName() {
+        return thirdPartyName;
+    }
+
+    public void setThirdPartyName(String thirdPartyName) {
+        this.thirdPartyName = thirdPartyName;
     }
 
     public void setCouponType(Byte couponType) {
@@ -31,7 +40,7 @@ public class ShowCouponCodeFilter {
     }
 
     public void setCouponLaunchName(String couponLaunchName) {
-        this.couponLaunchName = "%" + couponLaunchName + "%";
+        this.couponLaunchName = couponLaunchName;
     }
 
     public String getCode() {
@@ -42,11 +51,11 @@ public class ShowCouponCodeFilter {
         this.code = code;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getTel() {
+        return tel;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }

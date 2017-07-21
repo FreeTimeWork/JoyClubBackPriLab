@@ -7,12 +7,8 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 /**
  * Created by fangchen.chai on 2017/7/13.
  */
-public interface CardCouponCodeService {
-
-    void  batchCreateCouponCode(Long launchId);
+public interface CardThirdCouponCodeService {
 
     ResultData getListByFilter(Long projectId, ShowCouponCodeFilter filter, PageUtil pageUtil);
-
-    ResultData checkCouponCode(Long id);
 
 }

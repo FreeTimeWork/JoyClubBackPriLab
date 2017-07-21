@@ -1,9 +1,5 @@
 package com.joycity.joyclub.apiback.controller;
 
-import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
-
-import javax.servlet.http.HttpSession;
-
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.card_coupon.service.ShopService;
@@ -14,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
+
+import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 /**
  * Created by fangchen.chai on 2017/7/12.
@@ -36,7 +36,7 @@ public class ShopController extends BaseUserSessionController {
         return shopService.getListByCodeAndName(sysUser.getInfoId(), code, name, pageUtil);
     }
 
-    @RequestMapping(value = "/group/SubCommercial/shops", method = RequestMethod.GET)
+    @RequestMapping(value = "/group/subcommercial/shops", method = RequestMethod.GET)
     public ResultData getShopsByCodeAndSubCommercial(HttpSession session) {
         SysUser sysUser = checkProjectUser(session);
         return shopService.getShopsGroupBySubCommercial(sysUser.getInfoId());
