@@ -21,6 +21,7 @@ import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+·import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -107,6 +108,7 @@ public class CardPosServiceImpl implements CardPosService {
     }
 
     @Override
+    @Transactional
     public ResultData refund(String orderCode) {
 
         CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
@@ -123,7 +125,7 @@ public class CardPosServiceImpl implements CardPosService {
                 cardCouponCodeService.updateNotUsedCouponCode(id);
             }
         }
-        //应该代金券拥有量s
+        //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info);
         //实际代金券拥有量
         int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
@@ -131,7 +133,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (num <= info.getNotUsedNum()) {
             Date date = info.getDetail().getCreateTime();
             Long clientId = info.getDetail().getClientId();
-            List<Long> couponCodeIds =  cardCouponCodeMapper.selectNotUsedCouponCodeIdFromLaunchBetween(date, clientId, num);
+            List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCouponCodeIdFromLaunchBetween(date, clientId, num);
             //未使用代金券废弃
             for (Long id : couponCodeIds) {
                 CardCouponCode cardCouponCode = new CardCouponCode();
@@ -139,6 +141,9 @@ public class CardPosServiceImpl implements CardPosService {
                 cardCouponCode.setUseStatus(CouponCodeUseStatus.CANCELLED);
                 cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
             }
+        } else {
+            //正常先调用退货验证再调用退货不会到这里，防止直接调用此方法
+            throw new BusinessException(ResultCode.FORBID_REFUND);
         }
 
         return new ResultData(new UpdateResult(affectNum));
