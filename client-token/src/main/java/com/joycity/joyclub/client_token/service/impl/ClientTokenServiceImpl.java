@@ -1,5 +1,6 @@
 package com.joycity.joyclub.client_token.service.impl;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,15 +32,11 @@ public class ClientTokenServiceImpl implements ClientTokenService {
      * 目前是30天过时
      */
     private final Long EXPIRE_PERIOD = 1000 * 3600 * 24 * 30L;
-    private final BoundHashOperations<String, String, String> tokenHO;
-    private final BoundHashOperations<String, String, String> expireHO;
     private Log taskLogger = LogFactory.getLog(LogConst.LOG_TASK);
-
+    private final String CLIENT_TOKEN = RedisKeyConst.CLIENT_TOKEN.getName();
+    private final String CLIENT_TOKEN_EXPIRE = RedisKeyConst.CLIENT_TOKEN_EXPIRE.getName();
     @Autowired
-    public ClientTokenServiceImpl(RedisTemplate redisTemplate) {
-        tokenHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN.getName());
-        expireHO = redisTemplate.boundHashOps(RedisKeyConst.CLIENT_TOKEN_EXPIRE.getName());
-    }
+    RedisTemplate redisTemplate;
 
     @Override
     public Long getId(String token) {
@@ -55,6 +52,8 @@ public class ClientTokenServiceImpl implements ClientTokenService {
     @Override
     public String setToken(Long clientId) {
         String token = createToken();
+        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(CLIENT_TOKEN);
+        BoundHashOperations<String, String, String> expireHO = redisTemplate.boundHashOps(CLIENT_TOKEN_EXPIRE);
         tokenHO.put(token, String.valueOf(clientId));
         expireHO.put(getExpireKey(token), getExpireTime());
         return token;
@@ -62,6 +61,8 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 
     @Override
     public void removeToken(String token) {
+        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(CLIENT_TOKEN);
+        BoundHashOperations<String, String, String> expireHO = redisTemplate.boundHashOps(CLIENT_TOKEN_EXPIRE);
         tokenHO.delete(token);
         expireHO.delete(getExpireKey(token));
     }
@@ -73,6 +74,7 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 
     @Override
     public void clearExpireToken() {
+        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(CLIENT_TOKEN);
         Cursor<Map.Entry<String, String>> cursor = tokenHO.scan(new ScanOptions.ScanOptionsBuilder().build());
         Long startTime = System.currentTimeMillis();
         int clearNum = 0;
@@ -90,6 +92,8 @@ public class ClientTokenServiceImpl implements ClientTokenService {
     }
 
     private Long getId(String token, Boolean ifThrow) {
+        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(CLIENT_TOKEN);
+        BoundHashOperations<String, String, String> expireHO = redisTemplate.boundHashOps(CLIENT_TOKEN_EXPIRE);
         String expireKey = getExpireKey(token);
         String expireAt = expireHO.get(expireKey);
         String clientId = tokenHO.get(token);
