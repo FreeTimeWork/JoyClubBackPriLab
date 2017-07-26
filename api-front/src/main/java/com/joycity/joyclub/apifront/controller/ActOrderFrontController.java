@@ -61,11 +61,10 @@ public class ActOrderFrontController {
     @RequestMapping(value = "/order/act/wechat", method = POST)
     public ResultData orderForWechat(
             @CookieValue(Global.COOKIE_TOKEN) String token,
-            @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-            @RequestParam(required = false) Long subProjectId,
-            @RequestParam Long attrId, @RequestParam Boolean moneyOrPoint)
+            @Valid @RequestBody ActOrderVO orderVO
+    )
  {
-     return orderService.orderForWechat(projectId, subProjectId, clientTokenService.getIdOrThrow(token), attrId, moneyOrPoint);
+     return orderService.orderForWechat(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint());
     }
 
     /**
