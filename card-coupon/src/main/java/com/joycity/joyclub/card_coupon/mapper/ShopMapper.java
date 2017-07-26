@@ -22,5 +22,5 @@ public interface ShopMapper extends BaseMapper<SysShop, Long, SysShopExample> {
 
     List<SubCommercialShopInfo> selectShopGroupBySubCommercial(@Param("projectId") Long projectId);
 
-    List<SysShop> selectShopByNameAndSubCommercial(@Param("projectId") Long projectId, @Param("name") String name, @Param("subCommercial") String subsubCommercial);
+    List<SysShop> selectShopsByNameAndCode(@Param("projectId") Long projectId, @Param("name") String name, @Param("code") String code);
 }

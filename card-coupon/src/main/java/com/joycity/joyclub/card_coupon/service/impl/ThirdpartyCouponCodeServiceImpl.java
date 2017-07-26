@@ -32,14 +32,10 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
     private CardThirdpartyCouponCodeMapper thirdpartyCouponCodeMapper;
     @Autowired
     private RedisTemplate redisTemplate;
-    private final BoundHashOperations<String, String, String> thirdpartyCouponBatchCache;
 
-    @Autowired
-    public ThirdpartyCouponCodeServiceImpl(RedisTemplate redisTemplate) {
-        thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_BATCH.getName());
-    }
     @Override
     public ResultData createThirdpartyCouponCode(List<List<String>> list, Long thirdpartyShopId) {
+        BoundHashOperations<String, String, String> thirdpartyCouponBatchCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_BATCH.getName());
 
         Set<String> cardNos = new HashSet<>();
         List<String> rows;

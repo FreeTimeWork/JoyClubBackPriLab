@@ -113,6 +113,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData confirmLaunch(Long id) throws SchedulerException {
+        //TODO: cfc 增加条件投放限制，一个条件投放期间只能有一个条件投放
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         checkLaunchNum(launchDb);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {

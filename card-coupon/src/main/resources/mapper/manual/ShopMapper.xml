@@ -63,18 +63,18 @@
         ${sql}
     </insert>
 
-    <select id="selectShopByNameAndSubCommercial" resultType="com.joycity.joyclub.card_coupon.modal.generated.SysShop">
+    <select id="selectShopByNameAndCode" resultType="com.joycity.joyclub.card_coupon.modal.generated.SysShop">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_shop
         <where>
             delete_flag = 0
             AND project_id = #{projectId}
+            <if test="code != null">
+                AND code LIKE #{code}
+            </if>
             <if test="name != null">
                 AND name LIKE #{name}
-            </if>
-            <if test="subCommercial != null">
-                AND sub_commercial_type_name LIKE #{subCommercial}
             </if>
         </where>
          ORDER BY id DESC

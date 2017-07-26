@@ -50,13 +50,8 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     private CardVipBatchMapper cardVipBatchMapper;
     @Autowired
     private CardThirdpartyCouponCodeMapper cardThirdpartyCouponCodeMapper;
-
-    private final BoundHashOperations<String, String, Set<String>> thirdPartyCouponCodeCache;
-
     @Autowired
-    public CardCouponCodeServiceImpl(RedisTemplate redisTemplate) {
-        thirdPartyCouponCodeCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_CODE.getName());
-    }
+    private RedisTemplate redisTemplate;
 
     @Override
     @Transactional
@@ -72,7 +67,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             for (int i = 0; i < clientIds.size();) {
                 CardCouponCode cardCouponCode = new CardCouponCode();
 
-                if (cardCoupon.getType().equals(CouponType.THIRDPARTY_COUPON)) {
+                if (cardCoupon.getType().equals(CouponType.THIRD_PARTY_COUPON)) {
                     cardCouponCode.setBelong(cardCoupon.getThirdpartyShopId());
                 } else {
                     cardCouponCode.setBelong(-1L);
@@ -93,6 +88,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 }
             }
         } else {
+            BoundHashOperations<String, String, Set<String>> thirdPartyCouponCodeCache = redisTemplate.boundHashOps(RedisKeyConst.THIRD_PARTY_COUPON_CODE.getName());
             List<CardThirdpartyCouponCode> thirdpartyCouponCodes =  cardThirdpartyCouponCodeMapper.selectByBatch(thirdPartyCodeBatch);
             int index = 0;
             for (int i = 0; i < clientIds.size(); i++) {
@@ -150,7 +146,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     }
 
     @Override
-    public ResultData checkCouponCode(Long id) {
+    public ResultData checkCouponCode(Long id, Long posSaleDetailId) {
         CardCouponCode cardCouponCodeDb = cardCouponCodeMapper.selectByPrimaryKey(id);
         String errorText = null;
         if (cardCouponCodeDb == null) {
@@ -168,9 +164,22 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             cardCouponCode.setId(id);
             cardCouponCode.setUseStatus(CouponCodeUseStatus.USED);
             cardCouponCode.setUseTime(new Date());
+            if (posSaleDetailId != null) {
+                cardCouponCode.setPosSaleDetailId(posSaleDetailId);
+            }
             int num = cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
             return new ResultData(new UpdateResult(num));
         }
+    }
+
+    @Override
+    public int updateNotUsedCouponCode(Long couponCodeId) {
+        CardCouponCode cardCouponCode = new CardCouponCode();
+        cardCouponCode.setId(couponCodeId);
+        cardCouponCode.setPosSaleDetailId(null);
+        cardCouponCode.setUseStatus(CouponCodeUseStatus.NOT_USED);
+        cardCouponCode.setUseTime(null);
+        return cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
     }
 
     private void makeCouponCode(CardCouponCode cardCouponCode) {

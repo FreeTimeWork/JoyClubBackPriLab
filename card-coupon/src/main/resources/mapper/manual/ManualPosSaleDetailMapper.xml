@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper">
+
+  <sql id="limit">
+        limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+
+    <sql id="PosSaleDetailColumn">
+
+        psd.id, psd.order_code, psd.client_id, psd.paid, psd.refund_flag, psd.refund_time, psd.create_time, psd.last_update,
+        psd.delete_flag, psd.delete_time
+    </sql>
+
+    <resultMap id="CouponCodeIds" type="long">
+        <result column="coupon_code_id" jdbcType="BIGINT"/>
+    </resultMap>
+    <resultMap id="PosSaleDetailWithCouponCode" type="com.joycity.joyclub.card_coupon.modal.PosSaleDetailWithCouponCode" extends="BaseResultMap">
+        
+        <collection property="couponCodeIds" resultMap="CouponCodeIds" />
+    </resultMap>
+    <select id="selectByOrderCode" resultMap="PosSaleDetailWithCouponCode">
+        SELECT
+        <include refid="PosSaleDetailColumn"/>, ccc.id AS coupon_code_id
+        FROM pos_sale_detail psd
+        LEFT JOIN card_coupon_code ccc on ccc.pos_sale_detail_id = psd.id
+        AND ccc.belong = -1 AND ccc.use_status != 3 AND ccc.delete_flag = 0
+        WHERE
+        psd.order_code = #{orderCode}
+    </select>
+  
+</mapper>

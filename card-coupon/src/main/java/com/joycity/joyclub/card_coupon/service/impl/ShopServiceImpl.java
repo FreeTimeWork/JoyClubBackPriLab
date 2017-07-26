@@ -10,6 +10,7 @@ import com.joycity.joyclub.card_coupon.modal.MallcooShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -128,7 +129,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ResultData getListByCodeAndName(Long projectId, String code, String name, PageUtil pageUtil) {
+    public ResultData getListByCodeAndSubCommercial(Long projectId, String code, String name, PageUtil pageUtil) {
 
         if (name != null) {
             name = "%" + name + "%";
@@ -150,18 +151,15 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ResultData getShopsGroupBySubCommercial(Long projectId) {
-        return new ResultData(shopMapper.selectShopGroupBySubCommercial(projectId));
+        return new ResultData(new ListResult(shopMapper.selectShopGroupBySubCommercial(projectId)));
     }
 
     @Override
-    public ResultData getAllShopByNameAndSubCommercial(Long projectId, String name, String subCommercial) {
+    public ResultData getAllShopByNameAndCode(Long projectId, String name, String code) {
         if (name != null) {
             name = "%" + name + "%";
         }
-        if (subCommercial != null) {
-            subCommercial = "%" + subCommercial + "%";
-        }
-        return new ResultData(shopMapper.selectShopByNameAndSubCommercial(projectId, name, subCommercial));
+        return new ResultData(new ListResult(shopMapper.selectShopsByNameAndCode(projectId, name, code)));
     }
 
 }

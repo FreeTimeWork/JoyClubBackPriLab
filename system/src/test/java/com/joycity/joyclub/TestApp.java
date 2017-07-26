@@ -1,6 +1,11 @@
 package com.joycity.joyclub;
 
+import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.act.service.ActService;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
+import com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper;
+import com.joycity.joyclub.card_coupon.modal.PosSaleDetailWithCouponCode;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.system.App;
@@ -12,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
 
 /**
  * Created by CallMeXYZ on 2017/6/14.
@@ -30,6 +37,10 @@ public class TestApp {
 
     @Autowired
     ActService actService;
+    @Autowired
+    KeChuanCrmService keChuanCrmService;
+    @Autowired
+    CardPosSaleDetailMapper cardPosSaleDetailMapper;
 
 //    @Test
 //    public void testRechargeFlow() {
@@ -55,5 +66,16 @@ public class TestApp {
         System.out.println();
     }
 
+    @Test
+    public void RefundTest(){
+        System.out.println(JSON.toJSONString(keChuanCrmService.getMemberByTel("15001060933")));
+
+    }
+
+    @Test
+    public void CollectionTest(){
+        PosSaleDetailWithCouponCode data = cardPosSaleDetailMapper.selectByOrderCode("2");
+        System.out.println(data);
+    }
 
 }

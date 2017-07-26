@@ -15,10 +15,10 @@ public interface ShopService {
 
     ResultData syncMallCooShop(Long projectId);
 
-    ResultData getListByCodeAndName(Long projectId, String code, String name, PageUtil pageUtil);
+    ResultData getListByCodeAndSubCommercial(Long projectId, String code, String name, PageUtil pageUtil);
 
     ResultData getShopsGroupBySubCommercial(Long projectId);
 
-    ResultData getAllShopByNameAndSubCommercial(Long projectId, String name, String subCommercial);
+    ResultData getAllShopByNameAndCode(Long projectId, String name, String code);
 
 }

@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller;
+package com.joycity.joyclub.apiback.controller.card;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
@@ -24,16 +24,10 @@ public class ShopController extends BaseUserSessionController {
     @Autowired
     private ShopService shopService;
 
-    @RequestMapping(value = "/all/shops", method = RequestMethod.GET)
-    public ResultData getShopsByNameAndSubCommercial(@RequestParam(required = false) String name, @RequestParam(required = false) String subCommercial, HttpSession session) {
+    @RequestMapping(value = "/offline/shops", method = RequestMethod.GET)
+    public ResultData getShopsByNameAndCode(@RequestParam(required = false) String name, @RequestParam(required = false) String code, HttpSession session) {
         SysUser sysUser = checkProjectUser(session);
-        return shopService.getAllShopByNameAndSubCommercial(sysUser.getInfoId(), name, subCommercial);
-    }
-
-    @RequestMapping(value = "/shops", method = RequestMethod.GET)
-    public ResultData getShopsByCodeAndSubCommercial(@RequestParam(required = false) String code, @RequestParam(required = false) String name, PageUtil pageUtil, HttpSession session) {
-        SysUser sysUser = checkProjectUser(session);
-        return shopService.getListByCodeAndName(sysUser.getInfoId(), code, name, pageUtil);
+        return shopService.getAllShopByNameAndCode(sysUser.getInfoId(), name, code);
     }
 
     @RequestMapping(value = "/group/subcommercial/shops", method = RequestMethod.GET)

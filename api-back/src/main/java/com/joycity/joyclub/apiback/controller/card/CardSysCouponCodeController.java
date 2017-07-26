@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller;
+package com.joycity.joyclub.apiback.controller.card;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
@@ -50,7 +50,7 @@ public class CardSysCouponCodeController extends BaseUserSessionController{
     @RequestMapping(value = "card/sys/coupon/{id}/check", method = RequestMethod.POST)
     public ResultData checkCouponCode(@PathVariable Long id, HttpSession session) {
         checkProjectUser(session);
-        return cardCouponCodeService.checkCouponCode(id);
+        return cardCouponCodeService.checkCouponCode(id, null);
     }
 
 }

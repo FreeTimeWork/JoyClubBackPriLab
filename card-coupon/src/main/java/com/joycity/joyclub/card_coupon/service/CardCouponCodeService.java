@@ -13,6 +13,16 @@ public interface CardCouponCodeService {
 
     ResultData getListByFilter(Long projectId, ShowCouponCodeFilter filter, PageUtil pageUtil);
 
-    ResultData checkCouponCode(Long id);
+    /**
+     * 核销卡券
+     * 有订单流水号传入流水，没有传入null
+     */
+    ResultData checkCouponCode(Long id, Long posSaleDetailId);
+
+    /**
+     * 卡券改为未使用
+     */
+    int updateNotUsedCouponCode(Long couponCodeId);
+
 
 }

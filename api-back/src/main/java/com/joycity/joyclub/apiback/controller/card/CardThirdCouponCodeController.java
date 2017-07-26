@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller;
+package com.joycity.joyclub.apiback.controller.card;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;

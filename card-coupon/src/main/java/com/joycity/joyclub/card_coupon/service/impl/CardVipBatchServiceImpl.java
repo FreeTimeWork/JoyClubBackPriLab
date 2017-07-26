@@ -36,14 +36,10 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    private final BoundHashOperations<String, String, String> cardVipBatchCache;
-
-    @Autowired
-    public CardVipBatchServiceImpl(RedisTemplate redisTemplate) {
-        cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
-    }
 
     public ResultData createCardVipBatch(List<List<String>> list){
+        BoundHashOperations<String, String, String> cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
+
         Set<String> vipNos = new HashSet<>();
         List<String> rows;
         for (int i = 0; i < list.size(); i++) {

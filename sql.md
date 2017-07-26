@@ -348,15 +348,16 @@ CREATE TABLE `card_vip_batch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='批量插入会员号的中间表';
 
 CREATE TABLE `pos_sale_detail` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `client_id` bigint(20) DEFAULT NULL COMMENT '会员号id',
-  `paid` decimal(14,4) NOT NULL COMMENT '实际支付',
-  `refund_flag` tinyint(1) unsigned DEFAULT '0' COMMENT '是否退款',
-  `refund_time` datetime DEFAULT NULL COMMENT '退款时间',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
-  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `delete_flag` tinyint(1) unsigned DEFAULT '0',
-  `delete_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`order_code` VARCHAR(20) NOT DEFAULT COMMENT '订单号',
+	`client_id` BIGINT(20) NOT NULL COMMENT '会员号id',
+	`paid` DECIMAL(14,4) NOT NULL COMMENT '实际支付',
+	`refund_flag` TINYINT(1) UNSIGNED NULL DEFAULT '0' COMMENT '是否退款',
+	`refund_time` DATETIME NULL DEFAULT NULL COMMENT '退款时间',
+	`create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`last_update` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	`delete_flag` TINYINT(1) UNSIGNED NULL DEFAULT '0',
+	`delete_time` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
 ```
