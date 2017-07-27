@@ -12,7 +12,11 @@ public interface CardThirdPartyShopService {
 
     ResultData createThirdPartyShop(CardThirdPartyShop thirdPartyShop);
 
-    ResultData getListByName(String name, PageUtil pageUtil);
+    ResultData getListByName(Long projectId, String name, PageUtil pageUtil);
+
+    ResultData getShop(Long id);
+
+    ResultData updateShop(CardThirdPartyShop shop);
 
 
 }

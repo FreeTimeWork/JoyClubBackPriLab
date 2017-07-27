@@ -38,6 +38,22 @@ public interface ManagerService {
     ResultData createStoreManager(Long storeId, SysUser user);
 
     /**
+     * 按照添加时间倒序
+     *
+     * @param shopId
+     * @return
+     */
+    ResultData getThirdPartyShopManagersByShopId(Long shopId);
+
+    /**
+     * @param shopId
+     * @param user
+     * @return data.id为创建的id
+     */
+    ResultData createThirdPartyShopManager(Long shopId, SysUser user);
+
+
+    /**
      * 修改管理账户的备注
      *
      * @param managerId

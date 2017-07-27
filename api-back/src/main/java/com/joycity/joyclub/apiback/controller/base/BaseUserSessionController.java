@@ -22,6 +22,10 @@ public abstract class BaseUserSessionController extends BaseTimeController {
     @Value("${session.api-back.attr.user}")
     public String SESSION_ATTR_NAME_USER;
 
+    protected SysUser checkThirdPartyShopUser(HttpSession session) {
+        return checkUser(session, USER_TYPE_THIRD_PARTY_SHOP);
+    }
+
     protected SysUser checkStoreUser(HttpSession session) {
         return checkUser(session, USER_TYPE_STORE);
     }

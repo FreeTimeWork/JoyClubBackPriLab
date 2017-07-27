@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface CardThirdPartyShopMapper extends BaseMapper<CardThirdPartyShop, Long, CardThirdPartyShopExample> {
 
-    List<CardThirdPartyShop> selectListByName(@Param("name") String name, @Param("pageUtil") PageUtil pageUtil);
+    List<CardThirdPartyShop> selectListByName(@Param("projectId") Long projectId,@Param("name") String name, @Param("pageUtil") PageUtil pageUtil);
 
-    Long countListByName(@Param("name") String name);
+    Long countListByName(@Param("projectId") Long projectId, @Param("name") String name);
 
 }

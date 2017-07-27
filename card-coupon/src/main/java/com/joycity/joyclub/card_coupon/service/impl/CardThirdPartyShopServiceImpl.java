@@ -4,8 +4,11 @@ import com.joycity.joyclub.card_coupon.mapper.CardThirdPartyShopMapper;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdPartyShop;
 import com.joycity.joyclub.card_coupon.service.CardThirdPartyShopService;
 import com.joycity.joyclub.commons.AbstractGetListData;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class CardThirdPartyShopServiceImpl implements CardThirdPartyShopService 
     }
 
     @Override
-    public ResultData getListByName(String name, PageUtil pageUtil) {
+    public ResultData getListByName(Long projectId, String name, PageUtil pageUtil) {
         if (name != null) {
 
             name = "%" + name + "%";
@@ -38,13 +41,27 @@ public class CardThirdPartyShopServiceImpl implements CardThirdPartyShopService 
         return new AbstractGetListData<CardThirdPartyShop>() {
             @Override
             public Long countByFilter() {
-                return cardThirdPartyShopMapper.countListByName(finalName);
+                return cardThirdPartyShopMapper.countListByName(projectId,finalName);
             }
 
             @Override
             public List<CardThirdPartyShop> selectByFilter() {
-                return cardThirdPartyShopMapper.selectListByName(finalName,pageUtil);
+                return cardThirdPartyShopMapper.selectListByName(projectId,finalName,pageUtil);
             }
         }.getList(pageUtil);
     }
+
+    @Override
+    public ResultData getShop(Long id) {
+        CardThirdPartyShop shop = cardThirdPartyShopMapper.selectByPrimaryKey(id);
+        if (shop == null || shop.getDeleteFlag())
+            throw new BusinessException(ResultCode.DATA_NOT_EXIST);
+        return new ResultData(shop);
+    }
+
+    @Override
+    public ResultData updateShop(CardThirdPartyShop shop) {
+        return new ResultData(new UpdateResult(cardThirdPartyShopMapper.updateByPrimaryKeySelective(shop)));
+    }
+
 }

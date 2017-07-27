@@ -6,7 +6,7 @@
   </sql>
 
   <sql id="name">
-    ctps.delete_flag = 0
+    ctps.project_id = #{projectId} AND ctps.delete_flag = 0
     <if test="name != null">
       AND ctps.name LIKE #{name}
     </if>

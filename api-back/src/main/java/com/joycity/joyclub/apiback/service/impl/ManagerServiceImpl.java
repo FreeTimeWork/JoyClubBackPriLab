@@ -91,6 +91,19 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
+    public ResultData getThirdPartyShopManagersByShopId(Long shopId) {
+        return new ResultData(new ListResult(sysUserMapper.getManagersByUserTypeAndInfoId(USER_TYPE_THIRD_PARTY_SHOP, shopId)));
+
+    }
+
+    @Override
+    public ResultData createThirdPartyShopManager(Long shopId, SysUser user) {
+        user.setInfoId(shopId);
+        user.setType(UserType.USER_TYPE_THIRD_PARTY_SHOP);
+        return createManager(user);
+    }
+
+    @Override
     public ResultData updateRemark(Long managerId, String remark) {
         SysUser sysUser = new SysUser();
         sysUser.setId(managerId);
