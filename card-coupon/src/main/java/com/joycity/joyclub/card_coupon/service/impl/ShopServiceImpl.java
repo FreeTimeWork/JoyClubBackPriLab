@@ -12,6 +12,7 @@ import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
@@ -32,7 +33,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ResultData batchInsertOrUpdate(List<MallcooShop> shops, Long projectId) {
-        return new ResultData(new AbstractBatchInsertlUtils() {
+        return new ResultData(new UpdateResult(new AbstractBatchInsertlUtils() {
 
             @Override
             public int executeInsert(String longInsertSql) {
@@ -69,22 +70,22 @@ public class ShopServiceImpl implements ShopService {
                 MallcooShop shop = shops.get(index);
                 StringBuilder builder = new StringBuilder();
                 builder.append("(")
-                .append("'"+projectId+"', ")
-                .append("'"+shop.getCrmShopId()+"', ")
-                .append("'"+shop.getName()+"', ")
-                .append("'"+shop.getLogo()+"', ")
-                .append("'"+shop.getShopType()+"', ")
-                .append("'"+shop.getCommercialTypeId()+"', ")
-                .append("'"+shop.getSubCommercialTypeName()+"', ")
-                .append("'"+shop.getFloorId()+"', ")
-                .append("'"+shop.getFloorName()+"', ")
-                .append("'"+shop.getDoorNo()+"'")
-                .append(") ")
+                        .append("'"+projectId+"', ")
+                        .append("'"+shop.getCrmShopId()+"', ")
+                        .append("'"+shop.getName()+"', ")
+                        .append("'"+shop.getLogo()+"', ")
+                        .append("'"+shop.getShopType()+"', ")
+                        .append("'"+shop.getCommercialTypeId()+"', ")
+                        .append("'"+shop.getSubCommercialTypeName()+"', ")
+                        .append("'"+shop.getFloorId()+"', ")
+                        .append("'"+shop.getFloorName()+"', ")
+                        .append("'"+shop.getDoorNo()+"'")
+                        .append(") ")
                 ;
 
                 return builder.toString();
             }
-        }.batchInsert(shops.size()));
+        }.batchInsert(shops.size())));
     }
 
 

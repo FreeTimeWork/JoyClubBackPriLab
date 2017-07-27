@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardThirdPartyShopMapper">
+  <sql id="limit">
+    limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+
+  <sql id="name">
+    ctps.delete_flag = 0
+    <if test="name != null">
+      AND ctps.name LIKE #{name}
+    </if>
+  </sql>
+
+  <select id="selectListByName" resultType="com.joycity.joyclub.card_coupon.modal.generated.CardThirdPartyShop">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM card_third_party_shop ctps
+    <where>
+      <include refid="name"/>
+    </where>
+    ORDER BY ctps.create_time DESC
+    <include refid="limit"/>
+  </select>
+
+  <select id="countListByName" resultType="long">
+    SELECT
+    COUNT(*)
+    FROM card_third_party_shop ctps
+    <where>
+      <include refid="name"/>
+    </where>
+  </select>
+</mapper>

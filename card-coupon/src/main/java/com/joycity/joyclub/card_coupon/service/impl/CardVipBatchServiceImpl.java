@@ -119,6 +119,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
         for (String tel : tels) {
             Long clientId = clientUserMapper.getIdByTel(tel);
+            //TODO:  cfc  如果没有查到clientId。到crm系统去查clientId
             if (clientId == null) {
                 continue;
             }

@@ -11,6 +11,7 @@ public class ShowCouponCodeInfo extends CardCouponCode{
     private Byte couponType;
     private String couponLaunchName;
     private String vipCode;
+    private String tel;
 
     public String getCouponName() {
         return couponName;
@@ -50,5 +51,13 @@ public class ShowCouponCodeInfo extends CardCouponCode{
 
     public void setVipCode(String vipCode) {
         this.vipCode = vipCode;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 }

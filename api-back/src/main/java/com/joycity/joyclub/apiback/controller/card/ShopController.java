@@ -35,4 +35,10 @@ public class ShopController extends BaseUserSessionController {
         SysUser sysUser = checkProjectUser(session);
         return shopService.getShopsGroupBySubCommercial(sysUser.getInfoId());
     }
+
+    @RequestMapping(value = "/offline/shops/sync")
+    public ResultData syncShops(HttpSession session) {
+        SysUser sysUser = checkUser(session);
+        return shopService.syncMallCooShop(sysUser.getInfoId());
+    }
 }
