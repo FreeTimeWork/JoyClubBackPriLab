@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller.card;
+package com.joycity.joyclub.apiback.controller.card_coupon;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

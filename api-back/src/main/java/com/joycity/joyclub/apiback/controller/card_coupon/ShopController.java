@@ -1,10 +1,9 @@
-package com.joycity.joyclub.apiback.controller.card;
+package com.joycity.joyclub.apiback.controller.card_coupon;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

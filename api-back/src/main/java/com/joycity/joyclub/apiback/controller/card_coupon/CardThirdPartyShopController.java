@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller.card;
+package com.joycity.joyclub.apiback.controller.card_coupon;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdPartyShop;

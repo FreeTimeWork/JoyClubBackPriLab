@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apiback.controller.card;
+package com.joycity.joyclub.apiback.controller.card_coupon;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 import static com.joycity.joyclub.commons.constant.ResultCode.ERR_IMPORT_EXCEL;
