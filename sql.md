@@ -236,9 +236,11 @@ CREATE TABLE `card_coupon` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券表';
 
-CREATE TABLE `card_thirdparty_shop` (
+CREATE TABLE `card_third_party_shop` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) NOT NULL COMMENT '项目id',
   `name` varchar(50) NOT NULL COMMENT '商铺名称',
+  `info` varchar(500) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
@@ -360,4 +362,14 @@ CREATE TABLE `pos_sale_detail` (
 	`delete_time` DATETIME NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
+
+--  修改表 sys_user 的注释
+
+ALTER TABLE `sys_user`
+	CHANGE COLUMN `type` `type` INT(11) NOT NULL COMMENT '账户类型（1：平台，2：项目账户，3：商户账户, 4：第三方商户账户）' AFTER `password`;
+ALTER TABLE `sys_user`
+	CHANGE COLUMN `info_id` `info_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL COMMENT '关联者id,平台或项目账户关联项目id,商户账户关联商户id，第三方商户账户关联第三方商户id' AFTER `id`;
+
+
+
 ```
