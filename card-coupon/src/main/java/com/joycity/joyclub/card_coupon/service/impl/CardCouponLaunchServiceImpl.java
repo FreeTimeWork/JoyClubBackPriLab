@@ -113,7 +113,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData confirmLaunch(Long id) throws SchedulerException {
-        //TODO: cfc 增加条件投放限制，一个条件投放期间只能有一个条件投放
+
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         checkLaunchNum(launchDb);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
@@ -123,6 +123,14 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "已经投放");
 
         }
+        //一个条件投放期间只能有一个条件投放
+        if (launchDb.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+            int num = launchMapper.verifyConditionLaunch(launchDb.getLaunchStartTime(), launchDb.getLaunchEndTime());
+            if (num > 0) {
+                throw new BusinessException(ResultCode.LAUNCH_ERROR, "投放期间已存在其他条件投放");
+            }
+        }
+
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
             quartzManager.addJob(BatchLaunchJob.class, getTriggerKey(id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }

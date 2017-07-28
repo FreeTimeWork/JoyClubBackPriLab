@@ -35,4 +35,14 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     CouponLaunchWithCouponInfo selectLaunchWithCouponByCouponId(@Param("couponId") Long couponId);
 
     CreateCouponLaunchInfo selectCouponLaunchInfoById(@Param("id") Long id);
+
+    /**
+     * 投放期间没有重叠 返回0
+     * @param launchStartTime
+     * @param launchEndTime
+     * @return
+     */
+    @Select("SELECT count(*) from card_coupon_launch where review_status = 1 AND confirm_flag = 1 AND forbid_flag = 0 AND type = 1 AND !((#{launchStartTime} > launch_end_time AND #{launchEndTime} > launch_end_time) OR ( #{launchStartTime} < launch_start_time AND #{launchEndTime} < launch_start_time)) ")
+    int verifyConditionLaunch(@Param("launchStartTime") Date launchStartTime, @Param("launchEndTime") Date launchEndTime);
+
 }
