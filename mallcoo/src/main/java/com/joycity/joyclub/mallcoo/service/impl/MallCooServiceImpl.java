@@ -1,24 +1,14 @@
 package com.joycity.joyclub.mallcoo.service.impl;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.Resource;
-import javax.crypto.*;
-import javax.crypto.spec.DESKeySpec;
-
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.mallcoo.mapper.ProjectMallcooMapper;
 import com.joycity.joyclub.mallcoo.modal.ProjectMallcoo;
+import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserSimpleInfo;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
@@ -27,11 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sun.misc.BASE64Decoder;
+
+import javax.annotation.Resource;
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by CallMeXYZ on 2017/6/6.
@@ -66,61 +68,42 @@ public class MallCooServiceImpl implements MallCooService {
     private String URL_GET_SHOPS;
 
     @Override
-    public Map<String, Object> getUserToken(Long projectId, String ticket){
-        ProjectMallcoo projectMallcoo = projectMallcooMapper.getProjectMallcooInfo(projectId);
-        ThrowBusinessExceptionUtil.checkNull(projectMallcoo, "该项目猫酷信息不存在");
-        String realTicket = ticket;
-        //请求参数
-        Map<String, String> body = new HashMap<String, String>();
-        body.put("Ticket", realTicket);
-        //请求头
-        HttpHeaders headers = getHeader(projectMallcoo, body);
-
-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> response = restTemplate.exchange(URL_GET_TOKEN_BY_TICKET, HttpMethod.POST, requestEntity, Map.class);
-        return getBody(response);
+    public UserSimpleInfo getUserToken(Long projectId, String ticket) {
+        Map<String, String> body = new HashMap<>();
+        body.put("Ticket", ticket);
+        return postForDataObject(projectId, URL_GET_TOKEN_BY_TICKET, body, UserSimpleInfo.class);
     }
 
     @Override
-    public Map getShops(Long projectId) {
+    public List<OffLineShopInfo> getShops(Long projectId) {
+        Map<String, String> body = new HashMap<>();
+        body.put("PageIndex", "1");
+        return postForDataArray(projectId, URL_GET_SHOPS, body, OffLineShopInfo.class);
+    }
+
+    private <T> List<T> postForDataArray(Long projectId, String url, Object body, Class<T> clazz) {
+        return JSON.parseArray(postForDataString(projectId, url, body), clazz);
+    }
+
+    private <T> T postForDataObject(Long projectId, String url, Object body, Class<T> clazz) {
+        return JSON.parseObject(postForDataString(projectId, url, body), clazz);
+    }
+
+    private String postForDataString(Long projectId, String url, Object body) {
         ProjectMallcoo projectMallcoo = projectMallcooMapper.getProjectMallcooInfo(projectId);
         ThrowBusinessExceptionUtil.checkNull(projectMallcoo, "该项目猫酷信息不存在");
-        //请求参数
-        Map<String, String> body = new HashMap<String, String>();
-        body.put("PageIndex","1");
-        //请求头
         HttpHeaders headers = getHeader(projectMallcoo, body);
-
-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> response = restTemplate.exchange(URL_GET_SHOPS, HttpMethod.POST, requestEntity, Map.class);
-        return getBody(response);
-    }
-
-    private Map<String, Object> getBody(ResponseEntity<Map> response)  {
-        Map<String, Object> body = response.getBody();
-        int code = ((int) body.get("Code"));
-        //猫酷 1 是成功
+        HttpEntity request = new HttpEntity(body, headers);
+        String response = restTemplate.postForObject(url, request, String.class);
+        JSONObject jsonObject = JSONObject.parseObject(response);
+        int code = jsonObject.getInteger("Code");
         if (code != 1) {
-            throw new BusinessException(ResultCode.MALLCOO_ERROR,body.get("Message").toString());
+            throw new BusinessException(ResultCode.MALLCOO_ERROR, jsonObject.getString("Message"));
         }
-        return ((Map) body.get("Data"));
+        return jsonObject.getString("Data");
     }
 
-/*    @Override
-    public Map getUser(Long projectId,String userToken) throws Exception {
-
-        //请求参数
-        Map<String, String> body = new HashMap<String, String>();
-        body.put("UserToken", userToken);
-        //请求头
-        HttpHeaders headers = getHeader(body);
-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map> response = restTemplate.exchange(URL_GET_INFO_BY_TOKEN, HttpMethod.POST, requestEntity, Map.class);
-        return getBody(response);
-    }*/
-
-
-    private HttpHeaders getHeader(ProjectMallcoo projectMallcoo, Map<String, String> body) {
+    private HttpHeaders getHeader(ProjectMallcoo projectMallcoo, Object body) {
 
         String data = JSONObject.toJSONString(body);
 
