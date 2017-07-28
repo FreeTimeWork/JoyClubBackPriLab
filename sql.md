@@ -323,7 +323,7 @@ CREATE TABLE `card_coupon_code` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `code` varchar(20) DEFAULT NULL COMMENT '卡券号',
   `launch_id` bigint(20) NOT NULL COMMENT '卡券投放id',
-  `pos_sale_detail_id` bigint(20) DEFAULT NULL COMMENT '支付流水id',
+  `order_code` varchar(20) DEFAULT NULL COMMENT '订单号',
   `belong` bigint(20) NOT NULL COMMENT '卡券所属，-1 系统自身卡券， 第三方卡券中的商家id',
   `client_id` bigint(20) NOT NULL COMMENT '会员号id',
   `receive_time` datetime DEFAULT NULL COMMENT '领取时间',
@@ -336,6 +336,7 @@ CREATE TABLE `card_coupon_code` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_card_coupon_code_belong` (`code`,`belong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卡券号';
+
 
 CREATE TABLE `card_vip_batch` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -350,18 +351,20 @@ CREATE TABLE `card_vip_batch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='批量插入会员号的中间表';
 
 CREATE TABLE `pos_sale_detail` (
-	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-	`order_code` VARCHAR(20) NOT DEFAULT COMMENT '订单号',
-	`client_id` BIGINT(20) NOT NULL COMMENT '会员号id',
-	`paid` DECIMAL(14,4) NOT NULL COMMENT '实际支付',
-	`refund_flag` TINYINT(1) UNSIGNED NULL DEFAULT '0' COMMENT '是否退款',
-	`refund_time` DATETIME NULL DEFAULT NULL COMMENT '退款时间',
-	`create_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-	`last_update` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	`delete_flag` TINYINT(1) UNSIGNED NULL DEFAULT '0',
-	`delete_time` DATETIME NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(20) NOT NULL COMMENT '订单号',
+  `client_id` bigint(20) NOT NULL COMMENT '会员号id',
+  `shop_id` bigint(20)  NOT NULL COMMENT '线下商户id'，
+  `payable` decimal(14,4) NOT NULL COMMENT '应付款，订单总额，未减去优惠额',
+  `payment` decimal(14,4) NOT NULL COMMENT '订单实付总额，实际支付(如有优惠，减去优惠额)',
+  `balance` decimal(14,4) NOT NULL COMMENT '退款后余额，如果没有退款，和实际支付一样；参与退款逻辑',
+  `refund_time` datetime DEFAULT NULL COMMENT '退款时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
 
 --  修改表 sys_user 的注释
 

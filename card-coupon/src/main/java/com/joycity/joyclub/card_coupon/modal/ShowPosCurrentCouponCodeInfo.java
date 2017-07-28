@@ -3,12 +3,14 @@ package com.joycity.joyclub.card_coupon.modal;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by fangchen.chai on 2017/7/24
  */
 public class ShowPosCurrentCouponCodeInfo {
 
+    private Long couponId;
     private String couponName;
     private Byte couponType;
     private BigDecimal amount;
@@ -19,6 +21,20 @@ public class ShowPosCurrentCouponCodeInfo {
     private String code;
     private Byte useStatus;
     private String shopName;
+    private String clientId;
+    private String vipCode;
+    private Date effectiveStartTime;
+    private Date effectiveEndTime;
+    private Boolean useFlag;
+    private String notUseInfo;
+
+    public Long getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
+    }
 
     public String getCouponName() {
         return couponName;
@@ -34,6 +50,14 @@ public class ShowPosCurrentCouponCodeInfo {
 
     public void setCouponType(Byte couponType) {
         this.couponType = couponType;
+    }
+
+    public String getVipCode() {
+        return vipCode;
+    }
+
+    public void setVipCode(String vipCode) {
+        this.vipCode = vipCode;
     }
 
     public BigDecimal getAmount() {
@@ -76,6 +100,14 @@ public class ShowPosCurrentCouponCodeInfo {
         this.couponCodeId = couponCodeId;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
     public String getCode() {
         return code;
     }
@@ -100,4 +132,35 @@ public class ShowPosCurrentCouponCodeInfo {
         this.shopName = shopName;
     }
 
+    public Date getEffectiveStartTime() {
+        return effectiveStartTime;
+    }
+
+    public void setEffectiveStartTime(Date effectiveStartTime) {
+        this.effectiveStartTime = effectiveStartTime;
+    }
+
+    public Date getEffectiveEndTime() {
+        return effectiveEndTime;
+    }
+
+    public void setEffectiveEndTime(Date effectiveEndTime) {
+        this.effectiveEndTime = effectiveEndTime;
+    }
+
+    public Boolean getUseFlag() {
+        return useFlag;
+    }
+
+    public void setUseFlag(Boolean useFlag) {
+        this.useFlag = useFlag;
+    }
+
+    public String getNotUseInfo() {
+        return notUseInfo;
+    }
+
+    public void setNotUseInfo(String notUseInfo) {
+        this.notUseInfo = notUseInfo;
+    }
 }

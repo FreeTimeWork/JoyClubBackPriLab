@@ -9,70 +9,43 @@ import java.util.List;
  */
 public class PosCheckResult {
 
-    private BigDecimal payable;  //应付款
-    private String orderCode;
-    private List<RatioDetail> ratioDetails;
+    /**
+     * 优惠后应付款
+     */
+    private BigDecimal payment;
+    private Boolean checkResult;
+    private String resultInfo;
 
-    public class RatioDetail {
-        private String couponCode;      //卡券号
-        private BigDecimal ratio;       //商户分担比
-        private BigDecimal discountAmount;    //优惠额
-
-        public RatioDetail() {
-        }
-
-        public RatioDetail(String couponCode, BigDecimal ratio, BigDecimal discountAmount) {
-            this.couponCode = couponCode;
-            this.ratio = ratio;
-            this.discountAmount = discountAmount;
-        }
-
-        public BigDecimal getRatio() {
-            return ratio;
-        }
-
-        public void setRatio(BigDecimal ratio) {
-            this.ratio = ratio;
-        }
-
-        public BigDecimal getDiscountAmount() {
-            return discountAmount;
-        }
-
-        public void setDiscountAmount(BigDecimal discountAmount) {
-            this.discountAmount = discountAmount;
-        }
-
-        public String getCouponCode() {
-            return couponCode;
-        }
-
-        public void setCouponCode(String couponCode) {
-            this.couponCode = couponCode;
-        }
+    public PosCheckResult() {
     }
 
-    public BigDecimal getPayable() {
-        return payable;
+    public PosCheckResult(BigDecimal payment, Boolean checkResult, String resultInfo) {
+        this.payment = payment;
+        this.checkResult = checkResult;
+        this.resultInfo = resultInfo;
     }
 
-    public void setPayable(BigDecimal payable) {
-        this.payable = payable;
-    }
-    public String getOrderCode() {
-        return orderCode;
+    public BigDecimal getPayment() {
+        return payment;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setPayment(BigDecimal payment) {
+        this.payment = payment;
     }
 
-    public List<RatioDetail> getRatioDetails() {
-        return ratioDetails;
+    public Boolean getCheckResult() {
+        return checkResult;
     }
 
-    public void setRatioDetails(List<RatioDetail> ratioDetails) {
-        this.ratioDetails = ratioDetails;
+    public void setCheckResult(Boolean checkResult) {
+        this.checkResult = checkResult;
     }
 
+    public String getResultInfo() {
+        return resultInfo;
+    }
+
+    public void setResultInfo(String resultInfo) {
+        this.resultInfo = resultInfo;
+    }
 }

@@ -146,7 +146,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     }
 
     @Override
-    public ResultData checkCouponCode(Long id, Long posSaleDetailId) {
+    public ResultData checkCouponCode(Long id, String orderCode) {
         CardCouponCode cardCouponCodeDb = cardCouponCodeMapper.selectByPrimaryKey(id);
         String errorText = null;
         if (cardCouponCodeDb == null) {
@@ -164,8 +164,8 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             cardCouponCode.setId(id);
             cardCouponCode.setUseStatus(CouponCodeUseStatus.USED);
             cardCouponCode.setUseTime(new Date());
-            if (posSaleDetailId != null) {
-                cardCouponCode.setPosSaleDetailId(posSaleDetailId);
+            if (orderCode != null) {
+                cardCouponCode.setOrderCode(orderCode);
             }
             int num = cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
             return new ResultData(new UpdateResult(num));
@@ -174,12 +174,12 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
     @Override
     public int updateNotUsedCouponCode(Long couponCodeId) {
-        CardCouponCode cardCouponCode = new CardCouponCode();
+        CardCouponCode cardCouponCode = cardCouponCodeMapper.selectByPrimaryKey(couponCodeId);
         cardCouponCode.setId(couponCodeId);
-        cardCouponCode.setPosSaleDetailId(null);
+        cardCouponCode.setOrderCode(null);
         cardCouponCode.setUseStatus(CouponCodeUseStatus.NOT_USED);
         cardCouponCode.setUseTime(null);
-        return cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
+        return cardCouponCodeMapper.updateByPrimaryKey(cardCouponCode);
     }
 
     private void makeCouponCode(CardCouponCode cardCouponCode) {

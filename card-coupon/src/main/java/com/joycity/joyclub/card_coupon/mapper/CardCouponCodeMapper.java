@@ -31,6 +31,18 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
 
     List<ShowCouponCodeInfo> selectCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
 
+    @Select("select ccc.id,cc.type as coupon_type  from card_coupon_code ccc inner join card_coupon_launch ccl on ccl.id = ccc.launch_id and ccl.delete_flag = 0 " +
+            "inner join card_coupon cc on cc.id = ccl.coupon_id and cc.delete_flag = 0 where ccc.order_code = #{orderCode} and ccc.delete_flag = 0")
+    List<CouponCodeWithCoupon> selectCouponCodeWithCouponByOrderCode(@Param("orderCode") String orderCode);
+
+    /**
+     * 根据卡券code，查找卡券的信息，
+     * belong -1 为系统券，其他为第三方商户id
+     * @return
+     */
+    ShowPosCurrentCouponCodeInfo selectByCode(@Param("code") String code, @Param("belong") Long belong);
+
+
     /**
      *  查找该商户，该会员当前可用券，只查系统券,卡券未使用，时间在有效期内
      * @param projectId
@@ -45,11 +57,11 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     /**
      * 查找未使用的卡券，在有效期内
      *
-     * @param couponCodes 卡券code集合
+     * @param couponCode 卡券code
      * @param onlySys     是否只查询系统券
      * @return
      */
-    List<CouponCodeWithCoupon> selectCardCouponCodesByCodes(@Param("projectId") Long projectId, @Param("list") List<String> couponCodes, @Param("shopCode") String shopCode ,@Param("onlySys") boolean onlySys);
+    CouponCodeWithCoupon selectCardCouponCodesByCodes(@Param("projectId") Long projectId, @Param("list") String couponCode, @Param("shopCode") String shopCode ,@Param("onlySys") boolean onlySys);
 
     /**
      * 在条件投放期间内，卡券的基本信息
@@ -76,10 +88,10 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<Long> selectNotUsedCouponCodeIdFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId, @Param("num") Integer num);
 
     /**
-     * 在条件投放的期间内,该会员，所有未退款订单的付款总额
+     * 在条件投放的期间内,该会员，所有订单的最终实际付款总额
      * @return
      */
-    @Select("SELECT sum(psd.paid) " +
+    @Select("SELECT sum(psd.balance) " +
             "FROM pos_sale_detail psd " +
             "INNER JOIN ( " +
             "   SELECT launch_start_time, launch_end_time FROM card_coupon_launch WHERE #{now} > launch_start_time AND #{now} < launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0" +
@@ -95,7 +107,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      */
     @Select("select count(*) " +
             "FROM pos_sale_detail psd " +
-            "INNER JOIN card_coupon_code ccc ON ccc.pos_sale_detail_id = psd.id AND ccc.delete_flag = 0 " +
+            "INNER JOIN card_coupon_code ccc ON ccc.order_code = psd.order_code AND ccc.delete_flag = 0 " +
             "INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 " +
             "INNER JOIN card_coupon cc ON  cc.id = ccl.coupon_id AND cc.delete_flag = 0 " +
             " where psd.order_code = #{orderCode} and cc.support_refund_flag = 0 and  psd.delete_flag = 0 ")

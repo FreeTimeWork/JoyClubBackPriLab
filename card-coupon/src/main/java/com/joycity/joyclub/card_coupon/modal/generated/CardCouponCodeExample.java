@@ -385,63 +385,73 @@ public class CardCouponCodeExample {
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdIsNull() {
-            addCriterion("pos_sale_detail_id is null");
+        public Criteria andOrderCodeIsNull() {
+            addCriterion("order_code is null");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdIsNotNull() {
-            addCriterion("pos_sale_detail_id is not null");
+        public Criteria andOrderCodeIsNotNull() {
+            addCriterion("order_code is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdEqualTo(Long value) {
-            addCriterion("pos_sale_detail_id =", value, "posSaleDetailId");
+        public Criteria andOrderCodeEqualTo(String value) {
+            addCriterion("order_code =", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdNotEqualTo(Long value) {
-            addCriterion("pos_sale_detail_id <>", value, "posSaleDetailId");
+        public Criteria andOrderCodeNotEqualTo(String value) {
+            addCriterion("order_code <>", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdGreaterThan(Long value) {
-            addCriterion("pos_sale_detail_id >", value, "posSaleDetailId");
+        public Criteria andOrderCodeGreaterThan(String value) {
+            addCriterion("order_code >", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("pos_sale_detail_id >=", value, "posSaleDetailId");
+        public Criteria andOrderCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("order_code >=", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdLessThan(Long value) {
-            addCriterion("pos_sale_detail_id <", value, "posSaleDetailId");
+        public Criteria andOrderCodeLessThan(String value) {
+            addCriterion("order_code <", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdLessThanOrEqualTo(Long value) {
-            addCriterion("pos_sale_detail_id <=", value, "posSaleDetailId");
+        public Criteria andOrderCodeLessThanOrEqualTo(String value) {
+            addCriterion("order_code <=", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdIn(List<Long> values) {
-            addCriterion("pos_sale_detail_id in", values, "posSaleDetailId");
+        public Criteria andOrderCodeLike(String value) {
+            addCriterion("order_code like", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdNotIn(List<Long> values) {
-            addCriterion("pos_sale_detail_id not in", values, "posSaleDetailId");
+        public Criteria andOrderCodeNotLike(String value) {
+            addCriterion("order_code not like", value, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdBetween(Long value1, Long value2) {
-            addCriterion("pos_sale_detail_id between", value1, value2, "posSaleDetailId");
+        public Criteria andOrderCodeIn(List<String> values) {
+            addCriterion("order_code in", values, "orderCode");
             return (Criteria) this;
         }
 
-        public Criteria andPosSaleDetailIdNotBetween(Long value1, Long value2) {
-            addCriterion("pos_sale_detail_id not between", value1, value2, "posSaleDetailId");
+        public Criteria andOrderCodeNotIn(List<String> values) {
+            addCriterion("order_code not in", values, "orderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCodeBetween(String value1, String value2) {
+            addCriterion("order_code between", value1, value2, "orderCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCodeNotBetween(String value1, String value2) {
+            addCriterion("order_code not between", value1, value2, "orderCode");
             return (Criteria) this;
         }
 

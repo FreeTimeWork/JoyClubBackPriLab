@@ -15,9 +15,9 @@ public interface CardCouponCodeService {
 
     /**
      * 核销卡券
-     * 有订单流水号传入流水，没有传入null
+     * 有orderCode，传入orderCode
      */
-    ResultData checkCouponCode(Long id, Long posSaleDetailId);
+    ResultData checkCouponCode(Long id, String orderCode);
 
     /**
      * 卡券改为未使用

@@ -386,123 +386,243 @@ public class PosSaleDetailExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaidIsNull() {
-            addCriterion("paid is null");
+        public Criteria andShopIdIsNull() {
+            addCriterion("shop_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andPaidIsNotNull() {
-            addCriterion("paid is not null");
+        public Criteria andShopIdIsNotNull() {
+            addCriterion("shop_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPaidEqualTo(BigDecimal value) {
-            addCriterion("paid =", value, "paid");
+        public Criteria andShopIdEqualTo(Long value) {
+            addCriterion("shop_id =", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidNotEqualTo(BigDecimal value) {
-            addCriterion("paid <>", value, "paid");
+        public Criteria andShopIdNotEqualTo(Long value) {
+            addCriterion("shop_id <>", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidGreaterThan(BigDecimal value) {
-            addCriterion("paid >", value, "paid");
+        public Criteria andShopIdGreaterThan(Long value) {
+            addCriterion("shop_id >", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("paid >=", value, "paid");
+        public Criteria andShopIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("shop_id >=", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidLessThan(BigDecimal value) {
-            addCriterion("paid <", value, "paid");
+        public Criteria andShopIdLessThan(Long value) {
+            addCriterion("shop_id <", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("paid <=", value, "paid");
+        public Criteria andShopIdLessThanOrEqualTo(Long value) {
+            addCriterion("shop_id <=", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidIn(List<BigDecimal> values) {
-            addCriterion("paid in", values, "paid");
+        public Criteria andShopIdIn(List<Long> values) {
+            addCriterion("shop_id in", values, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidNotIn(List<BigDecimal> values) {
-            addCriterion("paid not in", values, "paid");
+        public Criteria andShopIdNotIn(List<Long> values) {
+            addCriterion("shop_id not in", values, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("paid between", value1, value2, "paid");
+        public Criteria andShopIdBetween(Long value1, Long value2) {
+            addCriterion("shop_id between", value1, value2, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andPaidNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("paid not between", value1, value2, "paid");
+        public Criteria andShopIdNotBetween(Long value1, Long value2) {
+            addCriterion("shop_id not between", value1, value2, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagIsNull() {
-            addCriterion("refund_flag is null");
+        public Criteria andPayableIsNull() {
+            addCriterion("payable is null");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagIsNotNull() {
-            addCriterion("refund_flag is not null");
+        public Criteria andPayableIsNotNull() {
+            addCriterion("payable is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagEqualTo(Boolean value) {
-            addCriterion("refund_flag =", value, "refundFlag");
+        public Criteria andPayableEqualTo(BigDecimal value) {
+            addCriterion("payable =", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagNotEqualTo(Boolean value) {
-            addCriterion("refund_flag <>", value, "refundFlag");
+        public Criteria andPayableNotEqualTo(BigDecimal value) {
+            addCriterion("payable <>", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagGreaterThan(Boolean value) {
-            addCriterion("refund_flag >", value, "refundFlag");
+        public Criteria andPayableGreaterThan(BigDecimal value) {
+            addCriterion("payable >", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("refund_flag >=", value, "refundFlag");
+        public Criteria andPayableGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("payable >=", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagLessThan(Boolean value) {
-            addCriterion("refund_flag <", value, "refundFlag");
+        public Criteria andPayableLessThan(BigDecimal value) {
+            addCriterion("payable <", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagLessThanOrEqualTo(Boolean value) {
-            addCriterion("refund_flag <=", value, "refundFlag");
+        public Criteria andPayableLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("payable <=", value, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagIn(List<Boolean> values) {
-            addCriterion("refund_flag in", values, "refundFlag");
+        public Criteria andPayableIn(List<BigDecimal> values) {
+            addCriterion("payable in", values, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagNotIn(List<Boolean> values) {
-            addCriterion("refund_flag not in", values, "refundFlag");
+        public Criteria andPayableNotIn(List<BigDecimal> values) {
+            addCriterion("payable not in", values, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagBetween(Boolean value1, Boolean value2) {
-            addCriterion("refund_flag between", value1, value2, "refundFlag");
+        public Criteria andPayableBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payable between", value1, value2, "payable");
             return (Criteria) this;
         }
 
-        public Criteria andRefundFlagNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("refund_flag not between", value1, value2, "refundFlag");
+        public Criteria andPayableNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payable not between", value1, value2, "payable");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentIsNull() {
+            addCriterion("payment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentIsNotNull() {
+            addCriterion("payment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentEqualTo(BigDecimal value) {
+            addCriterion("payment =", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentNotEqualTo(BigDecimal value) {
+            addCriterion("payment <>", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentGreaterThan(BigDecimal value) {
+            addCriterion("payment >", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("payment >=", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentLessThan(BigDecimal value) {
+            addCriterion("payment <", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("payment <=", value, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentIn(List<BigDecimal> values) {
+            addCriterion("payment in", values, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentNotIn(List<BigDecimal> values) {
+            addCriterion("payment not in", values, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payment between", value1, value2, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payment not between", value1, value2, "payment");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIsNull() {
+            addCriterion("balance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIsNotNull() {
+            addCriterion("balance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceEqualTo(BigDecimal value) {
+            addCriterion("balance =", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotEqualTo(BigDecimal value) {
+            addCriterion("balance <>", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThan(BigDecimal value) {
+            addCriterion("balance >", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance >=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThan(BigDecimal value) {
+            addCriterion("balance <", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance <=", value, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceIn(List<BigDecimal> values) {
+            addCriterion("balance in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotIn(List<BigDecimal> values) {
+            addCriterion("balance not in", values, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance between", value1, value2, "balance");
+            return (Criteria) this;
+        }
+
+        public Criteria andBalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance not between", value1, value2, "balance");
             return (Criteria) this;
         }
 

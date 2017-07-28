@@ -2,29 +2,30 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
+import com.joycity.joyclub.card_coupon.constant.RefundType;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper;
-import com.joycity.joyclub.card_coupon.modal.CouponCodeWithCoupon;
-import com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo;
-import com.joycity.joyclub.card_coupon.modal.PosCheckResult;
-import com.joycity.joyclub.card_coupon.modal.PosSaleDetailWithCouponCode;
+import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
+import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCodeExample;
 import com.joycity.joyclub.card_coupon.modal.generated.PosSaleDetail;
+import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
+import com.joycity.joyclub.card_coupon.service.ShopService;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.commons.modal.base.BooleanResult;
-import com.joycity.joyclub.commons.modal.base.ListResult;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.modal.base.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fangchen.chai on 2017/7/24
@@ -38,140 +39,232 @@ public class CardPosServiceImpl implements CardPosService {
     private CardCouponCodeMapper cardCouponCodeMapper;
     @Autowired
     private CardCouponCodeService cardCouponCodeService;
+    @Autowired
+    private CardCouponStoreScopeMapper cardCouponStoreScopeMapper;
+    @Autowired
+    private ClientUserMapper clientUserMapper;
+    @Autowired
+    private ShopService shopService;
 
     @Override
-    public ResultData getCurrentCoupons(Long projectId, String shopCode, String tel, String vipCode) {
-        return new ResultData(new ListResult(cardCouponCodeMapper.selectCurrentCouponCode(projectId, shopCode, tel, vipCode)));
+    public ResultData getCurrentCoupons(Long projectId, String shopCode, String vipCode) {
+        return new ResultData(new ListResult(cardCouponCodeMapper.selectCurrentCouponCode(projectId, shopCode, null, vipCode)));
     }
 
     @Override
-    public ResultData posCheck(Long projectId, List<String> couponCodes, String orderCode, BigDecimal orderAmount, String shopCode) {
-        List<CouponCodeWithCoupon> couponCodeWithCoupons = cardCouponCodeMapper.selectCardCouponCodesByCodes(projectId, couponCodes, shopCode, true);
-        Long clientId = null;
-        //验证卡券的存在性，可用性
-        Map<Byte, CouponCodeWithCoupon> couponCodeWithCouponMap = preCheck(couponCodes, orderAmount, couponCodeWithCoupons);
-        //先核销满减，再核销代金
-        CouponCodeWithCoupon deductionCouponCode = couponCodeWithCouponMap.get(CouponType.DEDUCTION_COUPON);
-        CouponCodeWithCoupon cashCouponCode = couponCodeWithCouponMap.get(CouponType.CASH_COUPON);
+    public ResultData examineCouponCode(String vipCode, String shopCode, String couponCode) {
 
-        //算实际支付金额，取clientId
-        if (deductionCouponCode != null) {
-            orderAmount = orderAmount.subtract(deductionCouponCode.getSubtractAmount());
-            clientId = deductionCouponCode.getClientId();
-        }
-        if (cashCouponCode != null) {
-            orderAmount = orderAmount.subtract(cashCouponCode.getSubtractAmount());
-            clientId = cashCouponCode.getClientId();
-        }
-
-        //记录流水，返回主键
-        Long  posSaleDetailId = createPosSaleDetail(orderCode, clientId, orderAmount);
-
-
-        if (deductionCouponCode != null) {
-            cardCouponCodeService.checkCouponCode(deductionCouponCode.getId(), posSaleDetailId);
-        }
-        if (cashCouponCode != null) {
-            cardCouponCodeService.checkCouponCode(cashCouponCode.getId(), posSaleDetailId);
-        }
-
-        //返回应付值+每个卡券在该商户的分担比
-        PosCheckResult posCheckResult = new PosCheckResult();
-        List<PosCheckResult.RatioDetail> details = new ArrayList<>();
-        PosCheckResult.RatioDetail deductionRatioDetail = posCheckResult.new RatioDetail(deductionCouponCode.getCode(), deductionCouponCode.getRatio(), deductionCouponCode.getSubtractAmount());
-        PosCheckResult.RatioDetail cashRatioDetail = posCheckResult.new RatioDetail(cashCouponCode.getCode(), cashCouponCode.getRatio(), cashCouponCode.getSubtractAmount());
-        details.add(deductionRatioDetail);
-        details.add(cashRatioDetail);
-        posCheckResult.setPayable(orderAmount);
-        posCheckResult.setOrderCode(orderCode);
-        posCheckResult.setRatioDetails(details);
-        return new ResultData(posCheckResult);
+        return new ResultData(preExamineCouponCode(vipCode, shopCode, couponCode));
     }
 
-    @Override
-    public ResultData refundVerification(String orderCode) {
-
-        CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
-        // 该订单不在投放期间内，可以退款
+    private ShowPosCurrentCouponCodeInfo preExamineCouponCode(String vipCode, String shopCode, String couponCode){
+        String  notUseInfo = null;
+        Date date = new Date();
+        ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(couponCode, -1L);
         if (info == null) {
-            return new ResultData(new BooleanResult(true));
-        }
-        //应该代金券拥有量
-        int subCouponNum = getSubCouponNum(info);
-        //实际代金券拥有量
-        int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
-        if ((actualCouponNum - subCouponNum) > info.getNotUsedNum() ) {
-            throw new BusinessException(ResultCode.FORBID_REFUND);
+            notUseInfo = "卡券不存在";
+            info.setUseFlag(false);
+            info.setNotUseInfo(notUseInfo);
+            return info;
         }
 
-        return new ResultData(new BooleanResult(true));
+        if (!info.getVipCode().equals(vipCode)) {
+            notUseInfo = "卡券不属于该会员";
+        } else if (info.getUseStatus().equals(CouponCodeUseStatus.USED) || info.getUseStatus().equals(CouponCodeUseStatus.CANCELLED)) {
+            notUseInfo = "卡券不能使用";
+        } else if (date.before(info.getEffectiveStartTime()) || date.after(info.getEffectiveEndTime())) {
+            notUseInfo = "卡券不在有效期内";
+        }
+        int num = cardCouponStoreScopeMapper.countByCouponIdAndShopCode(info.getCouponId(), shopCode);
+        if (num == 0) {
+            notUseInfo = "卡券不能再该店使用";
+        }
+        if (notUseInfo != null) {
+            info.setUseFlag(false);
+            info.setNotUseInfo(notUseInfo);
+            return info;
+        }
+        info.setUseFlag(true);
+        return info;
+    }
+    @Override
+    public ResultData posCheck(String vipCode, String couponCode, String orderCode, BigDecimal orderAmount, String shopCode) {
+        //验证卡券的存在性，可用性
+        ShowPosCurrentCouponCodeInfo info = preExamineCouponCode(vipCode, shopCode, couponCode);
+        Boolean checkResult = info.getUseFlag();
+        String resultInfo = info.getNotUseInfo();
+
+        if (checkResult) {
+            List<CouponCodeWithCoupon> couponCodeWithCoupons = cardCouponCodeMapper.selectCouponCodeWithCouponByOrderCode(orderCode);
+            if (CollectionUtils.isNotEmpty(couponCodeWithCoupons)) {
+
+                for (CouponCodeWithCoupon item : couponCodeWithCoupons) {
+                    if (info.getCouponType().equals(item.getCouponType())) {
+                        checkResult = false;
+                        resultInfo = "该订单已核销过相同类型的卡券";
+                        break;
+                    }
+                }
+            }
+
+            if (orderAmount.compareTo(info.getAmount()) < 0) {
+                checkResult = false;
+                resultInfo = "消费金额未达到该卡券使用条件";
+            }
+        }
+
+        if (checkResult) {
+            resultInfo = "核销成功";
+            orderAmount = orderAmount.subtract(info.getSubtractAmount());
+            cardCouponCodeService.checkCouponCode(info.getCouponCodeId(), orderCode);
+        }
+
+        return new ResultData(new PosCheckResult(orderAmount, checkResult, resultInfo));
     }
 
     @Override
     @Transactional
-    public ResultData refund(String orderCode) {
+    public ResultData posCheckCancel(String orderCode) {
+        CardCouponCodeExample example = new CardCouponCodeExample();
+        try {
+            CardCouponCodeExample.Criteria criteria = example.createCriteria();
+            criteria.andOrderCodeEqualTo(orderCode);
+            List<CardCouponCode> cardCouponCodes = cardCouponCodeMapper.selectByExample(example);
+            for (CardCouponCode cardCouponCode : cardCouponCodes) {
+                cardCouponCodeService.updateNotUsedCouponCode(cardCouponCode.getId());
+            }
+        } catch (Exception e) {
+            return new ResultData(new BooleanResult(false));
+        }
+        return new ResultData(new BooleanResult(true));
+    }
 
-        CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
+    @Override
+    public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) {
+        SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
 
+        Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        //记录流水，返回主键
+        Long posSaleDetailId = createPosSaleDetail(shop.getId(), orderCode, clientId, payable, payment);
+        return new ResultData(new CreateResult(posSaleDetailId));
+    }
+
+    @Override
+    public ResultData refundVerification(String orderCode, BigDecimal refundAmount) {
+
+        CouponLaunchBetweenInfo info = preRefundVerification(orderCode, refundAmount);
+        if (info.getRefundType() != null) {
+            return new ResultData(new PosRefundVerifyResult(info.getRefundType()));
+        }
+
+        if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
+            //应该代金券拥有量
+            int subCouponNum = getSubCouponNum(info, info.getDetail().getPayment());
+            //实际代金券拥有量
+            int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
+            if ((actualCouponNum - subCouponNum) > info.getNotUsedNum() ) {
+                return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
+            }
+            return new ResultData(new PosRefundVerifyResult(RefundType.PERMIT_REFUND_FULL_ORDER));
+        } else {
+            //应该代金券拥有量
+            int subCouponNum = getSubCouponNum(info, refundAmount);
+            //实际代金券拥有量
+            int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
+            if ((actualCouponNum - subCouponNum) > info.getNotUsedNum() ) {
+                return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
+            }
+            return new ResultData(new PosRefundVerifyResult(RefundType.PREMIT_REFUND));
+        }
+
+    }
+
+    @Override
+    @Transactional
+    public ResultData refund(String orderCode, BigDecimal refundAmount) {
+        CouponLaunchBetweenInfo info = preRefundVerification(orderCode, refundAmount);
+
+        if (info.getRefundType() != null && info.getRefundType().equals(RefundType.FORBIT_REFUND)) {
+
+            throw new BusinessException(ResultCode.FORBID_REFUND);
+        }
         //该订单改为退货状态
         PosSaleDetail posSaleDetail = new PosSaleDetail();
         posSaleDetail.setId(info.getDetail().getId());
-        posSaleDetail.setRefundFlag(true);
         posSaleDetail.setRefundTime(new Date());
+        posSaleDetail.setBalance(info.getDetail().getPayment().subtract(refundAmount));
         int affectNum = cardPosSaleDetailMapper.updateByPrimaryKeySelective(posSaleDetail);
         //退款订单关联卡券改为未使用
         if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
-            for (Long id : info.getDetail().getCouponCodeIds()) {
-                cardCouponCodeService.updateNotUsedCouponCode(id);
+            for (Long couponCodeId : info.getDetail().getCouponCodeIds()) {
+                cardCouponCodeService.updateNotUsedCouponCode(couponCodeId);
             }
         }
         //应该代金券拥有量
-        int subCouponNum = getSubCouponNum(info);
+        int subCouponNum = getSubCouponNum(info, refundAmount);
         //实际代金券拥有量
         int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
         Integer num = actualCouponNum - subCouponNum;
-        if (num <= info.getNotUsedNum()) {
-            Date date = info.getDetail().getCreateTime();
-            Long clientId = info.getDetail().getClientId();
-            List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCouponCodeIdFromLaunchBetween(date, clientId, num);
-            //未使用代金券废弃
-            for (Long id : couponCodeIds) {
-                CardCouponCode cardCouponCode = new CardCouponCode();
-                cardCouponCode.setId(id);
-                cardCouponCode.setUseStatus(CouponCodeUseStatus.CANCELLED);
-                cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
-            }
-        } else {
-            //正常先调用退货验证再调用退货不会到这里，防止直接调用此方法
-            throw new BusinessException(ResultCode.FORBID_REFUND);
+
+        Date date = info.getDetail().getCreateTime();
+        Long clientId = info.getDetail().getClientId();
+        List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCouponCodeIdFromLaunchBetween(date, clientId, num);
+        //未使用代金券废弃
+        for (Long id : couponCodeIds) {
+            CardCouponCode cardCouponCode = new CardCouponCode();
+            cardCouponCode.setId(id);
+            cardCouponCode.setUseStatus(CouponCodeUseStatus.CANCELLED);
+            cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
         }
+
 
         return new ResultData(new UpdateResult(affectNum));
     }
 
     @Override
-    public Long createPosSaleDetail(String orderCode, Long clientId, BigDecimal paid) {
+    public Long createPosSaleDetail(Long shopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment) {
         PosSaleDetail detail = new PosSaleDetail();
         detail.setOrderCode(orderCode);
         detail.setClientId(clientId);
-        detail.setPaid(paid);
+        detail.setPayable(payable);
+        detail.setPayment(payment);
+        detail.setBalance(payment);
+        detail.setShopId(shopId);
         cardPosSaleDetailMapper.insertSelective(detail);
         return detail.getId();
     }
 
-    private CouponLaunchBetweenInfo preRefundVerification(String orderCode) {
-        int forbidRefundNum = cardCouponCodeMapper.countForbidRefundByOrderCode(orderCode);
-        if (forbidRefundNum > 0) {
-            throw new BusinessException(ResultCode.FORBID_REFUND);
+    private CouponLaunchBetweenInfo preRefundVerification(String orderCode, BigDecimal refundAmount) {
+        PosSaleDetailWithCouponCode detail = cardPosSaleDetailMapper.selectByOrderCode(orderCode);
+        //找不到订单，不能退款
+        if (detail == null) {
+            CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
+            info.setRefundType(RefundType.FORBIT_REFUND);
+            return info;
+        }
+        if (refundAmount.compareTo(detail.getBalance()) > 0) {
+            CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
+            info.setRefundType(RefundType.FORBIT_REFUND);
+            return info;
         }
 
-        PosSaleDetailWithCouponCode detail = cardPosSaleDetailMapper.selectByOrderCode(orderCode);
-        if (detail == null) {
-            throw new BusinessException(ResultCode.ORDER_NOT_FIND);
+        int forbidRefundNum = cardCouponCodeMapper.countForbidRefundByOrderCode(orderCode);
+        if (forbidRefundNum > 0) {
+            CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
+            info.setRefundType(RefundType.FORBIT_REFUND);
+            return info;
         }
         CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectInfoFromLaunchBetween(detail.getCreateTime());
+        //订单不再投放期间内可以退款
         if (info == null) {
-            return null;
+            //如果该订单关联了卡券，只能全单退款
+            info = new CouponLaunchBetweenInfo();
+            if (CollectionUtils.isNotEmpty(detail.getCouponCodeIds())) {
+                info.setRefundType(RefundType.PERMIT_REFUND_FULL_ORDER);
+            } else {
+                info.setRefundType(RefundType.PREMIT_REFUND);
+            }
+            return info;
         }
         info.setDetail(detail);
         //在条件投放期间内，卡券的使用和未使用的数量
@@ -180,62 +273,12 @@ public class CardPosServiceImpl implements CardPosService {
         info.setNotUsedNum(couponNumInfo.getNotUsedNum());
         BigDecimal sumPaid = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(detail.getCreateTime(),detail.getClientId());
         info.setSumPaid(sumPaid);
+
         return info;
     }
 
-    private int getSubCouponNum(CouponLaunchBetweenInfo info) {
-        return (info.getSumPaid().subtract(info.getDetail().getPaid()).divide(info.getConditionAmount())).intValue();
-    }
-
-    private Map<Byte, CouponCodeWithCoupon> preCheck(List<String> couponCodes, BigDecimal orderAmount, List<CouponCodeWithCoupon> couponCodeWithCoupons) {
-        if (CollectionUtils.isEmpty(couponCodeWithCoupons) || couponCodes.size() != couponCodeWithCoupons.size()) {
-            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "其中有卡券不可用");
-        }
-
-        Map<Byte, CouponCodeWithCoupon> couponCodeWithCouponMap = new HashMap<>();
-        for (CouponCodeWithCoupon item : couponCodeWithCoupons) {
-            if (item.getCouponType().equals(CouponType.DEDUCTION_COUPON)) {
-                if (couponCodeWithCouponMap.get(CouponType.DEDUCTION_COUPON) != null){
-
-                    throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "满减券只能有一个");
-                }
-                couponCodeWithCouponMap.put(CouponType.DEDUCTION_COUPON, item);
-            }
-
-            if (item.getCouponType().equals(CouponType.CASH_COUPON)) {
-                if (couponCodeWithCouponMap.get(CouponType.CASH_COUPON) != null){
-
-                    throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "代金券只能有一个");
-                }
-                couponCodeWithCouponMap.put(CouponType.CASH_COUPON, item);
-            }
-        }
-
-        CouponCodeWithCoupon deductionCouponCode = couponCodeWithCouponMap.get(CouponType.DEDUCTION_COUPON);
-        if (deductionCouponCode != null) {
-            if (orderAmount.compareTo(deductionCouponCode.getAmount()) < 0) {
-                throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "满减券没有达到满额条件");
-            }
-            orderAmount = orderAmount.subtract(deductionCouponCode.getSubtractAmount());
-        }
-
-        CouponCodeWithCoupon cashCouponCode = couponCodeWithCouponMap.get(CouponType.CASH_COUPON);
-        if (cashCouponCode != null) {
-            if (orderAmount.compareTo(cashCouponCode.getAmount()) < 0) {
-                throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "代金券没有达到满额条件");
-            }
-        }
-
-        return couponCodeWithCouponMap;
-    }
-
-    public static void main(String[] args) {
-        BigDecimal amount = new BigDecimal(10);
-        System.out.println(amount.subtract(BigDecimal.ONE));
-    }
-
-    public static void method(BigDecimal amount) {
-        amount.subtract(BigDecimal.ONE);
+    private int getSubCouponNum(CouponLaunchBetweenInfo info, BigDecimal refundAmount) {
+        return (info.getSumPaid().subtract(refundAmount).divide(info.getConditionAmount())).intValue();
     }
 
 }

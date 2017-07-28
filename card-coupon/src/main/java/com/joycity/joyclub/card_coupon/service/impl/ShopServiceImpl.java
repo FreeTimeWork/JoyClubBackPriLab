@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.card_coupon.mapper.ShopMapper;
 import com.joycity.joyclub.card_coupon.modal.MallcooShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
+import com.joycity.joyclub.card_coupon.modal.generated.SysShopExample;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.ListResult;
@@ -16,6 +17,7 @@ import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -161,6 +163,19 @@ public class ShopServiceImpl implements ShopService {
             name = "%" + name + "%";
         }
         return new ResultData(new ListResult(shopMapper.selectShopsByNameAndCode(projectId, name, code)));
+    }
+
+    @Override
+    public SysShop getShopByProjectIdAndCode(Long projectId, String code) {
+        SysShopExample example = new SysShopExample();
+        SysShopExample.Criteria criteria = example.createCriteria();
+        criteria.andProjectIdEqualTo(projectId);
+        criteria.andCodeEqualTo(code);
+        List<SysShop> sysShops = shopMapper.selectByExample(example);
+        if (CollectionUtils.isNotEmpty(sysShops)) {
+            return sysShops.get(0);
+        }
+        return null;
     }
 
 }

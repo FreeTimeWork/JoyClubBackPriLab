@@ -3,6 +3,7 @@ package com.joycity.joyclub.card_coupon.service;
 import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.MallcooShop;
+import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 
@@ -20,5 +21,7 @@ public interface ShopService {
     ResultData getShopsGroupBySubCommercial(Long projectId);
 
     ResultData getAllShopByNameAndCode(Long projectId, String name, String code);
+
+    SysShop getShopByProjectIdAndCode(Long projectId, String code);
 
 }

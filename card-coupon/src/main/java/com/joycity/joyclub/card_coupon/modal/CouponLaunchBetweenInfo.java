@@ -12,6 +12,7 @@ public class CouponLaunchBetweenInfo {
     private BigDecimal conditionAmount; // 触发条件投放的总额
     private BigDecimal subtractAmount;   //卡券折扣金额
     private PosSaleDetailWithCouponCode detail;
+    private Byte refundType;
 
     public Integer getNotUsedNum() {
         return notUsedNum;
@@ -59,5 +60,13 @@ public class CouponLaunchBetweenInfo {
 
     public void setDetail(PosSaleDetailWithCouponCode detail) {
         this.detail = detail;
+    }
+
+    public Byte getRefundType() {
+        return refundType;
+    }
+
+    public void setRefundType(Byte refundType) {
+        this.refundType = refundType;
     }
 }

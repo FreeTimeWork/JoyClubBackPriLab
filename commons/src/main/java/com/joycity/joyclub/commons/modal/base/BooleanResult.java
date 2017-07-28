@@ -5,20 +5,22 @@ package com.joycity.joyclub.commons.modal.base;
  * 验证等返回Boolean类型结果
  */
 public class BooleanResult {
-    private Boolean result;
+    private Boolean resultFlag;
 
-    public BooleanResult(Boolean result) {
-        this.result = result;
+    public Boolean getResultFlag() {
+        return resultFlag;
+    }
+
+    public void setResultFlag(Boolean resultFlag) {
+        this.resultFlag = resultFlag;
     }
 
     public BooleanResult() {
+
     }
 
-    public Boolean getResult() {
-        return result;
-    }
+    public BooleanResult(Boolean resultFlag) {
 
-    public void setResult(Boolean result) {
-        this.result = result;
+        this.resultFlag = resultFlag;
     }
 }
