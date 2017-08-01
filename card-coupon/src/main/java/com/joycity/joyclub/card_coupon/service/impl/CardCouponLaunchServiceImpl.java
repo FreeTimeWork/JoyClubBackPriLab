@@ -6,6 +6,7 @@ import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_NUM_EXCEED_
 import java.util.Date;
 import java.util.List;
 
+import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchReviewStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
@@ -52,6 +53,8 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     private CardCouponCodeMapper cardCouponCodeMapper;
     @Autowired
     private QuartzManager quartzManager;
+    @Autowired
+    private CardCouponCodeCache couponCodeCache;
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
@@ -64,6 +67,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
                 throw new BusinessException(LAUNCH_ERROR, "代金券只能选择条件投放");
             }
         }
+        launch.setRemainNum(launch.getLaunchNum());
         launchMapper.insertSelective(launch);
         if (CollectionUtils.isNotEmpty(launch.getTriggerScopeIds())) {
             CardCouponTriggerScope triggerScope = new CardCouponTriggerScope();
@@ -85,17 +89,17 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             couponName = "%" + couponName + "%";
         }
         final String finalName = name;
-        final String finalcouponName = couponName;
+        final String finalCouponName = couponName;
         final Date now = new Date();
         return new AbstractGetListData<ShowCouponLaunchInfo>() {
             @Override
             public Long countByFilter() {
-                return launchMapper.countByCouponNameAndCouponTypeAndStatus(finalcouponName, couponType, finalName, type, status, now, pageUtil);
+                return launchMapper.countByCouponNameAndCouponTypeAndStatus(finalCouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
             @Override
             public List<ShowCouponLaunchInfo> selectByFilter() {
-                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(finalcouponName, couponType, finalName, type, status, now, pageUtil);
+                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(finalCouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
         }.getList(pageUtil);
@@ -135,6 +139,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
             quartzManager.addJob(BatchLaunchJob.class, getTriggerKey(id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }
+
+        // 添加库存缓存
+        couponCodeCache.addInventory(launchDb.getId(), launchDb.getLaunchNum());
+
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
         launch.setConfirmFlag(true);
@@ -223,7 +231,4 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + launchId);
     }
 
-    public static void main(String[] args) {
-
-    }
 }

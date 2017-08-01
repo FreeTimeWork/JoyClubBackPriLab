@@ -12,6 +12,15 @@ public class ShowCouponCodeInfo extends CardCouponCode{
     private String couponLaunchName;
     private String vipCode;
     private String tel;
+    private String realName;
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
     public String getCouponName() {
         return couponName;

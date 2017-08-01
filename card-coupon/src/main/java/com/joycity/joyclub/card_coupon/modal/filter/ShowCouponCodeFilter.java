@@ -6,6 +6,7 @@ package com.joycity.joyclub.card_coupon.modal.filter;
 public class ShowCouponCodeFilter {
     private String couponName;
     private String thirdPartyName;
+    private Long thirdPartyId;
     private Byte couponType;
     private String couponLaunchName;
     private String code;
@@ -21,6 +22,14 @@ public class ShowCouponCodeFilter {
 
     public Byte getCouponType() {
         return couponType;
+    }
+
+    public Long getThirdPartyId() {
+        return thirdPartyId;
+    }
+
+    public void setThirdPartyId(Long thirdPartyId) {
+        this.thirdPartyId = thirdPartyId;
     }
 
     public String getThirdPartyName() {

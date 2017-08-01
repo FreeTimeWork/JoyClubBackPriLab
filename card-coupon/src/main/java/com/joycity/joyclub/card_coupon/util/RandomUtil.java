@@ -1,5 +1,7 @@
 package com.joycity.joyclub.card_coupon.util;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.Random;
 
 /**
@@ -23,5 +25,9 @@ public class RandomUtil {
             sb.append(ALLCHAR.charAt(random.nextInt(ALLCHAR.length())));
         }
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(RandomStringUtils.random(12, "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"));
     }
 }

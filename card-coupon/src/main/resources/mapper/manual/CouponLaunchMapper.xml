@@ -110,13 +110,17 @@
         <include refid="limit"/>
     </select>
 
-    <select id="selectLaunchWithCouponByCouponId" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo">
+    <select id="selectLaunchWithCouponById" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon">
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
-        cc.name AS coupon_name, cc.type AS coupon_type, cc.batch, cc.thirdparty_shop_id
+        cc.id AS coupon_id, cc.name AS coupon_name, cc.project_id, cc.type AS coupon_type, cc.batch, cc.thirdparty_shop_id
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
-        WHERE ccl.coupon_id = #{couponId} AND ccl.delete_flag = 0
+        WHERE ccl.id = #{id}
+        AND now() <![CDATA[ > ]]> ccl.launch_start_time
+        AND now() <![CDATA[ < ]]> ccl.launch_end_time
+        AND ccl.type = 2 AND ccl.review_status = 1
+        AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
     </select>
 
     <resultMap id="CouponTriggerScopeWithShop" type="com.joycity.joyclub.card_coupon.modal.CouponTriggerScopeWithShop"

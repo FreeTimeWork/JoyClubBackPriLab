@@ -27,10 +27,6 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     @Select("select count(*) from card_coupon_code where launch_id = #{launchId} and delete_flag = 0")
     int countByLaunchId(@Param("launchId") Long launchId);
 
-    Long countCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter);
-
-    List<ShowCouponCodeInfo> selectCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
-
     @Select("select ccc.id,cc.type as coupon_type  from card_coupon_code ccc inner join card_coupon_launch ccl on ccl.id = ccc.launch_id and ccl.delete_flag = 0 " +
             "inner join card_coupon cc on cc.id = ccl.coupon_id and cc.delete_flag = 0 where ccc.order_code = #{orderCode} and ccc.delete_flag = 0")
     List<CouponCodeWithCoupon> selectCouponCodeWithCouponByOrderCode(@Param("orderCode") String orderCode);
@@ -47,7 +43,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      *  查找该商户，该会员当前可用券，只查系统券,卡券未使用，时间在有效期内
      * @param projectId
      * @param shopCode
-     * @param tel
+     * @params tel
      * @param vipCode
      * @return
      */
@@ -113,10 +109,13 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
             " where psd.order_code = #{orderCode} and cc.support_refund_flag = 0 and  psd.delete_flag = 0 ")
     int countForbidRefundByOrderCode(@Param("orderCode") String orderCode);
 
-    // 第三方列表需要的sql
+    // 只查第三方券
     Long countCardThirdCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter);
-
     List<ShowCouponCodeInfo> selectCardThirdCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
+
+    // 只查系统券
+    Long countSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter);
+    List<ShowCouponCodeInfo> selectSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
 
 
 }

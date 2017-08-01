@@ -25,14 +25,8 @@ public class CardCouponCodeCacheImpl implements CardCouponCodeCache {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Override
     public boolean sendCouponCode(Long launchId, Byte couponType,Long clientId,Long thirdPartyShopId, String couponCode) {
         BoundHashOperations<String, String, Integer> inventoryHO = redisTemplate.boundHashOps(INVENTORY);
-
-        if (inventoryHO.get(getKey(launchId)) == null) {
-            int launchNum = launchMapper.selectInventoryNumById(launchId);
-            inventoryHO.put(getKey(launchId), launchNum);
-        }
 
         //没有库存
         if (inventoryHO.get(getKey(launchId)) <= 0) {
@@ -45,22 +39,32 @@ public class CardCouponCodeCacheImpl implements CardCouponCodeCache {
             return false;
         }
 
-        //执行发券逻辑
-        try {
-            couponCodeService.sendSingleCouponCode(launchId, couponType, clientId,thirdPartyShopId , couponCode);
-        } catch (Exception e) {
-            //发券逻辑执行失败,库存恢复。
-            inventoryHO.increment(getKey(launchId), 1);
-            if (e instanceof DuplicateKeyException) {
-                //捕获唯一约束异常后再抛出
-                throw new DuplicateKeyException("已经存在一个code",e);
-            }
-            return false;
-        }
-
         return true;
     }
 
+    @Override
+    public void addInventory(Long launchId, int launchNum) {
+        BoundHashOperations<String, String, Integer> inventoryHO = redisTemplate.boundHashOps(INVENTORY);
+
+        if (inventoryHO.get(getKey(launchId)) == null) {
+            inventoryHO.put(getKey(launchId), launchNum);
+        }
+    }
+
+    @Override
+    public int getInventory(Long launchId) {
+        BoundHashOperations<String, String, Integer> inventoryHO = redisTemplate.boundHashOps(INVENTORY);
+        if (inventoryHO.get(getKey(launchId)) == null) {
+            return 0;
+        }
+        return inventoryHO.get(getKey(launchId));
+    }
+
+    @Override
+    public void changeInventory(Long launchId, int num) {
+        BoundHashOperations<String, String, Integer> inventoryHO = redisTemplate.boundHashOps(INVENTORY);
+        inventoryHO.increment(getKey(launchId), num);
+    }
 
 
     private String getKey(Long launchId) {
