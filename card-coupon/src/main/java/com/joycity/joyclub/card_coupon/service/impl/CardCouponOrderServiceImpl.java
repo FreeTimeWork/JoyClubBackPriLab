@@ -107,9 +107,9 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
             throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
         }
         PreCouponOrderResult preCouponOrderResult = new PreCouponOrderResult();
-//        //涉及金钱，应该等微信支付回调在处理积分
-//        preOrderResult.setIfUseMoney(true);
-//        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
+        //涉及金钱，应该等微信支付回调在处理
+        preCouponOrderResult.setIfUseMoney(true);
+//        preCouponOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
         return preCouponOrderResult;
     }
 

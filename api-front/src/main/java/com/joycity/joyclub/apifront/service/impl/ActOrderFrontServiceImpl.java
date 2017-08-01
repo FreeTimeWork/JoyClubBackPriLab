@@ -14,13 +14,13 @@ import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
 import com.joycity.joyclub.apifront.modal.order.PreOrderResult;
-import com.joycity.joyclub.apifront.pay.wechat.PreOrder;
-import com.joycity.joyclub.apifront.pay.wechat.SignUtils;
-import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.apifront.pay.wechat.WxPayService;
+import com.joycity.joyclub.we_chat.wechat.PreOrder;
+import com.joycity.joyclub.we_chat.wechat.SignUtils;
+import com.joycity.joyclub.we_chat.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.wechat.WxPayService;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.apifront.service.CartFrontService;
-import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
@@ -465,6 +465,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         //转成分
         preOrder.setTotalFee((int) Math.ceil(moneySum * 100));
         preOrder.setOutTradeNo(sysOrderCode);
+
 
         // TODO: 2017/5/11  增加项目的微信支付传参传参
         String prepayResultStr = wxPayService.precreate(preOrder);

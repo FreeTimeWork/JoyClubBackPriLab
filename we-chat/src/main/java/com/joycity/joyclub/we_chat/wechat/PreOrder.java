@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apifront.pay.wechat;
+package com.joycity.joyclub.we_chat.wechat;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apifront.util;
+package com.joycity.joyclub.we_chat.util;
 
 /**
  * Created by CallMeXYZ on 2017/4/1.

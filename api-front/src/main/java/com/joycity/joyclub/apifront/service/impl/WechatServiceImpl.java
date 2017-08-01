@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
 import com.joycity.joyclub.client.modal.WechatUserInfo;
-import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.service.WechatService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -12,8 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_ERROR;
 

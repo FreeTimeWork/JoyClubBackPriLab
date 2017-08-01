@@ -1,5 +1,6 @@
-package com.joycity.joyclub.apifront.util;
+package com.joycity.joyclub.we_chat.util;
 
+import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
@@ -107,7 +108,7 @@ public class HttpKit {
 				return EntityUtils.toString(entity);
 			} else {
 				logger.error("connection error.... .... ......." + statusCode);
-				throw new BusinessException(HTTPKIT_CONNECT_ERROR);
+				throw new BusinessException(ResultCode.HTTPKIT_CONNECT_ERROR);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

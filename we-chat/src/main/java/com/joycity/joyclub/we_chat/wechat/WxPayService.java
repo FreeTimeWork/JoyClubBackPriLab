@@ -1,9 +1,10 @@
-package com.joycity.joyclub.apifront.pay.wechat;
+package com.joycity.joyclub.we_chat.wechat;
 
 
-import com.joycity.joyclub.apifront.util.HttpKit;
-import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+
 import com.joycity.joyclub.commons.exception.BusinessException;
+import com.joycity.joyclub.we_chat.util.HttpKit;
+import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -60,7 +61,7 @@ public class WxPayService {
         params.put("total_fee", String.valueOf(Math.round(precreateRequest.getTotalFee() ))); // 总金额
         params.put("spbill_create_ip", "127.0.0.1"); // ip
 //		params.put("product_id", );
-        params.put("notify_url", wxPayConfig.getNotifyUrl());
+        params.put("notify_url", precreateRequest.getNotifyUrl());
         params.put("trade_type", "JSAPI");
         params.put("openid", precreateRequest.getOpenId());
         sign(params);

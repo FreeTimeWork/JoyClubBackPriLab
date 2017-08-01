@@ -23,6 +23,7 @@
         <module>client-token</module>
         <module>title_carousel</module>
         <module>card-coupon</module>
+        <module>we-chat</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

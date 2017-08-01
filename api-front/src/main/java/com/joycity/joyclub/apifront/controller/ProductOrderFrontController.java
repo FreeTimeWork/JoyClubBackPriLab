@@ -3,7 +3,7 @@ package com.joycity.joyclub.apifront.controller;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderFormDataVO;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
-import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;

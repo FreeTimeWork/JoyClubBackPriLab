@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apifront.pay.wechat;
+package com.joycity.joyclub.we_chat.wechat;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;

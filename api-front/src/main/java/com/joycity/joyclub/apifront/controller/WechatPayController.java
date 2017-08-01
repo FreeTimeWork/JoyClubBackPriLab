@@ -1,8 +1,8 @@
 package com.joycity.joyclub.apifront.controller;
 
-import com.joycity.joyclub.apifront.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.apifront.pay.wechat.WxPayService;
-import com.joycity.joyclub.apifront.util.WechatXmlUtil;
+import com.joycity.joyclub.we_chat.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.wechat.WxPayService;
+import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
