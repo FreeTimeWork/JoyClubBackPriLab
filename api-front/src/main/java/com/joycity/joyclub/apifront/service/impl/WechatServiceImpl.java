@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
 import com.joycity.joyclub.client.modal.WechatUserInfo;
-import com.joycity.joyclub.we_chat.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.apifront.service.WechatService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
