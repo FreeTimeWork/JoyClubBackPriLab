@@ -13,6 +13,7 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

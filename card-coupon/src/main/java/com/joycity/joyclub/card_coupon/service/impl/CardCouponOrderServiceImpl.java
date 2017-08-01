@@ -15,6 +15,7 @@ import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
+import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,9 +74,9 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         PreCouponOrderResult preCouponOrderResult = null;
         if (order.getMoneySum().compareTo(BigDecimal.ZERO) == 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
-                preCouponOrderResult = getWechatPreOrderResult(couponLaunchWithCoupon.getId(), clientId, order.getMoneySum(), order.getCode());
+//                preCouponOrderResult = getWechatPreOrderResult(couponLaunchWithCoupon.getId(), clientId, order.getMoneySum(), order.getCode());
             } else if (payType.equals(PAY_TYPE_ALI)) {
-                preCouponOrderResult = getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum(), order.getCode());
+//                preCouponOrderResult = getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum(), order.getCode());
             }
         } else {
             //总金钱为0，积分处理
@@ -105,11 +106,11 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         if (openId == null) {
             throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
         }
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //涉及金钱，应该等微信支付回调在处理积分
-        preOrderResult.setIfUseMoney(true);
-        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
-        return preOrderResult;
+        PreCouponOrderResult preCouponOrderResult = new PreCouponOrderResult();
+//        //涉及金钱，应该等微信支付回调在处理积分
+//        preOrderResult.setIfUseMoney(true);
+//        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
+        return preCouponOrderResult;
     }
 
     /**
@@ -120,7 +121,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
      * @return
      */
     private PreCouponOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code) {
-
+        return null;
     }
     private void setOrderPayed(String orderCode, String outOrderCode) {
         Long orderId = couponOrderMapper.selectIdByCode(orderCode);

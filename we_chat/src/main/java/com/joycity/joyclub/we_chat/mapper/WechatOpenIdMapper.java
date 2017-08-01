@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apifront.mapper.manual;
+package com.joycity.joyclub.we_chat.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;

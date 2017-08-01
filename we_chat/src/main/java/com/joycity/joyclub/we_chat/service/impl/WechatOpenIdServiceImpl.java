@@ -1,7 +1,8 @@
-package com.joycity.joyclub.apifront.service.impl;
+package com.joycity.joyclub.we_chat.service.impl;
 
-import com.joycity.joyclub.apifront.mapper.manual.WechatOpenIdMapper;
-import com.joycity.joyclub.apifront.service.WechatOpenIdService;
+
+import com.joycity.joyclub.we_chat.mapper.WechatOpenIdMapper;
+import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
