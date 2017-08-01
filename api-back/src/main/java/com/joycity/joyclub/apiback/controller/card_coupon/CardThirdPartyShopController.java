@@ -105,12 +105,12 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
 
     /**
      * 只有项目用户可以访问
-     *
+     * 返回第三方用户列表
      * @param id
      * @param httpSession
      * @return
      */
-    @RequestMapping(value = "/card/third/shop/{id}/manager", method = RequestMethod.GET)
+    @RequestMapping(value = "/card/third/shop/{id}/managers", method = RequestMethod.GET)
     public ResultData getShopManagers(@PathVariable Long id, HttpSession httpSession) {
         //确保项目用户
         checkProjectUser(httpSession);
