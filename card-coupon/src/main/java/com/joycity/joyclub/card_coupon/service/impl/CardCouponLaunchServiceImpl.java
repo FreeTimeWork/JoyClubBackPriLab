@@ -131,6 +131,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             }
         }
 
+        //如果是批量投放，开启定时任务
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
             quartzManager.addJob(BatchLaunchJob.class, getTriggerKey(id), QuartzPreKeyConst.BATCH_LAUNCH.getName(), id, launchDb.getLaunchStartTime());
         }
@@ -198,7 +199,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     private void checkLaunchNum(CardCouponLaunch launch){
         CreateCouponInfo couponInfo = cardCouponMapper.selectCardCouponById(launch.getCouponId());
         if (couponInfo != null) {
-            int launchSum = launchMapper.selectlaunchNumByCouponId(couponInfo.getId());
+            int launchSum = launchMapper.selectLaunchNumByCouponId(couponInfo.getId());
             int remainNum = couponInfo.getNum() - launchSum;
             if (remainNum < launch.getLaunchNum()) {
                 throw new BusinessException(LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
@@ -220,5 +221,9 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     private TriggerKey getTriggerKey(Long launchId) {
         return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + launchId);
+    }
+
+    public static void main(String[] args) {
+
     }
 }

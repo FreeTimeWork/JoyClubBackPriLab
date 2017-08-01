@@ -27,7 +27,7 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     int deleteCardCouponLaunchById(@Param("id") Long id);
 
     @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
-    int selectlaunchNumByCouponId(@Param("couponId") Long couponId);
+    int selectLaunchNumByCouponId(@Param("couponId") Long couponId);
 
     @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
     int countCardCouponLaunchByCouponId(@Param("couponId") Long couponId);
@@ -44,5 +44,12 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
      */
     @Select("SELECT count(*) from card_coupon_launch where review_status = 1 AND confirm_flag = 1 AND forbid_flag = 0 AND type = 1 AND !((#{launchStartTime} > launch_end_time AND #{launchEndTime} > launch_end_time) OR ( #{launchStartTime} < launch_start_time AND #{launchEndTime} < launch_start_time)) ")
     int verifyConditionLaunch(@Param("launchStartTime") Date launchStartTime, @Param("launchEndTime") Date launchEndTime);
+
+    /**
+     * 根据 id 得到 该投放下应剩余的库存。
+     */
+    @Select("SELECT ccl.launch_num - count(ccc.id) FROM card_coupon_launch ccl INNER JOIN card_coupon_code ccc ON ccc.launch_id = ccl.id and ccc.delete_flag = 0 WHERE ccl.id = #{id} and ccl.delete_flag = 0")
+    int selectInventoryNumById(@Param("id") Long id);
+
 
 }

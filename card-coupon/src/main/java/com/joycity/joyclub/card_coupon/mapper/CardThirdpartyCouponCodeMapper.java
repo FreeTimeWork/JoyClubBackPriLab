@@ -6,6 +6,7 @@ import com.joycity.joyclub.card_coupon.modal.ThirdpartyCouponCodeGroupByBatch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCodeExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -23,8 +24,8 @@ public interface CardThirdpartyCouponCodeMapper extends BaseMapper<CardThirdpart
     @Select("select count(*) from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0")
     Long countByBatch(@Param("batch") String batch);
 
-    @Select("select id, code, batch from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0")
-    List<CardThirdpartyCouponCode> selectByBatch(@Param("batch") String batch);
+    @Select("select id, code, batch from card_thirdparty_coupon_code where thirdparty_shop_id = #{thirdPartyShopId} and delete_flag = 0 limit #{pageUtil.offset},#{pageUtil.pageSize}")
+    List<CardThirdpartyCouponCode> selectByThirdPartyShopId(@Param("thirdPartyShopId") Long thirdPartyShopId, @Param("pageUtil") PageUtil pageUtil);
 
     @Update("update card_thirdparty_coupon_code set delete_flag = 1, delete_time = now() where id = #{id} and delete_flag = 0")
     int deleteById(@Param("id") Long id);

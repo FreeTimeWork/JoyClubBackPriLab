@@ -141,4 +141,5 @@
         LEFT JOIN sys_shop ss ON ss.id = ccts.store_id AND ss.delete_flag = 0
         WHERE ccl.id = #{id} AND ccl.delete_flag = 0
     </select>
+
 </mapper>

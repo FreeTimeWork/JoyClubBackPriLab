@@ -366,12 +366,35 @@ CREATE TABLE `pos_sale_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付流水,pos消费详情';
 
+CREATE TABLE `card_coupon_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `code` varchar(32) NOT NULL COMMENT '目前是nanoTime加三位随机数',
+  `out_pay_code` varchar(64) DEFAULT NULL COMMENT '支付成功的外部单号,如果是纯积分，可以为空',
+  `project_id` bigint(20) NOT NULL COMMENT '项目id',
+  `client_id` bigint(20) NOT NULL COMMENT '客户id',
+  `status` tinyint(4) NOT NULL COMMENT '0 待支付 1已取消 2 已支付 ',
+  `money_sum` float NOT NULL COMMENT '用户为该单所需支付的总金钱',
+  `point_sum` int(11) NOT NULL COMMENT '用户为该单所需支付的总积分',
+  `pay_type` tinyint(4) DEFAULT NULL COMMENT '0微信 1支付宝',
+  `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
+  `cancel_time` datetime DEFAULT NULL COMMENT '取消时间',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` tinyint(1) unsigned DEFAULT '0',
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COMMENT='卡券订单表，系统定时删除未支付订单，恢复库存，防止库存一直被占用';
+
+
+
+
 --  修改表 sys_user 的注释
 
 ALTER TABLE `sys_user`
 	CHANGE COLUMN `type` `type` INT(11) NOT NULL COMMENT '账户类型（1：平台，2：项目账户，3：商户账户, 4：第三方商户账户）' AFTER `password`;
 ALTER TABLE `sys_user`
 	CHANGE COLUMN `info_id` `info_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL COMMENT '关联者id,平台或项目账户关联项目id,商户账户关联商户id，第三方商户账户关联第三方商户id' AFTER `id`;
+
 
 
 
