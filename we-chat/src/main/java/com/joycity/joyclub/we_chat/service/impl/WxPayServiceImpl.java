@@ -1,12 +1,17 @@
-package com.joycity.joyclub.we_chat.pay.wechat;
+package com.joycity.joyclub.we_chat.service.impl;
 
 
 
 
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
+import com.joycity.joyclub.we_chat.pay.wechat.PreOrder;
+import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
+import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.pay.wechat.WxRefundRequest;
 import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
+import com.joycity.joyclub.we_chat.service.WxPayService;
 import com.joycity.joyclub.we_chat.util.HttpKit;
 import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,7 +45,7 @@ import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_PAY_REQUEST_ERROR;
 
 @Service
-public class WxPayService {
+public class WxPayServiceImpl implements WxPayService{
     /**
      * 生成prepayid的网址
      */
@@ -49,22 +54,14 @@ public class WxPayService {
      * 退款网址
      */
     private static final String URL_REFUND = "https://api.mch.weixin.qq.com/secapi/pay/refund";
-    private Log logger = LogFactory.getLog(WxPayService.class);
+    private Log logger = LogFactory.getLog(WxPayServiceImpl.class);
     @Autowired
     private WxPayConfig wxPayConfig;
     @Autowired
     private WechatOpenIdService wechatOpenIdService;
     // TODO: 2017/5/11  增加项目的微信支付传参传参
 
-    /**
-     * 生成微信支付相关的参数
-     *
-     * @param projectId
-     * @param clientId
-     * @param code
-     * @param moneySum
-     * @return
-     */
+    @Override
     public PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code, String wxPayNotifyUrl) {
         //先判断openid存在性
         //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id

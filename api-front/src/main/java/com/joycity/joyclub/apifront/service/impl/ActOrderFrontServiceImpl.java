@@ -9,7 +9,7 @@ import com.joycity.joyclub.act.modal.MyActOrder;
 import com.joycity.joyclub.act.modal.generated.SaleActOrder;
 import com.joycity.joyclub.act.modal.generated.SaleActOrderExample;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
-import com.joycity.joyclub.alipay.service.AliPayService;
+import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
@@ -29,9 +29,9 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.ProductAttrMapper;
 import com.joycity.joyclub.product.mapper.ProductMapper;
-import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayService;
+import com.joycity.joyclub.we_chat.service.WxPayService;
 import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
@@ -64,7 +64,8 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
 
     @Value("${wxpay.notifyUrl}")
     private String WX_PAY_NOTIFY_URL;
-
+    @Value("${alipay.notifyUrl}")
+    private String ALI_PAY_NOTIFY_URL;
     @Autowired
     WechatOpenIdService wechatOpenIdService;
 
@@ -235,7 +236,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         if (payType.equals(PAY_TYPE_WECHAT)) {
             preOrderResult = wxPayService.getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
         } else if (payType.equals(PAY_TYPE_ALI)) {
-            preOrderResult = getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode());
+            preOrderResult = aliPayService.getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode(),ALI_PAY_NOTIFY_URL);
 
         }
 
@@ -267,7 +268,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
             if (payType.equals(PAY_TYPE_WECHAT)) {
                 preOrderResult = wxPayService.getWechatPreOrderResult(projectId, clientId, order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
-                preOrderResult = getAliPreOrderResult(projectId, order.getMoneySum(), order.getCode());
+                preOrderResult = aliPayService.getAliPreOrderResult(projectId, order.getMoneySum(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
         } else {
             //总金钱为0，直接积分处理，支付成功
@@ -332,32 +333,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
 
     }
 
-
-    /**
-     * 生成支付宝支付相关的参数
-     *
-     * @param projectId
-     * @param code
-     * @param moneySum
-     * @return
-     */
-    private PreOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code) {
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //涉及金钱，应该等微信支付回调在处理积分
-        preOrderResult.setIfUseMoney(true);
-        AliPayStoreInfo storeInfo = null;
-        if (projectId.equals(Global.PLATFORM_ID)) {
-
-            storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
-
-        } else {
-            // TODO: 2017/5/9 非项目用户
-        }
-        //
-        String formStr = aliPayService.wapPay(code, moneySum, storeInfo);
-        preOrderResult.setFormString(formStr);
-        return preOrderResult;
-    }
 
     /**
      * 支付成功返回回调，进行订单支付成功业务处理

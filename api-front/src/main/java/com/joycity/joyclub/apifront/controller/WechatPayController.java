@@ -1,7 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayService;
+import com.joycity.joyclub.we_chat.service.impl.WxPayServiceImpl;
 import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 public class WechatPayController {
     @Autowired
-    WxPayService wxpay;
+    WxPayServiceImpl wxpay;
     @Autowired
     WxPayConfig wxpayConfig;
 

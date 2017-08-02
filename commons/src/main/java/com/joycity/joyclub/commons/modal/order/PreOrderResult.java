@@ -1,4 +1,4 @@
-package com.joycity.joyclub.we_chat.modal.order;
+package com.joycity.joyclub.commons.modal.order;
 
 import java.util.Map;
 

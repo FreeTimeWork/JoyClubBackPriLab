@@ -1,16 +1,23 @@
-package com.joycity.joyclub.alipay.service;
+package com.joycity.joyclub.alipay.service.service;
 
 import com.alipay.api.AlipayResponse;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 
 /**
  * Created by CallMeXYZ on 2017/5/9.
  */
 public interface AliPayService {
+
     /**
-     * 手机网站支付，返回的是页面对应的html
+     * 生成支付宝支付相关的参数
+     *
+     * @param projectId
+     * @param code
+     * @param moneySum
+     * @return
      */
-    String wapPay(String tradeNo, Float total,/*  String title,String body,*/ AliPayStoreInfo storeInfo);
+    public PreOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code, String wxPayNotifyUrl);
 
     /**
      * 条码支付

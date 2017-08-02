@@ -15,15 +15,15 @@ import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
-import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
+import com.joycity.joyclub.we_chat.service.WxPayService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAMS_ERROR;
 
 /**
@@ -40,6 +40,8 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
      */
     public static final Byte PAY_TYPE_ALI = 1;
 
+    @Value("${coupon.wxPay.notifyUrl}")
+    private String WX_PAY_NOTIFY_URL;
     @Autowired
     private CardCouponLaunchMapper launchMapper;
     @Autowired
@@ -51,7 +53,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     @Autowired
     private CardCouponOrderMapper couponOrderMapper;
     @Autowired
-    private WechatOpenIdService wechatOpenIdService;
+    private WxPayService wxPayService;
 
     @Override
     public ResultData orderForWeChat(Long clientId, Long couponLaunchId, Boolean moneyOrPoint) {
@@ -71,12 +73,12 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
         CardCouponOrder order = createOrder(payType, clientId, couponLaunchWithCoupon, moneyOrPoint);
-        PreCouponOrderResult preCouponOrderResult = null;
+        PreOrderResult preOrderResult = null;
         if (order.getMoneySum().compareTo(BigDecimal.ZERO) == 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
-//                preCouponOrderResult = getWechatPreOrderResult(couponLaunchWithCoupon.getId(), clientId, order.getMoneySum(), order.getCode());
+                preOrderResult = wxPayService.getWechatPreOrderResult(couponLaunchWithCoupon.getProjectId(), clientId, order.getMoneySum().floatValue(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
-//                preCouponOrderResult = getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum(), order.getCode());
+//                preOrderResult = getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum(), order.getCode());
             }
         } else {
             //总金钱为0，积分处理
@@ -87,31 +89,14 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
                 clientService.addPoint(clientId, -order.getPointSum().doubleValue());
                 couponOrderMapper.setOutPayCodeById(order.getId(), null);
             }
+            // 订单已经算支付完成了
+            preOrderResult = new PreOrderResult();
+            preOrderResult.setIfUseMoney(false);
         }
-        return null;
+        return new ResultData(preOrderResult);
     }
 
-    /**
-     * 生成微信支付相关参数
-     * @param projectId
-     * @param clientId
-     * @param moneySum
-     * @param code
-     * @return
-     */
-    private PreCouponOrderResult getWeChatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code) {
-        //先判断openid存在性
-        //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
-        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
-        if (openId == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
-        }
-        PreCouponOrderResult preCouponOrderResult = new PreCouponOrderResult();
-        //涉及金钱，应该等微信支付回调在处理
-        preCouponOrderResult.setIfUseMoney(true);
-//        preCouponOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
-        return preCouponOrderResult;
-    }
+
 
     /**
      * 生成支付宝相关参数

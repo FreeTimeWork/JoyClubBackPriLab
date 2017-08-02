@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apifront.service.impl;
 
-import com.joycity.joyclub.alipay.service.AliPayService;
+import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
@@ -8,15 +8,12 @@ import com.joycity.joyclub.apifront.modal.cart.ClientPostAddress;
 import com.joycity.joyclub.apifront.modal.project.ProductOrderItem;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderItemVO;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
-import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
-import com.joycity.joyclub.we_chat.pay.wechat.PreOrder;
-import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayService;
+import com.joycity.joyclub.we_chat.service.WxPayService;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
-import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
@@ -71,6 +68,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     public final String LIST_TYPE_DONE = "done";
     @Value("${wxpay.notifyUrl}")
     private String WX_PAY_NOTIFY_URL;
+    @Value("${alipay.notifyUrl}")
+    private String ALI_PAY_NOTIFY_URL;
     @Autowired
     WechatOpenIdService wechatOpenIdService;
     @Autowired
@@ -375,7 +374,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             if (payType.equals(PAY_TYPE_WECHAT)) {
                 preOrderResult = wxPayService.getWechatPreOrderResult(vo.getProjectId(), clientId, order.getMoneySum(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
-                preOrderResult = getAliPreOrderResult(vo.getProjectId(), order.getMoneySum(), order.getCode());
+                preOrderResult = aliPayService.getAliPreOrderResult(vo.getProjectId(), order.getMoneySum(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
         } else {
             //总金钱为0，直接积分处理，支付成功
@@ -386,34 +385,6 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             preOrderResult.setIfUseMoney(false);
         }
         return new ResultData(preOrderResult);
-    }
-
-
-
-    /**
-     * 生成支付宝支付相关的参数
-     *
-     * @param projectId
-     * @param code
-     * @param moneySum
-     * @return
-     */
-    private PreOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code) {
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //涉及金钱，应该等微信支付回调在处理积分
-        preOrderResult.setIfUseMoney(true);
-        AliPayStoreInfo storeInfo = null;
-        if (projectId.equals(Global.PLATFORM_ID)) {
-
-            storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
-
-        } else {
-            // TODO: 2017/5/9 非项目用户
-        }
-        //
-        String formStr = aliPayService.wapPay(code, moneySum, storeInfo);
-        preOrderResult.setFormString(formStr);
-        return preOrderResult;
     }
 
     @Override
@@ -434,7 +405,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         if (payType.equals(PAY_TYPE_WECHAT)) {
             preOrderResult = wxPayService.getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
         } else if (payType.equals(PAY_TYPE_ALI)) {
-            preOrderResult = getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode());
+            preOrderResult = aliPayService.getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode(),ALI_PAY_NOTIFY_URL);
 
         }
 
