@@ -72,6 +72,11 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         }
     }
 
+    @Override
+    public ResultData freeReceiveCoupon(Long clientId, Long couponLaunchId, Boolean moneyOrPoint) {
+        return null;
+    }
+
     /**
      * 线执行cache发券，在执行这个
      * @param launchId
@@ -121,29 +126,17 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
     @Override
     public ResultData checkCouponCode(Long id, String orderCode) {
-        CardCouponCode cardCouponCodeDb = cardCouponCodeMapper.selectByPrimaryKey(id);
-        String errorText = null;
-        if (cardCouponCodeDb == null) {
-            errorText = "该卡券号不存在";
-        } else {
-            if (!cardCouponCodeDb.getUseStatus().equals(CouponCodeUseStatus.NOT_USED)) {
-                errorText = "该卡券号已使用或已作废";
-            }
-        }
 
-        if (errorText != null) {
-            throw new BusinessException(ResultCode.COUPON_CHECK_ERROR, errorText);
-        } else {
-            CardCouponCode cardCouponCode = new CardCouponCode();
-            cardCouponCode.setId(id);
-            cardCouponCode.setUseStatus(CouponCodeUseStatus.USED);
-            cardCouponCode.setUseTime(new Date());
-            if (orderCode != null) {
-                cardCouponCode.setOrderCode(orderCode);
-            }
-            int num = cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
-            return new ResultData(new UpdateResult(num));
+        CardCouponCode cardCouponCode = new CardCouponCode();
+        cardCouponCode.setId(id);
+        cardCouponCode.setUseStatus(CouponCodeUseStatus.USED);
+        cardCouponCode.setUseTime(new Date());
+        if (orderCode != null) {
+            cardCouponCode.setOrderCode(orderCode);
         }
+        int num = cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
+        return new ResultData(new UpdateResult(num));
+
     }
 
     @Override

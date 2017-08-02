@@ -79,15 +79,4 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
         return cardThirdCouponCodeService.getListByFilter(null, filter, pageUtil);
     }
 
-    /**
-     * 商户核销自己的卡券
-     * @param id
-     * @param session
-     * @return
-     */
-    @RequestMapping(value = "/card/third/shop/coupon/code/{id}/check", method = RequestMethod.POST)
-    public ResultData checkCouponCode(@PathVariable Long id, HttpSession session) {
-        checkThirdPartyShopUser(session);
-        return cardCouponCodeService.checkCouponCode(id, null);
-    }
 }

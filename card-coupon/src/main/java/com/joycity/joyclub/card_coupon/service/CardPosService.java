@@ -48,5 +48,4 @@ public interface CardPosService {
      */
     ResultData refund(String orderCode, BigDecimal refundAmount);
 
-    Long  createPosSaleDetail(Long ShopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment);
 }

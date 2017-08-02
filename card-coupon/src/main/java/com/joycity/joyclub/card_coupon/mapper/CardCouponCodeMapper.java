@@ -32,6 +32,11 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<CouponCodeWithCoupon> selectCouponCodeWithCouponByOrderCode(@Param("orderCode") String orderCode);
 
     /**
+     * 线上投放验证某个用户是否已领过该投放的卡券。
+     */
+    @Select("select count(*) from card_coupon_code ccc INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 WHERE ccc.launch_id = #{launchId} and ccc.client_id = #{clientId} AND ccl.type = 2 AND ccc.delete_flag = 0")
+    int checkCouponCode(@Param("launchId") Long launchId, @Param("clientId") Long clientId);
+    /**
      * 根据卡券code，查找卡券的信息，
      * belong -1 为系统券，其他为第三方商户id
      * @return

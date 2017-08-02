@@ -146,6 +146,8 @@ public class CardPosServiceImpl implements CardPosService {
         Long clientId = clientUserMapper.getIdByVipCode(vipCode);
         //记录流水，返回主键
         Long posSaleDetailId = createPosSaleDetail(shop.getId(), orderCode, clientId, payable, payment);
+        //条件发放卡券业务
+
         return new ResultData(new CreateResult(posSaleDetailId));
     }
 
@@ -221,8 +223,8 @@ public class CardPosServiceImpl implements CardPosService {
         return new ResultData(new UpdateResult(affectNum));
     }
 
-    @Override
-    public Long createPosSaleDetail(Long shopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment) {
+
+    private Long createPosSaleDetail(Long shopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment) {
         PosSaleDetail detail = new PosSaleDetail();
         detail.setOrderCode(orderCode);
         detail.setClientId(clientId);

@@ -4,6 +4,7 @@ import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchPayType;
 import com.joycity.joyclub.card_coupon.constant.CouponOrderConst;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponOrderMapper;
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
@@ -57,6 +58,8 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     @Autowired
     private CardCouponLaunchMapper launchMapper;
     @Autowired
+    private CardCouponCodeMapper couponCodeMapper;
+    @Autowired
     private CardCouponCodeCache couponCodeCache;
     @Autowired
     private ClientUserMapper clientMapper;
@@ -106,6 +109,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
 
     private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
+
         //cache层发券
         if (!couponCodeCache.sendCouponCode(launchId)) {
             throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已售罄");
@@ -116,7 +120,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         } catch (Exception e) {
             //创建订单失败，恢复库存。
             couponCodeCache.changeInventory(launchId,1);
-            throw new BusinessException(REQUEST_PARAMS_ERROR, "订单创建失败");
+            throw new BusinessException(REQUEST_PARAMS_ERROR, e.getMessage());
         }
         PreOrderResult preOrderResult = null;
         if (order.getMoneySum().compareTo(BigDecimal.ZERO) == 0) {
@@ -127,13 +131,10 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
             }
         } else {
             //总金钱为0，积分处理
-            if (order.getPointSum().compareTo(BigDecimal.ZERO) == 0) {
-                //总积分也是0，为免费，直接完成订单
-                couponOrderMapper.setOutPayCodeById(order.getId(), null);
-            } else {
+            if (order.getPointSum().compareTo(BigDecimal.ZERO) > 0) {
                 clientService.addPoint(clientId, -order.getPointSum().doubleValue());
-                couponOrderMapper.setOutPayCodeById(order.getId(), null);
             }
+            couponOrderMapper.setPayedById(order.getId());
             // 订单已经算支付完成了
             preOrderResult = new PreOrderResult();
             preOrderResult.setIfUseMoney(false);
@@ -187,20 +188,9 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         return order;
     }
 
-
     private String createOrderCode(){
         String pix = String.valueOf(System.nanoTime());
         return pix + RandomStringUtils.random(8, "1234567890");
     }
 
-    public static void main(String[] args) {
-        String pix = String.valueOf(System.nanoTime());
-        pix += RandomStringUtils.random(8, "1234567890");
-        System.out.println(pix);
-        method(-BigDecimal.ONE.doubleValue());
-    }
-
-    public static void method(Double d) {
-        System.out.println(d);
-    }
 }
