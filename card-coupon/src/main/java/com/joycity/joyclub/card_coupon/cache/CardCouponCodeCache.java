@@ -5,7 +5,6 @@ package com.joycity.joyclub.card_coupon.cache;
  */
 public interface CardCouponCodeCache {
 
-
     /**
      *  cache层发券
      *  可以发券 返回 true。

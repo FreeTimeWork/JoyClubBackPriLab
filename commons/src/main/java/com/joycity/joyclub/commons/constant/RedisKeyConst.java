@@ -13,7 +13,8 @@ public enum RedisKeyConst {
     /**
      * 库存
      */
-    INVENTORY("inventory");
+    INVENTORY("inventory")
+    ;
 
     String name;
 

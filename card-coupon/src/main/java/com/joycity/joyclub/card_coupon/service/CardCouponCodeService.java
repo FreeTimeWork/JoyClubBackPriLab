@@ -14,12 +14,17 @@ public interface CardCouponCodeService {
     /**
      * 免费领取卡券
      * @param clientId
-     * @param couponLaunchId
-     * @param moneyOrPoint
+     * @param launchId
      * @return
      */
-    ResultData freeReceiveCoupon(Long clientId, Long couponLaunchId, Boolean moneyOrPoint);
+    ResultData freeReceiveCoupon(Long clientId, Long launchId);
 
+    /**
+     * 纯发卡业务，里面没有cache发卡
+     *  @param clientId
+     * @param launchId
+     */
+    Long sendCouponCode(Long clientId, Long launchId, Long couponId);
 
     ResultData getListByFilter(Long projectId, ShowCouponCodeFilter filter, PageUtil pageUtil);
 

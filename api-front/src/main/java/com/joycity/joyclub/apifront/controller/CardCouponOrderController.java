@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
@@ -31,8 +32,20 @@ public class CardCouponOrderController {
     @Autowired
     private CardCouponOrderService couponOrderService;
     @Autowired
+    private CardCouponCodeService couponCodeService;
+    @Autowired
     ClientTokenService clientTokenService;
     private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
+
+    /**
+     * 免费领取
+     */
+    @GetMapping(value = "/free/receive")
+    public ResultData freeReceiveCoupon(@CookieValue(Global.COOKIE_TOKEN) String token,
+                                        @RequestParam Long launchId){
+
+        return couponCodeService.freeReceiveCoupon(clientTokenService.getIdOrThrow(token), launchId);
+    }
 
     /**
      * 微信下单,

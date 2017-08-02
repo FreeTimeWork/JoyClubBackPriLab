@@ -8,8 +8,10 @@ import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponOrderMapper;
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
+import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponOrder;
 import com.joycity.joyclub.card_coupon.modal.order.PreCouponOrderResult;
+import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
@@ -60,6 +62,8 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     @Autowired
     private CardCouponCodeMapper couponCodeMapper;
     @Autowired
+    private CardCouponCodeService couponCodeService;
+    @Autowired
     private CardCouponCodeCache couponCodeCache;
     @Autowired
     private ClientUserMapper clientMapper;
@@ -89,7 +93,10 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
             logger.error("卡券订单回调时发现我方单号不存在，返回值为：我方单号：" + code + " 对方单号：" + outCode);
             return false;
         }
+        CardCouponOrder order = couponOrderMapper.selectByPrimaryKey(id);
         setOrderPayed(code, outCode);
+        CardCouponLaunch launch = launchMapper.selectByPrimaryKey(order.getLaunchId());
+        couponCodeService.sendCouponCode(order.getClientId(), order.getLaunchId(), launch.getCouponId());
         return true;
     }
 
@@ -110,10 +117,15 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
 
+        if (couponCodeMapper.checkCouponCode(launchId, clientId) > 0) {
+            throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已领取");
+        }
+
         //cache层发券
         if (!couponCodeCache.sendCouponCode(launchId)) {
             throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已售罄");
         }
+
         CardCouponOrder order;
         try {
             order = createOrder(payType, clientId, couponLaunchWithCoupon, moneyOrPoint);
