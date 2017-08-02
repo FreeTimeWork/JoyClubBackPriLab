@@ -13,14 +13,8 @@ import com.joycity.joyclub.alipay.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
 import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
-import com.joycity.joyclub.apifront.modal.order.PreOrderResult;
-import com.joycity.joyclub.we_chat.pay.wechat.PreOrder;
-import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayService;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.apifront.service.CartFrontService;
-import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
@@ -35,14 +29,17 @@ import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.ProductAttrMapper;
 import com.joycity.joyclub.product.mapper.ProductMapper;
+import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
+import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.pay.wechat.WxPayService;
 import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +47,6 @@ import java.util.Map;
 import static com.joycity.joyclub.apifront.service.impl.ProductOrderFrontServiceImpl.CANCEL_BY_CLIENT;
 import static com.joycity.joyclub.apifront.service.impl.ProductOrderFrontServiceImpl.CANCEL_BY_SYSTEM;
 import static com.joycity.joyclub.commons.constant.ActOrderConst.STATUS_NOT_PAYED;
-import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 
 /**
  * Created by Administrator on 2017/4/20.
@@ -65,6 +61,10 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
      * 支付宝支付
      */
     public static final Byte PAY_TYPE_ALI = 1;
+
+    @Value("${wxpay.notifyUrl}")
+    private String WX_PAY_NOTIFY_URL;
+
     @Autowired
     WechatOpenIdService wechatOpenIdService;
 
@@ -233,7 +233,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         ThrowBusinessExceptionUtil.checkNull(order, "订单不存在");
         PreOrderResult preOrderResult = null;
         if (payType.equals(PAY_TYPE_WECHAT)) {
-            preOrderResult = getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode());
+            preOrderResult = wxPayService.getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
         } else if (payType.equals(PAY_TYPE_ALI)) {
             preOrderResult = getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode());
 
@@ -265,7 +265,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         //金钱业务
         if (order.getMoneySum() > 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
-                preOrderResult = getWechatPreOrderResult(projectId, clientId, order.getMoneySum(), order.getCode());
+                preOrderResult = wxPayService.getWechatPreOrderResult(projectId, clientId, order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
                 preOrderResult = getAliPreOrderResult(projectId, order.getMoneySum(), order.getCode());
             }
@@ -332,28 +332,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
 
     }
 
-    /**
-     * 生成微信支付相关的参数
-     *
-     * @param projectId
-     * @param clientId
-     * @param code
-     * @param moneySum
-     * @return
-     */
-    private PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code) {
-        //先判断openid存在性
-        //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
-        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
-        if (openId == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
-        }
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //涉及金钱，应该等微信支付回调在处理积分
-        preOrderResult.setIfUseMoney(true);
-        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
-        return preOrderResult;
-    }
 
     /**
      * 生成支付宝支付相关的参数
@@ -455,42 +433,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         }
 
     }
-
-    // TODO: 2017/5/19 将商品和活动订单相关业务共同方法抽象下
-    public Map<String, Object> getWechatPayParams(Long projectId, String openId, float moneySum, String sysOrderCode) {
-        //涉及金钱，应该等微信支付回调在处理积分
-        PreOrder preOrder = new PreOrder();
-        preOrder.setBody("悦客会");
-        preOrder.setOpenId(openId);
-        //转成分
-        preOrder.setTotalFee((int) Math.ceil(moneySum * 100));
-        preOrder.setOutTradeNo(sysOrderCode);
-
-
-        // TODO: 2017/5/11  增加项目的微信支付传参传参
-        String prepayResultStr = wxPayService.precreate(preOrder);
-
-        Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
-        String prepay_id = prepayResult.get("prepay_id");
-        if (prepay_id == null) {
-            logger.error("微信统一下单失败,错误返回值为 " + prepayResultStr);
-            throw new BusinessException(ResultCode.WECHAT_PAY_REQUEST_ERROR, "微信统一下单失败");
-        }
-        return getWechatPayParams(prepay_id);
-    }
-
-    public Map<String, Object> getWechatPayParams(String prepayId) {
-        Map<String, Object> param = new HashMap<>();
-        param.put("appId", wxpayConfig.getAppid());
-        param.put("timeStamp", String.valueOf(new Date().getTime()));
-        param.put("nonceStr", "12345678");
-        param.put("package", "prepay_id=" + prepayId);
-        param.put("signType", "MD5");
-        String sign = SignUtils.paySign(param, wxpayConfig.getSign());
-        param.put("paySign", sign.toUpperCase());
-        return param;
-    }
-
 
     // TODO: 2017/4/28 优化
     private String createTradeNo() {

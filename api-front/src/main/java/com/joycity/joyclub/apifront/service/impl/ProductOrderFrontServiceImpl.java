@@ -8,6 +8,7 @@ import com.joycity.joyclub.apifront.modal.cart.ClientPostAddress;
 import com.joycity.joyclub.apifront.modal.project.ProductOrderItem;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderItemVO;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
+import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.pay.wechat.PreOrder;
 import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
@@ -39,6 +40,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -67,6 +69,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     public final String LIST_TYPE_NOT_SENT = "notSent";
     public final String LIST_TYPE_NOT_RECEIVED = "notReceived";
     public final String LIST_TYPE_DONE = "done";
+    @Value("${wxpay.notifyUrl}")
+    private String WX_PAY_NOTIFY_URL;
     @Autowired
     WechatOpenIdService wechatOpenIdService;
     @Autowired
@@ -369,7 +373,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         //金钱业务
         if (order.getMoneySum() > 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
-                preOrderResult = getWechatPreOrderResult(vo.getProjectId(), clientId, order.getMoneySum(), order.getCode());
+                preOrderResult = wxPayService.getWechatPreOrderResult(vo.getProjectId(), clientId, order.getMoneySum(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
                 preOrderResult = getAliPreOrderResult(vo.getProjectId(), order.getMoneySum(), order.getCode());
             }
@@ -384,28 +388,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         return new ResultData(preOrderResult);
     }
 
-    /**
-     * 生成微信支付相关的参数
-     *
-     * @param projectId
-     * @param clientId
-     * @param code
-     * @param moneySum
-     * @return
-     */
-    private PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code) {
-        //先判断openid存在性
-        //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
-        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
-        if (openId == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
-        }
-        PreOrderResult preOrderResult = new PreOrderResult();
-        //涉及金钱，应该等微信支付回调在处理积分
-        preOrderResult.setIfUseMoney(true);
-        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code));
-        return preOrderResult;
-    }
+
 
     /**
      * 生成支付宝支付相关的参数
@@ -449,7 +432,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         ThrowBusinessExceptionUtil.checkNull(order, "订单不存在");
         PreOrderResult preOrderResult = null;
         if (payType.equals(PAY_TYPE_WECHAT)) {
-            preOrderResult = getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode());
+            preOrderResult = wxPayService.getWechatPreOrderResult(order.getProjectId(), order.getClientId(), order.getMoneySum(), order.getCode(),WX_PAY_NOTIFY_URL);
         } else if (payType.equals(PAY_TYPE_ALI)) {
             preOrderResult = getAliPreOrderResult(order.getProjectId(), order.getMoneySum(), order.getCode());
 
@@ -558,38 +541,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
     }
 
-    public Map<String, Object> getWechatPayParams(Long projectId, String openId, float moneySum, String sysOrderCode) {
-        //涉及金钱，应该等微信支付回调在处理积分
-        PreOrder preOrder = new PreOrder();
-        preOrder.setBody("悦客会");
-        preOrder.setOpenId(openId);
-        //转成分
-        preOrder.setTotalFee((int) Math.ceil(moneySum * 100));
-        preOrder.setOutTradeNo(sysOrderCode);
 
-        // TODO: 2017/5/11  增加项目的微信支付传参传参
-        String prepayResultStr = wxPayService.precreate(preOrder);
-
-        Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
-        String prepay_id = prepayResult.get("prepay_id");
-        if (prepay_id == null) {
-            logger.error("微信统一下单失败,错误返回值为 " + prepayResultStr);
-            throw new BusinessException(ResultCode.WECHAT_PAY_REQUEST_ERROR, "微信统一下单失败");
-        }
-        return getWechatPayParams(prepay_id);
-    }
-
-    public Map<String, Object> getWechatPayParams(String prepayId) {
-        Map<String, Object> param = new HashMap<>();
-        param.put("appId", wxpayConfig.getAppid());
-        param.put("timeStamp", String.valueOf(new Date().getTime()));
-        param.put("nonceStr", "12345678");
-        param.put("package", "prepay_id=" + prepayId);
-        param.put("signType", "MD5");
-        String sign = SignUtils.paySign(param, wxpayConfig.getSign());
-        param.put("paySign", sign.toUpperCase());
-        return param;
-    }
 
   /*
     public void changePoint(Long clientId, String vipCode, Integer point) throws NullPointerException {
@@ -648,42 +600,6 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
 
         public void setOrderStore(SaleProductOrderStore orderStore) {
             this.orderStore = orderStore;
-        }
-    }
-
-    /**
-     * 前台下单的返回值
-     */
-    class PreOrderResult {
-        //是否要金钱支付
-        Boolean ifUseMoney;
-        //微信支付的参数
-        Map<String, Object> payParam;
-        //支付宝支付的返回参数，form表单的string
-        String formString;
-
-        public Boolean getIfUseMoney() {
-            return ifUseMoney;
-        }
-
-        public void setIfUseMoney(Boolean ifUseMoney) {
-            this.ifUseMoney = ifUseMoney;
-        }
-
-        public Map<String, Object> getPayParam() {
-            return payParam;
-        }
-
-        public void setPayParam(Map<String, Object> payParam) {
-            this.payParam = payParam;
-        }
-
-        public String getFormString() {
-            return formString;
-        }
-
-        public void setFormString(String formString) {
-            this.formString = formString;
         }
     }
 

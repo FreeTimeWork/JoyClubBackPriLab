@@ -2,7 +2,11 @@ package com.joycity.joyclub.we_chat.pay.wechat;
 
 
 
+
+import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
+import com.joycity.joyclub.we_chat.modal.order.PreOrderResult;
+import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import com.joycity.joyclub.we_chat.util.HttpKit;
 import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,9 +32,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.security.KeyStore;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.constant.ResultCode.WECHAT_PAY_REQUEST_ERROR;
 
 @Service
@@ -46,14 +52,72 @@ public class WxPayService {
     private Log logger = LogFactory.getLog(WxPayService.class);
     @Autowired
     private WxPayConfig wxPayConfig;
-
+    @Autowired
+    private WechatOpenIdService wechatOpenIdService;
     // TODO: 2017/5/11  增加项目的微信支付传参传参
+
+    /**
+     * 生成微信支付相关的参数
+     *
+     * @param projectId
+     * @param clientId
+     * @param code
+     * @param moneySum
+     * @return
+     */
+    public PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code, String wxPayNotifyUrl) {
+        //先判断openid存在性
+        //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
+        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
+        if (openId == null) {
+            throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
+        }
+        PreOrderResult preOrderResult = new PreOrderResult();
+        //涉及金钱，应该等微信支付回调在处理积分
+        preOrderResult.setIfUseMoney(true);
+        preOrderResult.setPayParam(getWechatPayParams(projectId, openId, moneySum, code,wxPayNotifyUrl));
+        return preOrderResult;
+    }
+
+    private Map<String, Object> getWechatPayParams(Long projectId, String openId, float moneySum, String sysOrderCode, String wxPayNotifyUrl) {
+        //涉及金钱，应该等微信支付回调在处理积分
+        PreOrder preOrder = new PreOrder();
+        preOrder.setBody("悦客会");
+        preOrder.setOpenId(openId);
+        //转成分
+        preOrder.setTotalFee((int) Math.ceil(moneySum * 100));
+        preOrder.setOutTradeNo(sysOrderCode);
+
+        // TODO: 2017/5/11  增加项目的微信支付传参传参
+        preOrder.setNotifyUrl(wxPayNotifyUrl);
+        String prepayResultStr = precreate(preOrder);
+
+        Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
+        String prepay_id = prepayResult.get("prepay_id");
+        if (prepay_id == null) {
+            logger.error("微信统一下单失败,错误返回值为 " + prepayResultStr);
+            throw new BusinessException(ResultCode.WECHAT_PAY_REQUEST_ERROR, "微信统一下单失败");
+        }
+        return getWechatPayParams(prepay_id);
+    }
+
+    private Map<String, Object> getWechatPayParams(String prepayId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("appId", wxPayConfig.getAppid());
+        param.put("timeStamp", String.valueOf(new Date().getTime()));
+        param.put("nonceStr", "12345678");
+        param.put("package", "prepay_id=" + prepayId);
+        param.put("signType", "MD5");
+        String sign = SignUtils.paySign(param, wxPayConfig.getSign());
+        param.put("paySign", sign.toUpperCase());
+        return param;
+    }
 
     /**
      * @param precreateRequest
      * @return
      */
-    public String precreate(PreOrder precreateRequest) {
+    private String precreate(PreOrder precreateRequest) {
         Map<String, Object> params = getSubmitMap();
         params.put("out_trade_no", precreateRequest.getOutTradeNo());
         params.put("body", precreateRequest.getBody());
