@@ -223,6 +223,14 @@ public class CardPosServiceImpl implements CardPosService {
         return new ResultData(new UpdateResult(affectNum));
     }
 
+    /**
+     *     条件发放的判断逻辑,返回应发放代金券的数量
+     */
+
+    private int conditionSendCoupon(){
+
+        return 0;
+    }
 
     private Long createPosSaleDetail(Long shopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment) {
         PosSaleDetail detail = new PosSaleDetail();
