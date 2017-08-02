@@ -162,7 +162,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         List<Long> clientIds = cardVipBatchMapper.selectClientIdByBatch(vipBatch);
         for (int i = 0; i < clientIds.size(); ) {
 
-            boolean result = couponCodeCache.sendCouponCode(launchId, cardCoupon.getType(), clientIds.get(i), cardCoupon.getThirdpartyShopId(), null);
+            boolean result = couponCodeCache.sendCouponCode(launchId);
             if (!result) {
                 return;
             } else {
@@ -245,7 +245,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             return;
         }
 
-        boolean result = couponCodeCache.sendCouponCode(launchId, cardCoupon.getType(), clientId, thirdPartyShopId, code);
+        boolean result = couponCodeCache.sendCouponCode(launchId);
 
         if (result) {
             //执行发券逻辑

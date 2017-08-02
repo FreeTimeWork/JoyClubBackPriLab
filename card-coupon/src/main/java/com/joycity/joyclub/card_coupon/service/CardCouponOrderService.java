@@ -11,7 +11,14 @@ public interface CardCouponOrderService {
     ResultData orderForAli(Long clientId, Long couponLaunchId,Boolean moneyOrPoint);
 
     /**
+     * 支付成功返回回调，进行订单支付成功业务处理
+     * @param code    我方单号
+     * @param outCode 对方单号
+     */
+
+    Boolean notifyPayed(String code,String outCode);
+    /**
      * 取消超过十分钟订单
      */
-    void cancelOverTenMinsOrder();
+    void cancelOverTenMinOrder();
 }

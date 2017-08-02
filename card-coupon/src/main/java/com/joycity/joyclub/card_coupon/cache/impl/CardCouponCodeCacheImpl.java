@@ -19,16 +19,12 @@ public class CardCouponCodeCacheImpl implements CardCouponCodeCache {
     private final String INVENTORY = RedisKeyConst.INVENTORY.getName();
 
     @Autowired
-    private CardCouponLaunchMapper launchMapper;
-    @Autowired
-    private CardCouponCodeService couponCodeService;
-    @Autowired
     private RedisTemplate redisTemplate;
 
-    public boolean sendCouponCode(Long launchId, Byte couponType,Long clientId,Long thirdPartyShopId, String couponCode) {
+    public boolean sendCouponCode(Long launchId) {
         BoundHashOperations<String, String, Integer> inventoryHO = redisTemplate.boundHashOps(INVENTORY);
 
-        //没有库存
+        //没有库存直接返回false
         if (inventoryHO.get(getKey(launchId)) <= 0) {
             return false;
         }

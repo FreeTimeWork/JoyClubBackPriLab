@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  * Created by fangchen.chai on 2017/8/1
  */
@@ -27,5 +29,10 @@ public interface CardCouponOrderMapper extends BaseMapper<CardCouponOrder, Long,
     @Update("update card_coupon_order set out_pay_code =#{outPayCode} where id=#{id}")
     Integer setOutPayCodeById(@Param("id") Long id, @Param("outPayCode") String outPayCode);
 
+    @Update("update card_coupon_order set status = 1,cancel_time=now() where id=#{id}")
+    Integer cancelOrder(@Param("id") Long id);
+
+    @Select("select id, launch_id from card_coupon_order where status = 0 and MINUTE(timediff(now(),create_time))>=10")
+    List<CardCouponOrder> getTenMinNotPayedOrder();
 
 }

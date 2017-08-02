@@ -1,5 +1,6 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
+import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchPayType;
 import com.joycity.joyclub.card_coupon.constant.CouponOrderConst;
@@ -11,18 +12,23 @@ import com.joycity.joyclub.card_coupon.modal.order.PreCouponOrderResult;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
+import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.service.WxPayService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAMS_ERROR;
 
@@ -31,6 +37,10 @@ import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAMS_ERR
  */
 @Service
 public class CardCouponOrderServiceImpl implements CardCouponOrderService {
+
+    private Log logger = LogFactory.getLog(CardCouponOrderServiceImpl.class);
+    private Log taskLogger = LogFactory.getLog(LogConst.LOG_TASK);
+
     /**
      * 微信支付
      */
@@ -42,6 +52,8 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
 
     @Value("${coupon.wxPay.notifyUrl}")
     private String WX_PAY_NOTIFY_URL;
+    @Value("${coupon.aliPay.notifyUrl}")
+    private String ALI_PAY_NOTIFY_URL;
     @Autowired
     private CardCouponLaunchMapper launchMapper;
     @Autowired
@@ -54,6 +66,8 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     private CardCouponOrderMapper couponOrderMapper;
     @Autowired
     private WxPayService wxPayService;
+    @Autowired
+    private AliPayService aliPayService;
 
     @Override
     public ResultData orderForWeChat(Long clientId, Long couponLaunchId, Boolean moneyOrPoint) {
@@ -66,19 +80,50 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     }
 
     @Override
-    public void cancelOverTenMinsOrder() {
+    public Boolean notifyPayed(String code, String outCode) {
+        Long id = couponOrderMapper.selectIdByCode(code);
+        if (id == null) {
+            logger.error("卡券订单回调时发现我方单号不存在，返回值为：我方单号：" + code + " 对方单号：" + outCode);
+            return false;
+        }
+        setOrderPayed(code, outCode);
+        return true;
+    }
 
+    @Override
+    public void cancelOverTenMinOrder() {
+        // TODO: 2017/8/2 cfc 如果十分钟没有处理完，下一个十分钟定时器执行，会造成多加两次库存
+        List<CardCouponOrder> orders = couponOrderMapper.getTenMinNotPayedOrder();
+        for (CardCouponOrder order : orders) {
+            couponOrderMapper.cancelOrder(order.getId());
+            //cache库存恢复
+            couponCodeCache.changeInventory(order.getLaunchId(), 1);
+        }
+        if (orders.size() > 0) {
+            taskLogger.info("取消超时未支付卡券订单 " + orders.size() + " 个");
+        }
     }
 
     private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
-        CardCouponOrder order = createOrder(payType, clientId, couponLaunchWithCoupon, moneyOrPoint);
+        //cache层发券
+        if (!couponCodeCache.sendCouponCode(launchId)) {
+            throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已售罄");
+        }
+        CardCouponOrder order;
+        try {
+            order = createOrder(payType, clientId, couponLaunchWithCoupon, moneyOrPoint);
+        } catch (Exception e) {
+            //创建订单失败，恢复库存。
+            couponCodeCache.changeInventory(launchId,1);
+            throw new BusinessException(REQUEST_PARAMS_ERROR, "订单创建失败");
+        }
         PreOrderResult preOrderResult = null;
         if (order.getMoneySum().compareTo(BigDecimal.ZERO) == 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
                 preOrderResult = wxPayService.getWechatPreOrderResult(couponLaunchWithCoupon.getProjectId(), clientId, order.getMoneySum().floatValue(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
-//                preOrderResult = getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum(), order.getCode());
+                preOrderResult = aliPayService.getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum().floatValue(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
         } else {
             //总金钱为0，积分处理
@@ -96,18 +141,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         return new ResultData(preOrderResult);
     }
 
-
-
-    /**
-     * 生成支付宝相关参数
-     * @param projectId
-     * @param moneySum
-     * @param code
-     * @return
-     */
-    private PreCouponOrderResult getAliPreOrderResult(Long projectId, Float moneySum, String code) {
-        return null;
-    }
+    
     private void setOrderPayed(String orderCode, String outOrderCode) {
         Long orderId = couponOrderMapper.selectIdByCode(orderCode);
         ThrowBusinessExceptionUtil.checkNull(orderId, "订单号不存在");

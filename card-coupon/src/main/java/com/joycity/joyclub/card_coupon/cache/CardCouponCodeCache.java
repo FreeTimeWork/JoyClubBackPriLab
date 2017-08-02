@@ -5,17 +5,15 @@ package com.joycity.joyclub.card_coupon.cache;
  */
 public interface CardCouponCodeCache {
 
+
     /**
-     *  cache层发卡券的入口。
+     *  cache层发券
      *  可以发券 返回 true。
      *  不让发卡券 返回 false。
      * @param launchId
-     * @param couponType
-     * @param thirdPartyShopId
-     * @param clientId
      * @return
      */
-    public boolean sendCouponCode(Long launchId, Byte couponType, Long clientId, Long thirdPartyShopId, String couponCode);
+    public boolean sendCouponCode(Long launchId);
 
     /**
      * 添加inventory缓存

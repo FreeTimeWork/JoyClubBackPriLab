@@ -383,7 +383,8 @@ CREATE TABLE `card_coupon_order` (
   `last_update` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `delete_flag` tinyint(1) unsigned DEFAULT '0',
   `delete_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_card_coupon_order_code` (`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COMMENT='卡券订单表，系统定时删除未支付订单，恢复库存，防止库存一直被占用';
 
 
