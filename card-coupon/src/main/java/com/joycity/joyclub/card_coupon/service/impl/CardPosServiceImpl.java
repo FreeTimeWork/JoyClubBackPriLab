@@ -1,16 +1,15 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
+import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.constant.RefundType;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper;
 import com.joycity.joyclub.card_coupon.modal.*;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
-import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCodeExample;
-import com.joycity.joyclub.card_coupon.modal.generated.PosSaleDetail;
-import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
+import com.joycity.joyclub.card_coupon.modal.generated.*;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
 import com.joycity.joyclub.card_coupon.service.ShopService;
@@ -18,12 +17,15 @@ import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.*;
+import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,10 @@ public class CardPosServiceImpl implements CardPosService {
     private ClientUserMapper clientUserMapper;
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private CardCouponLaunchMapper launchMapper;
+    @Autowired
+    private CardCouponCodeCache couponCodeCache;
 
     @Override
     public ResultData getCurrentCoupons(Long projectId, String shopCode, String vipCode) {
@@ -140,14 +146,29 @@ public class CardPosServiceImpl implements CardPosService {
     }
 
     @Override
-    public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) {
+    public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
 
         Long clientId = clientUserMapper.getIdByVipCode(vipCode);
         //记录流水，返回主键
         Long posSaleDetailId = createPosSaleDetail(shop.getId(), orderCode, clientId, payable, payment);
-        //条件发放卡券业务
 
+        //条件发放卡券业务
+        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(new Date(), clientId);
+        //如果该订单在条件投放期间
+        if (info != null) {
+            int receiveNum = receiveCashCouponNum(info, clientId);
+            CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
+            if (receiveNum > 0) {
+                //发卡
+                for (int i= 0 ; i <= receiveNum ; i++) {
+                    boolean result = couponCodeCache.sendCouponCode(info.getLaunchId());
+                    if (result) {
+                        cardCouponCodeService.sendCouponCode(clientId, info.getLaunchId(), launch.getCouponId());
+                    }
+                }
+            }
+        }
         return new ResultData(new CreateResult(posSaleDetailId));
     }
 
@@ -162,18 +183,17 @@ public class CardPosServiceImpl implements CardPosService {
         if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
             //应该代金券拥有量
             int subCouponNum = getSubCouponNum(info, info.getDetail().getPayment());
-            //实际代金券拥有量
-            int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
-            if ((actualCouponNum - subCouponNum) > info.getNotUsedNum() ) {
+            int diff = actualNumSubtractSubNum(info, subCouponNum);
+            if (diff > info.getNotUsedNum() ) {
                 return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
             }
             return new ResultData(new PosRefundVerifyResult(RefundType.PERMIT_REFUND_FULL_ORDER));
         } else {
             //应该代金券拥有量
             int subCouponNum = getSubCouponNum(info, refundAmount);
-            //实际代金券拥有量
-            int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
-            if ((actualCouponNum - subCouponNum) > info.getNotUsedNum() ) {
+            int diff = actualNumSubtractSubNum(info, subCouponNum);
+
+            if (diff > info.getNotUsedNum() ) {
                 return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
             }
             return new ResultData(new PosRefundVerifyResult(RefundType.PREMIT_REFUND));
@@ -204,13 +224,11 @@ public class CardPosServiceImpl implements CardPosService {
         }
         //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info, refundAmount);
-        //实际代金券拥有量
-        int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
-        Integer num = actualCouponNum - subCouponNum;
+        Integer num = actualNumSubtractSubNum(info, subCouponNum);
 
         Date date = info.getDetail().getCreateTime();
         Long clientId = info.getDetail().getClientId();
-        List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCouponCodeIdFromLaunchBetween(date, clientId, num);
+        List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCashCouponCodeIdFromLaunchBetween(date, clientId, num);
         //未使用代金券废弃
         for (Long id : couponCodeIds) {
             CardCouponCode cardCouponCode = new CardCouponCode();
@@ -223,14 +241,6 @@ public class CardPosServiceImpl implements CardPosService {
         return new ResultData(new UpdateResult(affectNum));
     }
 
-    /**
-     *     条件发放的判断逻辑,返回应发放代金券的数量
-     */
-
-    private int conditionSendCoupon(){
-
-        return 0;
-    }
 
     private Long createPosSaleDetail(Long shopId, String orderCode, Long clientId, BigDecimal payable, BigDecimal payment) {
         PosSaleDetail detail = new PosSaleDetail();
@@ -264,7 +274,7 @@ public class CardPosServiceImpl implements CardPosService {
             info.setRefundType(RefundType.FORBIT_REFUND);
             return info;
         }
-        CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectInfoFromLaunchBetween(detail.getCreateTime());
+        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(detail.getCreateTime(), detail.getClientId());
         //订单不再投放期间内可以退款
         if (info == null) {
             //如果该订单关联了卡券，只能全单退款
@@ -277,18 +287,73 @@ public class CardPosServiceImpl implements CardPosService {
             return info;
         }
         info.setDetail(detail);
-        //在条件投放期间内，卡券的使用和未使用的数量
-        CouponLaunchBetweenInfo couponNumInfo = cardCouponCodeMapper.selectCouponNumFromLaunchBetween(detail.getCreateTime(),detail.getClientId());
-        info.setUsedNum(couponNumInfo.getUsedNum());
-        info.setNotUsedNum(couponNumInfo.getNotUsedNum());
-        BigDecimal sumPaid = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(detail.getCreateTime(),detail.getClientId());
-        info.setSumPaid(sumPaid);
-
         return info;
     }
 
+    /**
+     * 返回一个用户在一个投放期间，已使用代金券的和未使用代金券的数量，期间所有订单的总额,还有卡券的信息
+     */
+
+    private CouponLaunchBetweenInfo clientCouponNumAndSumPaidInfo(Date date, Long clientId) {
+        CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectInfoFromLaunchBetween(date);
+        if (info == null) {
+            return null;
+        }
+        BigDecimal sumPaid = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(date, clientId);
+        info.setSumPaid(sumPaid);
+        //在条件投放期间内，卡券的使用和未使用的数量
+        CouponLaunchBetweenInfo couponNumInfo = cardCouponCodeMapper.selectCouponNumFromLaunchBetween(date, clientId);
+        info.setUsedNum(couponNumInfo.getUsedNum());
+        info.setNotUsedNum(couponNumInfo.getNotUsedNum());
+        return info;
+    }
+
+    /**
+     * 会员实际拥有代金券与应该拥有代金券数量的差
+     * @param info
+     * @param subCouponNum 应该拥有卡券数量
+     * @return
+     */
+    private int actualNumSubtractSubNum(CouponLaunchBetweenInfo info, int subCouponNum) {
+
+        //实际代金券拥有量
+        int actualCouponNum = info.getNotUsedNum() + info.getUsedNum();
+        return actualCouponNum - subCouponNum;
+    }
+    /**
+     * 算出应该给一个用户多少卡券。
+     * 如果不是退款，新入订单的话，refundAmount = 0
+     * @param info
+     * @param refundAmount
+     * @return
+     */
     private int getSubCouponNum(CouponLaunchBetweenInfo info, BigDecimal refundAmount) {
         return (info.getSumPaid().subtract(refundAmount).divide(info.getConditionAmount())).intValue();
     }
 
+    /**
+     * 返回应发代金券的数量
+     * @return
+     */
+    private int receiveCashCouponNum(CouponLaunchBetweenInfo info, Long clientId) throws ParseException {
+        int receiveNum = 0;
+        int subCouponNum= getSubCouponNum(info, BigDecimal.ZERO);
+        //会员实际拥有代金券与应该拥有代金券数量的差
+        int diff = actualNumSubtractSubNum(info, subCouponNum);
+        //1.实际数量比应发数量小，应该发券
+        //2.检查当天领取的代金券是否达到该投放限制的每日最大获取量
+        if (diff < 0) {
+            Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
+            Date end = DateTimeUtil.addDays(start, 1);
+            int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
+            //每日限制数量 - 当日已领取代金券数量
+            int diffNum = info.getMaxReceive() - cashCouponNum;
+            if (diffNum > 0) {
+                //发卡数量
+                receiveNum = diffNum + diff;
+
+            }
+        }
+        return receiveNum;
+    }
 }

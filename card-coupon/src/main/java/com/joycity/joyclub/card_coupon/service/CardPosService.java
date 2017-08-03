@@ -3,6 +3,7 @@ package com.joycity.joyclub.card_coupon.service;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public interface CardPosService {
     /**
      * 订单结果通知
      */
-    ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment);
+    ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException;
 
 
     /**

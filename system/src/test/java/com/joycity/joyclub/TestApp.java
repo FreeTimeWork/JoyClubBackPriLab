@@ -8,6 +8,7 @@ import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper;
+import com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo;
 import com.joycity.joyclub.card_coupon.modal.PosSaleDetailWithCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.PosSaleDetail;
@@ -39,11 +40,9 @@ import java.util.Date;
 @ActiveProfiles(value = "development")
 public class TestApp {
 
-    @Value("${coupon.alipay.notifyUrl}")
+    @Value("${coupon.aliPay.notifyUrl}")
     private String notifyUrl;
-    @Value("${coupon.alipay.returnUrl}")
-    private String returnUrl;
-    @Value("${coupon.wxpay.notifyUrl}")
+    @Value("${coupon.wxPay.notifyUrl}")
     private String wxNotifyUrl;
 
 //    @Autowired
@@ -137,6 +136,10 @@ public class TestApp {
         System.out.println(test.get("h1"));
         test.put("h1", "h2");
         System.out.println(test.get("h1"));
+        CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectCouponNumFromLaunchBetween(new Date(), 1111L);
+        System.out.println(info);
+        BigDecimal bigDecimal = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(new Date(), 1111L);
+        System.out.println(bigDecimal);
     }
 
 }

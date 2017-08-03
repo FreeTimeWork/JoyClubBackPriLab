@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,11 @@ public class CardPosController extends BaseUserSessionController {
      * 订单结果通知后处理
      */
     @GetMapping(value = "/order/inform")
-    public ResultData posOrderInform(@RequestParam String vipCode, @RequestParam String orderCode, @RequestParam String shopCode, @RequestParam BigDecimal payable, @RequestParam BigDecimal payment) {
+    public ResultData posOrderInform(@RequestParam String vipCode,
+                                     @RequestParam String orderCode,
+                                     @RequestParam String shopCode,
+                                     @RequestParam BigDecimal payable,
+                                     @RequestParam BigDecimal payment) throws ParseException {
         //TODO: cfc  projectId根据秘钥对应，得到到底是哪个项目的商家
         Long projectId = 1L;
         return cardPosService.posOrderInform(projectId, vipCode, orderCode, shopCode, payable, payment);

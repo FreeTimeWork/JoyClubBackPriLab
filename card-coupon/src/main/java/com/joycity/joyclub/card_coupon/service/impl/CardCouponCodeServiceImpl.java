@@ -85,7 +85,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         if (launch.getPayAmount().compareTo(BigDecimal.ZERO) != 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "卡券不能免费领取");
         }
-        if (cardCouponCodeMapper.checkCouponCode(launchId, clientId) > 0) {
+        if (cardCouponCodeMapper.checkOnlineCouponCodeNum(launchId, clientId) > 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "已领取");
         }
         //cache发卡

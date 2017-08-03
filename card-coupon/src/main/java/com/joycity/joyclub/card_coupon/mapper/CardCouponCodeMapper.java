@@ -32,10 +32,17 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<CouponCodeWithCoupon> selectCouponCodeWithCouponByOrderCode(@Param("orderCode") String orderCode);
 
     /**
-     * 线上投放验证某个用户是否已领过该投放的卡券。
+     * 某个用户已领过该投放的卡券数量(线上投放类型)。
      */
     @Select("select count(*) from card_coupon_code ccc INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 WHERE ccc.launch_id = #{launchId} and ccc.client_id = #{clientId} AND ccl.type = 2 AND ccc.delete_flag = 0")
-    int checkCouponCode(@Param("launchId") Long launchId, @Param("clientId") Long clientId);
+    int checkOnlineCouponCodeNum(@Param("launchId") Long launchId, @Param("clientId") Long clientId);
+
+    /**
+     * 某个用户一段时间已领过该投放的卡券数量(条件投放类型)。
+     */
+    @Select("select count(*) from card_coupon_code ccc INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 WHERE ccc.launch_id = #{launchId} and ccc.client_id = #{clientId} and ccc.receive_time > #{startTime} and ccc.receive_time < #{endTime}  AND ccl.type = 1 AND ccc.delete_flag = 0")
+    int todayConditionCouponCodeNum(@Param("launchId") Long launchId, @Param("clientId") Long clientId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
     /**
      * 根据卡券code，查找卡券的信息，
      * belong -1 为系统券，其他为第三方商户id
@@ -68,7 +75,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      * 在条件投放期间内，卡券的基本信息
      */
     @Select(
-            " SELECT ccl.condition_amount, cc.subtract_amount   " +
+            " SELECT ccl.id as launch_id, ccl.condition_amount, ccl.max_receive, cc.subtract_amount   " +
             " FROM card_coupon_launch ccl" +
             " inner join card_coupon cc on cc.id = ccl.coupon_id and cc.type != 3 and cc.delete_flag = 0 " +
             " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.forbid_flag = 0 and ccl.review_status = 1 and ccl.delete_flag = 0")
@@ -86,7 +93,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      * 条件投放期间内，从该会员未使用的代金券中找到num个couponCodeId
      * 注意要验证 list.size == num
      */
-    List<Long> selectNotUsedCouponCodeIdFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId, @Param("num") Integer num);
+    List<Long> selectNotUsedCashCouponCodeIdFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId, @Param("num") Integer num);
 
     /**
      * 在条件投放的期间内,该会员，所有订单的最终实际付款总额

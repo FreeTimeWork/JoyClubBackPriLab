@@ -6,6 +6,9 @@ import java.math.BigDecimal;
  * Created by fangchen.chai on 2017/7/25
  */
 public class CouponLaunchBetweenInfo {
+
+    private Long launchId;
+    private Integer maxReceive;
     private Integer notUsedNum;     //未使用数量
     private Integer usedNum;        //已使用数量
     private BigDecimal sumPaid;     //付款总额
@@ -13,6 +16,22 @@ public class CouponLaunchBetweenInfo {
     private BigDecimal subtractAmount;   //卡券折扣金额
     private PosSaleDetailWithCouponCode detail;
     private Byte refundType;
+
+    public Long getLaunchId() {
+        return launchId;
+    }
+
+    public void setLaunchId(Long launchId) {
+        this.launchId = launchId;
+    }
+
+    public Integer getMaxReceive() {
+        return maxReceive;
+    }
+
+    public void setMaxReceive(Integer maxReceive) {
+        this.maxReceive = maxReceive;
+    }
 
     public Integer getNotUsedNum() {
         return notUsedNum;

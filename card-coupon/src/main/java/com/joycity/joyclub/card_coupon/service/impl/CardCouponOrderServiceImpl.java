@@ -3,6 +3,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchPayType;
+import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponOrderConst;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
@@ -10,7 +11,6 @@ import com.joycity.joyclub.card_coupon.mapper.CardCouponOrderMapper;
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponOrder;
-import com.joycity.joyclub.card_coupon.modal.order.PreCouponOrderResult;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
@@ -22,7 +22,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.service.WxPayService;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -117,7 +116,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
 
-        if (couponCodeMapper.checkCouponCode(launchId, clientId) > 0) {
+        if (couponCodeMapper.checkOnlineCouponCodeNum(launchId, clientId) > 0) {
             throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已领取");
         }
 
