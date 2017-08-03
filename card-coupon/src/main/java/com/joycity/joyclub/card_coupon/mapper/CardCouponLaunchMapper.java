@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
+import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
@@ -56,5 +57,14 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     @Select("SELECT ccl.launch_num - count(ccc.id) FROM card_coupon_launch ccl INNER JOIN card_coupon_code ccc ON ccc.launch_id = ccl.id and ccc.delete_flag = 0 WHERE ccl.id = #{id} and ccl.delete_flag = 0")
     int selectInventoryNumById(@Param("id") Long id);
 
+
+    // --------------------前段------------------------
+    // 当前会员可领取列表
+    Long countClientVisibleByCouponType(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("couponType") Byte couponType);
+    List<ShowClientVisibleLaunchCoupon> selectClientVisibleByCouponType(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("couponType") Byte couponType, @Param("pageUtil") PageUtil pageUtil);
+
+    //游客可以看到所有正在投放的列表
+    Long countVisitorVisibleByCouponType(@Param("projectId") Long projectId, @Param("couponType") Byte couponType);
+    List<ShowClientVisibleLaunchCoupon> selectVisitorVisibleByCouponType(@Param("projectId") Long projectId, @Param("couponType") Byte couponType, @Param("pageUtil") PageUtil pageUtil);
 
 }

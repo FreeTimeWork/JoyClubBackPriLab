@@ -38,16 +38,6 @@ public class CardCouponOrderController {
     private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
 
     /**
-     * 免费领取
-     */
-    @GetMapping(value = "/free/receive")
-    public ResultData freeReceiveCoupon(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                        @RequestParam Long launchId){
-
-        return couponCodeService.freeReceiveCoupon(clientTokenService.getIdOrThrow(token), launchId);
-    }
-
-    /**
      * 微信下单,
      * 如果需要支付金钱，返回微信支付参数
      * 如果不需要，扣分后直接返回，

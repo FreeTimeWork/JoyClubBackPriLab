@@ -1,5 +1,6 @@
 package com.joycity.joyclub.card_coupon.util;
 
+import com.joycity.joyclub.commons.utils.MD5Util;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Random;
@@ -28,6 +29,6 @@ public class RandomUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(RandomStringUtils.random(12, "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"));
+//        System.out.println(RandomStringUtils.random(24, "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"));
     }
 }

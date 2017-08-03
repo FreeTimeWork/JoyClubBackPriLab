@@ -154,14 +154,14 @@ public class CardPosServiceImpl implements CardPosService {
         Long posSaleDetailId = createPosSaleDetail(shop.getId(), orderCode, clientId, payable, payment);
 
         //条件发放卡券业务
-        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(new Date(), clientId);
+        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(shop.getId(), new Date(), clientId);
         //如果该订单在条件投放期间
         if (info != null) {
             int receiveNum = receiveCashCouponNum(info, clientId);
             CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
             if (receiveNum > 0) {
                 //发卡
-                for (int i= 0 ; i <= receiveNum ; i++) {
+                for (int i= 0 ; i < receiveNum ; i++) {
                     boolean result = couponCodeCache.sendCouponCode(info.getLaunchId());
                     if (result) {
                         cardCouponCodeService.sendCouponCode(clientId, info.getLaunchId(), launch.getCouponId());
@@ -274,7 +274,7 @@ public class CardPosServiceImpl implements CardPosService {
             info.setRefundType(RefundType.FORBIT_REFUND);
             return info;
         }
-        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(detail.getCreateTime(), detail.getClientId());
+        CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(detail.getShopId(), detail.getCreateTime(), detail.getClientId());
         //订单不再投放期间内可以退款
         if (info == null) {
             //如果该订单关联了卡券，只能全单退款
@@ -286,16 +286,18 @@ public class CardPosServiceImpl implements CardPosService {
             }
             return info;
         }
+        info.setRefundType(RefundType.PREMIT_REFUND);
         info.setDetail(detail);
         return info;
     }
 
     /**
-     * 返回一个用户在一个投放期间，已使用代金券的和未使用代金券的数量，期间所有订单的总额,还有卡券的信息
+     *
+     * 返回一个用户在一个投放期间，订单的商户要在商户触发范围内，已使用代金券的和未使用代金券的数量，期间所有订单的总额,还有卡券的信息
      */
 
-    private CouponLaunchBetweenInfo clientCouponNumAndSumPaidInfo(Date date, Long clientId) {
-        CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectInfoFromLaunchBetween(date);
+    private CouponLaunchBetweenInfo clientCouponNumAndSumPaidInfo(Long shopId,Date date, Long clientId) {
+        CouponLaunchBetweenInfo info = cardCouponCodeMapper.selectInfoFromLaunchBetween(shopId, date);
         if (info == null) {
             return null;
         }

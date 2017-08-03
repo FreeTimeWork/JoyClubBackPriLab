@@ -576,6 +576,66 @@ public class CardCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andDisplayWeightIsNull() {
+            addCriterion("display_weight is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightIsNotNull() {
+            addCriterion("display_weight is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightEqualTo(Integer value) {
+            addCriterion("display_weight =", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightNotEqualTo(Integer value) {
+            addCriterion("display_weight <>", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightGreaterThan(Integer value) {
+            addCriterion("display_weight >", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightGreaterThanOrEqualTo(Integer value) {
+            addCriterion("display_weight >=", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightLessThan(Integer value) {
+            addCriterion("display_weight <", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightLessThanOrEqualTo(Integer value) {
+            addCriterion("display_weight <=", value, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightIn(List<Integer> values) {
+            addCriterion("display_weight in", values, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightNotIn(List<Integer> values) {
+            addCriterion("display_weight not in", values, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightBetween(Integer value1, Integer value2) {
+            addCriterion("display_weight between", value1, value2, "displayWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayWeightNotBetween(Integer value1, Integer value2) {
+            addCriterion("display_weight not between", value1, value2, "displayWeight");
+            return (Criteria) this;
+        }
+
         public Criteria andSysgenFlagIsNull() {
             addCriterion("sysgen_flag is null");
             return (Criteria) this;

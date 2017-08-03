@@ -17,6 +17,7 @@ import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponTriggerScopeMapper;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
+import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponTriggerScope;
@@ -67,7 +68,6 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
                 throw new BusinessException(LAUNCH_ERROR, "代金券只能选择条件投放");
             }
         }
-        launch.setRemainNum(launch.getLaunchNum());
         launchMapper.insertSelective(launch);
         if (CollectionUtils.isNotEmpty(launch.getTriggerScopeIds())) {
             CardCouponTriggerScope triggerScope = new CardCouponTriggerScope();
@@ -202,6 +202,36 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以删除");
         }
         return new ResultData(new UpdateResult(launchMapper.deleteCardCouponLaunchById(id)));
+    }
+
+    @Override
+    public ResultData getClientVisibleListByCouponType(Long projectId, Long clientId, Byte couponType, PageUtil pageUtil) {
+        return new AbstractGetListData<ShowClientVisibleLaunchCoupon>() {
+            @Override
+            public Long countByFilter() {
+                return launchMapper.countClientVisibleByCouponType(projectId,clientId,couponType);
+            }
+
+            @Override
+            public List<ShowClientVisibleLaunchCoupon> selectByFilter() {
+                return launchMapper.selectClientVisibleByCouponType(projectId, clientId, couponType, pageUtil);
+            }
+        }.getList(pageUtil);
+    }
+
+    @Override
+    public ResultData getVisitorVisibleListByCouponType(Long projectId, Byte couponType, PageUtil pageUtil) {
+        return new AbstractGetListData<ShowClientVisibleLaunchCoupon>() {
+            @Override
+            public Long countByFilter() {
+                return launchMapper.countVisitorVisibleByCouponType(projectId,couponType);
+            }
+
+            @Override
+            public List<ShowClientVisibleLaunchCoupon> selectByFilter() {
+                return launchMapper.selectVisitorVisibleByCouponType(projectId, couponType, pageUtil);
+            }
+        }.getList(pageUtil);
     }
 
     private void checkLaunchNum(CardCouponLaunch launch){

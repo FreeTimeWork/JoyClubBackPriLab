@@ -38,6 +38,10 @@ public interface CardCouponLaunchService {
 
     ResultData deleteCardCouponLaunch(Long id);
 
-    //TODO: cfc 验证领取一个投放的卡券，不能大于每日领取上限
+    // -------front----------
+    // 会员展示自己可领取卡券的列表
+    ResultData getClientVisibleListByCouponType(Long projectId, Long clientId, Byte couponType, PageUtil pageUtil);
+    // 游客展示已经投放的卡券列表
+    ResultData getVisitorVisibleListByCouponType(Long projectId, Byte couponType, PageUtil pageUtil);
 
 }

@@ -816,66 +816,6 @@ public class CardCouponLaunchExample {
             return (Criteria) this;
         }
 
-        public Criteria andRemainNumIsNull() {
-            addCriterion("remain_num is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumIsNotNull() {
-            addCriterion("remain_num is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumEqualTo(Integer value) {
-            addCriterion("remain_num =", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumNotEqualTo(Integer value) {
-            addCriterion("remain_num <>", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumGreaterThan(Integer value) {
-            addCriterion("remain_num >", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("remain_num >=", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumLessThan(Integer value) {
-            addCriterion("remain_num <", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumLessThanOrEqualTo(Integer value) {
-            addCriterion("remain_num <=", value, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumIn(List<Integer> values) {
-            addCriterion("remain_num in", values, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumNotIn(List<Integer> values) {
-            addCriterion("remain_num not in", values, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumBetween(Integer value1, Integer value2) {
-            addCriterion("remain_num between", value1, value2, "remainNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemainNumNotBetween(Integer value1, Integer value2) {
-            addCriterion("remain_num not between", value1, value2, "remainNum");
-            return (Criteria) this;
-        }
-
         public Criteria andLaunchStartTimeIsNull() {
             addCriterion("launch_start_time is null");
             return (Criteria) this;

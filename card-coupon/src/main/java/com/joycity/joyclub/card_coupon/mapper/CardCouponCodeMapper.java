@@ -61,25 +61,16 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      */
     List<ShowPosCurrentCouponCodeInfo> selectCurrentCouponCode(@Param("projectId") Long projectId, @Param("shopCode") String shopCode, @Param("tel") String tel, @Param("vipCode") String vipCode);
 
-
     /**
-     * 查找未使用的卡券，在有效期内
-     *
-     * @param couponCode 卡券code
-     * @param onlySys     是否只查询系统券
-     * @return
-     */
-    CouponCodeWithCoupon selectCardCouponCodesByCodes(@Param("projectId") Long projectId, @Param("list") String couponCode, @Param("shopCode") String shopCode ,@Param("onlySys") boolean onlySys);
-
-    /**
-     * 在条件投放期间内，卡券的基本信息
+     * 在条件投放期间内，在触发的商户范围内,卡券的基本信息
      */
     @Select(
             " SELECT ccl.id as launch_id, ccl.condition_amount, ccl.max_receive, cc.subtract_amount   " +
             " FROM card_coupon_launch ccl" +
             " inner join card_coupon cc on cc.id = ccl.coupon_id and cc.type != 3 and cc.delete_flag = 0 " +
-            " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.forbid_flag = 0 and ccl.review_status = 1 and ccl.delete_flag = 0")
-    CouponLaunchBetweenInfo selectInfoFromLaunchBetween(@Param("now") Date now);
+            " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id "+
+            " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccts.store_id = #{shopId} and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.forbid_flag = 0 and ccl.review_status = 1 and ccl.delete_flag = 0")
+    CouponLaunchBetweenInfo selectInfoFromLaunchBetween(@Param("shopId")Long shopId,@Param("now") Date now);
 
     /**
      * 在条件投放的期间内，该会员 已使用卡券的数量和未使用卡券的数量
@@ -96,16 +87,19 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<Long> selectNotUsedCashCouponCodeIdFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId, @Param("num") Integer num);
 
     /**
-     * 在条件投放的期间内,该会员，所有订单的最终实际付款总额
+     * 在条件投放的期间内，触发的店铺范围内,该会员，所有订单的最终实际付款总额
      * @return
      */
-    @Select("SELECT sum(psd.balance) " +
-            "FROM pos_sale_detail psd " +
-            "INNER JOIN ( " +
-            "   SELECT launch_start_time, launch_end_time FROM card_coupon_launch WHERE #{now} > launch_start_time AND #{now} < launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0" +
-            ") launch_time ON psd.create_time > launch_time.launch_start_time " +
-            "AND psd.create_time < launch_time.launch_end_time" +
-            " where psd.client_id = #{clientId} and psd.delete_flag = 0")
+    @Select("SELECT	sum(psd.balance) FROM	pos_sale_detail psd"+
+            "INNER JOIN ("+
+            "       SELECT id,launch_start_time,launch_end_time	FROM card_coupon_launch"+
+            "       WHERE"+
+            "        #{now} > launch_start_time AND #{now} < launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0"+
+            "        ) launch_time ON psd.create_time > launch_time.launch_start_time"+
+            "AND psd.create_time < launch_time.launch_end_time"+
+            "INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id"+
+            "        WHERE"+
+            "psd.client_id = #{clientId} AND ccts.store_id = psd.shop_id and psd.delete_flag = 0")
     BigDecimal selectSumPaidFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId);
 
     /**
