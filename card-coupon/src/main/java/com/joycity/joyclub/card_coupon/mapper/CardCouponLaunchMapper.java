@@ -3,10 +3,7 @@ package com.joycity.joyclub.card_coupon.mapper;
 import java.util.Date;
 import java.util.List;
 
-import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
-import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
-import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
-import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
+import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunchExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
@@ -56,6 +53,11 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
      */
     @Select("SELECT ccl.launch_num - count(ccc.id) FROM card_coupon_launch ccl INNER JOIN card_coupon_code ccc ON ccc.launch_id = ccl.id and ccc.delete_flag = 0 WHERE ccl.id = #{id} and ccl.delete_flag = 0")
     int selectInventoryNumById(@Param("id") Long id);
+
+    //投放-商户承担金额列表页
+    List<ShowShopRatio> selectShopRatioByLaunchId(@Param("launchId") Long launchId,@Param("shopName") String shopName, @Param("pageUtil") PageUtil pageUtil);
+    Long countShopRatioByLaunchId(@Param("launchId") Long launchId,@Param("shopName") String shopName);
+
 
 
     // --------------------前段------------------------

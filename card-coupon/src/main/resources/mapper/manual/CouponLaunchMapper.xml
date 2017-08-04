@@ -155,6 +155,54 @@
         WHERE ccl.id = #{id} AND ccl.delete_flag = 0
     </select>
 
+    <!-- 投放-商户承担金额列表页 -->
+
+    <select id="selectShopRatioByLaunchId" resultType="com.joycity.joyclub.card_coupon.modal.ShowShopRatio">
+        select
+        <include refid="CardCouponLaunchColumn"/>,
+        ss.name AS shop_name, ccss.ratio,
+        count(DISTINCT psd.client_id) AS effective_client_num,
+        count(ccc.id) AS effective_coupon_num,
+        count(ccc.id) * cc.subtract_amount * ccss.ratio AS shop_ratio_amount,
+        (count(ccc.id) * cc.subtract_amount) - (count(ccc.id) * cc.subtract_amount * ccss.ratio) AS landlord_ratio_amount
+        from card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        INNER JOIN card_coupon_code ccc ON ccc.launch_id = ccl.id AND ccc.delete_flag = 0 AND ccc.use_status = 2
+        INNER JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id AND ccss.delete_flag = 0
+        INNER JOIN pos_sale_detail psd ON psd.shop_id = ccss.store_id AND psd.order_code = ccc.order_code
+        INNER JOIN sys_shop ss ON ss.id = psd.shop_id AND ss.delete_flag = 0
+        WHERE ccl.id = #{launchId}
+        <if test="shopName != null">
+            AND cc.name LIKE #{shopName}
+        </if>
+        AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.review_status = 1 AND ccl.delete_flag = 0
+        GROUP BY psd.shop_id
+        ORDER BY count(ccc.id) DESC
+        <include refid="limit"/>
+    </select>
+
+    <select id="countShopRatioByLaunchId" resultType="long">
+
+        SELECT
+        count(*)
+        FROM (
+            select
+            ccl.id
+            from card_coupon_launch ccl
+            INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+            INNER JOIN card_coupon_code ccc ON ccc.launch_id = ccl.id AND ccc.delete_flag = 0 AND ccc.use_status = 2
+            INNER JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id AND ccss.delete_flag = 0
+            INNER JOIN pos_sale_detail psd ON psd.shop_id = ccss.store_id AND psd.order_code = ccc.order_code
+            INNER JOIN sys_shop ss ON ss.id = psd.shop_id AND ss.delete_flag = 0
+            WHERE ccl.id = #{launchId}
+            <if test="shopName != null">
+                AND cc.name LIKE #{shopName}
+            </if>
+            AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.review_status = 1 AND ccl.delete_flag = 0
+            GROUP BY psd.shop_id
+        ) temp
+    </select>
+
     <!-- front展示 用户-当前可领取列表 -->
     <select id="selectClientVisibleByCouponType" resultType="com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon">
         select
