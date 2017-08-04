@@ -17,4 +17,8 @@ public class UserType {
      * 商户账户
      */
     public static final  int USER_TYPE_STORE = 3;
+    /**
+     * 第三方商户账户
+     */
+    public static final  int USER_TYPE_THIRD_PARTY_SHOP = 4;
 }

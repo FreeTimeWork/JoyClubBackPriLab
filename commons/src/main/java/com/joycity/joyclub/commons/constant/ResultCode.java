@@ -74,4 +74,20 @@ public class ResultCode {
      */
     public static final int CLIENT_TOKEN_EXPIRE = 50902;
 
+    /**
+     *  投放数量超过剩余发行量
+     */
+    public static final int LAUNCH_NUM_EXCEED_COUPON_NUM = 60000;
+    public static final int COUPON_LAUNCH_TYPE_ERROR = 60001;
+    public static final int EXIST_LAUNCH  = 60002;
+    /**
+     * 投放类的错误
+     */
+    public static final int LAUNCH_ERROR  = 60003;
+
+
+    public static final int FORBID_REFUND  = 60100;
+    public static final int ORDER_NOT_FIND  = 60101;
+
+
 }

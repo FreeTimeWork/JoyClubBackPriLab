@@ -22,6 +22,7 @@
         <module>recharge</module>
         <module>client-token</module>
         <module>title_carousel</module>
+        <module>card-coupon</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

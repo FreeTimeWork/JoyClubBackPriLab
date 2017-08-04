@@ -1,9 +1,9 @@
 package com.joycity.joyclub.commons.exception;
 
-import com.joycity.joyclub.commons.constant.ResultCode;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.joycity.joyclub.commons.constant.ResultCode;
 
 
 /**
@@ -16,7 +16,7 @@ public class BusinessException extends BaseBusinessException {
     static {
         map.put(ResultCode.SUCCESS, "请求成功");
         map.put(ResultCode.ERR_EXPORT_EXCEL, "导出excel失败");
-        map.put(ResultCode.ERR_EXPORT_EXCEL, "导出excel失败");
+        map.put(ResultCode.ERR_IMPORT_EXCEL, "导入excel失败");
         map.put(ResultCode.LOGIN_ERROR, "登陆失败");
         map.put(ResultCode.UPLOAD_ERROR, "上传失败");
         map.put(ResultCode.USER_SESSION_NULL, "用户未登录或者登陆过期，请重新登陆");
@@ -36,6 +36,12 @@ public class BusinessException extends BaseBusinessException {
 
         map.put(ResultCode.CLIENT_TOKEN_NULL, "会话已过期，请重新登陆");
         map.put(ResultCode.CLIENT_TOKEN_EXPIRE, "会话已过期，请重新登陆");
+        map.put(ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
+        map.put(ResultCode.COUPON_LAUNCH_TYPE_ERROR, "投放类型错误");
+        map.put(ResultCode.EXIST_LAUNCH, "该券存在投放");
+        map.put(ResultCode.FORBID_REFUND, "该订单不能退货");
+        map.put(ResultCode.ORDER_NOT_FIND, "订单不存在");
+
 
     }
 

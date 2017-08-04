@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.ShopMapper">
+
+    <sql id="limit">
+        limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+
+    <sql id="code_And_sub_commercial">
+        delete_flag = 0
+
+        <if test="code != null">
+            AND project_id = #{projectId}
+        </if>
+        <if test="code != null">
+            AND code = #{code}
+        </if>
+        <if test="name != null">
+            AND name LIKE #{name}
+        </if>
+    </sql>
+
+    <resultMap id="SubCommercialShopInfo" type="com.joycity.joyclub.card_coupon.modal.SubCommercialShopInfo">
+        <result column="sub_commercial_type_name" jdbcType="VARCHAR" property="subCommercialTypeName" />
+
+        <collection property="sysShops" resultMap="BaseResultMap" columnPrefix="s_"/>
+    </resultMap>
+
+    <select id="selectShopByCodeAndSubCommercial" resultMap="BaseResultMap">
+        SELECT
+        id, project_id, code, name, logo, shop_type, commercial_type_id, sub_commercial_type_name, floor_id,
+        floor_name, door_no, create_time, last_update, delete_flag, delete_time
+        FROM sys_shop
+        <where>
+            <include refid="code_And_sub_commercial"/>
+        </where>
+        ORDER BY create_time DESC
+        <include refid="limit"/>
+    </select>
+
+    <select id="countShopByCodeAndSubCommercial" parameterType="map" resultType="java.lang.Long">
+        SELECT count(*) FROM sys_shop
+        <where>
+            <include refid="code_And_sub_commercial"/>
+        </where>
+    </select>
+
+    <select id="selectShopGroupBySubCommercial" resultMap="SubCommercialShopInfo">
+        SELECT s1.sub_commercial_type_name
+        , s1.code AS s_code, s1.name AS s_name, s1.logo AS s_logo, s1.shop_type AS s_shop_type
+        , s1.commercial_type_id AS s_commercial_type_id, s1.sub_commercial_type_name AS s_sub_commercial_type_name
+        , s1.door_no AS s_door_no, s1.floor_id AS s_floor_id, s1.floor_name AS s_floor_name
+        , s1.create_time AS s_create_time, s1.delete_flag AS s_delete_flag, s1.last_update AS s_last_update, s1.delete_time AS s_delete_time
+        FROM sys_shop s1
+        INNER JOIN sys_shop s2 ON s1.sub_commercial_type_name = s2.sub_commercial_type_name  AND  s1.code = s2.code
+        <where>
+            s1.project_id = #{projectId} AND s1.delete_flag = 0 AND s2.delete_flag = 0
+        </where>
+        ORDER BY s1.create_time DESC
+    </select>
+
+    <insert id="batchInsertShop" parameterType="map">
+        ${sql}
+    </insert>
+
+    <select id="selectShopByNameAndCode" resultType="com.joycity.joyclub.card_coupon.modal.generated.SysShop">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_shop
+        <where>
+            delete_flag = 0
+            AND project_id = #{projectId}
+            <if test="code != null">
+                AND code LIKE #{code}
+            </if>
+            <if test="name != null">
+                AND name LIKE #{name}
+            </if>
+        </where>
+         ORDER BY id DESC
+    </select>
+</mapper>

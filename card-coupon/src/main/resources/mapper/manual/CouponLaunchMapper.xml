@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper">
+    <sql id="limit">
+        limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+
+    <sql id="CardCouponLaunchColumn">
+        ccl.id , ccl.coupon_id , ccl.name , ccl.type , ccl.vip_batch, ccl.condition_amount ,
+        ccl.pay_type  , ccl.pay_amount  , ccl.launch_num  ,ccl.max_receive,
+        ccl.remain_num  , ccl.launch_start_time  , ccl.launch_end_time  ,
+        ccl.effective_start_time  , ccl.effective_end_time,ccl.review_status  ,
+        ccl.review_info  , ccl.confirm_flag  , ccl.forbid_flag  , ccl.confirm_time  ,
+        ccl.forbid_time  , ccl.last_update  , ccl.delete_flag  , ccl.delete_time
+    </sql>
+    <sql id="status">
+        CASE
+        WHEN ccl.review_status = 3 THEN 0
+        WHEN ccl.review_status = 0 THEN 1
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 0 THEN 2
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND now() <![CDATA[ <= ]]> ccl.launch_start_time THEN 3
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_start_time
+                AND now() <![CDATA[ < ]]> ccl.launch_end_time    THEN 4
+        WHEN ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_end_time    THEN 5
+        WHEN ccl.forbid_flag = 1 THEN 6
+        END AS status
+    </sql>
+
+    <sql id="name_type_status">
+        ccl.delete_flag = 0
+        <if test="couponName != null">
+            AND cc.name LIKE #{couponName}
+        </if>
+        <if test="couponType != null">
+            AND cc.type = #{couponType}
+        </if>
+        <if test="name != null">
+            AND ccl.name LIKE #{name}
+        </if>
+        <if test="type != null">
+            AND ccl.type = #{type}
+        </if>
+        -- 投放状态，0.审核未通过 1. 未审核，2 未投放，3 未开始，4 投放中，5 投放已过期，6 投放已中止
+        <if test="status != null ">
+
+            <if test="status == 0">
+                AND ccl.review_status = 3
+            </if>
+            <if test="status == 1">
+                AND ccl.review_status = 0
+            </if>
+            <if test="status == 2">
+                AND ccl.review_status = 1
+                AND ccl.confirm_flag = 0
+            </if>
+            <if test="status == 3">
+                AND ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND now() <![CDATA[ <= ]]> ccl.launch_start_time
+            </if>
+            <if test="status == 4">
+                AND ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_start_time
+                AND now() <![CDATA[ < ]]> ccl.launch_end_time
+            </if>
+            <if test="status == 5">
+                AND ccl.review_status = 1
+                AND ccl.confirm_flag = 1
+                AND ccl.forbid_flag = 0
+                AND now() <![CDATA[ > ]]> ccl.launch_end_time
+            </if>
+            <if test="status == 6">
+                AND ccl.forbid_flag = 1
+            </if>
+        </if>
+    </sql>
+
+
+    <select id="countByCouponNameAndCouponTypeAndStatus" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        <where>
+            <include refid="name_type_status"/>
+        </where>
+    </select>
+
+    <select id="selectByCouponNameAndCouponTypeAndStatus" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo">
+        SELECT
+            <include refid="CardCouponLaunchColumn"/>,
+            <include refid="status"/>,
+            cc.name AS coupon_name, cc.type AS coupon_type
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        <where>
+            <include refid="name_type_status"/>
+        </where>
+        ORDER BY ccl.create_time DESC
+        <include refid="limit"/>
+    </select>
+
+    <select id="selectLaunchWithCouponByCouponId" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCouponInfo">
+        SELECT
+        <include refid="CardCouponLaunchColumn"/>,
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.batch, cc.thirdparty_shop_id
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        WHERE ccl.coupon_id = #{couponId} AND ccl.delete_flag = 0
+    </select>
+
+    <resultMap id="CouponTriggerScopeWithShop" type="com.joycity.joyclub.card_coupon.modal.CouponTriggerScopeWithShop"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponTriggerScopeMapper.BaseResultMap">
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="sub_commercial_type_name" jdbcType="VARCHAR" property="subCommercialTypeName"/>
+    </resultMap>
+
+    <resultMap id="CreateCouponLaunchInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo" extends="BaseResultMap">
+        <result column="coupon_name" jdbcType="VARCHAR" property="couponName"/>
+        <collection property="couponTriggerScopes" resultMap="CouponTriggerScopeWithShop" columnPrefix="ccts_"/>
+    </resultMap>
+
+    <select id="selectCouponLaunchInfoById" resultMap="CreateCouponLaunchInfo">
+        SELECT
+        <include refid="CardCouponLaunchColumn"/>,
+        <include refid="status"/>,
+        cc.name AS coupon_name, ss.id AS ccts_store_id, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id AND ccts.delete_flag = 0
+        LEFT JOIN sys_shop ss ON ss.id = ccts.store_id AND ss.delete_flag = 0
+        WHERE ccl.id = #{id} AND ccl.delete_flag = 0
+    </select>
+</mapper>

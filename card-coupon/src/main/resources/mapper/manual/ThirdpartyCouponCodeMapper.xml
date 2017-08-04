@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardThirdpartyCouponCodeMapper">
+
+  <insert id="batchInsertCardThirdpartyCouponCode" parameterType="map">
+    ${sql}
+  </insert>
+
+  <resultMap id="Codes" type="string" >
+    <result column="code" jdbcType="VARCHAR" property="code"/>
+  </resultMap>
+
+  <resultMap id="ThirdpartyCouponCodeGroupByBatch" type="com.joycity.joyclub.card_coupon.modal.ThirdpartyCouponCodeGroupByBatch">
+    <result column="batch" jdbcType="VARCHAR" property="batch"/>
+    <collection property="codes" resultMap="Codes" columnPrefix="ctcc_"/>
+  </resultMap>
+
+  <select id="selectGroupByBatch" resultMap="ThirdpartyCouponCodeGroupByBatch">
+    SELECT ctcc1.batch, ctcc1.code AS ctcc_code
+    FROM `card_thirdparty_coupon_code` ctcc1
+    INNER JOIN `card_thirdparty_coupon_code` ctcc2 ON ctcc1.id = ctcc2.id
+  </select>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper">
+    <sql id="limit">
+        limit #{pageUtil.offset},#{pageUtil.pageSize}
+    </sql>
+
+    <sql id="CardCouponColumn">
+        cc.id, cc.project_id, cc.name, cc.type, cc.batch, cc.thirdparty_shop_id, cc.sysgen_flag, cc.portrait, cc.num, cc.amount, cc.subtract_amount,
+        cc.support_refund_flag, cc.info, cc.create_time, cc.last_update, cc.delete_flag, cc.delete_time
+    </sql>
+
+    <sql id="CardCouponLaunchColumn">
+        ccl.id AS ccl_id, ccl.coupon_id AS ccl_coupon_id, ccl.name AS ccl_name, ccl.type AS ccl_type, ccl.condition_amount AS ccl_condition_amount,
+        ccl.pay_type AS ccl_pay_type, ccl.pay_amount AS ccl_pay_type, ccl.launch_num AS ccl_launch_num, ccl.max_receive AS ccl_max_receive,
+        ccl.remain_num AS ccl_remain_num, ccl.launch_start_time AS ccl_launch_start_time, ccl.launch_end_time AS ccl_launch_end_time,
+        ccl.effective_start_time AS ccl_effective_start_time, ccl.effective_end_time,ccl.review_status AS ccl_review_status,
+        ccl.review_info AS ccl_review_info, ccl.confirm_flag AS ccl_confirm_flag, ccl.forbid_flag AS ccl_forbid_flag, ccl.confirm_time AS ccl_confirm_time,
+        ccl.forbid_time AS ccl_forbid_time, ccl.last_update AS ccl_last_update, ccl.delete_flag AS ccl_delete_flag, ccl.delete_time AS ccl_delete_time
+    </sql>
+    <sql id="name_and_type">
+            cc.delete_flag = 0 AND cc.project_id = #{projectId}
+        <if test="name != null">
+            AND cc.name LIKE #{name}
+        </if>
+        <if test="type != null">
+            AND cc.type = #{type}
+        </if>
+    </sql>
+
+<!--    <resultMap
+            id="CardCouponLaunch"
+            type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch"
+            extends="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper.BaseResultMap">
+    </resultMap>-->
+
+    <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper.BaseResultMap">
+
+        <result column="thirdparty_shop_name" jdbcType="VARCHAR" property="thirdpartyShopName"/>
+        <result column="sum_launch_num" property="sumLaunchNum"/>
+        <result column="available_num" property="availableNum"/>
+    </resultMap>
+
+    <select id="countCardCouponByNameAndType" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM (
+        SELECT *
+        FROM card_coupon
+        WHERE delete_flag = 0
+        ORDER BY create_time DESC
+        ) cc
+        LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1
+        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        <where>
+            <include refid="name_and_type"/>
+        </where>
+    </select>
+
+    <select id="selectCardCouponByNameAndType" resultMap="ShowCouponInfo">
+        SELECT
+            <include refid="CardCouponColumn"/>,
+        SUM(launch_num) AS sum_launch_num, cts.name AS thirdparty_shop_name,
+        CASE WHEN  !ISNULL(SUM(ccl.launch_num)) THEN cc.num - SUM(ccl.launch_num) END AS available_num
+        FROM (
+            SELECT *
+            FROM card_coupon
+            WHERE delete_flag = 0
+            ORDER BY create_time DESC
+            <include refid="limit"/>
+        ) cc
+        LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1
+        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        <where>
+            <include refid="name_and_type"/>
+        </where>
+        GROUP BY cc.id
+    </select>
+
+    <resultMap id="CouponStoreScopeWithShop" type="com.joycity.joyclub.card_coupon.modal.CouponStoreScopeWithShop"
+               extends="com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper.BaseResultMap">
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="sub_commercial_type_name" jdbcType="VARCHAR" property="subCommercialTypeName"/>
+    </resultMap>
+
+    <resultMap id="VipScopes" type="string" >
+        <result column="vip_type" jdbcType="VARCHAR" property="vipType"/>
+    </resultMap>
+    <resultMap id="CreateCouponInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponInfo" extends="BaseResultMap">
+        <result column="thirdparty_shop_name" jdbcType="VARCHAR" property="thirdpartyShopName"/>
+        <collection property="storeScopes" resultMap="CouponStoreScopeWithShop" columnPrefix="ccss_"/>
+        <collection property="vipScopes" resultMap="VipScopes"  columnPrefix="ccvs_"/>
+    </resultMap>
+
+    <select id="selectCardCouponById" resultMap="CreateCouponInfo" >
+        SELECT
+        <include refid="CardCouponColumn"/>,
+        ccss.store_id AS ccss_store_id, ccss.ratio AS ccss_ratio, ccvs.vip_type AS ccvs_vip_type,
+        ss.name AS ccss_shop_name, ss.sub_commercial_type_name AS ccss_sub_commercial_type_name,
+        cts.name AS thirdparty_shop_name
+        FROM card_coupon cc
+        LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id AND ccss.delete_flag = 0
+        LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id AND ccvs.delete_flag = 0
+        LEFT JOIN sys_shop ss ON ss.id = ccss.store_id AND ss.delete_flag = 0
+        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        WHERE cc.id = #{id}  AND cc.delete_flag = 0
+    </select>
+
+</mapper>

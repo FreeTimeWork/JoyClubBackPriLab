@@ -2,14 +2,16 @@ package com.joycity.joyclub.apiback.controller;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
-import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.apiback.modal.vo.title_carousel.SearchActTitleCarouselsVO;
+import com.joycity.joyclub.apiback.modal.vo.title_carousel.SearchProductTitleCarouselsVO;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.title_carousel.modal.generated.SaleTitleCarousel;
-import com.joycity.joyclub.title_carousel.service.TitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
+import com.joycity.joyclub.title_carousel.service.ProductTitleCarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,23 +24,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class TitleCarouselController extends BaseUserSessionController {
 
     @Autowired
-    private TitleCarouselService titleCarouselService;
+    private ProductTitleCarouselService productTitleCarouselService;
+    @Autowired
+    private ActTitleCarouselService actTitleCarouselService;
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.POST)
-    public ResultData updateTitleCarousel(List<SaleTitleCarousel> titleCarousels, HttpSession session) {
+    public ResultData updateProductTitleCarousel(@RequestBody SearchProductTitleCarouselsVO vo, HttpSession session) {
         checkProjectUser(session);
-        return titleCarouselService.updateTitleCarousel(titleCarousels);
-    }
-
-    @RequestMapping(value = "/system/product/carousel", method = RequestMethod.POST)
-    public ResultData createTitleCarousel(SaleTitleCarousel titleCarousel, HttpSession session) {
-        checkProjectUser(session);
-        return titleCarouselService.createTitleCarousel(titleCarousel);
+        return productTitleCarouselService.updateProductTitleCarousel(vo.getTitleCarousels());
     }
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
-    public ResultData getAllTitleCarousel(HttpSession session) {
+    public ResultData getAllProductTitleCarousel(HttpSession session) {
         checkProjectUser(session);
-        return titleCarouselService.getAllTitleCarousel();
+        return productTitleCarouselService.getAllProductTitleCarousel();
+    }
+
+    @RequestMapping(value = "/system/act/carousels", method = RequestMethod.POST)
+    public ResultData updateActTitleCarousel(@RequestBody SearchActTitleCarouselsVO vo, HttpSession session) {
+        checkProjectUser(session);
+        return actTitleCarouselService.updateActTitleCarousel(vo.getTitleCarousels());
+    }
+
+    @RequestMapping(value = "/system/act/carousels", method = RequestMethod.GET)
+    public ResultData getAllActTitleCarousel(HttpSession session) {
+        checkProjectUser(session);
+        return actTitleCarouselService.getAllActTitleCarousel();
     }
 }
