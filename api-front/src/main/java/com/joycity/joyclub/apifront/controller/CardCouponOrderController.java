@@ -62,7 +62,7 @@ public class CardCouponOrderController {
     }
 
     /**
-     * 微信一个回调
+     * 微信回调
      *
      * @param request
      * @param response
@@ -95,7 +95,7 @@ public class CardCouponOrderController {
     }
 
     /**
-     * 活动和商品订单使用一个回调
+     * ali回调
      *
      * @param request
      * @param response

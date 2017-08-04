@@ -90,16 +90,16 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      * 在条件投放的期间内，触发的店铺范围内,该会员，所有订单的最终实际付款总额
      * @return
      */
-    @Select("SELECT	sum(psd.balance) FROM	pos_sale_detail psd"+
-            "INNER JOIN ("+
+    @Select(" SELECT	sum(psd.balance) FROM	pos_sale_detail psd"+
+            " INNER JOIN ("+
             "       SELECT id,launch_start_time,launch_end_time	FROM card_coupon_launch"+
             "       WHERE"+
             "        #{now} > launch_start_time AND #{now} < launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0"+
             "        ) launch_time ON psd.create_time > launch_time.launch_start_time"+
-            "AND psd.create_time < launch_time.launch_end_time"+
-            "INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id"+
-            "        WHERE"+
-            "psd.client_id = #{clientId} AND ccts.store_id = psd.shop_id and psd.delete_flag = 0")
+            " AND psd.create_time < launch_time.launch_end_time"+
+            " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id"+
+            "        WHERE "+
+            " psd.client_id = #{clientId} AND ccts.store_id = psd.shop_id and psd.delete_flag = 0")
     BigDecimal selectSumPaidFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId);
 
     /**

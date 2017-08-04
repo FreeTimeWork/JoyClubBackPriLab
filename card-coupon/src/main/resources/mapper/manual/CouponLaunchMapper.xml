@@ -172,18 +172,18 @@
         ) ccc ON ccc.launch_id = ccl.id
         WHERE
         c.id = #{clientId} AND cc.project_id = #{projectId}
-        <if test="countType != null">
+        <if test="couponType != null">
             AND cc.type = #{couponType}
         </if>
         AND now() <![CDATA[ > ]]> ccl.launch_start_time
         AND now() <![CDATA[ < ]]> ccl.launch_end_time
         AND ccl.type = 2
-        AND ccl.review_status = 1 AND ccl.confirm_flag = 0 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+        AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
         ORDER BY cc.display_weight DESC, ccl.create_time DESC
         <include refid="limit"/>
     </select>
 
-    <select id="countClientVisibleByCouponType" resultType="com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon">
+    <select id="countClientVisibleByCouponType" resultType="long">
         select
         COUNT(*)
         from card_coupon_launch ccl
@@ -196,19 +196,19 @@
         ) ccc ON ccc.launch_id = ccl.id
         WHERE
         c.id = #{clientId} AND cc.project_id = #{projectId}
-        <if test="countType != null">
+        <if test="couponType != null">
         AND cc.type = #{couponType}
         </if>
         AND now() <![CDATA[ > ]]> ccl.launch_start_time
         AND now() <![CDATA[ < ]]> ccl.launch_end_time
         AND ccl.type = 2
-        AND ccl.review_status = 1 AND ccl.confirm_flag = 0 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+        AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
     </select>
 
 <!--  游客可见  -->
     <select id="selectVisitorVisibleByCouponType" resultType="com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon">
         select
-        <include refid="receiveStatus"/>,
+        0 AS receive_status,
         <include refid="CardCouponLaunchColumn"/>,
         ccl.launch_num - IFNULL(ccc.receive_num,0) AS remain_num,
         cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait, cc.info, cc.amount, cc.subtract_amount
@@ -218,20 +218,21 @@
         (
         select id, launch_id, count(*) AS receive_num from card_coupon_code WHERE delete_flag = 0 GROUP BY launch_id
         ) ccc ON ccc.launch_id = ccl.id
-        WHERE
-        cc.project_id = #{projectId}
-        AND now() <![CDATA[ > ]]> ccl.launch_start_time
-        AND now() <![CDATA[ < ]]> ccl.launch_end_time
-        <if test="countType != null">
-            AND cc.type = #{couponType}
-        </if>
-        AND ccl.type = 2
-        AND ccl.review_status = 1 AND ccl.confirm_flag = 0 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+        where
+            cc.project_id = #{projectId}
+            AND now() <![CDATA[ > ]]> ccl.launch_start_time
+            AND now() <![CDATA[ < ]]> ccl.launch_end_time
+            <if test="couponType != null">
+                AND cc.type = #{couponType}
+            </if>
+            AND ccl.type = 2
+            AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+
         ORDER BY cc.display_weight DESC, ccl.create_time DESC
         <include refid="limit"/>
     </select>
 
-    <select id="countVisitorVisibleByCouponType" resultType="com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon">
+    <select id="countVisitorVisibleByCouponType" resultType="long">
         select
         COUNT(*)
         from card_coupon_launch ccl
@@ -240,14 +241,15 @@
         (
         select id, launch_id, count(*) AS receive_num from card_coupon_code WHERE delete_flag = 0 GROUP BY launch_id
         ) ccc ON ccc.launch_id = ccl.id
-        WHERE
-        cc.project_id = #{projectId}
-        AND now() <![CDATA[ > ]]> ccl.launch_start_time
-        AND now() <![CDATA[ < ]]> ccl.launch_end_time
-        <if test="countType != null">
-            AND cc.type = #{couponType}
-        </if>
-        AND ccl.type = 2
-        AND ccl.review_status = 1 AND ccl.confirm_flag = 0 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+        where
+            cc.project_id = #{projectId}
+            AND now() <![CDATA[ > ]]> ccl.launch_start_time
+            AND now() <![CDATA[ < ]]> ccl.launch_end_time
+            <if test="couponType != null">
+                AND cc.type = #{couponType}
+            </if>
+            AND ccl.type = 2
+            AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
+
     </select>
 </mapper>

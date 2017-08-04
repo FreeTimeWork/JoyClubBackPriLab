@@ -21,7 +21,7 @@ public interface CardCouponCodeService {
 
     /**
      * 纯发卡业务，里面没有cache发卡。
-     * 注：调用此方法，必须先前通过cache发卡，以为方法内集成清楚cache库存的操作
+     * 注：调用此方法，必须先前通过cache发卡，因为方法内集成清除cache库存的操作
      *  @param clientId
      * @param launchId
      */

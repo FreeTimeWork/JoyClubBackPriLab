@@ -24,6 +24,7 @@ public class CardCouponFrontController {
     private CardCouponLaunchService launchService;
     @Autowired
     private CardCouponCodeService couponCodeService;
+
     /**
      * 某个项目中，某个会员能领取的卡券
      * 按权重，卡券投放时间倒序
@@ -32,11 +33,12 @@ public class CardCouponFrontController {
      */
     @GetMapping(value = "/launches")
     public ResultData getCouponsClientCanReceive(
-            @CookieValue(name = Global.COOKIE_TOKEN) String token,
+            @CookieValue(name = Global.COOKIE_TOKEN, required = false) String token,
             @RequestParam Long projectId,
-            @RequestParam Byte couponType,
+            @RequestParam(required = false) Byte couponType,
             PageUtil pageUtil) {
-        Long clientId  = clientTokenService.getId(token);
+
+        Long clientId = token == null ? null : clientTokenService.getId(token);
         if (clientId == null) {
             return launchService.getVisitorVisibleListByCouponType(projectId, couponType, pageUtil);
         } else {
