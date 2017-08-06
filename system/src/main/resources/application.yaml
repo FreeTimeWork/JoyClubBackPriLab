@@ -82,13 +82,24 @@ mallcoo:
   url:
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
     getInfoByToken: https://openapi10.mallcoo.cn/User/BaseInfo/v1/Get/ByToken
+    getAdvancedInfoById:  https://openapi10.mallcoo.cn/User/AdvancedInfo/v1/Get/ByOpenUserID
     getShop: https://openapi10.mallcoo.cn/Shop/V1/GetList
-# 积分充值相关
+
 point:
+  # 积分充值相关
   recharge:
     url: http://api.madaikr.com:50080/API
     user: test
     key: 56648E20F6712C5F
+  # 积分抵现码相关
+  qrcode:
+    key: 013c5b2630558c4d
+    # POS的接口 POST,DATE格式2017-08-06 09:39:00
+    pos:
+      api:
+        data: >-
+          {"req":{"funcid":"9001","termid":"H5-001","oprtno":"JOYCITY-APP","oprtmd":"0","reqdate":"DATE"},"viptrack":"VIPCODE"}
+        url: http://111.207.146.151:18080/LayerArchitecture/winpos/uf_stservice_term?reqjson={reqjson}
 ---
 spring:
     profiles: development
