@@ -8,6 +8,7 @@ import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.mallcoo.mapper.ProjectMallcooMapper;
 import com.joycity.joyclub.mallcoo.modal.ProjectMallcoo;
 import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
 import com.joycity.joyclub.mallcoo.modal.result.data.UserSimpleInfo;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -64,6 +65,8 @@ public class MallCooServiceImpl implements MallCooService {
     private String URL_GET_TOKEN_BY_TICKET;
     @Value("${mallcoo.url.getInfoByToken}")
     private String URL_GET_INFO_BY_TOKEN;
+    @Value("${mallcoo.url.getAdvancedInfoById}")
+    private String URL_GET_ADVANCED_INFO_BY_ID;
     @Value("${mallcoo.url.getShop}")
     private String URL_GET_SHOPS;
 
@@ -72,6 +75,14 @@ public class MallCooServiceImpl implements MallCooService {
         Map<String, String> body = new HashMap<>();
         body.put("Ticket", ticket);
         return postForDataObject(projectId, URL_GET_TOKEN_BY_TICKET, body, UserSimpleInfo.class);
+    }
+
+    @Override
+    public UserAdvancedInfo getUserAdvancedInfo(Long projectId, String ticket) {
+        UserSimpleInfo simpleInfo = getUserToken(projectId,ticket);
+        Map<String, String> body = new HashMap<>();
+        body.put("OpenUserId", simpleInfo.getOpenUserId());
+        return postForDataObject(projectId, URL_GET_ADVANCED_INFO_BY_ID, body, UserAdvancedInfo.class);
     }
 
     @Override
