@@ -75,7 +75,7 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
 
         filter.setCode(code);
         filter.setTel(tel);
-        filter.setThirdPartyId(sysUser.getInfoId());
+        filter.setThirdPartyShopId(sysUser.getInfoId());
         return cardThirdCouponCodeService.getListByFilter(null, filter, pageUtil);
     }
 

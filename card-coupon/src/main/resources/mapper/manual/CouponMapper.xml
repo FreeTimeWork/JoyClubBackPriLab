@@ -28,12 +28,6 @@
         </if>
     </sql>
 
-<!--    <resultMap
-            id="CardCouponLaunch"
-            type="com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch"
-            extends="com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper.BaseResultMap">
-    </resultMap>-->
-
     <resultMap id="ShowCouponInfo" type="com.joycity.joyclub.card_coupon.modal.ShowCouponInfo"
                extends="com.joycity.joyclub.card_coupon.mapper.CardCouponMapper.BaseResultMap">
 
@@ -43,15 +37,15 @@
     </resultMap>
 
     <select id="countCardCouponByNameAndType" resultType="java.lang.Long">
-        SELECT count(*)
+        SELECT cc.count
         FROM (
-        SELECT *
+        SELECT count(*) AS count
         FROM card_coupon
         WHERE delete_flag = 0
         ORDER BY create_time DESC
         ) cc
         LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1
-        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        LEFT JOIN card_third_party_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
         <where>
             <include refid="name_and_type"/>
         </where>
@@ -70,7 +64,7 @@
             <include refid="limit"/>
         ) cc
         LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1
-        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        LEFT JOIN card_third_party_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
         <where>
             <include refid="name_and_type"/>
         </where>
@@ -102,7 +96,7 @@
         LEFT JOIN card_coupon_store_scope ccss ON ccss.coupon_id = cc.id AND ccss.delete_flag = 0
         LEFT JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id AND ccvs.delete_flag = 0
         LEFT JOIN sys_shop ss ON ss.id = ccss.store_id AND ss.delete_flag = 0
-        LEFT JOIN card_thirdparty_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
+        LEFT JOIN card_third_party_shop cts ON cts.id = cc.thirdparty_shop_id AND cts.delete_flag = 0
         WHERE cc.id = #{id}  AND cc.delete_flag = 0
     </select>
 

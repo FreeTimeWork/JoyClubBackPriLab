@@ -48,6 +48,7 @@ public class CardCouponController extends BaseUserSessionController {
         cardCoupon.setId(id);
         cardCoupon.setName(vo.getName());
         cardCoupon.setInfo(vo.getInfo());
+        cardCoupon.setDisplayWeight(vo.getDisplayWeight());
         cardCoupon.setPortrait(vo.getPortrait());
         return cardCouponService.updateCardCoupon(cardCoupon);
     }

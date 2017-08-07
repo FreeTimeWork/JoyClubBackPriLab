@@ -6,6 +6,7 @@ package com.joycity.joyclub.apiback.modal.vo.card_coupon;
 public class updateCardCouponVO {
     private String name;
     private String info;
+    private Integer displayWeight;
     private String portrait;
 
     public String getName() {
@@ -22,6 +23,14 @@ public class updateCardCouponVO {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public Integer getDisplayWeight() {
+        return displayWeight;
+    }
+
+    public void setDisplayWeight(Integer displayWeight) {
+        this.displayWeight = displayWeight;
     }
 
     public String getPortrait() {

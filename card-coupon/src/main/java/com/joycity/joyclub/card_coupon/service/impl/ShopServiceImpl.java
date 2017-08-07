@@ -162,7 +162,7 @@ public class ShopServiceImpl implements ShopService {
         if (name != null) {
             name = "%" + name + "%";
         }
-        return new ResultData(new ListResult(shopMapper.selectShopsByNameAndCode(projectId, name, code)));
+        return new ResultData(new ListResult(shopMapper.selectShopByNameAndCode(projectId, name, code)));
     }
 
     @Override
