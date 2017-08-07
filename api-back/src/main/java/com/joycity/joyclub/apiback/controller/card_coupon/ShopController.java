@@ -5,10 +5,7 @@ import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -35,7 +32,7 @@ public class ShopController extends BaseUserSessionController {
         return shopService.getShopsGroupBySubCommercial(sysUser.getInfoId());
     }
 
-    @RequestMapping(value = "/offline/shops/sync")
+    @PostMapping(value = "/offline/shops/sync")
     public ResultData syncShops(HttpSession session) {
         SysUser sysUser = checkUser(session);
         return shopService.syncMallCooShop(sysUser.getInfoId());
