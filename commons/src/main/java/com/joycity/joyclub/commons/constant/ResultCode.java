@@ -83,11 +83,11 @@ public class ResultCode {
     /**
      * 投放类的错误
      */
-    public static final int LAUNCH_ERROR  = 60003;
+    public static final int COUPON_LAUNCH_ERROR = 60003;
 
 
-    public static final int FORBID_REFUND  = 60100;
-    public static final int ORDER_NOT_FIND  = 60101;
+    public static final int COUPON_FORBID_REFUND = 60100;
+    public static final int COUPON_ORDER_NOT_FIND = 60101;
 
 
 }

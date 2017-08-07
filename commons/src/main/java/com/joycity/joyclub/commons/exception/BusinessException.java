@@ -39,8 +39,8 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM, "投放数量超过剩余发行量");
         map.put(ResultCode.COUPON_LAUNCH_TYPE_ERROR, "投放类型错误");
         map.put(ResultCode.EXIST_LAUNCH, "该券存在投放");
-        map.put(ResultCode.FORBID_REFUND, "该订单不能退货");
-        map.put(ResultCode.ORDER_NOT_FIND, "订单不存在");
+        map.put(ResultCode.COUPON_FORBID_REFUND, "该订单不能退货");
+        map.put(ResultCode.COUPON_ORDER_NOT_FIND, "订单不存在");
 
 
     }

@@ -2,7 +2,6 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
-import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.constant.RefundType;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -208,7 +206,7 @@ public class CardPosServiceImpl implements CardPosService {
 
         if (info.getRefundType() != null && info.getRefundType().equals(RefundType.FORBIT_REFUND)) {
 
-            throw new BusinessException(ResultCode.FORBID_REFUND);
+            throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
         }
         //该订单改为退货状态
         PosSaleDetail posSaleDetail = new PosSaleDetail();

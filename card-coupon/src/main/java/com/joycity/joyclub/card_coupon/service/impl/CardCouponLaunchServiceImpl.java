@@ -1,6 +1,6 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
-import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_ERROR;
+import static com.joycity.joyclub.commons.constant.ResultCode.COUPON_LAUNCH_ERROR;
 import static com.joycity.joyclub.commons.constant.ResultCode.LAUNCH_NUM_EXCEED_COUPON_NUM;
 
 import java.util.Date;
@@ -61,11 +61,11 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
         if (launch.getType().equals(CouponType.DEDUCTION_COUPON)) {
             if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
-                throw new BusinessException(LAUNCH_ERROR, "满减券只能选择批量投放和线上投放");
+                throw new BusinessException(COUPON_LAUNCH_ERROR, "满减券只能选择批量投放和线上投放");
             }
         } else if (launch.getType().equals(CouponType.CASH_COUPON)) {
             if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
-                throw new BusinessException(LAUNCH_ERROR, "代金券只能选择条件投放");
+                throw new BusinessException(COUPON_LAUNCH_ERROR, "代金券只能选择条件投放");
             }
         }
         launchMapper.insertSelective(launch);
@@ -121,17 +121,17 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         checkLaunchNum(launchDb);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有审核通过，才可以开始投放");
         }
         if (launchDb.getConfirmFlag()) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "已经投放");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "已经投放");
 
         }
         //一个条件投放期间只能有一个条件投放
         if (launchDb.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
             int num = launchMapper.verifyConditionLaunch(launchDb.getLaunchStartTime(), launchDb.getLaunchEndTime());
             if (num > 0) {
-                throw new BusinessException(ResultCode.LAUNCH_ERROR, "投放期间已存在其他条件投放");
+                throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "投放期间已存在其他条件投放");
             }
         }
 
@@ -154,7 +154,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     public ResultData forbidLaunch(Long id) throws SchedulerException {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_PERMIT)) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有审核通过，才可以开始投放");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有审核通过，才可以开始投放");
         }
         if (launchDb.getType().equals(CouponLaunchType.BATCH_LAUNCH)
                 && launchDb.getConfirmFlag()
@@ -174,7 +174,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     public ResultData permitLaunch(Long id) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核通过");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有未审核，才可以审核通过");
         }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
@@ -186,7 +186,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     public ResultData rejectLaunch(Long id, String reviewInfo) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以审核不通过");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有未审核，才可以审核不通过");
         }
         CardCouponLaunch launch = new CardCouponLaunch();
         launch.setId(id);
@@ -199,7 +199,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     public ResultData deleteCardCouponLaunch(Long id) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
         if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
-            throw new BusinessException(ResultCode.LAUNCH_ERROR, "只有未审核，才可以删除");
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有未审核，才可以删除");
         }
         return new ResultData(new UpdateResult(launchMapper.deleteCardCouponLaunchById(id)));
     }
@@ -258,7 +258,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     }
 
     private TriggerKey getTriggerKey(Long launchId) {
-        return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + launchId);
+        return new TriggerKey(QuartzPreKeyConst.BATCH_LAUNCH.getName() + "_" + launchId);
     }
 
 }
