@@ -55,7 +55,10 @@
         SELECT
             <include refid="CardCouponColumn"/>,
         SUM(launch_num) AS sum_launch_num, cts.name AS thirdparty_shop_name,
-        CASE WHEN  !ISNULL(SUM(ccl.launch_num)) THEN cc.num - SUM(ccl.launch_num) END AS available_num
+        CASE
+        WHEN  !ISNULL(SUM(ccl.launch_num)) THEN cc.num - SUM(ccl.launch_num)
+        WHEN  ISNULL(SUM(ccl.launch_num)) THEN cc.num
+        END AS available_num
         FROM (
             SELECT *
             FROM card_coupon
