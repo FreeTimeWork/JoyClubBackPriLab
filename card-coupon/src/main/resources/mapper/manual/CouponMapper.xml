@@ -39,7 +39,7 @@
     <select id="countCardCouponByNameAndType" resultType="java.lang.Long">
         SELECT cc.count
         FROM (
-        SELECT count(*) AS count
+        SELECT *,count(*) AS count
         FROM card_coupon
         WHERE delete_flag = 0
         ORDER BY create_time DESC
@@ -60,7 +60,6 @@
             SELECT *
             FROM card_coupon
             WHERE delete_flag = 0
-            ORDER BY create_time DESC
             <include refid="limit"/>
         ) cc
         LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1
@@ -69,6 +68,7 @@
             <include refid="name_and_type"/>
         </where>
         GROUP BY cc.id
+        ORDER BY cc.create_time DESC
     </select>
 
     <resultMap id="CouponStoreScopeWithShop" type="com.joycity.joyclub.card_coupon.modal.CouponStoreScopeWithShop"
