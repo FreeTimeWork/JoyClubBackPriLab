@@ -113,7 +113,7 @@
         </where>
     </select>
 
-    <!-- 查找在条件投放期间，该会员，已使用券量和未使用券量 -->
+    <!-- 查找在条件投放期间，该会员，已使用代金券券量和未使用券量 -->
     <select id="selectCouponNumFromLaunchBetween" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo">
         SELECT
         COUNT(CASE WHEN ccc.use_status = 1 THEN 1 ELSE NULL END) AS not_used_num,
@@ -121,36 +121,42 @@
         FROM card_coupon_code ccc
         INNER JOIN
         ( SELECT launch_start_time, launch_end_time
-        FROM card_coupon_launch
-        WHERE now() <![CDATA[ > ]]> launch_start_time
-        AND now()  <![CDATA[ < ]]> launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0
+        FROM card_coupon_launch ccl2
+        INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
+        WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
+        AND now()  <![CDATA[ < ]]> ccl2.launch_end_time and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
         AND ccl.delete_flag = 0  AND ccl.type = 1
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         <where>
             ccc.client_id = #{clientId}
+            AND cc.type = 2
             AND ccc.use_status != 3
             AND ccc.belong  = -1
             AND ccc.delete_flag = 0
         </where>
     </select>
 
-    <select id="selectNotUsedCouponCodeIdFromLaunchBetween" resultType="long">
+    <select id="selectNotUsedCashCouponCodeIdFromLaunchBetween" resultType="long">
         SELECT
         ccc.id
         FROM card_coupon_code ccc
         INNER JOIN
         ( SELECT launch_start_time, launch_end_time
-        FROM card_coupon_launch
-        WHERE now() <![CDATA[ > ]]> launch_start_time
-        AND now()  <![CDATA[ < ]]> launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0
+        FROM card_coupon_launch ccl2
+        INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
+        WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
+        AND now()  <![CDATA[ < ]]> ccl2.launch_end_time and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
         AND ccl.delete_flag = 0  AND ccl.type = 1
+        INNER JOIN card_coupon cc ON  cc.id = ccl.coupon_id
         <where>
             ccc.client_id = #{clientId}
+            AND cc.type = 2
             AND ccc.use_status != 3
             AND ccc.belong  = -1
             AND ccc.delete_flag = 0

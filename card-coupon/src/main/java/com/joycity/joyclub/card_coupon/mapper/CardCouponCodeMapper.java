@@ -66,7 +66,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
             " FROM card_coupon_launch ccl" +
             " inner join card_coupon cc on cc.id = ccl.coupon_id and cc.type != 3 and cc.delete_flag = 0 " +
             " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id "+
-            " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccts.store_id = #{shopId} and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.forbid_flag = 0 and ccl.review_status = 1 and ccl.delete_flag = 0")
+            " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccts.store_id = #{shopId} and ccl.type = 1 and ccl.confirm_flag = 1 and and ccl.review_status = 1 and ccl.delete_flag = 0")
     CouponLaunchBetweenInfo selectInfoFromLaunchBetween(@Param("shopId")Long shopId,@Param("now") Date now);
 
     /**
@@ -89,9 +89,11 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      */
     @Select(" SELECT	sum(psd.balance) FROM	pos_sale_detail psd"+
             " INNER JOIN ("+
-            "       SELECT id,launch_start_time,launch_end_time	FROM card_coupon_launch"+
-            "       WHERE"+
-            "        #{now} > launch_start_time AND #{now} < launch_end_time and type = 1 and confirm_flag = 1 and forbid_flag = 0 and review_status = 1 and delete_flag = 0"+
+            "       SELECT ccl.id,ccl.launch_start_time,ccl.launch_end_time " +
+            "       FROM card_coupon_launch ccl " +
+            "       INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id  " +
+            "       WHERE #{now} > ccl.launch_start_time AND #{now} < ccl.launch_end_time and ccl.type = 1  " +
+            "       and ccl.confirm_flag = 1 and ccl.review_status = 1 and ccl.delete_flag = 0"+
             "        ) launch_time ON psd.create_time > launch_time.launch_start_time"+
             " AND psd.create_time < launch_time.launch_end_time"+
             " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id"+
