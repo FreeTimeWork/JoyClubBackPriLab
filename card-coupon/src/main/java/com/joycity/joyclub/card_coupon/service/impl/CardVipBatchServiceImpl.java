@@ -63,7 +63,9 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
             cardVipBatchCache.put(findBatch,findBatch);
 
         List<CardVipBatch> cardVipBatches = prepareCardVipBatch(tels,findBatch);
-
+        if (cardVipBatches.isEmpty()) {
+            throw new BusinessException(ResultCode.ERR_IMPORT_EXCEL,"手机号不存在");
+        }
         int sum = 0;
         if (CollectionUtils.isNotEmpty(cardVipBatches)) {
 

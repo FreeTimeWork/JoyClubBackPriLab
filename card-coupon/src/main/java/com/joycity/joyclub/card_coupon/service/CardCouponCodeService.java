@@ -1,8 +1,11 @@
 package com.joycity.joyclub.card_coupon.service;
 
+import com.joycity.joyclub.card_coupon.modal.ClientCouponBag;
 import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+
+import java.util.List;
 
 /**
  * Created by fangchen.chai on 2017/7/13.
@@ -41,5 +44,9 @@ public interface CardCouponCodeService {
     int updateNotUsedCouponCode(Long couponCodeId);
 
 
+    /**
+     * 用户券包，查询用户当前可用券
+     */
+    List<ClientCouponBag> getListCurrentClientCouponUsable(Long clientId);
 
 }

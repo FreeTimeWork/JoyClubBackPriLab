@@ -119,6 +119,7 @@
         <include refid="limit"/>
     </select>
 
+    <!-- 正在投放期间的卡券信息 -->
     <select id="selectLaunchWithCouponById" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon">
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
@@ -175,7 +176,7 @@
         <if test="shopName != null">
             AND cc.name LIKE #{shopName}
         </if>
-        AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.review_status = 1 AND ccl.delete_flag = 0
+        AND ccl.confirm_flag = 1 AND ccl.review_status = 1 AND ccl.delete_flag = 0
         GROUP BY psd.shop_id
         ORDER BY count(ccc.id) DESC
         <include refid="limit"/>
@@ -198,7 +199,7 @@
             <if test="shopName != null">
                 AND cc.name LIKE #{shopName}
             </if>
-            AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.review_status = 1 AND ccl.delete_flag = 0
+            AND ccl.confirm_flag = 1 AND ccl.review_status = 1 AND ccl.delete_flag = 0
             GROUP BY psd.shop_id
         ) temp
     </select>

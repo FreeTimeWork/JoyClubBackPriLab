@@ -5,6 +5,7 @@ import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
+import com.joycity.joyclub.card_coupon.modal.ClientCouponBag;
 import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo;
 import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
@@ -206,6 +207,12 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         cardCouponCode.setUseStatus(CouponCodeUseStatus.NOT_USED);
         cardCouponCode.setUseTime(null);
         return cardCouponCodeMapper.updateByPrimaryKey(cardCouponCode);
+    }
+
+    @Override
+    public List<ClientCouponBag> getListCurrentClientCouponUsable(Long clientId) {
+
+        return cardCouponCodeMapper.selectCurrentClientCouponUsable(clientId);
     }
 
     private void batchSendSysgenCouponCode(Long launchId, CardCoupon cardCoupon, CardCouponLaunch cardCouponLaunch) {

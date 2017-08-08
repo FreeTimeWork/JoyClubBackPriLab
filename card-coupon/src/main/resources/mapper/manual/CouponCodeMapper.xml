@@ -189,4 +189,20 @@
         ORDER BY ccc.create_time DESC
         <include refid="limit"/>
     </select>
+
+    <select id="selectCurrentClientCouponUsable" resultType="com.joycity.joyclub.card_coupon.modal.ClientCouponBag">
+        SELECT
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.info, cc.portrait, cc.amount, cc.subtract_amount, cc.support_refund_flag,
+        ccl.effective_start_time, ccl.effective_end_time,
+        ccc.code, ccc.belong, ccc.receive_time, ccc.use_status, c.vip_code
+        from card_coupon_code ccc
+        INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
+        INNER JOIN client c ON c.id = ccc.client_id
+        WHERE
+        <include refid="UsableCouponCodeFilter"/>
+        AND ccc.client_id = #{clientId}
+        AND ccc.use_status = 1 AND ccc.delete_flag = 0
+        ORDER BY ccl.effective_end_time DESC, ccc.create_time DESC, ccc.id
+    </select>
 </mapper>

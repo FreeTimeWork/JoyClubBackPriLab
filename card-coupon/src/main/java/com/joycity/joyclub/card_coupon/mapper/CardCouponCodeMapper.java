@@ -1,9 +1,6 @@
 package com.joycity.joyclub.card_coupon.mapper;
 
-import com.joycity.joyclub.card_coupon.modal.CouponCodeWithCoupon;
-import com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo;
-import com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo;
-import com.joycity.joyclub.card_coupon.modal.ShowPosCurrentCouponCodeInfo;
+import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCodeExample;
@@ -123,5 +120,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     Long countSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter);
     List<ShowCouponCodeInfo> selectSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
 
+    //用户券包
+    List<ClientCouponBag> selectCurrentClientCouponUsable(@Param("clientId") Long clientId);
 
 }
