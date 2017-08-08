@@ -33,6 +33,7 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.MSG_AUTH_CODE_ERROR, "发送验证码出错");
         map.put(ResultCode.DATA_NOT_EXIST, "数据不存在");
         map.put(ResultCode.REQUEST_PARAM_ERROR, "请求参数错误");
+        map.put(ResultCode.REQUEST_PARAMS_ERROR, "请求参数错误");
         map.put(ResultCode.USE_OTHER_API_ERROR, "第三方接口调用失败");
 
         map.put(ResultCode.CLIENT_TOKEN_NULL, "会话已过期，请重新登陆");

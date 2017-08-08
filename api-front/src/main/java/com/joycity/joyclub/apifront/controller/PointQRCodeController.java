@@ -26,10 +26,14 @@ public class PointQRCodeController {
     }
 
     /**
-     * 平台没有猫酷账户的
+     * mallcooOpenUserId,ticket二者传一个即可
+     * 后者具有有效期，所以第一次取出后换取mallcooOpenUserId
      */
     @GetMapping("/mallcoo")
-    public ResultData getQRCodeForMallcoo(@RequestParam String ticket, Long projectId) {
-        return service.getQRCodeForMallcoo(projectId, ticket);
+    public ResultData getQRCodeForMallcoo(
+            @RequestParam(required = false) String ticket,
+            @RequestParam(required = false) String mallcooOpenUserId,
+            @RequestParam Long projectId) {
+        return service.getQRCodeForMallcoo(projectId, ticket, mallcooOpenUserId);
     }
 }

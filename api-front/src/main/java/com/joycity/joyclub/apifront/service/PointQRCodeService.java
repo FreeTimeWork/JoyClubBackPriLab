@@ -7,6 +7,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
  */
 public interface PointQRCodeService {
     ResultData getQRCode(Long clientId);
-    ResultData getQRCodeForMallcoo(Long projectId,String ticket);
+    ResultData getQRCodeForMallcoo(Long projectId,String ticket,String openUserId);
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.apifront.modal.point.qrcode.PointHintFromPosResult;
 import com.joycity.joyclub.apifront.service.PointQRCodeService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.EncryptionUtil;
@@ -48,21 +49,34 @@ public class PointQRCodeServiceImpl implements PointQRCodeService {
     public ResultData getQRCode(Long clientId) {
         String vipCode = clientUserMapper.getVipCodeById(clientId);
         ThrowBusinessExceptionUtil.checkNull(vipCode, "会员不存在");
-        return getQRCodeData(vipCode);
+        return getQRCodeData(vipCode, null);
     }
 
     @Override
-    public ResultData getQRCodeForMallcoo(Long projectId,String ticket) {
-       UserAdvancedInfo info =  mallcooService.getUserAdvancedInfo(projectId,ticket);
-        return getQRCodeData(info.getThirdPartyCardID());
+    public ResultData getQRCodeForMallcoo(Long projectId, String ticket, String openUserId) {
+        if (ticket == null && openUserId == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAM_ERROR);
+        }
+        UserAdvancedInfo info;
+        if (openUserId == null) {
+            info = mallcooService.getUserAdvancedInfoByTicket(projectId, ticket);
+
+        } else {
+            info = mallcooService.getUserAdvancedInfoById(projectId, openUserId);
+        }
+
+        return getQRCodeData(info.getThirdPartyCardID(), info.getOpenUserId());
     }
 
-    private ResultData getQRCodeData(String vipCode) {
+    private ResultData getQRCodeData(String vipCode, String mallcooOpenUserId) {
         String qrCode = EncryptionUtil.aesEncrypt(vipCode + System.currentTimeMillis(), QR_CODE_KEY);
         String hint = getPointHintFromPosOrThrow(vipCode);
         Map<String, String> result = new HashMap<>();
         result.put("qrCode", qrCode);
         result.put("hint", hint);
+        if (mallcooOpenUserId != null) {
+            result.put("mallcooOpenUserId", hint);
+        }
         return new ResultData(result);
     }
 

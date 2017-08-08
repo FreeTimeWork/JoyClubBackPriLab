@@ -80,10 +80,15 @@ message:
 #猫酷相关
 mallcoo:
   url:
+    #http://docs.mallcoo.cn/OpenPlatform/APIDoc.html
     getTokenByTicket: https://openapi10.mallcoo.cn/User/OAuth/v1/GetToken/ByTicket
     getInfoByToken: https://openapi10.mallcoo.cn/User/BaseInfo/v1/Get/ByToken
     getAdvancedInfoById:  https://openapi10.mallcoo.cn/User/AdvancedInfo/v1/Get/ByOpenUserID
     getShop: https://openapi10.mallcoo.cn/Shop/V1/GetList
+    #http://docs-t.mallcoo.cn/openplatform/coupon/v1/9.1.CodeGetPageByMemberID.html
+    getCoupons: https://openapi10.mallcoo.cn/Coupon/v1/GetPage/ByMemberID
+    # http://docs-t.mallcoo.cn/openplatform/coupon/v1/9.3.CodeGetByIDOrVCode.html
+    getCouponInfo: https://openapi10.mallcoo.cn/Coupon/v1/Get/ByVCode
 
 point:
   # 积分充值相关

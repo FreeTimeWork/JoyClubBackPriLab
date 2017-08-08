@@ -1,5 +1,6 @@
 package com.joycity.joyclub.mallcoo.service;
 
+import com.joycity.joyclub.mallcoo.modal.result.data.CouponResult;
 import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
 import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
 import com.joycity.joyclub.mallcoo.modal.result.data.UserSimpleInfo;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface MallCooService {
     /**
      * 获取UserToken,简单信息
+     *
      * @param ticket 必须是v2接口传过来的，v2的ticket未加密 v1加密的
      * @return
      */
@@ -20,13 +22,23 @@ public interface MallCooService {
     /**
      * 获取用户高级信息，主要是包含会员号
      */
-    UserAdvancedInfo getUserAdvancedInfo(Long projectId, String ticket);
+    UserAdvancedInfo getUserAdvancedInfoByTicket(Long projectId, String ticket);
+
+    UserAdvancedInfo getUserAdvancedInfoById(Long projectId, String openUserId);
 
     /**
      * 获取线下商户列表
+     *
      * @param projectId
      * @return
      */
     List<OffLineShopInfo> getShops(Long projectId);
+
+    /**
+     * @param crmId 会员号
+     */
+    CouponResult getCoupons(Long projectId, String crmId);
+
+    void getCouponInfo(Long projectId, String code);
 
 }
