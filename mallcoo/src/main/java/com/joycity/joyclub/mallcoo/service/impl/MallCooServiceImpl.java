@@ -7,8 +7,7 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.mallcoo.mapper.ProjectMallcooMapper;
 import com.joycity.joyclub.mallcoo.modal.ProjectMallcoo;
-import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
-import com.joycity.joyclub.mallcoo.modal.result.data.UserSimpleInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.*;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
@@ -64,8 +63,14 @@ public class MallCooServiceImpl implements MallCooService {
     private String URL_GET_TOKEN_BY_TICKET;
     @Value("${mallcoo.url.getInfoByToken}")
     private String URL_GET_INFO_BY_TOKEN;
+    @Value("${mallcoo.url.getAdvancedInfoById}")
+    private String URL_GET_ADVANCED_INFO_BY_ID;
     @Value("${mallcoo.url.getShop}")
     private String URL_GET_SHOPS;
+    @Value("${mallcoo.url.getCoupons}")
+    private String URL_GET_COUPONS;
+    @Value("${mallcoo.url.getCouponInfo}")
+    private String URL_GET_COUPON_INFO;
 
     @Override
     public UserSimpleInfo getUserToken(Long projectId, String ticket) {
@@ -75,10 +80,40 @@ public class MallCooServiceImpl implements MallCooService {
     }
 
     @Override
+    public UserAdvancedInfo getUserAdvancedInfoByTicket(Long projectId, String ticket) {
+        UserSimpleInfo simpleInfo = getUserToken(projectId, ticket);
+        return getUserAdvancedInfoById(projectId, simpleInfo.getOpenUserId());
+    }
+
+    @Override
+    public UserAdvancedInfo getUserAdvancedInfoById(Long projectId, String openUserId) {
+        Map<String, String> body = new HashMap<>();
+        body.put("OpenUserId", openUserId);
+        return postForDataObject(projectId, URL_GET_ADVANCED_INFO_BY_ID, body, UserAdvancedInfo.class);
+    }
+
+    @Override
     public List<OffLineShopInfo> getShops(Long projectId) {
         Map<String, String> body = new HashMap<>();
         body.put("PageIndex", "1");
         return postForDataArray(projectId, URL_GET_SHOPS, body, OffLineShopInfo.class);
+    }
+
+    @Override
+    public CouponResult getCoupons(Long projectId, String crmId) {
+        Map<String, String> body = new HashMap<>();
+        body.put("MemberID", crmId);
+        body.put("MinID", "0");
+        body.put("PageSize", "100");
+        return postForDataObject(projectId, URL_GET_COUPONS, body, CouponResult.class);
+    }
+
+    @Override
+    public void getCouponInfo(Long projectId, String code) {
+        Map<String, String> body = new HashMap<>();
+        body.put("VCode", code);
+        System.out.println(postForDataObject(projectId, URL_GET_COUPON_INFO, body, String.class));
+        return;
     }
 
     private <T> List<T> postForDataArray(Long projectId, String url, Object body, Class<T> clazz) {

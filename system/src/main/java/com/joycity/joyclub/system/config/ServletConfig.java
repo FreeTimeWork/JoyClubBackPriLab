@@ -16,11 +16,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    AuthenticationInterceptor authenticationInterceptor;
+    ApiBackAuthenticationInterceptor authenticationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor);
+        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/api/back/*").excludePathPatterns("/api/back/login");
     }
 
 

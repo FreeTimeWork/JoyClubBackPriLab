@@ -32,6 +32,8 @@ public class ResultCode {
     public static final int DATA_NOT_PERMIT = 30202;
     public static final int DATA_ALREADY_EXIST = 30203;
     public static final int REQUEST_PARAM_ERROR = 30204;
+    /* 访问第三方接口错误 */
+    public static final int USE_OTHER_API_ERROR = 30205;
 
 
     public static final int HTTPKIT_CONNECT_ERROR = 50000;
@@ -84,8 +86,6 @@ public class ResultCode {
      * 投放类的错误
      */
     public static final int COUPON_LAUNCH_ERROR = 60003;
-
-
     public static final int COUPON_FORBID_REFUND = 60100;
     public static final int COUPON_ORDER_NOT_FIND = 60101;
 

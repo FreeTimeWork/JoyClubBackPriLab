@@ -6,7 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Created by CallMeXYZ on 2017/6/29.
  */
-public class EncyptionUtil {
+public class EncryptionUtil {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static String bytesToHex(byte[] bytes) {
@@ -29,7 +29,7 @@ public class EncyptionUtil {
         return data;
     }
 
-    public String aesEncrypt(String value, String key) {
+    public static String aesEncrypt(String value, String key) {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
@@ -39,7 +39,7 @@ public class EncyptionUtil {
         }
     }
 
-    public String aesDecrypt(String value, String key) {
+    public static String aesDecrypt(String value, String key) {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));

@@ -1,35 +1,19 @@
 *TODO*
-- ~~service inject error while serviceimpl works fine~~ use `@MapperScan` works fine
-- global exception handler `@ControllerAdvice`
-- mybatis auto-mapping performance
-- mybatis generator generate all java files
-- mybatis java if test
+
 - spring test mapper
-- ~~mybatis generator add annotation such as `@Repository` to ~~use `@MapperScan` without such annotations
 - mybatis generator
-- jackson avoid null property
-- server side rendering for wechat sharing page
 - security
-- multi properties file  configure one time,`ServletConfig`使用`@Value`
-- 统一所有的properties file
-- test mapper 跨module
-- 所有的配置属性改成`@ConfigurationProperties`配置类
 - `service`层的更新时，把createTime等信息置为null应该可以抽象为通用方法。
 - getList里的getSum应该用缓存
 - mybatis generator comment generator
 - 创建和更新删除时不必要的数据项
 - 退出登陆 某些state不清空
-- 商家
-- 修改更新api-front的相关依赖
-- config properties class而不是每次重新赋值
 - act 和 product 抽象
 - 把每一个功能单独模块化，比如会员卡相关，可以新建一个会员卡模块。
 - 删除会员 17600690737，17600690738，17600690739
 - 压力测试，京东借口
--  `POI`相关功能在运行时需要更多的包
-- PageUtil的pageSize增加最大值限制
-- 特价商品只能买一件，增加购物车限制，目前只是前端有限制。增加下订单时的验证，目前只是前端验证了。
 - 将某些常量变为枚举类型
+- 项目和平台版关于猫酷的问题，目前平台版也可以进行猫酷相关操作，其实应该更改。
 *NOTE*
 - 使用相同名字的properties在不同module时使用`@PropertySource`可能会出错
 - formData乱码，使用`CommonsMultipartResolver`
