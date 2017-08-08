@@ -120,11 +120,11 @@
         COUNT(CASE WHEN ccc.use_status = 2 THEN 1 ELSE NULL END) AS used_num
         FROM card_coupon_code ccc
         INNER JOIN
-        ( SELECT launch_start_time, launch_end_time
+        ( SELECT ccl2.launch_start_time, IFNULL(ccl2.forbid_time,ccl2.launch_end_time) AS launch_end_time
         FROM card_coupon_launch ccl2
         INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
         WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
-        AND now()  <![CDATA[ < ]]> ccl2.launch_end_time and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
+        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
@@ -144,11 +144,11 @@
         ccc.id
         FROM card_coupon_code ccc
         INNER JOIN
-        ( SELECT launch_start_time, launch_end_time
+        ( SELECT ccl2.launch_start_time, IFNULL(ccl2.forbid_time,ccl2.launch_end_time) AS launch_end_time
         FROM card_coupon_launch ccl2
         INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
         WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
-        AND now()  <![CDATA[ < ]]> ccl2.launch_end_time and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
+        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id

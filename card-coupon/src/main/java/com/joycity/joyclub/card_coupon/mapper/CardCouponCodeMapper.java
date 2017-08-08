@@ -66,7 +66,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
             " FROM card_coupon_launch ccl" +
             " inner join card_coupon cc on cc.id = ccl.coupon_id and cc.type != 3 and cc.delete_flag = 0 " +
             " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id "+
-            " WHERE #{now} > launch_start_time AND #{now} < launch_end_time and ccts.store_id = #{shopId} and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.review_status = 1 and ccl.delete_flag = 0")
+            " WHERE #{now} > ccl.launch_start_time AND #{now} < IFNULL(ccl.forbid_time,ccl.launch_end_time) and ccts.store_id = #{shopId} and ccl.type = 1 and ccl.confirm_flag = 1 and ccl.review_status = 1 and ccl.delete_flag = 0")
     CouponLaunchBetweenInfo selectInfoFromLaunchBetween(@Param("shopId")Long shopId,@Param("now") Date now);
 
     /**
