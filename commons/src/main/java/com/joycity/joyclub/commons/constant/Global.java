@@ -23,11 +23,6 @@ public class Global {
 
     public static final String RESET_PWD = "888888";
 
-    /**
-     * 日期表单的格式
-     */
-    public static final String DATE_FORM_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     public static final String SEX_MALE = "1";
     public static final String SEX_FEMALE = "0";
 

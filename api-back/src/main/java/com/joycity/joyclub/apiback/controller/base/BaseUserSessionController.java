@@ -15,7 +15,7 @@ import static com.joycity.joyclub.apiback.constant.UserType.*;
  * 主要是定义一个基础类， user的获取session属性名
  * Created by CallMeXYZ on 2017/3/27.
  */
-public abstract class BaseUserSessionController extends BaseTimeController {
+public abstract class BaseUserSessionController{
     /**
      * user的session属性名
      */
