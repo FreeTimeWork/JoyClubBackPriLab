@@ -59,7 +59,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<ShowPosCurrentCouponCodeInfo> selectCurrentCouponCode(@Param("projectId") Long projectId, @Param("shopCode") String shopCode, @Param("tel") String tel, @Param("vipCode") String vipCode);
 
     /**
-     * 在条件投放期间内，在触发的商户范围内,卡券的基本信息
+     * 在条件投放期间内，正在投放中，在触发的商户范围内,卡券的基本信息
      */
     @Select(
             " SELECT ccl.id as launch_id, ccl.condition_amount, ccl.max_receive, cc.subtract_amount   " +
@@ -89,10 +89,10 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      */
     @Select(" SELECT	sum(psd.balance) FROM	pos_sale_detail psd"+
             " INNER JOIN ("+
-            "       SELECT ccl.id,ccl.launch_start_time,ccl.launch_end_time " +
+            "       SELECT ccl.id,ccl.launch_start_time,IFNULL(ccl.forbid_time,ccl.launch_end_time) as launch_end_time " +
             "       FROM card_coupon_launch ccl " +
             "       INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id  " +
-            "       WHERE #{now} > ccl.launch_start_time AND #{now} < ccl.launch_end_time and ccl.type = 1  " +
+            "       WHERE #{now} > ccl.launch_start_time AND #{now} < IFNULL(ccl.forbid_time,ccl.launch_end_time) and ccl.type = 1  " +
             "       and ccl.confirm_flag = 1 and ccl.review_status = 1 and ccl.delete_flag = 0"+
             "        ) launch_time ON psd.create_time > launch_time.launch_start_time"+
             " AND psd.create_time < launch_time.launch_end_time"+

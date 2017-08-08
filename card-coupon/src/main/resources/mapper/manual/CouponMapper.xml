@@ -10,14 +10,6 @@
         cc.support_refund_flag, cc.info, cc.create_time, cc.last_update, cc.delete_flag, cc.delete_time
     </sql>
 
-    <sql id="CardCouponLaunchColumn">
-        ccl.id AS ccl_id, ccl.coupon_id AS ccl_coupon_id, ccl.name AS ccl_name, ccl.type AS ccl_type, ccl.condition_amount AS ccl_condition_amount,
-        ccl.pay_type AS ccl_pay_type, ccl.pay_amount AS ccl_pay_type, ccl.launch_num AS ccl_launch_num, ccl.max_receive AS ccl_max_receive,
-        ccl.remain_num AS ccl_remain_num, ccl.launch_start_time AS ccl_launch_start_time, ccl.launch_end_time AS ccl_launch_end_time,
-        ccl.effective_start_time AS ccl_effective_start_time, ccl.effective_end_time,ccl.review_status AS ccl_review_status,
-        ccl.review_info AS ccl_review_info, ccl.confirm_flag AS ccl_confirm_flag, ccl.forbid_flag AS ccl_forbid_flag, ccl.confirm_time AS ccl_confirm_time,
-        ccl.forbid_time AS ccl_forbid_time, ccl.last_update AS ccl_last_update, ccl.delete_flag AS ccl_delete_flag, ccl.delete_time AS ccl_delete_time
-    </sql>
     <sql id="name_and_type">
             cc.delete_flag = 0 AND cc.project_id = #{projectId}
         <if test="name != null">

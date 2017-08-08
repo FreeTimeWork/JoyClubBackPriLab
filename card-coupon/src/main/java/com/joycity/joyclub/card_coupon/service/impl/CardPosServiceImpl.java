@@ -156,8 +156,8 @@ public class CardPosServiceImpl implements CardPosService {
         //如果该订单在条件投放期间
         if (info != null) {
             int receiveNum = receiveCashCouponNum(info, clientId);
-            CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
             if (receiveNum > 0) {
+                CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
                 //发卡
                 for (int i= 0 ; i < receiveNum ; i++) {
                     boolean result = couponCodeCache.sendCouponCode(info.getLaunchId());
@@ -352,6 +352,8 @@ public class CardPosServiceImpl implements CardPosService {
                 //发卡数量
                 if ((todayLimitNum + diff) >= 0) {
                     return diff;
+                } else {
+                    return todayLimitNum;
                 }
 
             }
