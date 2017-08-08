@@ -128,7 +128,7 @@
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         WHERE ccl.id = #{id}
         AND now() <![CDATA[ > ]]> ccl.launch_start_time
-        AND now() <![CDATA[ < ]]> IFNULL(ccl.forbid_time,ccl.launch_end_time)
+        AND now() <![CDATA[ < ]]> ccl.launch_end_time
         AND ccl.type = 2 AND ccl.review_status = 1
         AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
     </select>
@@ -160,6 +160,7 @@
 
     <select id="selectShopRatioByLaunchId" resultType="com.joycity.joyclub.card_coupon.modal.ShowShopRatio">
         select
+        ss.id AS id,
         <include refid="CardCouponLaunchColumn"/>,
         ss.name AS shop_name, ccss.ratio,
         count(DISTINCT psd.client_id) AS effective_client_num,
@@ -225,7 +226,7 @@
             AND cc.type = #{couponType}
         </if>
         AND now() <![CDATA[ > ]]> ccl.launch_start_time
-        AND now() <![CDATA[ < ]]> IFNULL(ccl.forbid_time,ccl.launch_end_time)
+        AND now() <![CDATA[ < ]]> ccl.launch_end_time
         AND ccl.type = 2
         AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
         ORDER BY cc.display_weight DESC, ccl.create_time DESC
@@ -249,7 +250,7 @@
         AND cc.type = #{couponType}
         </if>
         AND now() <![CDATA[ > ]]> ccl.launch_start_time
-        AND now() <![CDATA[ < ]]> IFNULL(ccl.forbid_time,ccl.launch_end_time)
+        AND now() <![CDATA[ < ]]> ccl.launch_end_time
         AND ccl.type = 2
         AND ccl.review_status = 1 AND ccl.confirm_flag = 1 AND ccl.forbid_flag = 0 AND ccl.delete_flag = 0
     </select>
@@ -270,7 +271,7 @@
         where
             cc.project_id = #{projectId}
             AND now() <![CDATA[ > ]]> ccl.launch_start_time
-            AND now() <![CDATA[ < ]]> IFNULL(ccl.forbid_time,ccl.launch_end_time)
+            AND now() <![CDATA[ < ]]> ccl.launch_end_time
             <if test="couponType != null">
                 AND cc.type = #{couponType}
             </if>
@@ -293,7 +294,7 @@
         where
             cc.project_id = #{projectId}
             AND now() <![CDATA[ > ]]> ccl.launch_start_time
-            AND now() <![CDATA[ < ]]> IFNULL(ccl.forbid_time,ccl.launch_end_time)
+            AND now() <![CDATA[ < ]]> ccl.launch_end_time
             <if test="couponType != null">
                 AND cc.type = #{couponType}
             </if>

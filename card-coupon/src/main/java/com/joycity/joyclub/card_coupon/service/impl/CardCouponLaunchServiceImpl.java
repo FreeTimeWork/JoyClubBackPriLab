@@ -19,6 +19,7 @@ import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
+import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponTriggerScope;
 import com.joycity.joyclub.card_coupon.quartz.BatchLaunchJob;
@@ -59,11 +60,12 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
-        if (launch.getType().equals(CouponType.DEDUCTION_COUPON)) {
+        CardCoupon cardCoupon = cardCouponMapper.selectByPrimaryKey(launch.getCouponId());
+        if (cardCoupon.getType().equals(CouponType.DEDUCTION_COUPON)) {
             if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
                 throw new BusinessException(COUPON_LAUNCH_ERROR, "满减券只能选择批量投放和线上投放");
             }
-        } else if (launch.getType().equals(CouponType.CASH_COUPON)) {
+        } else if (cardCoupon.getType().equals(CouponType.CASH_COUPON)) {
             if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
                 throw new BusinessException(COUPON_LAUNCH_ERROR, "代金券只能选择条件投放");
             }
