@@ -1,12 +1,6 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.card_coupon.mapper.ShopMapper;
-import com.joycity.joyclub.card_coupon.modal.MallcooShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShopExample;
 import com.joycity.joyclub.card_coupon.service.ShopService;
@@ -21,6 +15,8 @@ import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by fangchen.chai on 2017/7/11.
@@ -72,6 +68,7 @@ public class ShopServiceImpl implements ShopService {
             public String getValues(int index) {
                 OffLineShopInfo shop = shops.get(index);
                 shop.setName(shop.getName().replaceAll("'", "\\\\'"));
+
                 StringBuilder builder = new StringBuilder();
                 builder.append("(")
                         .append("'"+projectId+"', ")

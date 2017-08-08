@@ -40,14 +40,14 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
     public ResultData createCardVipBatch(List<List<String>> list){
         BoundHashOperations<String, String, String> cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
 
-        Set<String> vipNos = new HashSet<>();
+        Set<String> tels = new HashSet<>();
         List<String> rows;
         for (int i = 0; i < list.size(); i++) {
             rows = list.get(i);
             if (rows != null && rows.size() > 0) {
-                String cardNo = rows.get(0);
-                if (!StringUtils.isBlank(cardNo)) {
-                    vipNos.add(cardNo);
+                String telNum = rows.get(0);
+                if (!StringUtils.isBlank(telNum)) {
+                    tels.add(telNum);
                 }
             }
 
@@ -62,7 +62,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
             } while (cardVipBatchCache.hasKey(findBatch) || count > 0);
             cardVipBatchCache.put(findBatch,findBatch);
 
-        List<CardVipBatch> cardVipBatches = prepareCardVipBatch(vipNos,findBatch);
+        List<CardVipBatch> cardVipBatches = prepareCardVipBatch(tels,findBatch);
 
         int sum = 0;
         if (CollectionUtils.isNotEmpty(cardVipBatches)) {

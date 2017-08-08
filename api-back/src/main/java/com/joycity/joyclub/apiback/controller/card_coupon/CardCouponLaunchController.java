@@ -87,7 +87,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
         return cardCouponLaunchService.forbidLaunch(id);
     }
 
-    @RequestMapping(value = "/card/coupon/launch/vip/codes/excel", method = {RequestMethod.POST})
+    @RequestMapping(value = "/card/coupon/launch/tel/num/excel", method = {RequestMethod.POST})
     public ResultData importCodesFromExcel(@RequestParam("file") final MultipartFile file,
                                            HttpSession httpSession) {
 

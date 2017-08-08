@@ -2,6 +2,7 @@ package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
+import com.joycity.joyclub.apiback.modal.vo.RemarkVO;
 import com.joycity.joyclub.apiback.modal.vo.auth.ResetPasswordVO;
 import com.joycity.joyclub.apiback.service.ManagerService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
@@ -34,7 +35,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/forbid", method = RequestMethod.POST)
     public ResultData forbid(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatformUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return managerService.forbid(id);
     }
 
@@ -48,7 +49,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/forbidcancel", method = RequestMethod.POST)
     public ResultData cancelForbid(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatformUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return managerService.cancelForbid(id);
     }
 
@@ -63,7 +64,7 @@ public class ManagerController extends BaseUserSessionController {
     @RequestMapping(value = "/manager/{id}/password/reset", method = RequestMethod.POST)
     public ResultData resetPassword(@PathVariable Long id, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatformUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return managerService.resetPwd(id);
     }
     /**
@@ -86,9 +87,12 @@ public class ManagerController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/manager/{id}/remark", method = RequestMethod.POST)
-    public ResultData resetPassword(@PathVariable Long id, @RequestParam String remark, HttpSession httpSession) {
+    public ResultData resetPassword(@PathVariable Long id, @RequestBody RemarkVO vo, HttpSession httpSession) {
         //确保是平台用户
-        checkPlatformUser(httpSession);
-        return managerService.updateRemark(id, remark);
+        checkPlatformOrProjectUser(httpSession);
+        return managerService.updateRemark(id, vo.getRemark());
     }
+
+
+
 }

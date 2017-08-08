@@ -27,6 +27,17 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
     @Autowired
     private CardCouponCodeService cardCouponCodeService;
 
+    /**
+     * 所有该项目下的第三方卡券号
+     * @param couponName
+     * @param thirdPartyShopName
+     * @param couponLaunchName
+     * @param code
+     * @param tel
+     * @param pageUtil
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/card/third/coupon/codes", method = RequestMethod.GET)
     public ResultData getListByFilter(@RequestParam(required = false) String couponName,
                                       @RequestParam(required = false) String thirdPartyShopName,
@@ -55,6 +66,16 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
         return cardThirdCouponCodeService.getListByFilter(sysUser.getInfoId(), filter, pageUtil);
     }
 
+    /**
+     * 该第三方商户自己的卡券列表
+     * @param couponName
+     * @param couponLaunchName
+     * @param code
+     * @param tel
+     * @param pageUtil
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/card/third/shop/coupon/codes", method = RequestMethod.GET)
     public ResultData getListByFilter(@RequestParam(required = false) String couponName,
                                       @RequestParam(required = false) String couponLaunchName,

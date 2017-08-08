@@ -44,7 +44,7 @@
                 AND cts.name LIKE #{filter.thirdPartyName}
             </if>
             <if test="filter.thirdPartyShopId != null">
-                AND cc.thirdparty_shop_id LIKE #{filter.thirdPartyShopId}
+                AND cc.thirdparty_shop_id = #{filter.thirdPartyShopId}
             </if>
         </if>
     </sql>
