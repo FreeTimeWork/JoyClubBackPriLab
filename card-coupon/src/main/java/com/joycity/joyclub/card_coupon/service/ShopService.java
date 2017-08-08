@@ -6,13 +6,14 @@ import com.joycity.joyclub.card_coupon.modal.MallcooShop;
 import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
 
 /**
  * Created by fangchen.chai on 2017/7/11.
  */
 public interface ShopService {
 
-    ResultData batchInsertOrUpdate(List<MallcooShop> shops, Long projectId);
+    ResultData batchInsertOrUpdate(List<OffLineShopInfo> offLineShopInfos, Long projectId);
 
     ResultData syncMallCooShop(Long projectId);
 

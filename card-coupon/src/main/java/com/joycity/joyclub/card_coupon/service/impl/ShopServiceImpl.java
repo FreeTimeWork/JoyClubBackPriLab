@@ -16,6 +16,7 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ShopServiceImpl implements ShopService {
     private MallCooService mallcooService;
 
     @Override
-    public ResultData batchInsertOrUpdate(List<MallcooShop> shops, Long projectId) {
+    public ResultData batchInsertOrUpdate(List<OffLineShopInfo> shops, Long projectId) {
         return new ResultData(new UpdateResult(new AbstractBatchInsertlUtils() {
 
             @Override
@@ -61,7 +62,7 @@ public class ShopServiceImpl implements ShopService {
 
             @Override
             public String getUpdateSqlWhenDuplicate() {
-                return "name = VALUES (name), logo = VALUES (logo), shop_type = VALUES (shop_type), " +
+                return "code = VALUES (code),name = VALUES (name), logo = VALUES (logo), shop_type = VALUES (shop_type), " +
                         "commercial_type_id = VALUES (commercial_type_id) ," +
                         "sub_commercial_type_name = VALUES (sub_commercial_type_name)," +
                         "floor_id = VALUES (floor_id), floor_name = VALUES (floor_name), door_no = VALUES (door_no)";
@@ -69,17 +70,18 @@ public class ShopServiceImpl implements ShopService {
 
             @Override
             public String getValues(int index) {
-                MallcooShop shop = shops.get(index);
+                OffLineShopInfo shop = shops.get(index);
+                shop.setName(shop.getName().replaceAll("'", "\\\\'"));
                 StringBuilder builder = new StringBuilder();
                 builder.append("(")
                         .append("'"+projectId+"', ")
-                        .append("'"+shop.getCrmShopId()+"', ")
+                        .append("'"+shop.getCrmShopID()+"', ")
                         .append("'"+shop.getName()+"', ")
                         .append("'"+shop.getLogo()+"', ")
                         .append("'"+shop.getShopType()+"', ")
-                        .append("'"+shop.getCommercialTypeId()+"', ")
+                        .append("'"+shop.getCommercialTypeID()+"', ")
                         .append("'"+shop.getSubCommercialTypeName()+"', ")
-                        .append("'"+shop.getFloorId()+"', ")
+                        .append("'"+shop.getFloorID()+"', ")
                         .append("'"+shop.getFloorName()+"', ")
                         .append("'"+shop.getDoorNo()+"'")
                         .append(") ")
@@ -94,39 +96,8 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ResultData syncMallCooShop(Long projectId) {
         ResultData resultData = new ResultData();
-//        Map map = mallcooService.getShops(projectId);
-        Map<String, String> map = new HashMap();
-        map.put("Data", "  [\n" +
-                "      {\n" +
-                "        \"ID\": 1000030,\n" +
-                "        \"Name\": \"VERO MODA\",\n" +
-                "        \"CrmShopID\": \"454524\",\n" +
-                "        \"Logo\": \"http://i1.mallcoo.cn/sp_mall/82de37a0-db14-4c23-aca9-58900758c2e7.jpg\",\n" +
-                "        \"ShopType\": 1,\n" +
-                "        \"CommercialTypeID\": 14024,\n" +
-                "        \"SubCommercialTypeName\": \"服饰01\",\n" +
-                "        \"FloorID\": 0,\n" +
-                "        \"FloorName\": \"1F\",\n" +
-                "        \"DoorNo\": null,\n" +
-                "        \"UpdateTime\": \"0001-01-01 00:00:00\"\n" +
-                "      },\n" +
-                "\t  {\n" +
-                "        \"ID\": 1000031,\n" +
-                "        \"Name\": \"VERO MODA\",\n" +
-                "        \"CrmShopID\": \"454525\",\n" +
-                "        \"Logo\": \"http://i1.mallcoo.cn/sp_mall/82de37a0-db14-4c23-aca9-58900758c2e7.jpg\",\n" +
-                "        \"ShopType\": 1,\n" +
-                "        \"CommercialTypeID\": 14024,\n" +
-                "        \"SubCommercialTypeName\": \"服饰01\",\n" +
-                "        \"FloorID\": 0,\n" +
-                "        \"FloorName\": \"1F\",\n" +
-                "        \"DoorNo\": null,\n" +
-                "        \"UpdateTime\": \"0001-01-01 00:00:00\"\n" +
-                "      }\n" +
-                "  ]");
-        List<MallcooShop> shops = JSONObject.parseArray(map.get("Data").toString(), MallcooShop.class);
-
-        ResultData result = batchInsertOrUpdate(shops, projectId);
+        List<OffLineShopInfo> offLineShopInfos = mallcooService.getShops(projectId);
+        ResultData result = batchInsertOrUpdate(offLineShopInfos, projectId);
         resultData.setData(result.getData());
         return resultData;
     }
