@@ -347,10 +347,12 @@ public class CardPosServiceImpl implements CardPosService {
             Date end = DateTimeUtil.addDays(start, 1);
             int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
             //每日限制数量 - 当日已领取代金券数量
-            int diffNum = info.getMaxReceive() - cashCouponNum;
-            if (diffNum > 0) {
+            int todayLimitNum = info.getMaxReceive() - cashCouponNum;
+            if (todayLimitNum > 0) {
                 //发卡数量
-                receiveNum = diffNum + diff;
+                if ((todayLimitNum + diff) >= 0) {
+                    return diff;
+                }
 
             }
         }
