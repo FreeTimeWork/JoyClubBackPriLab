@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponOrderVO;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,21 +46,19 @@ public class CardCouponOrderController {
      *
      * @return
      */
-    @GetMapping(value = "/order/we_chat")
+    @PostMapping("/order/we_chat")
     public ResultData orderForWeChat(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                     @RequestParam Long launchId,
-                                     @RequestParam Boolean moneyOrPoint) {
-        return couponOrderService.orderForWeChat(clientTokenService.getIdOrThrow(token), launchId, moneyOrPoint);
+                                     @Valid @RequestBody CouponOrderVO vo) {
+        return couponOrderService.orderForWeChat(clientTokenService.getIdOrThrow(token), vo.getLaunchId(), vo.getMoneyOrPoint());
     }
 
     /**
      * 支付宝下单 ，返回form参数 其他参照微信支付
      */
-    @GetMapping(value = "/order/ali")
+    @PostMapping("/order/ali")
     public ResultData orderForAli(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                  @RequestParam Long launchId,
-                                  @RequestParam Boolean moneyOrPoint) {
-        return couponOrderService.orderForAli(clientTokenService.getIdOrThrow(token), launchId, moneyOrPoint);
+                                  @Valid @RequestBody CouponOrderVO vo) {
+        return couponOrderService.orderForAli(clientTokenService.getIdOrThrow(token), vo.getLaunchId(), vo.getMoneyOrPoint());
     }
 
     /**

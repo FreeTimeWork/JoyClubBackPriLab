@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponFreeGetVO;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
@@ -8,6 +9,8 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 
@@ -31,7 +34,7 @@ public class CardCouponFrontController {
      *
      * @return
      */
-    @GetMapping(value = "/launches")
+    @GetMapping("/launches")
     public ResultData getCouponsClientCanReceive(
             @CookieValue(name = Global.COOKIE_TOKEN, required = false) String token,
             @RequestParam Long projectId,
@@ -49,10 +52,10 @@ public class CardCouponFrontController {
     /**
      * 免费领取
      */
-    @GetMapping(value = "/free/receive")
+    @PostMapping("/free/receive")
     public ResultData freeReceiveCoupon(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                        @RequestParam Long launchId){
+                                        @Valid @RequestBody CouponFreeGetVO vo) {
 
-        return couponCodeService.freeReceiveCoupon(clientTokenService.getIdOrThrow(token), launchId);
+        return couponCodeService.freeReceiveCoupon(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
     }
 }
