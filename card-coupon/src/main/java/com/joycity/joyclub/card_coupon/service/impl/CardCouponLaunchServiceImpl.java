@@ -11,10 +11,7 @@ import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchReviewStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponTriggerScopeMapper;
+import com.joycity.joyclub.card_coupon.mapper.*;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
@@ -57,6 +54,8 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     private QuartzManager quartzManager;
     @Autowired
     private CardCouponCodeCache couponCodeCache;
+    @Autowired
+    private CardVipBatchMapper cardVipBatchMapper;
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
@@ -69,6 +68,11 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
                 throw new BusinessException(COUPON_LAUNCH_ERROR, "代金券只能选择条件投放");
             }
+        }
+        if (launch.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
+            launch.setLaunchEndTime(launch.getLaunchStartTime());
+            Long num = cardVipBatchMapper.countCardVipBatchByBatch(launch.getVipBatch());
+            launch.setLaunchNum(num.intValue());
         }
         launchMapper.insertSelective(launch);
         if (CollectionUtils.isNotEmpty(launch.getTriggerScopeIds())) {
