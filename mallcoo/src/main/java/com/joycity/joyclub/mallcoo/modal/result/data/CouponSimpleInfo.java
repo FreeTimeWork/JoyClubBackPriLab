@@ -10,139 +10,139 @@ import java.util.Date;
  */
 public class CouponSimpleInfo {
     /* 注意应该是券号id 而不是卡券id */
-    private Long CouponID;
-    private String VCode;
-    private String Name;
-    private String Subtitle;
-    private Integer CouponType;
-    private Integer UseState;
-    private Double ReduceMoney;
-    private Double Deductible;
-    private Double DiscountAmount;
-    private Double InsteadMoney;
-    private Double InsteadTime;
-    private Double ExchangeInfo;
-    private Double YouHuiInfo;
-    private Date EnableTime;
-    private Date OverdueTime;
+    private Long couponId;
+    private String vCode;
+    private String name;
+    private String subtitle;
+    private Integer couponType;
+    private Integer useState;
+    private Double reduceMoney;
+    private Double deductible;
+    private Double discountAmount;
+    private Double insteadMoney;
+    private Double insteadTime;
+    private String exchangeInfo;
+    private String youHuiInfo;
+    private Date enableTime;
+    private Date overdueTime;
 
-    public Long getCouponID() {
-        return CouponID;
+    public Long getCouponId() {
+        return couponId;
     }
 
-    public void setCouponID(Long couponID) {
-        CouponID = couponID;
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
     }
 
-    public String getVCode() {
-        return VCode;
+    public String getvCode() {
+        return vCode;
     }
 
-    public void setVCode(String VCode) {
-        this.VCode = VCode;
+    public void setvCode(String vCode) {
+        this.vCode = vCode;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getSubtitle() {
-        return Subtitle;
+        return subtitle;
     }
 
     public void setSubtitle(String subtitle) {
-        Subtitle = subtitle;
+        this.subtitle = subtitle;
     }
 
     public Integer getCouponType() {
-        return CouponType;
+        return couponType;
     }
 
     public void setCouponType(Integer couponType) {
-        CouponType = couponType;
+        this.couponType = couponType;
     }
 
     public Integer getUseState() {
-        return UseState;
+        return useState;
     }
 
     public void setUseState(Integer useState) {
-        UseState = useState;
+        this.useState = useState;
     }
 
     public Double getReduceMoney() {
-        return ReduceMoney;
+        return reduceMoney;
     }
 
     public void setReduceMoney(Double reduceMoney) {
-        ReduceMoney = reduceMoney;
+        this.reduceMoney = reduceMoney;
     }
 
     public Double getDeductible() {
-        return Deductible;
+        return deductible;
     }
 
     public void setDeductible(Double deductible) {
-        Deductible = deductible;
+        this.deductible = deductible;
     }
 
     public Double getDiscountAmount() {
-        return DiscountAmount;
+        return discountAmount;
     }
 
     public void setDiscountAmount(Double discountAmount) {
-        DiscountAmount = discountAmount;
+        this.discountAmount = discountAmount;
     }
 
     public Double getInsteadMoney() {
-        return InsteadMoney;
+        return insteadMoney;
     }
 
     public void setInsteadMoney(Double insteadMoney) {
-        InsteadMoney = insteadMoney;
+        this.insteadMoney = insteadMoney;
     }
 
     public Double getInsteadTime() {
-        return InsteadTime;
+        return insteadTime;
     }
 
     public void setInsteadTime(Double insteadTime) {
-        InsteadTime = insteadTime;
+        this.insteadTime = insteadTime;
     }
 
-    public Double getExchangeInfo() {
-        return ExchangeInfo;
+    public String getExchangeInfo() {
+        return exchangeInfo;
     }
 
-    public void setExchangeInfo(Double exchangeInfo) {
-        ExchangeInfo = exchangeInfo;
+    public void setExchangeInfo(String exchangeInfo) {
+        this.exchangeInfo = exchangeInfo;
     }
 
-    public Double getYouHuiInfo() {
-        return YouHuiInfo;
+    public String getYouHuiInfo() {
+        return youHuiInfo;
     }
 
-    public void setYouHuiInfo(Double youHuiInfo) {
-        YouHuiInfo = youHuiInfo;
+    public void setYouHuiInfo(String youHuiInfo) {
+        this.youHuiInfo = youHuiInfo;
     }
 
     public Date getEnableTime() {
-        return EnableTime;
+        return enableTime;
     }
 
     public void setEnableTime(Date enableTime) {
-        EnableTime = enableTime;
+        this.enableTime = enableTime;
     }
 
     public Date getOverdueTime() {
-        return OverdueTime;
+        return overdueTime;
     }
 
     public void setOverdueTime(Date overdueTime) {
-        OverdueTime = overdueTime;
+        this.overdueTime = overdueTime;
     }
 }

@@ -127,7 +127,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     List<ClientCouponBag> selectCurrentClientCouponUsable(@Param("clientId") Long clientId);
     List<CouponSimpleInfoInBag> selectClientAvailableCoupon(@Param("clientId") Long clientId);
     CouponInfoInBag selectCouponInfoByCodeId(@Param("id") Long id);
-    @Select("select s.name Name,s.id ID from card_coupon_store_scope c join sys_shop s on c.store_id=s.id where s.coupon_id = #{id}")
+    @Select("select s.name ,s.id id from card_coupon_store_scope c join sys_shop s on c.store_id=s.id where c.coupon_id = #{id}")
     List<JoinShop> selectJoinShopsByCouponId(@Param("id") Long id);
 
 }

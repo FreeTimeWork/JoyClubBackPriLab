@@ -25,6 +25,7 @@ public class CouponSimpleInfoInBag extends CouponSimpleInfo {
     /*系统券的优惠金额 */
     private Float sysReduceMoney;
     private Date sysCouponReceiveTime;
+    private Integer sysUseStatus;
 
     public Boolean getIfSystem() {
         return ifSystem;
@@ -72,5 +73,13 @@ public class CouponSimpleInfoInBag extends CouponSimpleInfo {
 
     public void setSysCouponReceiveTime(Date sysCouponReceiveTime) {
         this.sysCouponReceiveTime = sysCouponReceiveTime;
+    }
+
+    public Integer getSysUseStatus() {
+        return sysUseStatus;
+    }
+
+    public void setSysUseStatus(Integer sysUseStatus) {
+        this.sysUseStatus = sysUseStatus;
     }
 }

@@ -221,26 +221,26 @@
     </select>
     <select id="selectClientAvailableCoupon" resultType="com.joycity.joyclub.card_coupon.modal.CouponSimpleInfoInBag">
         SELECT
-        ccc.id  CouponID,4 CouponType,cc.type  sysCouponType,  cc.portrait sysCouponPortrait , cc.amount sysConditionMoney, cc.subtract_amount sysReduceMoney,
-        ccl.effective_start_time EnableTime, ccl.effective_end_time OverdueTime,
-        ccc.code VCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status UseState
+        ccc.id couponId,4 couponType,cc.type  sysCouponType, cc.name name,cc.portrait sysCouponPortrait, cc.amount sysConditionMoney, cc.subtract_amount sysReduceMoney,
+        ccl.effective_start_time enableTime, ccl.effective_end_time overdueTime,
+        ccc.code vCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status sysUseStatus,1 ifSystem
         from card_coupon_code ccc
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         WHERE
         ccc.use_status = 1
-        AND now() &lt; ccl.effective_start_time
-        AND now() &gt; ccl.effective_end_time
+        AND now() &gt; ccl.effective_start_time
+        AND now() &lt; ccl.effective_end_time
         AND ccc.client_id = #{clientId}
         AND ccc.delete_flag = 0
         ORDER BY ccl.effective_end_time DESC, ccc.id DESC
     </select>
     <select id="selectCouponInfoByCodeId" resultType="com.joycity.joyclub.card_coupon.modal.CouponInfoInBag">
         SELECT
-        ccc.id  CouponID,cc.info `Desc`,ccc.use_time UseTime,4 CouponType,cc.type  sysCouponType,  cc.portrait sysCouponPortrait ,
+        ccc.id  couponId,cc.info `desc`,ccc.use_time useTime,cc.name name,4 couponType,cc.type  sysCouponType,  cc.portrait sysCouponPortrait,
         cc.amount sysConditionMoney, cc.subtract_amount sysReduceMoney,ccc.launch_id, ccl.coupon_id,
         ccl.effective_start_time EnableTime, ccl.effective_end_time OverdueTime,
-        ccc.code VCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status UseState
+        ccc.code vCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status sysUseStatus
         from card_coupon_code ccc
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id

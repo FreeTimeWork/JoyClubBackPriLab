@@ -7,31 +7,31 @@ package com.joycity.joyclub.mallcoo.modal.result.data;
  * @date 2017/8/10
  */
 public class JoinShop {
-    private Integer ID;
-    private String Name;
-    private String Logo;
+    private Integer id;
+    private String name;
+    private String logo;
 
-    public Integer getID() {
-        return ID;
+    public Integer getId() {
+        return id;
     }
 
-    public void setID(Integer ID) {
-        this.ID = ID;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getLogo() {
-        return Logo;
+        return logo;
     }
 
     public void setLogo(String logo) {
-        Logo = logo;
+        this.logo = logo;
     }
 }

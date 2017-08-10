@@ -39,6 +39,7 @@ import java.util.Map;
  */
 @Service
 public class MallCooServiceImpl implements MallCooService {
+
     private final Log logger = LogFactory.getLog(MallCooServiceImpl.class);
     /**
      * 密钥算法
@@ -135,6 +136,7 @@ public class MallCooServiceImpl implements MallCooService {
         if (code != 1) {
             throw new BusinessException(ResultCode.MALLCOO_ERROR, jsonObject.getString("Message"));
         }
+        String a = jsonObject.getString("Data");
         return jsonObject.getString("Data");
     }
 

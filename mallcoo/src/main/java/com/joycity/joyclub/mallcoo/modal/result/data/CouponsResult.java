@@ -9,22 +9,22 @@ import java.util.List;
  * @date 2017/8/8
  */
 public class CouponsResult {
-    private List<CouponSimpleInfo> CouponInfoList;
-    private int Count;
+    private List<CouponSimpleInfo> couponInfoList;
+    private int count;
 
     public List<CouponSimpleInfo> getCouponInfoList() {
-        return CouponInfoList;
+        return couponInfoList;
     }
 
     public void setCouponInfoList(List<CouponSimpleInfo> couponInfoList) {
-        CouponInfoList = couponInfoList;
+        this.couponInfoList = couponInfoList;
     }
 
     public int getCount() {
-        return Count;
+        return count;
     }
 
     public void setCount(int count) {
-        Count = count;
+        this.count = count;
     }
 }
