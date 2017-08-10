@@ -122,4 +122,18 @@ alipay:
   returnUrl: http://callmexyz1.ngrok.cc/alipayresult
 server:
   port: 8080
----
+
+coupon:
+  wxPay:
+    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/we_chat/notify
+
+  aliPay:
+    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/ali/notify
+
+# pos 加密需要
+
+pos:
+  appid: rzrf9teOyA5l
+# pos与后台通信密钥。secretKey用MD5加密，与pos传过来的sign对比，一样就可以通过。
+  secretKey: pC6yk2RoMqbK20jFv6NlPAg2
+
