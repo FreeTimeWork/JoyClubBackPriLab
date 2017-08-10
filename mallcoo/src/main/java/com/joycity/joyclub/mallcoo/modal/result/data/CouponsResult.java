@@ -8,15 +8,15 @@ import java.util.List;
  * @author CallMeXYZ
  * @date 2017/8/8
  */
-public class CouponResult {
-    private List<CouponInfo> CouponInfoList;
+public class CouponsResult {
+    private List<CoupoSimpleInfo> CouponInfoList;
     private int Count;
 
-    public List<CouponInfo> getCouponInfoList() {
+    public List<CoupoSimpleInfo> getCouponInfoList() {
         return CouponInfoList;
     }
 
-    public void setCouponInfoList(List<CouponInfo> couponInfoList) {
+    public void setCouponInfoList(List<CoupoSimpleInfo> couponInfoList) {
         CouponInfoList = couponInfoList;
     }
 

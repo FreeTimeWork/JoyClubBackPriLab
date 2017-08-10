@@ -100,20 +100,20 @@ public class MallCooServiceImpl implements MallCooService {
     }
 
     @Override
-    public CouponResult getCoupons(Long projectId, String crmId) {
+    public CouponsResult getCoupons(Long projectId, String crmId) {
         Map<String, String> body = new HashMap<>();
         body.put("MemberID", crmId);
         body.put("MinID", "0");
         body.put("PageSize", "100");
-        return postForDataObject(projectId, URL_GET_COUPONS, body, CouponResult.class);
+        return postForDataObject(projectId, URL_GET_COUPONS, body, CouponsResult.class);
     }
 
     @Override
-    public void getCouponInfo(Long projectId, String code) {
+    public CouponInfo getCouponInfo(Long projectId, String code) {
         Map<String, String> body = new HashMap<>();
         body.put("VCode", code);
-        System.out.println(postForDataObject(projectId, URL_GET_COUPON_INFO, body, String.class));
-        return;
+        return postForDataObject(projectId, URL_GET_COUPON_INFO, body, CouponInfo.class);
+
     }
 
     private <T> List<T> postForDataArray(Long projectId, String url, Object body, Class<T> clazz) {

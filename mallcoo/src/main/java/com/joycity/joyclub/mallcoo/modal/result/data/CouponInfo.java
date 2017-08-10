@@ -1,147 +1,167 @@
 package com.joycity.joyclub.mallcoo.modal.result.data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * CouponInfo
  *
  * @author CallMeXYZ
- * @date 2017/8/8
+ * @date 2017/8/10
  */
-public class CouponInfo {
-    private Long CouponID;
-    private String VCode;
-    private String Name;
-    private String Subtitle;
-    private Integer CouponType;
-    private Integer UseState;
+public class CouponInfo extends CoupoSimpleInfo {
+    private String CouponRuleNo;
+    private String Desc;
     private Double ReduceMoney;
     private Double Deductible;
     private Double DiscountAmount;
     private Double InsteadMoney;
     private Double InsteadTime;
-    private Double ExchangeInfo;
-    private Double YouHuiInfo;
-    private Date EnableTime;
-    private Date OverdueTime;
+    private List<Integer> PartTimeList;
+    private Date UseTime;
+    private Integer Verification;
+    private String ConsumerHotline;
+    private Boolean IsPwdForVerify;
+    private Integer ShowType;
+    private String OperationTips;
+    private String UseDesc;
+    private List<JoinShop> JoinShopList;
 
-    public Long getCouponID() {
-        return CouponID;
+    public String getCouponRuleNo() {
+        return CouponRuleNo;
     }
 
-    public void setCouponID(Long couponID) {
-        CouponID = couponID;
+    public void setCouponRuleNo(String couponRuleNo) {
+        CouponRuleNo = couponRuleNo;
     }
 
-    public String getVCode() {
-        return VCode;
+    public String getDesc() {
+        return Desc;
     }
 
-    public void setVCode(String VCode) {
-        this.VCode = VCode;
+    public void setDesc(String desc) {
+        Desc = desc;
     }
 
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getSubtitle() {
-        return Subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        Subtitle = subtitle;
-    }
-
-    public Integer getCouponType() {
-        return CouponType;
-    }
-
-    public void setCouponType(Integer couponType) {
-        CouponType = couponType;
-    }
-
-    public Integer getUseState() {
-        return UseState;
-    }
-
-    public void setUseState(Integer useState) {
-        UseState = useState;
-    }
-
+    @Override
     public Double getReduceMoney() {
         return ReduceMoney;
     }
 
+    @Override
     public void setReduceMoney(Double reduceMoney) {
         ReduceMoney = reduceMoney;
     }
 
+    @Override
     public Double getDeductible() {
         return Deductible;
     }
 
+    @Override
     public void setDeductible(Double deductible) {
         Deductible = deductible;
     }
 
+    @Override
     public Double getDiscountAmount() {
         return DiscountAmount;
     }
 
+    @Override
     public void setDiscountAmount(Double discountAmount) {
         DiscountAmount = discountAmount;
     }
 
+    @Override
     public Double getInsteadMoney() {
         return InsteadMoney;
     }
 
+    @Override
     public void setInsteadMoney(Double insteadMoney) {
         InsteadMoney = insteadMoney;
     }
 
+    @Override
     public Double getInsteadTime() {
         return InsteadTime;
     }
 
+    @Override
     public void setInsteadTime(Double insteadTime) {
         InsteadTime = insteadTime;
     }
 
-    public Double getExchangeInfo() {
-        return ExchangeInfo;
+    public List<Integer> getPartTimeList() {
+        return PartTimeList;
     }
 
-    public void setExchangeInfo(Double exchangeInfo) {
-        ExchangeInfo = exchangeInfo;
+    public void setPartTimeList(List<Integer> partTimeList) {
+        PartTimeList = partTimeList;
     }
 
-    public Double getYouHuiInfo() {
-        return YouHuiInfo;
+    public Date getUseTime() {
+        return UseTime;
     }
 
-    public void setYouHuiInfo(Double youHuiInfo) {
-        YouHuiInfo = youHuiInfo;
+    public void setUseTime(Date useTime) {
+        UseTime = useTime;
     }
 
-    public Date getEnableTime() {
-        return EnableTime;
+    public Integer getVerification() {
+        return Verification;
     }
 
-    public void setEnableTime(Date enableTime) {
-        EnableTime = enableTime;
+    public void setVerification(Integer verification) {
+        Verification = verification;
     }
 
-    public Date getOverdueTime() {
-        return OverdueTime;
+    public String getConsumerHotline() {
+        return ConsumerHotline;
     }
 
-    public void setOverdueTime(Date overdueTime) {
-        OverdueTime = overdueTime;
+    public void setConsumerHotline(String consumerHotline) {
+        ConsumerHotline = consumerHotline;
+    }
+
+    public Boolean getPwdForVerify() {
+        return IsPwdForVerify;
+    }
+
+    public void setPwdForVerify(Boolean pwdForVerify) {
+        IsPwdForVerify = pwdForVerify;
+    }
+
+    public Integer getShowType() {
+        return ShowType;
+    }
+
+    public void setShowType(Integer showType) {
+        ShowType = showType;
+    }
+
+    public String getOperationTips() {
+        return OperationTips;
+    }
+
+    public void setOperationTips(String operationTips) {
+        OperationTips = operationTips;
+    }
+
+    public String getUseDesc() {
+        return UseDesc;
+    }
+
+    public void setUseDesc(String useDesc) {
+        UseDesc = useDesc;
+    }
+
+    public List<JoinShop> getJoinShopList() {
+        return JoinShopList;
+    }
+
+    public void setJoinShopList(List<JoinShop> joinShopList) {
+        JoinShopList = joinShopList;
     }
 }
