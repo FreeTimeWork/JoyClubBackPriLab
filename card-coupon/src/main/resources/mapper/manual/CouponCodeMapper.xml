@@ -18,7 +18,7 @@
         AND now() <![CDATA[ > ]]> ccl.effective_start_time
         AND now() <![CDATA[ < ]]> ccl.effective_end_time
     </sql>
-    
+
     <sql id="CardCouponCodeFilter">
         ccc.delete_flag = 0
         <if test="projectId != null">
@@ -88,7 +88,8 @@
         WHERE ccc.code = #{code} AND ccc.belong = #{belong}
     </select>
 
-    <select id="selectCurrentCouponCode" resultType="com.joycity.joyclub.card_coupon.modal.ShowPosCurrentCouponCodeInfo">
+    <select id="selectCurrentCouponCode"
+            resultType="com.joycity.joyclub.card_coupon.modal.ShowPosCurrentCouponCodeInfo">
         select
         cc.name AS coupon_name, cc.type AS coupon_type, cc.amount, cc.subtract_amount,
         ccl.name AS launch_name, ccl.type AS launch_type, ccc.id AS coupon_code_id, ccc.code, ccc.use_status,
@@ -97,7 +98,8 @@
         inner join card_coupon_launch ccl on ccl.id = ccc.launch_id and ccl.delete_flag = 0
         inner join card_coupon cc on cc.id = ccl.coupon_id and cc.delete_flag = 0 and cc.`type` != 3
         inner join card_coupon_store_scope ccss on ccss.coupon_id = cc.id and ccss.delete_flag = 0
-        inner join sys_shop ss on ss.id = ccss.store_id and ss.code = #{shopCode} and ss.project_id = #{projectId} and ss.delete_flag = 0
+        inner join sys_shop ss on ss.id = ccss.store_id and ss.code = #{shopCode} and ss.project_id = #{projectId} and
+        ss.delete_flag = 0
         inner join card_coupon_vip_scope ccvs on ccvs.coupon_id = cc.id and ccvs.delete_flag = 0
         inner join client c on c.id = ccc.client_id and c.delete_flag = 0 and c.vip_card_grade = ccvs.vip_type
 
@@ -114,7 +116,8 @@
     </select>
 
     <!-- 查找在条件投放期间，该会员，已使用代金券券量和未使用券量 -->
-    <select id="selectCouponNumFromLaunchBetween" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo">
+    <select id="selectCouponNumFromLaunchBetween"
+            resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchBetweenInfo">
         SELECT
         COUNT(CASE WHEN ccc.use_status = 1 THEN 1 ELSE NULL END) AS not_used_num,
         COUNT(CASE WHEN ccc.use_status = 2 THEN 1 ELSE NULL END) AS used_num
@@ -124,17 +127,18 @@
         FROM card_coupon_launch ccl2
         INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
         WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
-        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
+        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag
+        = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
-        AND ccl.delete_flag = 0  AND ccl.type = 1
+        AND ccl.delete_flag = 0 AND ccl.type = 1
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         <where>
             ccc.client_id = #{clientId}
             AND cc.type = 2
             AND ccc.use_status != 3
-            AND ccc.belong  = -1
+            AND ccc.belong = -1
             AND ccc.delete_flag = 0
         </where>
     </select>
@@ -148,17 +152,18 @@
         FROM card_coupon_launch ccl2
         INNER JOIN card_coupon cc ON cc.id = ccl2.coupon_id AND cc.type = 2
         WHERE now() <![CDATA[ > ]]> ccl2.launch_start_time
-        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
+        AND now()  <![CDATA[ < ]]> IFNULL(ccl2.forbid_time,ccl2.launch_end_time) and ccl2.type = 1 and ccl2.confirm_flag
+        = 1 and ccl2.review_status = 1 and ccl2.delete_flag = 0
         ) launch_time ON ccc.receive_time  <![CDATA[ > ]]>  launch_time.launch_start_time
         AND ccc.receive_time <![CDATA[ < ]]> launch_time.launch_end_time
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
-        AND ccl.delete_flag = 0  AND ccl.type = 1
-        INNER JOIN card_coupon cc ON  cc.id = ccl.coupon_id
+        AND ccl.delete_flag = 0 AND ccl.type = 1
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         <where>
             ccc.client_id = #{clientId}
             AND cc.type = 2
             AND ccc.use_status != 3
-            AND ccc.belong  = -1
+            AND ccc.belong = -1
             AND ccc.delete_flag = 0
         </where>
         limit 0,#{num}
@@ -179,10 +184,12 @@
         </where>
     </select>
 
-    <select id="selectCardThirdCouponCodeByFilter" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo">
+    <select id="selectCardThirdCouponCodeByFilter"
+            resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo">
         SELECT
         <include refid="CardCouponCodeColumn"/>,
-        cc.name AS coupon_name, cc.type AS coupon_type, ccl.name AS coupon_launch_name, c.vip_code, c.tel, c.real_name, cts.name AS third_party_shop_name
+        cc.name AS coupon_name, cc.type AS coupon_type, ccl.name AS coupon_launch_name, c.vip_code, c.tel, c.real_name,
+        cts.name AS third_party_shop_name
         FROM card_coupon_code ccc
         INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
@@ -198,7 +205,8 @@
 
     <select id="selectCurrentClientCouponUsable" resultType="com.joycity.joyclub.card_coupon.modal.ClientCouponBag">
         SELECT
-        cc.name AS coupon_name, cc.type AS coupon_type, cc.info, cc.portrait, cc.amount, cc.subtract_amount, cc.support_refund_flag,
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.info, cc.portrait, cc.amount, cc.subtract_amount,
+        cc.support_refund_flag,
         ccl.effective_start_time, ccl.effective_end_time,
         ccc.code, ccc.belong, ccc.receive_time, ccc.use_status, c.vip_code
         from card_coupon_code ccc
@@ -210,5 +218,32 @@
         AND ccc.client_id = #{clientId}
         AND ccc.use_status = 1 AND ccc.delete_flag = 0
         ORDER BY ccl.effective_end_time DESC, ccc.create_time DESC, ccc.id
+    </select>
+    <select id="selectClientAvailableCoupon" resultType="com.joycity.joyclub.card_coupon.modal.CouponSimpleInfoInBag">
+        SELECT
+        ccc.id  CouponID,4 CouponType,cc.type  sysCouponType,  cc.portrait sysCouponPortrait , cc.amount sysConditionMoney, cc.subtract_amount sysReduceMoney,
+        ccl.effective_start_time EnableTime, ccl.effective_end_time OverdueTime,
+        ccc.code VCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status UseState
+        from card_coupon_code ccc
+        INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
+        WHERE
+        ccc.use_status = 1
+        AND now() &lt; ccl.effective_start_time
+        AND now() &gt; ccl.effective_end_time
+        AND ccc.client_id = #{clientId}
+        AND ccc.delete_flag = 0
+        ORDER BY ccl.effective_end_time DESC, ccc.id DESC
+    </select>
+    <select id="selectCouponInfoByCodeId" resultType="com.joycity.joyclub.card_coupon.modal.CouponInfoInBag">
+        SELECT
+        ccc.id  CouponID,cc.info `Desc`,ccc.use_time UseTime,4 CouponType,cc.type  sysCouponType,  cc.portrait sysCouponPortrait ,
+        cc.amount sysConditionMoney, cc.subtract_amount sysReduceMoney,ccc.launch_id, ccl.coupon_id,
+        ccl.effective_start_time EnableTime, ccl.effective_end_time OverdueTime,
+        ccc.code VCode,  ccc.receive_time sysCouponReceiveTime, ccc.use_status UseState
+        from card_coupon_code ccc
+        INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
+        WHERE ccc.id = #{id}
     </select>
 </mapper>

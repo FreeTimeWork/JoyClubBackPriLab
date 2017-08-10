@@ -89,7 +89,7 @@ mallcoo:
     getShop: https://openapi10.mallcoo.cn/Shop/V1/GetList
     #http://docs-t.mallcoo.cn/openplatform/coupon/v1/9.1.CodeGetPageByMemberID.html
     getCoupons: https://openapi10.mallcoo.cn/Coupon/v1/GetPage/ByMemberID
-    # http://docs-t.mallcoo.cn/openplatform/coupon/v1/9.3.CodeGetByIDOrVCode.html
+    # http://docs.mallcoo.cn/openplatform/coupon/v1/9.3.CodeGetByVCode.html
     getCouponInfo: https://openapi10.mallcoo.cn/Coupon/v1/Get/ByVCode
 
 point:
