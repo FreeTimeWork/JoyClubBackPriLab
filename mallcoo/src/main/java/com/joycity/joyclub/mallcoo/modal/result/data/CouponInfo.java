@@ -9,7 +9,7 @@ import java.util.List;
  * @author CallMeXYZ
  * @date 2017/8/10
  */
-public class CouponInfo extends CoupoSimpleInfo {
+public class CouponInfo extends CouponSimpleInfo {
     private String CouponRuleNo;
     private String Desc;
     private Double ReduceMoney;

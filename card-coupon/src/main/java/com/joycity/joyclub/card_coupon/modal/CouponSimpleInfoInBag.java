@@ -1,6 +1,6 @@
 package com.joycity.joyclub.card_coupon.modal;
 
-import com.joycity.joyclub.mallcoo.modal.result.data.CoupoSimpleInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.CouponSimpleInfo;
 
 import java.util.Date;
 
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author CallMeXYZ
  * @date 2017/8/10
  */
-public class CouponSimpleInfoInBag extends CoupoSimpleInfo {
+public class CouponSimpleInfoInBag extends CouponSimpleInfo {
 
 
     /* 是否是我方系统的券 */

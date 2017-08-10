@@ -8,7 +8,8 @@ import java.util.Date;
  * @author CallMeXYZ
  * @date 2017/8/8
  */
-public class CoupoSimpleInfo {
+public class CouponSimpleInfo {
+    /* 注意应该是券号id 而不是卡券id */
     private Long CouponID;
     private String VCode;
     private String Name;

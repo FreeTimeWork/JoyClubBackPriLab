@@ -9,14 +9,14 @@ import java.util.List;
  * @date 2017/8/8
  */
 public class CouponsResult {
-    private List<CoupoSimpleInfo> CouponInfoList;
+    private List<CouponSimpleInfo> CouponInfoList;
     private int Count;
 
-    public List<CoupoSimpleInfo> getCouponInfoList() {
+    public List<CouponSimpleInfo> getCouponInfoList() {
         return CouponInfoList;
     }
 
-    public void setCouponInfoList(List<CoupoSimpleInfo> couponInfoList) {
+    public void setCouponInfoList(List<CouponSimpleInfo> couponInfoList) {
         CouponInfoList = couponInfoList;
     }
 

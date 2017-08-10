@@ -32,6 +32,7 @@ public interface MallCooService {
     List<OffLineShopInfo> getShops(Long projectId);
 
     /**
+     * 目前是返回100个
      * @param crmId 会员号
      */
     CouponsResult getCoupons(Long projectId, String crmId);

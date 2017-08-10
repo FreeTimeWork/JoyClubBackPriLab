@@ -24,7 +24,7 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
-import com.joycity.joyclub.mallcoo.modal.result.data.CoupoSimpleInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.CouponSimpleInfo;
 import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
 import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.collections.CollectionUtils;
@@ -229,7 +229,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         String vipCode = clientUserMapper.getVipCodeById(clientId);
         ThrowBusinessExceptionUtil.checkNull(vipCode, "会员信息不存在");
         List<CouponSimpleInfoInBag> sysList = cardCouponCodeMapper.selectClientAvailableCoupon(clientId);
-        List<CoupoSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
+        List<CouponSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
         return getAvailableCardCoupons(sysList, mallcooList);
     }
 
@@ -259,15 +259,15 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         Long clientId = clientUserMapper.getIdByVipCode(vipCode);
         ThrowBusinessExceptionUtil.checkNull(clientId, "会员信息不存在");
         List<CouponSimpleInfoInBag> sysList = cardCouponCodeMapper.selectClientAvailableCoupon(clientId);
-        List<CoupoSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
+        List<CouponSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
         return getAvailableCardCoupons(sysList, mallcooList);
     }
 
-    private ResultData getAvailableCardCoupons(List<CouponSimpleInfoInBag> sysList, List<CoupoSimpleInfo> mallcooList) {
-        List<CoupoSimpleInfo> resultList = new ArrayList<>();
+    private ResultData getAvailableCardCoupons(List<CouponSimpleInfoInBag> sysList, List<CouponSimpleInfo> mallcooList) {
+        List<CouponSimpleInfo> resultList = new ArrayList<>();
         resultList.addAll(sysList);
         resultList.addAll(mallcooList);
-        resultList.sort(Comparator.comparing(CoupoSimpleInfo::getOverdueTime));
+        resultList.sort(Comparator.comparing(CouponSimpleInfo::getOverdueTime));
         return new ResultData(new ListResult(resultList));
     }
 
