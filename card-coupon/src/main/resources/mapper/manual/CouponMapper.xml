@@ -51,6 +51,7 @@
             <where>
                 <include refid="name_and_type"/>
             </where>
+            ORDER BY cc.create_time DESC
             <include refid="limit"/>
         ) cc
         LEFT JOIN card_coupon_launch ccl ON cc.id = ccl.coupon_id and ccl.delete_flag = 0 and ccl.confirm_flag = 1 AND  ccl.review_status = 1

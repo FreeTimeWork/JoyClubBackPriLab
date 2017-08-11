@@ -116,9 +116,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             CardThirdpartyCouponCode cardThirdpartyCouponCode = null;
             PageUtil pageUtil = new PageUtil();
             Long thirdPartyShopId = cardCoupon.getThirdpartyShopId();
+            String thirdCodeBatch = cardCoupon.getBatch();
             try {
                 thirdPartyCouponCodeCache = redisTemplate.boundHashOps(getThirdCodeKey(thirdPartyShopId));
-                List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByThirdPartyShopId(thirdPartyShopId, pageUtil);
+                List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
                 cardThirdpartyCouponCode = getThirdCode(thirdPartyCouponCodes, 0, thirdPartyCouponCodeCache, pageUtil);
                 if (cardThirdpartyCouponCode == null) {
                     couponCodeCache.changeInventory(launchId, 1);
@@ -250,18 +251,20 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     private void batchSendThirdPartyCode(Long launchId, CardCoupon cardCoupon, CardCouponLaunch cardCouponLaunch) {
 
         Long thirdPartyShopId = cardCoupon.getThirdpartyShopId();
+        String thirdCodeBatch = cardCoupon.getBatch();
         String vipBatch = cardCouponLaunch.getVipBatch();
         List<Long> clientIds = cardVipBatchMapper.selectClientIdByBatch(vipBatch);
         BoundHashOperations<String, String, String> thirdPartyCouponCodeCache = redisTemplate.boundHashOps(getThirdCodeKey(thirdPartyShopId));
 
         PageUtil pageUtil = new PageUtil(0, clientIds.size());
-        List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByThirdPartyShopId(thirdPartyShopId, pageUtil);
+        List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
         int index = 0;
         for (int i = 0; i < clientIds.size(); i++) {
             boolean result = couponCodeCache.sendCouponCode(launchId);
             if (!result) {
                 return;
             }
+            // TODO: 2017/8/11 cfc 封裝有问题，一些变动的参数传进去还是不变的
             CardThirdpartyCouponCode cardThirdpartyCouponCode = getThirdCode(thirdPartyCouponCodes, index, thirdPartyCouponCodeCache, pageUtil);
             //第三方没有卡券了，直接返回
             if (cardThirdpartyCouponCode == null) {
@@ -312,9 +315,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                     // 取一次codes不够，再取一次。如果取null，直接返回
                     if (index < thirdPartyCouponCodes.size()) {
                         cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index++);
+                        code = cardThirdpartyCouponCode.getCode();
                     } else {
                         pageUtil.setPage(pageUtil.getPage() + 1);
-                        thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByThirdPartyShopId(cardThirdpartyCouponCode.getThirdpartyShopId(), pageUtil);
+                        thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(cardThirdpartyCouponCode.getBatch(), pageUtil);
                         index = 0;
                         if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
                             cardThirdpartyCouponCode = null;

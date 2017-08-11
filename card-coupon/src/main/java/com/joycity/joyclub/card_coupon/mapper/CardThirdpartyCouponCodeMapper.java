@@ -24,8 +24,8 @@ public interface CardThirdpartyCouponCodeMapper extends BaseMapper<CardThirdpart
     @Select("select count(*) from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0")
     Long countByBatch(@Param("batch") String batch);
 
-    @Select("select id, code, batch from card_thirdparty_coupon_code where thirdparty_shop_id = #{thirdPartyShopId} and delete_flag = 0 limit #{pageUtil.offset},#{pageUtil.pageSize}")
-    List<CardThirdpartyCouponCode> selectByThirdPartyShopId(@Param("thirdPartyShopId") Long thirdPartyShopId, @Param("pageUtil") PageUtil pageUtil);
+    @Select("select id, code, batch from card_thirdparty_coupon_code where batch = #{batch} and delete_flag = 0 limit #{pageUtil.offset},#{pageUtil.pageSize}")
+    List<CardThirdpartyCouponCode> selectByBatch(@Param("batch") String thirdCodeBatch, @Param("pageUtil") PageUtil pageUtil);
 
     @Update("update card_thirdparty_coupon_code set delete_flag = 1, delete_time = now() where id = #{id} and delete_flag = 0")
     int deleteById(@Param("id") Long id);
