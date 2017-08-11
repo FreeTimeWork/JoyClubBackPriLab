@@ -42,24 +42,17 @@ public class EncryptionUtil {
         return data;
     }
 
-    public static String aesEncrypt(String value, String key) {
-        try {
-            Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
-            return bytesToHex(cipher.doFinal(value.getBytes("utf-8")));
-        } catch (Exception e) {
-            return null;
-        }
+    public static String aesEncrypt(String value, String key) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+        return bytesToHex(cipher.doFinal(value.getBytes("utf-8")));
+
     }
 
-    public static String aesDecrypt(String value, String key) {
-        try {
-            Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
-            return new String(cipher.doFinal(hexToBytes(value)));
-        } catch (Exception e) {
-            return null;
-        }
+    public static String aesDecrypt(String value, String key) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.getBytes("utf-8"), "AES"));
+        return new String(cipher.doFinal(hexToBytes(value)));
     }
 
     public static Map<String, String> generateRsaKeyPair() throws Exception {
@@ -95,6 +88,7 @@ public class EncryptionUtil {
 
     /**
      * 得到公钥
+     *
      * @param key 密钥字符串（经过base64编码）
      * @throws Exception
      */

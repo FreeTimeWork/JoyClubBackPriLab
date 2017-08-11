@@ -69,7 +69,12 @@ public class PointQRCodeServiceImpl implements PointQRCodeService {
     }
 
     private ResultData getQRCodeData(String vipCode, String mallcooOpenUserId) {
-        String qrCode = EncryptionUtil.aesEncrypt(vipCode + System.currentTimeMillis(), QR_CODE_KEY);
+        String qrCode = null;
+        try {
+            qrCode = EncryptionUtil.aesEncrypt(vipCode + System.currentTimeMillis(), QR_CODE_KEY);
+        } catch (Exception e) {
+            throw new BusinessException(ResultCode.ENCRYPTION_ERROR,"二维码加密错误");
+        }
         String hint = getPointHintFromPosOrThrow(vipCode);
         Map<String, String> result = new HashMap<>();
         result.put("qrCode", qrCode);
