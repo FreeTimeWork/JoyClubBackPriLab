@@ -29,7 +29,7 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
      * @param couponId
      * @return
      */
-    @Select("select IFNULL(sum(launch_num),0) from card_coupon_launch where coupon_id = 23 and confirm_flag = 1 and delete_flag = 0")
+    @Select("select IFNULL(sum(launch_num),0) from card_coupon_launch where coupon_id = #{couponId} and confirm_flag = 1 and delete_flag = 0")
     int selectLaunchNumByCouponId(@Param("couponId") Long couponId);
 
     @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
