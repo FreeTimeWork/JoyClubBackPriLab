@@ -36,8 +36,8 @@ public interface CardThirdpartyCouponCodeMapper extends BaseMapper<CardThirdpart
      *
      * @return
      */
-    @Delete("DELETE ctcc.* from card_thirdparty_coupon_code ctcc LEFT JOIN card_coupon cc ON cc.batch = ctcc.batch WHERE ISNULL(cc.id)")
-    int clear();
+    @Delete("DELETE ctcc.* from card_thirdparty_coupon_code ctcc LEFT JOIN card_coupon cc ON cc.batch = ctcc.batch WHERE ctcc.thirdparty_shop_id = #{thirdPartyShopId} and  ISNULL(cc.id)")
+    int clear(@Param("thirdPartyShopId") Long thirdPartyShopId);
 
     List<ThirdpartyCouponCodeGroupByBatch> selectGroupByBatch();
 }
