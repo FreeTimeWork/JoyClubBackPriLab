@@ -1,7 +1,6 @@
 package com.joycity.joyclub.commons.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,9 +18,9 @@ public interface BaseMapper<T, PK extends Serializable, E> {
 
     int deleteByPrimaryKey(PK id);
 
-    int insert(T record);
+    PK insert(T record);
 
-    int insertSelective(T record);
+    PK insertSelective(T record);
 
     List<T> selectByExample(E example);
 
