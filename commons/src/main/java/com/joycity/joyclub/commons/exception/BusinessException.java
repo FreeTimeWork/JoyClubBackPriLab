@@ -43,6 +43,8 @@ public class BusinessException extends BaseBusinessException {
         map.put(ResultCode.EXIST_LAUNCH, "该券存在投放");
         map.put(ResultCode.FORBID_REFUND, "该订单不能退货");
         map.put(ResultCode.ORDER_NOT_FIND, "订单不存在");
+        map.put(ResultCode.ENCRYPTION_ERROR, "加密错误");
+        map.put(ResultCode.DECRYPTION_ERROR, "解密错误");
 
 
     }

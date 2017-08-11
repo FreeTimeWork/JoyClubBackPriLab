@@ -96,6 +96,23 @@ public class ClientServiceImpl implements ClientService {
         }.getList(pageUtil);
     }
 
+    @Override
+    public Client fetchClientByVipCodeFromKechuanAndAynclocal(String vipCode) {
+        Client client = keChuanCrmService.getMemberByVipCode(vipCode);
+        if (client != null) {
+            Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+            if (clientId == null) {
+                Long id = clientUserMapper.insertSelective(client);
+                client.setId(id);
+            } else {
+                client.setId(clientId);
+                clientUserMapper.updateByPrimaryKeySelective(client);
+            }
+
+        }
+        return client;
+    }
+
     /**
      * 如果为空 抛出异常
      */

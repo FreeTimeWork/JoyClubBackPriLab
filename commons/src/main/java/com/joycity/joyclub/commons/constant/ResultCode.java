@@ -17,13 +17,13 @@ public class ResultCode {
     public static final int USER_SESSION_NULL = 30000;
     public static final int ERR_EXPORT_EXCEL = 30001;
     public static final int ERR_IMPORT_EXCEL = 30002;
-    public static final int UPLOAD_ERROR = 30101;
+
 
     /**
      * 请求的参数错误
      */
     public static final int REQUEST_PARAMS_ERROR = 30006;
-
+    public static final int UPLOAD_ERROR = 30101;
 
     /**
      * 数据不存在，比如通过id访问时返回null
@@ -34,6 +34,10 @@ public class ResultCode {
     public static final int REQUEST_PARAM_ERROR = 30204;
     /* 访问第三方接口错误 */
     public static final int USE_OTHER_API_ERROR = 30205;
+    /* 加密错误 */
+    public static final int ENCRYPTION_ERROR = 30301;
+    /* 解密错误 */
+    public static final int DECRYPTION_ERROR = 30302;
 
 
     public static final int HTTPKIT_CONNECT_ERROR = 50000;
