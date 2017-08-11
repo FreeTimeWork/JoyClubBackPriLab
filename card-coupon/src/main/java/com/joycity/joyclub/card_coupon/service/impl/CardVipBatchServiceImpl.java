@@ -38,6 +38,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
 
     public ResultData createCardVipBatch(List<List<String>> list){
+        cardVipBatchMapper.clear();
         BoundHashOperations<String, String, String> cardVipBatchCache = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
 
         Set<String> tels = new HashSet<>();

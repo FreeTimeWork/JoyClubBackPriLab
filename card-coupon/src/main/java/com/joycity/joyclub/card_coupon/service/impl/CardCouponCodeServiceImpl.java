@@ -114,23 +114,18 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         } else {
             BoundHashOperations<String, String, String> thirdPartyCouponCodeCache = null;
             CardThirdpartyCouponCode cardThirdpartyCouponCode = null;
-            PageUtil pageUtil = new PageUtil();
             Long thirdPartyShopId = cardCoupon.getThirdpartyShopId();
             String thirdCodeBatch = cardCoupon.getBatch();
             try {
-                thirdPartyCouponCodeCache = redisTemplate.boundHashOps(getThirdCodeKey(thirdPartyShopId));
-                List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
-                cardThirdpartyCouponCode = getThirdCode(thirdPartyCouponCodes, 0, thirdPartyCouponCodeCache, pageUtil);
+                cardThirdpartyCouponCode = getThirdCode(thirdCodeBatch,thirdPartyShopId);
                 if (cardThirdpartyCouponCode == null) {
                     couponCodeCache.changeInventory(launchId, 1);
-                    thirdPartyCouponCodeCache.delete(cardThirdpartyCouponCode.getCode());
                     throw new BusinessException(ResultCode.DATA_NOT_EXIST);
                 }
                 id = sendThirdPartyCode(launchId, cardCoupon, clientId, cardThirdpartyCouponCode);
             } catch (Exception e) {
-                //发券逻辑执行失败,cache库存恢复。
-                couponCodeCache.changeInventory(launchId, 1);
-                thirdPartyCouponCodeCache.delete(cardThirdpartyCouponCode.getCode());
+                //第三方发券逻辑执行失败,第三方的卡券删掉。
+                cardThirdpartyCouponCodeMapper.deleteById(cardThirdpartyCouponCode.getId());
                 throw new RuntimeException(e);
             }
         }
@@ -256,7 +251,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         List<Long> clientIds = cardVipBatchMapper.selectClientIdByBatch(vipBatch);
         BoundHashOperations<String, String, String> thirdPartyCouponCodeCache = redisTemplate.boundHashOps(getThirdCodeKey(thirdPartyShopId));
 
-        PageUtil pageUtil = new PageUtil(0, clientIds.size());
+        PageUtil pageUtil = new PageUtil(1, clientIds.size());
         List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
         int index = 0;
         for (int i = 0; i < clientIds.size(); i++) {
@@ -264,12 +259,37 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             if (!result) {
                 return;
             }
-            // TODO: 2017/8/11 cfc 封裝有问题，一些变动的参数传进去还是不变的
-            CardThirdpartyCouponCode cardThirdpartyCouponCode = getThirdCode(thirdPartyCouponCodes, index, thirdPartyCouponCodeCache, pageUtil);
-            //第三方没有卡券了，直接返回
-            if (cardThirdpartyCouponCode == null) {
-                couponCodeCache.changeInventory(launchId, 1);
-                thirdPartyCouponCodeCache.delete(cardThirdpartyCouponCode.getCode());
+            // 批量插入为了效率，这里重新写得到三方卡号的逻辑
+            CardThirdpartyCouponCode cardThirdpartyCouponCode = null;
+            String code = null;
+            if (CollectionUtils.isNotEmpty(thirdPartyCouponCodes)) {
+                cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
+                code = cardThirdpartyCouponCode.getCode();
+                // code缓存没有，说明可用，存入缓存，再使用code。
+                // code缓存存在，说明不可用，取下一个
+                while (true) {
+                    if (thirdPartyCouponCodeCache.get(code) == null) {
+                        thirdPartyCouponCodeCache.put(code, code);
+                        break;
+                    } else {
+                        index++;
+                        if (index < thirdPartyCouponCodes.size()) {
+                            cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
+                            code = cardThirdpartyCouponCode.getCode();
+                        } else {
+                            // 取一次codes不够，再取一次。如果没有了，直接返回
+                            pageUtil.setPage(pageUtil.getPage() + 1);
+                            thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(cardThirdpartyCouponCode.getBatch(), pageUtil);
+                            index = 0;
+                            if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
+                                return;
+                            }
+
+                        }
+                    }
+                }
+
+            } else {
                 return;
             }
 
@@ -277,10 +297,8 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 //执行发券逻辑
                 sendThirdPartyCode(launchId, cardCoupon, clientIds.get(i), cardThirdpartyCouponCode);
             } catch (Exception e) {
-                //发券逻辑执行失败,cache库存恢复。
-                couponCodeCache.changeInventory(launchId, 1);
-                thirdPartyCouponCodeCache.delete(cardThirdpartyCouponCode.getCode());
-                throw new RuntimeException(e);
+                //第三方卡号发券逻辑执行失败,该卡号删掉。
+                cardThirdpartyCouponCodeMapper.deleteById(cardThirdpartyCouponCode.getId());
             }
         }
     }
@@ -289,17 +307,13 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     /**
      * 得到第三方的code,如果没有，返回null
      *
-     * @param thirdPartyCouponCodes
-     * @param index
-     * @param thirdPartyCouponCodeCache
-     * @param pageUtil
      * @return
      */
-    private CardThirdpartyCouponCode getThirdCode(List<CardThirdpartyCouponCode> thirdPartyCouponCodes,
-                                                  int index,
-                                                  BoundHashOperations<String, String, String> thirdPartyCouponCodeCache,
-                                                  PageUtil pageUtil) {
-
+    private CardThirdpartyCouponCode getThirdCode(String thirdCodeBatch,Long thirdPartyShopId) {
+        PageUtil pageUtil = new PageUtil();
+        int index = 0;
+        BoundHashOperations<String, String, String> thirdPartyCouponCodeCache = redisTemplate.boundHashOps(getThirdCodeKey(thirdPartyShopId));
+        List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
         CardThirdpartyCouponCode cardThirdpartyCouponCode = null;
         String code = null;
         if (CollectionUtils.isNotEmpty(thirdPartyCouponCodes)) {
@@ -313,15 +327,16 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                     break;
                 } else {
                     // 取一次codes不够，再取一次。如果取null，直接返回
+                    index++;
                     if (index < thirdPartyCouponCodes.size()) {
-                        cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index++);
+                        cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
                         code = cardThirdpartyCouponCode.getCode();
                     } else {
                         pageUtil.setPage(pageUtil.getPage() + 1);
                         thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(cardThirdpartyCouponCode.getBatch(), pageUtil);
                         index = 0;
                         if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
-                            cardThirdpartyCouponCode = null;
+                            return null;
                         }
 
                     }
@@ -329,7 +344,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             }
 
         } else {
-            cardThirdpartyCouponCode = null;
+            return null;
         }
         return cardThirdpartyCouponCode;
     }

@@ -2,10 +2,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import java.util.List;
 
-import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponVipScopeMapper;
+import com.joycity.joyclub.card_coupon.mapper.*;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
@@ -37,11 +34,15 @@ public class CardCouponServiceImpl implements CardCouponService {
     private CardCouponVipScopeMapper couponVipScopeMapper;
     @Autowired
     private CardCouponLaunchMapper launchMapper;
+    @Autowired
+    private CardThirdpartyCouponCodeMapper thirdpartyCouponCodeMapper;
 
 
     @Override
     @Transactional
     public ResultData createCardCoupon(CreateCouponInfo info) {
+        int num = thirdpartyCouponCodeMapper.countByBatch(info.getBatch());
+        info.setNum(num);
         couponMapper.insertSelective(info);
         if (info.getStoreScopes() != null) {
 
