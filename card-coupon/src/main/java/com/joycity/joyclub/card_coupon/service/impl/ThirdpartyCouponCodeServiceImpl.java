@@ -102,7 +102,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
 
                     return builder.toString();
                 }
-            }.batchInsert(thirdpartyCouponCodes.size());
+            }.batchInsert(thirdpartyCouponCodes.size(),50000);
 
         }
         thirdpartyCouponBatchCache.delete(findBatch);

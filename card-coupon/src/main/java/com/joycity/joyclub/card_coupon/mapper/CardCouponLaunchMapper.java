@@ -24,7 +24,12 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponLaunchById(@Param("id") Long id);
 
-    @Select("select sum(launch_num) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")
+    /**
+     * 查找确认投放的数量
+     * @param couponId
+     * @return
+     */
+    @Select("select IFNULL(sum(launch_num),0) from card_coupon_launch where coupon_id = 23 and confirm_flag = 1 and delete_flag = 0")
     int selectLaunchNumByCouponId(@Param("couponId") Long couponId);
 
     @Select("select count(*) from card_coupon_launch where coupon_id = #{couponId} and delete_flag = 0")

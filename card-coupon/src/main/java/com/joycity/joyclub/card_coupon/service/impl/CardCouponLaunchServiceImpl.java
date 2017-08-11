@@ -204,8 +204,8 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     @Override
     public ResultData deleteCardCouponLaunch(Long id) {
         CardCouponLaunch launchDb = launchMapper.selectByPrimaryKey(id);
-        if (!launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_NOT_REVIEW)) {
-            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有未审核，才可以删除");
+        if (launchDb.getReviewStatus().equals(CouponLaunchReviewStatus.STATUS_REVIEW_REJECT)) {
+            throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "只有未审核和审核通过，才可以删除");
         }
         return new ResultData(new UpdateResult(launchMapper.deleteCardCouponLaunchById(id)));
     }

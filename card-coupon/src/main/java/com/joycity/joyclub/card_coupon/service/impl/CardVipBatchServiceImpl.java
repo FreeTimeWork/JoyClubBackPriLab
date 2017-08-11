@@ -108,7 +108,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
 
                     return builder.toString();
                 }
-            }.batchInsert(cardVipBatches.size());
+            }.batchInsert(cardVipBatches.size(),50000);
         }
         cardVipBatchCache.delete(findBatch);
         if (sum == 0) {
