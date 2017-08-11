@@ -5,24 +5,28 @@ import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
-import com.joycity.joyclub.card_coupon.modal.ClientCouponBag;
-import com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon;
-import com.joycity.joyclub.card_coupon.modal.ShowCouponCodeInfo;
+import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCode;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
+import com.joycity.joyclub.mallcoo.modal.result.data.CouponSimpleInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
@@ -34,6 +38,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +52,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     private Log logger = LogFactory.getLog(LogConst.LOG_TASK);
     private final String THIRD_PARTY_COUPON_CODE = RedisKeyConst.THIRD_PARTY_COUPON_CODE.getName();
 
-
+    @Autowired
+    MallCooService mallCooService;
+    @Autowired
+    ClientUserMapper clientUserMapper;
     @Autowired
     private CardCouponLaunchMapper launchMapper;
     @Autowired
@@ -209,6 +218,53 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     public List<ClientCouponBag> getListCurrentClientCouponUsable(Long clientId) {
 
         return cardCouponCodeMapper.selectCurrentClientCouponUsable(clientId);
+    }
+
+    @Override
+    public ResultData getAvailableCardCouponsById(Long projectId, Long clientId) {
+        String vipCode = clientUserMapper.getVipCodeById(clientId);
+        ThrowBusinessExceptionUtil.checkNull(vipCode, "会员信息不存在");
+        List<CouponSimpleInfoInBag> sysList = cardCouponCodeMapper.selectClientAvailableCoupon(clientId);
+        List<CouponSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
+        return getAvailableCardCoupons(sysList, mallcooList);
+    }
+
+    @Override
+    public ResultData getAvailableCardCouponsByMallcooTicket(Long projectId, String ticket, String vipCode) {
+        if (vipCode == null) {
+            UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
+            vipCode = info.getThirdPartyCardID();
+        }
+        return getAvailableCardCoupons(projectId, vipCode);
+    }
+
+    @Override
+    public ResultData getCouponInfoByCodeId(Long id) {
+        CouponInfoInBag info = cardCouponCodeMapper.selectCouponInfoByCodeId(id);
+        ThrowBusinessExceptionUtil.checkNull(info,"卡券信息不存在");
+        info.setJoinShopList(cardCouponCodeMapper.selectJoinShopsByCouponId(info.getCouponId()));
+        return new ResultData(info);
+    }
+
+    @Override
+    public ResultData getMallcooCouponInfoByCode(Long projectId, String code) {
+        return new ResultData(mallCooService.getCouponInfo(projectId, code));
+    }
+
+    public ResultData getAvailableCardCoupons(Long projectId, String vipCode) {
+        Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        ThrowBusinessExceptionUtil.checkNull(clientId, "会员信息不存在");
+        List<CouponSimpleInfoInBag> sysList = cardCouponCodeMapper.selectClientAvailableCoupon(clientId);
+        List<CouponSimpleInfo> mallcooList = mallCooService.getCoupons(projectId, vipCode).getCouponInfoList();
+        return getAvailableCardCoupons(sysList, mallcooList);
+    }
+
+    private ResultData getAvailableCardCoupons(List<CouponSimpleInfoInBag> sysList, List<CouponSimpleInfo> mallcooList) {
+        List<CouponSimpleInfo> resultList = new ArrayList<>();
+        resultList.addAll(sysList);
+        resultList.addAll(mallcooList);
+        resultList.sort(Comparator.comparing(CouponSimpleInfo::getOverdueTime));
+        return new ResultData(new ListResult(resultList));
     }
 
     private void batchSendSysgenCouponCode(Long launchId, CardCoupon cardCoupon, CardCouponLaunch cardCouponLaunch) {

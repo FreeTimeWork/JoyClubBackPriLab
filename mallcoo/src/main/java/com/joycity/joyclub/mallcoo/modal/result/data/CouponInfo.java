@@ -1,147 +1,167 @@
 package com.joycity.joyclub.mallcoo.modal.result.data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * CouponInfo
  *
  * @author CallMeXYZ
- * @date 2017/8/8
+ * @date 2017/8/10
  */
-public class CouponInfo {
-    private Long CouponID;
-    private String VCode;
-    private String Name;
-    private String Subtitle;
-    private Integer CouponType;
-    private Integer UseState;
-    private Double ReduceMoney;
-    private Double Deductible;
-    private Double DiscountAmount;
-    private Double InsteadMoney;
-    private Double InsteadTime;
-    private Double ExchangeInfo;
-    private Double YouHuiInfo;
-    private Date EnableTime;
-    private Date OverdueTime;
+public class CouponInfo extends CouponSimpleInfo {
+    private String couponRuleNo;
+    private String desc;
+    private Double reduceMoney;
+    private Double deductible;
+    private Double discountAmount;
+    private Double insteadMoney;
+    private Double insteadTime;
+    private List<Integer> partTimeList;
+    private Date useTime;
+    private Integer verification;
+    private String consumerHotline;
+    private Boolean isPwdForVerify;
+    private Integer showType;
+    private String operationTips;
+    private String useDesc;
+    private List<JoinShop> joinShopList;
 
-    public Long getCouponID() {
-        return CouponID;
+    public String getCouponRuleNo() {
+        return couponRuleNo;
     }
 
-    public void setCouponID(Long couponID) {
-        CouponID = couponID;
+    public void setCouponRuleNo(String couponRuleNo) {
+        this.couponRuleNo = couponRuleNo;
     }
 
-    public String getVCode() {
-        return VCode;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setVCode(String VCode) {
-        this.VCode = VCode;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getSubtitle() {
-        return Subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        Subtitle = subtitle;
-    }
-
-    public Integer getCouponType() {
-        return CouponType;
-    }
-
-    public void setCouponType(Integer couponType) {
-        CouponType = couponType;
-    }
-
-    public Integer getUseState() {
-        return UseState;
-    }
-
-    public void setUseState(Integer useState) {
-        UseState = useState;
-    }
-
+    @Override
     public Double getReduceMoney() {
-        return ReduceMoney;
+        return reduceMoney;
     }
 
+    @Override
     public void setReduceMoney(Double reduceMoney) {
-        ReduceMoney = reduceMoney;
+        this.reduceMoney = reduceMoney;
     }
 
+    @Override
     public Double getDeductible() {
-        return Deductible;
+        return deductible;
     }
 
+    @Override
     public void setDeductible(Double deductible) {
-        Deductible = deductible;
+        this.deductible = deductible;
     }
 
+    @Override
     public Double getDiscountAmount() {
-        return DiscountAmount;
+        return discountAmount;
     }
 
+    @Override
     public void setDiscountAmount(Double discountAmount) {
-        DiscountAmount = discountAmount;
+        this.discountAmount = discountAmount;
     }
 
+    @Override
     public Double getInsteadMoney() {
-        return InsteadMoney;
+        return insteadMoney;
     }
 
+    @Override
     public void setInsteadMoney(Double insteadMoney) {
-        InsteadMoney = insteadMoney;
+        this.insteadMoney = insteadMoney;
     }
 
+    @Override
     public Double getInsteadTime() {
-        return InsteadTime;
+        return insteadTime;
     }
 
+    @Override
     public void setInsteadTime(Double insteadTime) {
-        InsteadTime = insteadTime;
+        this.insteadTime = insteadTime;
     }
 
-    public Double getExchangeInfo() {
-        return ExchangeInfo;
+    public List<Integer> getPartTimeList() {
+        return partTimeList;
     }
 
-    public void setExchangeInfo(Double exchangeInfo) {
-        ExchangeInfo = exchangeInfo;
+    public void setPartTimeList(List<Integer> partTimeList) {
+        this.partTimeList = partTimeList;
     }
 
-    public Double getYouHuiInfo() {
-        return YouHuiInfo;
+    public Date getUseTime() {
+        return useTime;
     }
 
-    public void setYouHuiInfo(Double youHuiInfo) {
-        YouHuiInfo = youHuiInfo;
+    public void setUseTime(Date useTime) {
+        this.useTime = useTime;
     }
 
-    public Date getEnableTime() {
-        return EnableTime;
+    public Integer getVerification() {
+        return verification;
     }
 
-    public void setEnableTime(Date enableTime) {
-        EnableTime = enableTime;
+    public void setVerification(Integer verification) {
+        this.verification = verification;
     }
 
-    public Date getOverdueTime() {
-        return OverdueTime;
+    public String getConsumerHotline() {
+        return consumerHotline;
     }
 
-    public void setOverdueTime(Date overdueTime) {
-        OverdueTime = overdueTime;
+    public void setConsumerHotline(String consumerHotline) {
+        this.consumerHotline = consumerHotline;
+    }
+
+    public Boolean getPwdForVerify() {
+        return isPwdForVerify;
+    }
+
+    public void setPwdForVerify(Boolean pwdForVerify) {
+        isPwdForVerify = pwdForVerify;
+    }
+
+    public Integer getShowType() {
+        return showType;
+    }
+
+    public void setShowType(Integer showType) {
+        this.showType = showType;
+    }
+
+    public String getOperationTips() {
+        return operationTips;
+    }
+
+    public void setOperationTips(String operationTips) {
+        this.operationTips = operationTips;
+    }
+
+    public String getUseDesc() {
+        return useDesc;
+    }
+
+    public void setUseDesc(String useDesc) {
+        this.useDesc = useDesc;
+    }
+
+    public List<JoinShop> getJoinShopList() {
+        return joinShopList;
+    }
+
+    public void setJoinShopList(List<JoinShop> joinShopList) {
+        this.joinShopList = joinShopList;
     }
 }

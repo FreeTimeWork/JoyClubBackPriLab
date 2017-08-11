@@ -1,9 +1,6 @@
 package com.joycity.joyclub.mallcoo.service;
 
-import com.joycity.joyclub.mallcoo.modal.result.data.CouponResult;
-import com.joycity.joyclub.mallcoo.modal.result.data.OffLineShopInfo;
-import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
-import com.joycity.joyclub.mallcoo.modal.result.data.UserSimpleInfo;
+import com.joycity.joyclub.mallcoo.modal.result.data.*;
 
 import java.util.List;
 
@@ -35,10 +32,14 @@ public interface MallCooService {
     List<OffLineShopInfo> getShops(Long projectId);
 
     /**
+     * 目前是返回100个
      * @param crmId 会员号
      */
-    CouponResult getCoupons(Long projectId, String crmId);
+    CouponsResult getCoupons(Long projectId, String crmId);
 
-    void getCouponInfo(Long projectId, String code);
+    /**
+     * @param code 券号 VCode
+     */
+    CouponInfo getCouponInfo(Long projectId, String code);
 
 }

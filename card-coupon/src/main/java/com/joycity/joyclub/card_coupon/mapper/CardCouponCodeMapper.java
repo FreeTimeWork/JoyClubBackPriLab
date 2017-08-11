@@ -6,6 +6,7 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCodeExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.mallcoo.modal.result.data.JoinShop;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -122,7 +123,11 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     Long countSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter);
     List<ShowCouponCodeInfo> selectSysCardCouponCodeByFilter(@Param("projectId") Long projectId, @Param("filter") ShowCouponCodeFilter filter, @Param("pageUtil") PageUtil pageUtil);
 
-    //用户券包
+    // 用户券包
     List<ClientCouponBag> selectCurrentClientCouponUsable(@Param("clientId") Long clientId);
+    List<CouponSimpleInfoInBag> selectClientAvailableCoupon(@Param("clientId") Long clientId);
+    CouponInfoInBag selectCouponInfoByCodeId(@Param("id") Long id);
+    @Select("select s.name ,s.id id from card_coupon_store_scope c join sys_shop s on c.store_id=s.id where c.coupon_id = #{id}")
+    List<JoinShop> selectJoinShopsByCouponId(@Param("id") Long id);
 
 }

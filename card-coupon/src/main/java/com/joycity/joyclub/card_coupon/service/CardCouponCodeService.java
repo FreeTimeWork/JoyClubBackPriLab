@@ -12,10 +12,11 @@ import java.util.List;
  */
 public interface CardCouponCodeService {
 
-    void  batchCreateCouponCode(Long launchId);
+    void batchCreateCouponCode(Long launchId);
 
     /**
      * 免费领取卡券
+     *
      * @param clientId
      * @param launchId
      * @return
@@ -25,7 +26,8 @@ public interface CardCouponCodeService {
     /**
      * 纯发卡业务，里面没有cache发卡。
      * 注：调用此方法，必须先前通过cache发卡，因为方法内集成清除cache库存的操作
-     *  @param clientId
+     *
+     * @param clientId
      * @param launchId
      */
     Long sendCouponCode(Long clientId, Long launchId, Long couponId);
@@ -48,5 +50,28 @@ public interface CardCouponCodeService {
      * 用户券包，查询用户当前可用券
      */
     List<ClientCouponBag> getListCurrentClientCouponUsable(Long clientId);
+
+    /**
+     * 获得用户当前可用券
+     */
+    ResultData getAvailableCardCouponsById(Long projectId,Long clientId);
+
+    /**
+     * 猫酷页面，获得用户当前可用券
+     * crmId, ticket有一个可以为null
+     * @return
+     */
+    ResultData getAvailableCardCouponsByMallcooTicket(Long projectId,String ticket, String vipCode);
+
+    /**
+     * 券包页点击系统券进入查看详情
+     * @param id cardCouponCode id
+     */
+    ResultData getCouponInfoByCodeId(Long id);
+    /**
+     * 券包页点击猫酷券进入查看详情
+     * @param code 猫酷券码
+     */
+    ResultData getMallcooCouponInfoByCode(Long projectId,String code);
 
 }

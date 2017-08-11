@@ -5,63 +5,63 @@ package com.joycity.joyclub.mallcoo.modal.result.data;
  */
 public class UserAdvancedInfo extends  UserSimpleInfo{
     /* 猫酷会员卡号 */
-    private String MallCardNo;
+    private String mallCardNo;
     /* 猫酷会员卡名称 */
-    private String MallCardName;
+    private String mallCardName;
     /* 第三方会员ID */
-    private String ThirdPartyCardID;
+    private String thirdPartyCardID;
     /* 第三方会员卡号 */
-    private String ThirdPartyCardNo;
+    private String thirdPartyCardNo;
     /* 积分 */
-    private String Score;
+    private String score;
     /* 猫酷会员卡类型ID */
-    private Long MallCardTypeID;
+    private Long mallCardTypeID;
 
     public String getMallCardNo() {
-        return MallCardNo;
+        return mallCardNo;
     }
 
     public void setMallCardNo(String mallCardNo) {
-        MallCardNo = mallCardNo;
+        this.mallCardNo = mallCardNo;
     }
 
     public String getMallCardName() {
-        return MallCardName;
+        return mallCardName;
     }
 
     public void setMallCardName(String mallCardName) {
-        MallCardName = mallCardName;
+        this.mallCardName = mallCardName;
     }
 
     public String getThirdPartyCardID() {
-        return ThirdPartyCardID;
+        return thirdPartyCardID;
     }
 
     public void setThirdPartyCardID(String thirdPartyCardID) {
-        ThirdPartyCardID = thirdPartyCardID;
+        this.thirdPartyCardID = thirdPartyCardID;
     }
 
     public String getThirdPartyCardNo() {
-        return ThirdPartyCardNo;
+        return thirdPartyCardNo;
     }
 
     public void setThirdPartyCardNo(String thirdPartyCardNo) {
-        ThirdPartyCardNo = thirdPartyCardNo;
+        this.thirdPartyCardNo = thirdPartyCardNo;
     }
 
     public String getScore() {
-        return Score;
+        return score;
     }
 
     public void setScore(String score) {
-        Score = score;
+        this.score = score;
     }
 
     public Long getMallCardTypeID() {
-        return MallCardTypeID;
+        return mallCardTypeID;
     }
 
     public void setMallCardTypeID(Long mallCardTypeID) {
-        MallCardTypeID = mallCardTypeID;
+        this.mallCardTypeID = mallCardTypeID;
     }
 }

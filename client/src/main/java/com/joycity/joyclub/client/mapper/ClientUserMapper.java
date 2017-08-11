@@ -8,7 +8,6 @@ import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,10 +18,10 @@ public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample
     @Select("select id from client where tel=#{tel}")
     Long getIdByTel(String tel);
 
-    @Select("select vip_code from client where id=#{id}")
+    @Select("select vip_code from client where id=#{id} limit 1")
     String getVipCodeById(Long id);
 
-    @Select("select id from client where vip_code=#{vipCode} limit 0,1")
+    @Select("select id from client where vip_code=#{vipCode} limit 1")
     Long getIdByVipCode(String vipCode);
 
     @Select("select wx_head_img_url headimgurl,wx_nick_name nickName,wx_gender sex,wx_language language,wx_city city, wx_country country,wx_province province from client where id=#{id}")

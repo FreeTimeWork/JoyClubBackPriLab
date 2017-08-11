@@ -6,103 +6,103 @@ import java.util.Date;
  * Created by CallMeXYZ on 2017/7/28.
  */
 public class OffLineShopInfo {
-    private Integer Id;
-    private String Name;
-    private String CrmShopID;
-    private String Logo;
-    private Integer ShopType;
-    private Integer CommercialTypeID;
-    private String SubCommercialTypeName;
-    private Integer FloorID;
-    private String FloorName;
-    private String DoorNo;
-    private Date UpdateTime;
+    private Integer id;
+    private String name;
+    private String crmShopID;
+    private String logo;
+    private Integer shopType;
+    private Integer commercialTypeID;
+    private String subCommercialTypeName;
+    private Integer floorID;
+    private String floorName;
+    private String doorNo;
+    private Date updateTime;
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getCrmShopID() {
-        return CrmShopID;
+        return crmShopID;
     }
 
     public void setCrmShopID(String crmShopID) {
-        CrmShopID = crmShopID;
+        this.crmShopID = crmShopID;
     }
 
     public String getLogo() {
-        return Logo;
+        return logo;
     }
 
     public void setLogo(String logo) {
-        Logo = logo;
+        this.logo = logo;
     }
 
     public Integer getShopType() {
-        return ShopType;
+        return shopType;
     }
 
     public void setShopType(Integer shopType) {
-        ShopType = shopType;
+        this.shopType = shopType;
     }
 
     public Integer getCommercialTypeID() {
-        return CommercialTypeID;
+        return commercialTypeID;
     }
 
     public void setCommercialTypeID(Integer commercialTypeID) {
-        CommercialTypeID = commercialTypeID;
+        this.commercialTypeID = commercialTypeID;
     }
 
     public String getSubCommercialTypeName() {
-        return SubCommercialTypeName;
+        return subCommercialTypeName;
     }
 
     public void setSubCommercialTypeName(String subCommercialTypeName) {
-        SubCommercialTypeName = subCommercialTypeName;
+        this.subCommercialTypeName = subCommercialTypeName;
     }
 
     public Integer getFloorID() {
-        return FloorID;
+        return floorID;
     }
 
     public void setFloorID(Integer floorID) {
-        FloorID = floorID;
+        this.floorID = floorID;
     }
 
     public String getFloorName() {
-        return FloorName;
+        return floorName;
     }
 
     public void setFloorName(String floorName) {
-        FloorName = floorName;
+        this.floorName = floorName;
     }
 
     public String getDoorNo() {
-        return DoorNo;
+        return doorNo;
     }
 
     public void setDoorNo(String doorNo) {
-        DoorNo = doorNo;
+        this.doorNo = doorNo;
     }
 
     public Date getUpdateTime() {
-        return UpdateTime;
+        return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
-        UpdateTime = updateTime;
+        this.updateTime = updateTime;
     }
 }

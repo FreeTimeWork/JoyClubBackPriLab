@@ -4,103 +4,103 @@ package com.joycity.joyclub.mallcoo.modal.result.data;
  * Created by CallMeXYZ on 2017/7/28.
  */
 public class UserSimpleInfo {
-    private String OpenUserId;
-    private String NickName;
-    private String Avatar;
-    private String Mobile;
-    private String UserToken;
-    private String WXOpenID;
-    private Integer Expires;
-    private String UserName;
-    private Integer Gender;
-    private Integer Age;
-    private String Birthday;
+    private String openUserId;
+    private String nickName;
+    private String avatar;
+    private String mobile;
+    private String userToken;
+    private String wXOpenID;
+    private Integer expires;
+    private String userName;
+    private Integer gender;
+    private Integer age;
+    private String birthday;
 
     public String getOpenUserId() {
-        return OpenUserId;
+        return openUserId;
     }
 
     public void setOpenUserId(String openUserId) {
-        OpenUserId = openUserId;
+        this.openUserId = openUserId;
     }
 
     public String getNickName() {
-        return NickName;
+        return nickName;
     }
 
     public void setNickName(String nickName) {
-        NickName = nickName;
+        this.nickName = nickName;
     }
 
     public String getAvatar() {
-        return Avatar;
+        return avatar;
     }
 
     public void setAvatar(String avatar) {
-        Avatar = avatar;
+        this.avatar = avatar;
     }
 
     public String getMobile() {
-        return Mobile;
+        return mobile;
     }
 
     public void setMobile(String mobile) {
-        Mobile = mobile;
+        this.mobile = mobile;
     }
 
     public String getUserToken() {
-        return UserToken;
+        return userToken;
     }
 
     public void setUserToken(String userToken) {
-        UserToken = userToken;
+        this.userToken = userToken;
     }
 
-    public String getWXOpenID() {
-        return WXOpenID;
+    public String getwXOpenID() {
+        return wXOpenID;
     }
 
-    public void setWXOpenID(String WXOpenID) {
-        this.WXOpenID = WXOpenID;
+    public void setwXOpenID(String wXOpenID) {
+        this.wXOpenID = wXOpenID;
     }
 
     public Integer getExpires() {
-        return Expires;
+        return expires;
     }
 
     public void setExpires(Integer expires) {
-        Expires = expires;
+        this.expires = expires;
     }
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
     public Integer getGender() {
-        return Gender;
+        return gender;
     }
 
     public void setGender(Integer gender) {
-        Gender = gender;
+        this.gender = gender;
     }
 
     public Integer getAge() {
-        return Age;
+        return age;
     }
 
     public void setAge(Integer age) {
-        Age = age;
+        this.age = age;
     }
 
     public String getBirthday() {
-        return Birthday;
+        return birthday;
     }
 
     public void setBirthday(String birthday) {
-        Birthday = birthday;
+        this.birthday = birthday;
     }
 }
