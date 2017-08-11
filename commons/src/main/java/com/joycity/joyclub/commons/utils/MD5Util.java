@@ -6,7 +6,8 @@ import org.apache.commons.logging.LogFactory;
 import java.security.MessageDigest;
 
 /**
- * Created by CallMeXYZ on 2017/3/27.
+ * Created by CallMeXYZ on 2017/3/27.0
+ * 返回的默认是全小写
  */
 public class MD5Util {
     private static final Log logger = LogFactory.getLog(MD5Util.class);

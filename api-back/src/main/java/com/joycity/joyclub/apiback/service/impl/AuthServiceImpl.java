@@ -28,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
         if (sysUser == null) throw new BusinessException(ResultCode.LOGIN_ERROR, "账户不存在");
         else if (sysUser.getForbidFlag()) {
             throw new BusinessException(ResultCode.LOGIN_ERROR, "该账户已被禁用");
-        } else if (!MD5Util.MD5(password, PASSWORD_SALT).equals(sysUser.getPassword())) {
+        } else if (!MD5Util.MD5(password, PASSWORD_SALT).toUpperCase().equals(sysUser.getPassword().toUpperCase())) {
             throw new BusinessException(ResultCode.LOGIN_ERROR, "密码错误");
         }
         //清空密码
