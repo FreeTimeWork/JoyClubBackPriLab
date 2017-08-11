@@ -141,6 +141,8 @@
 
     <resultMap id="CreateCouponLaunchInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo" extends="BaseResultMap">
         <result column="coupon_name" jdbcType="VARCHAR" property="couponName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+
         <collection property="couponTriggerScopes" resultMap="CouponTriggerScopeWithShop" columnPrefix="ccts_"/>
     </resultMap>
 
