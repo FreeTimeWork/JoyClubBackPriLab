@@ -316,43 +316,44 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 return;
             }
             // 批量插入为了效率，这里重新写得到三方卡号的逻辑
-            CardThirdpartyCouponCode cardThirdpartyCouponCode = null;
             String code = null;
-            if (CollectionUtils.isNotEmpty(thirdPartyCouponCodes)) {
-               // code缓存没有，说明可用，存入缓存，再使用code。
+            CardThirdpartyCouponCode effectiveThirdCouponCode = null;
+            while (CollectionUtils.isNotEmpty(thirdPartyCouponCodes)) {
+                CardThirdpartyCouponCode cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
+                code = cardThirdpartyCouponCode.getCode();
+                // code缓存没有，说明可用，存入缓存，再使用code。
                 // code缓存存在，说明不可用，取下一个
-                while (true) {
-                    cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
-                    code = cardThirdpartyCouponCode.getCode();
-                    String copy = thirdPartyCouponCodeCache.get(code);
-                    if (copy == null) {
-                        thirdPartyCouponCodeCache.put(code, code);
-                        break;
-                    } else {
-                        index++;
-                        if (index >= thirdPartyCouponCodes.size()) {
-                            // 取一次codes不够，再取一次。如果没有了，直接返回
-                            pageUtil.setPage(pageUtil.getPage() + 1);
-                            thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(cardThirdpartyCouponCode.getBatch(), pageUtil);
-                            index = 0;
-                            if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
-                                return;
-                            }
-
+                String copy = thirdPartyCouponCodeCache.get(code);
+                if (copy == null) {
+                    thirdPartyCouponCodeCache.put(code, code);
+                    effectiveThirdCouponCode = cardThirdpartyCouponCode;
+                    index++;
+                    break;
+                } else {
+                    index++;
+                    if (index >= thirdPartyCouponCodes.size()) {
+                        // 取一次codes不够，再取一次。如果没有了，直接返回
+                        pageUtil.setPage(pageUtil.getPage() + 1);
+                        thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(cardThirdpartyCouponCode.getBatch(), pageUtil);
+                        index = 0;
+                        if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
+                            return;
                         }
+
                     }
                 }
+            }
 
-            } else {
+            if (code == null) {
                 return;
             }
 
             try {
                 //执行发券逻辑
-                sendThirdPartyCode(launchId, cardCoupon, clientIds.get(i), cardThirdpartyCouponCode);
+                sendThirdPartyCode(launchId, cardCoupon, clientIds.get(i), effectiveThirdCouponCode);
             } catch (Exception e) {
                 //第三方卡号发券逻辑执行失败,该卡号删掉。
-                cardThirdpartyCouponCodeMapper.deleteById(cardThirdpartyCouponCode.getId());
+                cardThirdpartyCouponCodeMapper.deleteById(effectiveThirdCouponCode.getId());
             }
         }
     }
