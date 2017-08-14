@@ -1,15 +1,20 @@
 package com.joycity.joyclub.apiback.modal.vo.pos;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
  * Created by fangchen.chai on 2017/8/14
  */
 public class PosOrderInformVO {
+    @NotNull
     private String vipCode;
+    @NotNull
     private String orderCode;
     private String shopCode;
+    @NotNull
     private BigDecimal payable;
+    @NotNull
     private BigDecimal payment;
 
     public String getVipCode() {

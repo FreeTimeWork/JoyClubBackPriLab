@@ -208,6 +208,10 @@ public class CardPosServiceImpl implements CardPosService {
 
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
         }
+        //系统没有订单，直接返回成功
+        if (info.getDetail() == null) {
+            return new ResultData();
+        }
         //该订单改为退货状态
         PosSaleDetail posSaleDetail = new PosSaleDetail();
         posSaleDetail.setId(info.getDetail().getId());
@@ -254,10 +258,10 @@ public class CardPosServiceImpl implements CardPosService {
 
     private CouponLaunchBetweenInfo preRefundVerification(String orderCode, BigDecimal refundAmount) {
         PosSaleDetailWithCouponCode detail = cardPosSaleDetailMapper.selectByOrderCode(orderCode);
-        //找不到订单，不能退款
+        //找不到订单，可以退款
         if (detail == null) {
             CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
-            info.setRefundType(RefundType.FORBIT_REFUND);
+            info.setRefundType(RefundType.PREMIT_REFUND);
             return info;
         }
         if (refundAmount.compareTo(detail.getBalance()) > 0) {
