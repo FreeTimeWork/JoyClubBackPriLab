@@ -171,29 +171,23 @@ public class CardPosServiceImpl implements CardPosService {
     }
 
     @Override
-    public ResultData refundVerification(String orderCode, BigDecimal refundAmount) {
+    public ResultData refundVerification(String orderCode) {
 
-        CouponLaunchBetweenInfo info = preRefundVerification(orderCode, refundAmount);
+        CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
         if (info.getRefundType() != null) {
             return new ResultData(new PosRefundVerifyResult(info.getRefundType()));
         }
 
+        //应该代金券拥有量
+        int subCouponNum = getSubCouponNum(info, info.getDetail().getPayment());
+        int diff = actualNumSubtractSubNum(info, subCouponNum);
+        if (diff > info.getNotUsedNum() ) {
+            return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
+        }
+        //订单是否关联卡券
         if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
-            //应该代金券拥有量
-            int subCouponNum = getSubCouponNum(info, info.getDetail().getPayment());
-            int diff = actualNumSubtractSubNum(info, subCouponNum);
-            if (diff > info.getNotUsedNum() ) {
-                return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
-            }
             return new ResultData(new PosRefundVerifyResult(RefundType.PERMIT_REFUND_FULL_ORDER));
         } else {
-            //应该代金券拥有量
-            int subCouponNum = getSubCouponNum(info, refundAmount);
-            int diff = actualNumSubtractSubNum(info, subCouponNum);
-
-            if (diff > info.getNotUsedNum() ) {
-                return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
-            }
             return new ResultData(new PosRefundVerifyResult(RefundType.PREMIT_REFUND));
         }
 
@@ -202,7 +196,7 @@ public class CardPosServiceImpl implements CardPosService {
     @Override
     @Transactional
     public ResultData refund(String orderCode, BigDecimal refundAmount) {
-        CouponLaunchBetweenInfo info = preRefundVerification(orderCode, refundAmount);
+        CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
 
         if (info.getRefundType() != null && info.getRefundType().equals(RefundType.FORBIT_REFUND)) {
 
@@ -211,6 +205,9 @@ public class CardPosServiceImpl implements CardPosService {
         //系统没有订单，直接返回成功
         if (info.getDetail() == null) {
             return new ResultData();
+        }
+        if (refundAmount.compareTo(info.getDetail().getBalance()) > 0) {
+            throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
         }
         //该订单改为退货状态
         PosSaleDetail posSaleDetail = new PosSaleDetail();
@@ -256,17 +253,12 @@ public class CardPosServiceImpl implements CardPosService {
         return detail.getId();
     }
 
-    private CouponLaunchBetweenInfo preRefundVerification(String orderCode, BigDecimal refundAmount) {
+    private CouponLaunchBetweenInfo preRefundVerification(String orderCode) {
         PosSaleDetailWithCouponCode detail = cardPosSaleDetailMapper.selectByOrderCode(orderCode);
         //找不到订单，可以退款
         if (detail == null) {
             CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
             info.setRefundType(RefundType.PREMIT_REFUND);
-            return info;
-        }
-        if (refundAmount.compareTo(detail.getBalance()) > 0) {
-            CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
-            info.setRefundType(RefundType.FORBIT_REFUND);
             return info;
         }
 

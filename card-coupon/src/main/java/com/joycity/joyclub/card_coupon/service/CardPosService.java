@@ -40,7 +40,7 @@ public interface CardPosService {
     /**
      * pos 退货验证
      */
-    ResultData refundVerification(String orderCode, BigDecimal refundAmount);
+    ResultData refundVerification(String orderCode);
 
     /**
      * pos退货通知后的处理

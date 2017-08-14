@@ -92,9 +92,9 @@ public class CardPosController extends BaseUserSessionController {
     @PostMapping("/refund/verify")
     public ResultData refundVerification(@RequestHeader("sign") String sign,
                                          @RequestHeader("timestamp") Long timestamp,
-                                         @RequestBody @Validated PosRefundVO vo) throws ParseException {
+                                         @RequestBody @Validated PosRefundVerificationVO vo) throws ParseException {
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
-        return cardPosService.refundVerification(vo.getOrderCode(),vo.getRefundAmount());
+        return cardPosService.refundVerification(vo.getOrderCode());
     }
 
     /**
