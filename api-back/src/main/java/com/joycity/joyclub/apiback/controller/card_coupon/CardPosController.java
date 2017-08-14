@@ -1,10 +1,7 @@
 package com.joycity.joyclub.apiback.controller.card_coupon;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
-import com.joycity.joyclub.apiback.modal.vo.pos.PosCheckCancelVO;
-import com.joycity.joyclub.apiback.modal.vo.pos.PosCheckVO;
-import com.joycity.joyclub.apiback.modal.vo.pos.PosOrderInformVO;
-import com.joycity.joyclub.apiback.modal.vo.pos.PosRefundVO;
+import com.joycity.joyclub.apiback.modal.vo.pos.*;
 import com.joycity.joyclub.apiback.util.CheckSecretKey;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
 import com.joycity.joyclub.commons.modal.base.ResultData;
@@ -32,16 +29,15 @@ public class CardPosController extends BaseUserSessionController {
     /**
      * 得到某个会员在某个商户当前可用券
      */
-    @RequestMapping(value = "/current/coupons", method = RequestMethod.GET)
+    @PostMapping("/current/coupons")
     public ResultData getCardCoupons(@RequestHeader("sign") String sign,
                                      @RequestHeader("timestamp") Long timestamp,
-                                     @RequestParam String vipCode,
-                                     @RequestParam String shopCode) {
+                                     @RequestBody @Validated PosCurrentVO vo) {
 
         //TODO: cfc  projectId根据秘钥对应，得到到底是哪个项目的商家
         Long projectId = 1L;
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
-        return cardPosService.getCurrentCoupons(projectId, shopCode, vipCode);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
+        return cardPosService.getCurrentCoupons(projectId, vo.getShopCode(), vo.getVipCode());
     }
 
 
@@ -51,9 +47,9 @@ public class CardPosController extends BaseUserSessionController {
     @GetMapping(value = "/coupon/examine")
     public ResultData posCheckCouponCode(@RequestHeader("sign") String sign,
                                          @RequestHeader("timestamp") Long timestamp,
-                                         @RequestParam String vipCode, @RequestParam String shopCode, @RequestParam String couponCode) {
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
-        return cardPosService.examineCouponCode(vipCode,shopCode,couponCode);
+                                         @RequestBody @Validated PosExamineVO vo) {
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
+        return cardPosService.examineCouponCode(vo.getVipCode(),vo.getShopCode(),vo.getCouponCode());
     }
     /**
      * 核销券号
@@ -62,7 +58,7 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData posCheck(@RequestHeader("sign") String sign,
                                @RequestHeader("timestamp") Long timestamp,
                                @RequestBody @Validated PosCheckVO vo) {
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.posCheck(vo.getVipCode(), vo.getCouponCode(), vo.getOrderCode(), vo.getPayable(), vo.getShopCode());
     }
 
@@ -73,7 +69,7 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData posCheckCancel(@RequestHeader("sign") String sign,
                                      @RequestHeader("timestamp") Long timestamp,
                                      @RequestBody @Validated PosCheckCancelVO vo) {
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.posCheckCancel(vo.getOrderCode());
     }
 
@@ -86,7 +82,7 @@ public class CardPosController extends BaseUserSessionController {
                                      @RequestBody @Validated PosOrderInformVO vo) throws ParseException {
         //TODO: cfc  projectId根据秘钥对应，得到到底是哪个项目的商家
         Long projectId = 1L;
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.posOrderInform(projectId, vo.getVipCode(), vo.getOrderCode(), vo.getShopCode(), vo.getPayable(), vo.getPayment());
     }
 
@@ -97,7 +93,7 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData refundVerification(@RequestHeader("sign") String sign,
                                          @RequestHeader("timestamp") Long timestamp,
                                          @RequestBody @Validated PosRefundVO vo) throws ParseException {
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.refundVerification(vo.getOrderCode(),vo.getRefundAmount());
     }
 
@@ -108,7 +104,7 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData refund(@RequestHeader("sign") String sign,
                              @RequestHeader("timestamp") Long timestamp,
                              @RequestBody @Validated PosRefundVO vo) {
-        CheckSecretKey.checkSecretKey(secretKey,sign,timestamp);
+        CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.refund(vo.getOrderCode(), vo.getRefundAmount());
     }
 
