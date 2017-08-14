@@ -128,11 +128,12 @@ public class CardPosServiceImpl implements CardPosService {
 
     @Override
     @Transactional
-    public ResultData posCheckCancel(String orderCode) {
+    public ResultData posCheckCancel(String orderCode, String couponCode) {
         CardCouponCodeExample example = new CardCouponCodeExample();
         try {
             CardCouponCodeExample.Criteria criteria = example.createCriteria();
             criteria.andOrderCodeEqualTo(orderCode);
+            criteria.andCodeEqualTo(couponCode);
             List<CardCouponCode> cardCouponCodes = cardCouponCodeMapper.selectByExample(example);
             for (CardCouponCode cardCouponCode : cardCouponCodes) {
                 cardCouponCodeService.updateNotUsedCouponCode(cardCouponCode.getId());

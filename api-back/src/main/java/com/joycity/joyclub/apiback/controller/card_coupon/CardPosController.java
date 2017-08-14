@@ -70,7 +70,7 @@ public class CardPosController extends BaseUserSessionController {
                                      @RequestHeader("timestamp") Long timestamp,
                                      @RequestBody @Validated PosCheckCancelVO vo) {
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
-        return cardPosService.posCheckCancel(vo.getOrderCode());
+        return cardPosService.posCheckCancel(vo.getOrderCode(), vo.getCouponCode());
     }
 
     /**

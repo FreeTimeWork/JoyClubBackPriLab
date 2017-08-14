@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 public class PosCheckCancelVO {
     @NotNull
     private String orderCode;
+    @NotNull
+    private String couponCode;
 
     public String getOrderCode() {
         return orderCode;
@@ -15,5 +17,13 @@ public class PosCheckCancelVO {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
     }
 }

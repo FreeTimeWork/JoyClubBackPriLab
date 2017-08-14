@@ -29,7 +29,7 @@ public interface CardPosService {
     /**
      * 取消核销
      */
-    ResultData posCheckCancel(String orderCode);
+    ResultData posCheckCancel(String orderCode, String couponCode);
 
     /**
      * 订单结果通知
