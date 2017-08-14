@@ -309,6 +309,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
 
         PageUtil pageUtil = new PageUtil(1, clientIds.size());
         List<CardThirdpartyCouponCode> thirdPartyCouponCodes = cardThirdpartyCouponCodeMapper.selectByBatch(thirdCodeBatch, pageUtil);
+        if (CollectionUtils.isEmpty(thirdPartyCouponCodes)) {
+            return;
+        }
+
         int index = 0;
         for (int i = 0; i < clientIds.size(); i++) {
             boolean result = couponCodeCache.sendCouponCode(launchId);
@@ -316,11 +320,11 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 return;
             }
             // 批量插入为了效率，这里重新写得到三方卡号的逻辑
-            String code = null;
             CardThirdpartyCouponCode effectiveThirdCouponCode = null;
             while (CollectionUtils.isNotEmpty(thirdPartyCouponCodes)) {
+                effectiveThirdCouponCode = null;
                 CardThirdpartyCouponCode cardThirdpartyCouponCode = thirdPartyCouponCodes.get(index);
-                code = cardThirdpartyCouponCode.getCode();
+                String code = cardThirdpartyCouponCode.getCode();
                 // code缓存没有，说明可用，存入缓存，再使用code。
                 // code缓存存在，说明不可用，取下一个
                 String copy = thirdPartyCouponCodeCache.get(code);
@@ -344,7 +348,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
                 }
             }
 
-            if (code == null) {
+            if (effectiveThirdCouponCode == null) {
                 return;
             }
 
