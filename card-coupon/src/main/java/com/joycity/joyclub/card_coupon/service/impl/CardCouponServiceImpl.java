@@ -2,6 +2,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import java.util.List;
 
+import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
 import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
 import com.joycity.joyclub.card_coupon.modal.ShowCouponInfo;
@@ -41,8 +42,10 @@ public class CardCouponServiceImpl implements CardCouponService {
     @Override
     @Transactional
     public ResultData createCardCoupon(CreateCouponInfo info) {
-        int num = thirdpartyCouponCodeMapper.countByBatch(info.getBatch());
-        info.setNum(num);
+        if (info.getType().equals(CouponType.THIRD_PARTY_COUPON)) {
+            int num = thirdpartyCouponCodeMapper.countByBatch(info.getBatch());
+            info.setNum(num);
+        }
         couponMapper.insertSelective(info);
         if (info.getStoreScopes() != null) {
 
