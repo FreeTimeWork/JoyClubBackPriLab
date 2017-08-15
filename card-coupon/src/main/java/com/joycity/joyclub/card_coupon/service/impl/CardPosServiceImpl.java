@@ -67,6 +67,7 @@ public class CardPosServiceImpl implements CardPosService {
         ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(couponCode, -1L);
         if (info == null) {
             notUseInfo = "卡券不存在";
+            info = new ShowPosCurrentCouponCodeInfo();
             info.setUseFlag(false);
             info.setNotUseInfo(notUseInfo);
             return info;
