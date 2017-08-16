@@ -128,18 +128,20 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         CardCouponOrder order;
         try {
             order = createOrder(payType, clientId, couponLaunchWithCoupon);
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             //创建订单失败，恢复库存。
             couponCodeCache.changeInventory(launchId,1);
             throw new BusinessException(REQUEST_PARAMS_ERROR, e.getMessage());
         }
         PreOrderResult preOrderResult = null;
-        if (order.getMoneySum().compareTo(BigDecimal.ZERO) == 0) {
+        if (order.getMoneySum().compareTo(BigDecimal.ZERO) > 0) {
             if (payType.equals(PAY_TYPE_WECHAT)) {
                 preOrderResult = wxPayService.getWechatPreOrderResult(couponLaunchWithCoupon.getProjectId(), clientId, order.getMoneySum().floatValue(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
                 preOrderResult = aliPayService.getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum().floatValue(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
+        } else {
+            throw new BusinessException(REQUEST_PARAMS_ERROR, "订单价钱小于零");
         }
         return new ResultData(preOrderResult);
     }
