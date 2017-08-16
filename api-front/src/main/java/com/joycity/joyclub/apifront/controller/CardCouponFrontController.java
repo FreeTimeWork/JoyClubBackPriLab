@@ -54,7 +54,7 @@ public class CardCouponFrontController {
     /**
      * 免费领取
      */
-    @PostMapping("/card/coupon/free/receive")
+    @PostMapping("/card/coupon/point/receive")
     public ResultData freeReceiveCoupon(@CookieValue(Global.COOKIE_TOKEN) String token,
                                         @Valid @RequestBody CouponFreeGetVO vo) {
 
