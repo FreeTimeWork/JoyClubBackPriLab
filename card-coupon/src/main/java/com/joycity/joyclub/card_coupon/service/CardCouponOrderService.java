@@ -7,8 +7,8 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
  */
 public interface CardCouponOrderService {
 
-    ResultData orderForWeChat(Long clientId, Long couponLaunchId, Boolean moneyOrPoint);
-    ResultData orderForAli(Long clientId, Long couponLaunchId,Boolean moneyOrPoint);
+    ResultData orderForWeChat(Long clientId, Long couponLaunchId);
+    ResultData orderForAli(Long clientId, Long couponLaunchId);
 
     /**
      * 支付成功返回回调，进行订单支付成功业务处理

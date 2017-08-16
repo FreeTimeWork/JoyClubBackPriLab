@@ -5,7 +5,6 @@ package com.joycity.joyclub.apifront.modal.vo.card_coupon;
  */
 public class CouponOrderVO {
     private Long launchId;
-    private Boolean moneyOrPoint;
 
     public Long getLaunchId() {
         return launchId;
@@ -15,11 +14,4 @@ public class CouponOrderVO {
         this.launchId = launchId;
     }
 
-    public Boolean getMoneyOrPoint() {
-        return moneyOrPoint;
-    }
-
-    public void setMoneyOrPoint(Boolean moneyOrPoint) {
-        this.moneyOrPoint = moneyOrPoint;
-    }
 }

@@ -2,6 +2,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
+import com.joycity.joyclub.card_coupon.constant.CouponLaunchPayType;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
@@ -13,6 +14,9 @@ import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardThirdpartyCouponCode;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.modal.Client;
+import com.joycity.joyclub.client.service.ClientService;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.RedisKeyConst;
@@ -43,6 +47,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
+
 /**
  * Created by fangchen.chai on 2017/7/13.
  */
@@ -70,6 +76,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     private CardCouponCodeCache couponCodeCache;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    KeChuanCrmService keChuanCrmService;
+    @Autowired
+    ClientService clientService;
 
     @Override
     @Transactional
@@ -87,7 +97,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     }
 
     @Override
-    public ResultData freeReceiveCoupon(Long clientId, Long launchId) {
+    public ResultData freeOrPointReceiveCoupon(Long clientId, Long launchId) {
         CouponLaunchWithCoupon launch = launchMapper.selectLaunchWithCouponById(launchId);
         if (!launch.getType().equals(CouponLaunchType.ONLINE_LAUNCH)) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "必须为线上发放");
@@ -98,10 +108,32 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         if (cardCouponCodeMapper.checkOnlineCouponCodeNum(launchId, clientId) > 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "已领取");
         }
+        BigDecimal pointSum = BigDecimal.ZERO;
+        if (launch.getPayType().equals(CouponLaunchPayType.POINT)) {
+            pointSum = launch.getPayAmount();
+        }else {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "该卡券不是积分支付");
+        }
+        if (pointSum.intValue() > 0) {
+
+            //积分
+            String tel = clientUserMapper.getTel(clientId);
+            Client client = keChuanCrmService.getMemberByTel(tel);
+            if (client == null) {
+                throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
+            }
+            if (pointSum.intValue() > client.getVipPoint()) {
+                throw new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH, "积分不足");
+            }
+        }
         //cache发卡
         boolean result = couponCodeCache.sendCouponCode(launchId);
         if (!result) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "卡券已售罄");
+        }
+        //减积分
+        if (pointSum.intValue() > 0) {
+            clientService.addPoint(clientId, -pointSum.doubleValue());
         }
         Long id = sendCouponCode(clientId, launchId, launch.getCouponId());
         return new ResultData(new CreateResult(id));

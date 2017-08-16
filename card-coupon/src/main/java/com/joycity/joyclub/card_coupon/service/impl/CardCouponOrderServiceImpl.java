@@ -76,13 +76,13 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
     private AliPayService aliPayService;
 
     @Override
-    public ResultData orderForWeChat(Long clientId, Long couponLaunchId, Boolean moneyOrPoint) {
-        return clientOrder(PAY_TYPE_WECHAT,clientId,couponLaunchId,moneyOrPoint);
+    public ResultData orderForWeChat(Long clientId, Long couponLaunchId) {
+        return clientOrder(PAY_TYPE_WECHAT,clientId,couponLaunchId);
     }
 
     @Override
-    public ResultData orderForAli(Long clientId, Long couponLaunchId, Boolean moneyOrPoint) {
-        return clientOrder(PAY_TYPE_ALI,clientId,couponLaunchId,moneyOrPoint);
+    public ResultData orderForAli(Long clientId, Long couponLaunchId) {
+        return clientOrder(PAY_TYPE_ALI,clientId,couponLaunchId);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         }
     }
 
-    private ResultData clientOrder(Byte payType, Long clientId, Long launchId, Boolean moneyOrPoint) {
+    private ResultData clientOrder(Byte payType, Long clientId, Long launchId) {
         CouponLaunchWithCoupon couponLaunchWithCoupon = launchMapper.selectLaunchWithCouponById(launchId);
 
         if (couponCodeMapper.checkOnlineCouponCodeNum(launchId, clientId) > 0) {
@@ -127,7 +127,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
 
         CardCouponOrder order;
         try {
-            order = createOrder(payType, clientId, couponLaunchWithCoupon, moneyOrPoint);
+            order = createOrder(payType, clientId, couponLaunchWithCoupon);
         } catch (Exception e) {
             //创建订单失败，恢复库存。
             couponCodeCache.changeInventory(launchId,1);
@@ -140,15 +140,6 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
             } else if (payType.equals(PAY_TYPE_ALI)) {
                 preOrderResult = aliPayService.getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum().floatValue(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
-        } else {
-            //总金钱为0，积分处理
-            if (order.getPointSum().compareTo(BigDecimal.ZERO) > 0) {
-                clientService.addPoint(clientId, -order.getPointSum().doubleValue());
-            }
-            couponOrderMapper.setPayedById(order.getId());
-            // 订单已经算支付完成了
-            preOrderResult = new PreOrderResult();
-            preOrderResult.setIfUseMoney(false);
         }
         return new ResultData(preOrderResult);
     }
@@ -164,28 +155,19 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
 
     }
 
-    private CardCouponOrder createOrder(Byte payType, Long clientId, CouponLaunchWithCoupon couponLaunchWithCoupon, Boolean moneyOrPoint) {
+    private CardCouponOrder createOrder(Byte payType, Long clientId, CouponLaunchWithCoupon couponLaunchWithCoupon) {
         ThrowBusinessExceptionUtil.checkNull(couponLaunchWithCoupon,"该卡券不在投放期间或已下架");
         if (couponCodeCache.getInventory(couponLaunchWithCoupon.getId()) <= 0) {
             throw new BusinessException(REQUEST_PARAMS_ERROR, "卡券已售罄");
         }
 
-        BigDecimal moneySum = BigDecimal.ZERO;
-        BigDecimal pointSum = BigDecimal.ZERO;
+        BigDecimal moneySum;
         CardCouponOrder order = new CardCouponOrder();
-        if (moneyOrPoint && couponLaunchWithCoupon.getPayType().equals(CouponLaunchPayType.MONEY)) {
+        if (couponLaunchWithCoupon.getPayType().equals(CouponLaunchPayType.MONEY)) {
             order.setPayType(payType);
             moneySum = couponLaunchWithCoupon.getPayAmount();
-        } else if (!moneyOrPoint && couponLaunchWithCoupon.getPayType().equals(CouponLaunchPayType.POINT)){
-            pointSum = couponLaunchWithCoupon.getPayAmount();
         } else {
-            throw new BusinessException(REQUEST_PARAMS_ERROR, "支付类型不匹配");
-        }
-        //积分
-        Integer nowPoint = clientMapper.getPoint(clientId);
-        //积分不足，提前判断，避免生成订单
-        if (pointSum.intValue() > nowPoint) {
-            throw new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH, "积分不足");
+            throw new BusinessException(REQUEST_PARAMS_ERROR, "该卡券不是金钱支付");
         }
 
         order.setCode(createOrderCode());
@@ -194,7 +176,6 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         order.setLaunchId(couponLaunchWithCoupon.getId());
         order.setStatus(CouponOrderConst.STATUS_NOT_PAYED);
         order.setMoneySum(moneySum);
-        order.setPointSum(pointSum);
         couponOrderMapper.insertSelective(order);
         return order;
     }

@@ -58,7 +58,7 @@ public class CardCouponFrontController {
     public ResultData freeReceiveCoupon(@CookieValue(Global.COOKIE_TOKEN) String token,
                                         @Valid @RequestBody CouponFreeGetVO vo) {
 
-        return couponCodeService.freeReceiveCoupon(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
+        return couponCodeService.freeOrPointReceiveCoupon(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
     }
 
     /**

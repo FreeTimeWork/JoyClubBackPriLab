@@ -15,13 +15,13 @@ public interface CardCouponCodeService {
     void batchCreateCouponCode(Long launchId);
 
     /**
-     * 免费领取卡券
+     * 免费或积分领取卡券
      *
      * @param clientId
      * @param launchId
      * @return
      */
-    ResultData freeReceiveCoupon(Long clientId, Long launchId);
+    ResultData freeOrPointReceiveCoupon(Long clientId, Long launchId);
 
     /**
      * 纯发卡业务，里面没有cache发卡。

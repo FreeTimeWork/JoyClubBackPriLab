@@ -696,66 +696,6 @@ public class CardCouponOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andPointSumIsNull() {
-            addCriterion("point_sum is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumIsNotNull() {
-            addCriterion("point_sum is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumEqualTo(BigDecimal value) {
-            addCriterion("point_sum =", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumNotEqualTo(BigDecimal value) {
-            addCriterion("point_sum <>", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumGreaterThan(BigDecimal value) {
-            addCriterion("point_sum >", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("point_sum >=", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumLessThan(BigDecimal value) {
-            addCriterion("point_sum <", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("point_sum <=", value, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumIn(List<BigDecimal> values) {
-            addCriterion("point_sum in", values, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumNotIn(List<BigDecimal> values) {
-            addCriterion("point_sum not in", values, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("point_sum between", value1, value2, "pointSum");
-            return (Criteria) this;
-        }
-
-        public Criteria andPointSumNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("point_sum not between", value1, value2, "pointSum");
-            return (Criteria) this;
-        }
-
         public Criteria andPayTypeIsNull() {
             addCriterion("pay_type is null");
             return (Criteria) this;

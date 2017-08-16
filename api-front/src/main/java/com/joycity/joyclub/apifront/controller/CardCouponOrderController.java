@@ -49,7 +49,7 @@ public class CardCouponOrderController {
     @PostMapping("/order/we_chat")
     public ResultData orderForWeChat(@CookieValue(Global.COOKIE_TOKEN) String token,
                                      @Valid @RequestBody CouponOrderVO vo) {
-        return couponOrderService.orderForWeChat(clientTokenService.getIdOrThrow(token), vo.getLaunchId(), vo.getMoneyOrPoint());
+        return couponOrderService.orderForWeChat(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
     }
 
     /**
@@ -58,7 +58,7 @@ public class CardCouponOrderController {
     @PostMapping("/order/ali")
     public ResultData orderForAli(@CookieValue(Global.COOKIE_TOKEN) String token,
                                   @Valid @RequestBody CouponOrderVO vo) {
-        return couponOrderService.orderForAli(clientTokenService.getIdOrThrow(token), vo.getLaunchId(), vo.getMoneyOrPoint());
+        return couponOrderService.orderForAli(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
     }
 
     /**
