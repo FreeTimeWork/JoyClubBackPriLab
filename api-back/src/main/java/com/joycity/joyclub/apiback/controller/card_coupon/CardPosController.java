@@ -44,7 +44,7 @@ public class CardPosController extends BaseUserSessionController {
     /**
      * 查看券号
      */
-    @GetMapping(value = "/coupon/examine")
+    @PostMapping("/coupon/examine")
     public ResultData posCheckCouponCode(@RequestHeader("sign") String sign,
                                          @RequestHeader("timestamp") Long timestamp,
                                          @RequestBody @Validated PosExamineVO vo) {
