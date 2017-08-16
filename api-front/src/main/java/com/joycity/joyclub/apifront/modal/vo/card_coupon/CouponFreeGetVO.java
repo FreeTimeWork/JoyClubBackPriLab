@@ -1,5 +1,7 @@
 package com.joycity.joyclub.apifront.modal.vo.card_coupon;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * CouponFreeGetVO
  *
@@ -7,6 +9,7 @@ package com.joycity.joyclub.apifront.modal.vo.card_coupon;
  * @date 2017/8/9
  */
 public class CouponFreeGetVO {
+    @NotNull
     private Long launchId;
 
     public Long getLaunchId() {
