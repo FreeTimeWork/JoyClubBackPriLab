@@ -138,7 +138,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
             if (payType.equals(PAY_TYPE_WECHAT)) {
                 preOrderResult = wxPayService.getWechatPreOrderResult(couponLaunchWithCoupon.getProjectId(), clientId, order.getMoneySum().floatValue(), order.getCode(), WX_PAY_NOTIFY_URL);
             } else if (payType.equals(PAY_TYPE_ALI)) {
-                preOrderResult = aliPayService.getAliPreOrderResult(couponLaunchWithCoupon.getId(), order.getMoneySum().floatValue(), order.getCode(), ALI_PAY_NOTIFY_URL);
+                preOrderResult = aliPayService.getAliPreOrderResult(couponLaunchWithCoupon.getProjectId(), order.getMoneySum().floatValue(), order.getCode(), ALI_PAY_NOTIFY_URL);
             }
         } else {
             throw new BusinessException(REQUEST_PARAMS_ERROR, "订单价钱小于零");
