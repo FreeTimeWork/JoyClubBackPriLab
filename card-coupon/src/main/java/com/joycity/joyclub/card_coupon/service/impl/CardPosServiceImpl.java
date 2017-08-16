@@ -124,6 +124,10 @@ public class CardPosServiceImpl implements CardPosService {
             cardCouponCodeService.checkCouponCode(info.getCouponCodeId(), orderCode);
         }
 
+        //减去优惠额为负数，重置为0
+        if (orderAmount.compareTo(BigDecimal.ZERO) < 0) {
+            orderAmount = BigDecimal.ZERO;
+        }
         return new ResultData(new PosCheckResult(orderAmount, checkResult, resultInfo));
     }
 
@@ -358,4 +362,5 @@ public class CardPosServiceImpl implements CardPosService {
         }
         return receiveNum;
     }
+
 }
