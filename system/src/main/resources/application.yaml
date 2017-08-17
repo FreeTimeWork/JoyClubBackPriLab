@@ -62,7 +62,6 @@ alipay:
   returnUrl: http://ykh-bj.com/alipayresult
 
 #科传 crm
-
 crm:
   tech:
     url: http://joycitycrmws2.cofco.com:8082/CRM_VIP_Proxy.asmx
@@ -117,6 +116,20 @@ async:
       privateKey: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMV+4slFS5omSc9AvvXhArHDuB/nYeGytzyyXureqowl8xlQwD95cMBy4WS/Vt4czlicFgBJcrbJYtfdC+m8ksecIlirSMiZB+hwkIPLlCzKvsUDvJugXlgeygIJyEpT/SymOFqjfLdXMp0oplbyvO+t+q2soOvIXq1BIrIMif/FAgMBAAECgYAmnKkgKqEeUTALCiCLl+Nb9+Tur+EuLC+w+TqfdssnPWAq6eO8RTTrG0q/1LzaDg21u0Z95d48qGDfzUK//vM/JNIm11NunQqitcosqQ8g+SdON5vhybycNEdYu9OwfY8OVlU5k5jUnqb7vScOgfguURBvTcRmBoKPSytrUlpxIQJBAP2z+yGKeyanfB4ZmyWXGRIFjcdA/oU8NpWhhKcOsfLzlBqRQoRLw5xgPNiTKHbjj6veplCYPz16CzaiVnvnyrkCQQDHSKFmSz2X6d5We5M14vue0wCNssoq+CKEWh5/oI3nnCEPIMCiXq5pF7zqgI6qY1lj2u1xGTOMGaSfshPNaqdtAkEAoIBdrxGB6alpr005xuU5ehpDYLwwiS/XxIADgQCd+Xq5xrkBINshrGuB8u3eWqCKgwv/ods/nu/36h93oTm6GQJAVHRlYjK00bKdNU19n7KoLDED5QlGQFuUVT7T+gaS3Pr/z6dzu9wgUg1rVH5S98bO1VCsm+ewPsmHSN5xIfb3KQJASGaFlchTGF8Jm8evxLfJHDpk+i0RfHJdwjsqH8E65AHdpo8z3rtpTB2Q0yoFsfxzikLsJDDc2+IRghOsJJ+F4g==
       publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDFfuLJRUuaJknPQL714QKxw7gf52Hhsrc8sl7q3qqMJfMZUMA/eXDAcuFkv1beHM5YnBYASXK2yWLX3QvpvJLHnCJYq0jImQfocJCDy5Qsyr7FA7yboF5YHsoCCchKU/0spjhao3y3VzKdKKZW8rzvrfqtrKDryF6tQSKyDIn/xQIDAQAB
 
+coupon:
+  wxPay:
+    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/we_chat/notify
+
+  aliPay:
+    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/ali/notify
+
+# pos 加密需要
+
+pos:
+  appid: rzrf9teOyA5l
+# pos与后台通信密钥。secretKey用MD5加密，与pos传过来的sign对比，一样就可以通过。
+  secretKey: pC6yk2RoMqbK20jFv6NlPAg2
+
 ---
 spring:
     profiles: development
@@ -132,17 +145,5 @@ alipay:
 server:
   port: 8080
 
-coupon:
-  wxPay:
-    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/we_chat/notify
 
-  aliPay:
-    notifyUrl: http://ykh-bj.com/api/front/card/coupon/pay/ali/notify
-
-# pos 加密需要
-
-pos:
-  appid: rzrf9teOyA5l
-# pos与后台通信密钥。secretKey用MD5加密，与pos传过来的sign对比，一样就可以通过。
-  secretKey: pC6yk2RoMqbK20jFv6NlPAg2
 
