@@ -211,7 +211,7 @@ public class CardPosServiceImpl implements CardPosService {
         }
         //系统没有订单，直接返回成功
         if (info.getDetail() == null) {
-            return new ResultData();
+            return new ResultData(new UpdateResult(0));
         }
         if (refundAmount.compareTo(info.getDetail().getBalance()) > 0) {
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
