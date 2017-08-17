@@ -181,23 +181,7 @@ public class CardPosServiceImpl implements CardPosService {
     public ResultData refundVerification(String orderCode) {
 
         CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
-        if (info.getRefundType() != null) {
-            return new ResultData(new PosRefundVerifyResult(info.getRefundType()));
-        }
-
-        //应该代金券拥有量
-        int subCouponNum = getSubCouponNum(info, info.getDetail().getPayment());
-        int diff = actualNumSubtractSubNum(info, subCouponNum);
-        if (diff > info.getNotUsedNum() ) {
-            return new ResultData(new PosRefundVerifyResult(RefundType.FORBIT_REFUND));
-        }
-        //订单是否关联卡券
-        if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
-            return new ResultData(new PosRefundVerifyResult(RefundType.PERMIT_REFUND_FULL_ORDER));
-        } else {
-            return new ResultData(new PosRefundVerifyResult(RefundType.PREMIT_REFUND));
-        }
-
+        return new ResultData(new PosRefundVerifyResult(info.getRefundType()));
     }
 
     @Override
@@ -209,6 +193,7 @@ public class CardPosServiceImpl implements CardPosService {
 
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
         }
+
         //系统没有订单，直接返回成功
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
@@ -216,33 +201,35 @@ public class CardPosServiceImpl implements CardPosService {
         if (refundAmount.compareTo(info.getDetail().getBalance()) > 0) {
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
         }
-        //该订单改为退货状态
-        PosSaleDetail posSaleDetail = new PosSaleDetail();
-        posSaleDetail.setId(info.getDetail().getId());
-        posSaleDetail.setRefundTime(new Date());
-        posSaleDetail.setBalance(info.getDetail().getPayment().subtract(refundAmount));
-        int affectNum = cardPosSaleDetailMapper.updateByPrimaryKeySelective(posSaleDetail);
+        //应该代金券拥有量
+        int subCouponNum = getSubCouponNum(info, refundAmount);
+        Integer num = actualNumSubtractSubNum(info, subCouponNum);
+        if (num > 0 && num <= info.getNotUsedNum()) {
+            Date date = info.getDetail().getCreateTime();
+            Long clientId = info.getDetail().getClientId();
+            List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCashCouponCodeIdFromLaunchBetween(date, clientId, num);
+            //未使用代金券废弃
+            for (Long id : couponCodeIds) {
+                CardCouponCode cardCouponCode = new CardCouponCode();
+                cardCouponCode.setId(id);
+                cardCouponCode.setUseStatus(CouponCodeUseStatus.CANCELLED);
+                cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
+            }
+        } else if (num > 0 && num > info.getNotUsedNum()){
+            throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
+        }
         //退款订单关联卡券改为未使用
         if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
             for (Long couponCodeId : info.getDetail().getCouponCodeIds()) {
                 cardCouponCodeService.updateNotUsedCouponCode(couponCodeId);
             }
         }
-        //应该代金券拥有量
-        int subCouponNum = getSubCouponNum(info, refundAmount);
-        Integer num = actualNumSubtractSubNum(info, subCouponNum);
-
-        Date date = info.getDetail().getCreateTime();
-        Long clientId = info.getDetail().getClientId();
-        List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCashCouponCodeIdFromLaunchBetween(date, clientId, num);
-        //未使用代金券废弃
-        for (Long id : couponCodeIds) {
-            CardCouponCode cardCouponCode = new CardCouponCode();
-            cardCouponCode.setId(id);
-            cardCouponCode.setUseStatus(CouponCodeUseStatus.CANCELLED);
-            cardCouponCodeMapper.updateByPrimaryKeySelective(cardCouponCode);
-        }
-
+        //该订单改为退货状态
+        PosSaleDetail posSaleDetail = new PosSaleDetail();
+        posSaleDetail.setId(info.getDetail().getId());
+        posSaleDetail.setRefundTime(new Date());
+        posSaleDetail.setBalance(info.getDetail().getBalance().subtract(refundAmount));
+        int affectNum = cardPosSaleDetailMapper.updateByPrimaryKeySelective(posSaleDetail);
 
         return new ResultData(new UpdateResult(affectNum));
     }
@@ -287,8 +274,22 @@ public class CardPosServiceImpl implements CardPosService {
             }
             return info;
         }
-        info.setRefundType(RefundType.PREMIT_REFUND);
         info.setDetail(detail);
+
+        //应该代金券拥有量
+        int subCouponNum = getSubCouponNum(info, info.getDetail().getBalance());
+        int diff = actualNumSubtractSubNum(info, subCouponNum);
+        if (diff > info.getNotUsedNum() ) {
+            info.setRefundType(RefundType.FORBIT_REFUND);
+            return info;
+        }
+        //订单是否关联卡券
+        if (CollectionUtils.isNotEmpty(info.getDetail().getCouponCodeIds())) {
+            info.setRefundType(RefundType.PERMIT_REFUND_FULL_ORDER);
+        } else {
+            info.setRefundType(RefundType.PREMIT_REFUND);
+        }
+
         return info;
     }
 
