@@ -67,7 +67,7 @@ public interface CardCouponCodeService {
      * 券包页点击系统券进入查看详情
      * @param id cardCouponCode id
      */
-    ResultData getCouponInfoByCodeId(Long id);
+    ResultData getCouponInfoByCodeId(Long id,Long clientId);
     /**
      * 券包页点击猫酷券进入查看详情
      * @param code 猫酷券码

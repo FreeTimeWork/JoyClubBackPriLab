@@ -47,6 +47,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import static com.joycity.joyclub.commons.constant.ResultCode.API_NO_PERMISSION_FOR_CURRENT_USER;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 
 /**
@@ -265,9 +266,13 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     }
 
     @Override
-    public ResultData getCouponInfoByCodeId(Long id) {
+    public ResultData getCouponInfoByCodeId(Long id, Long clientId) {
         CouponInfoInBag info = cardCouponCodeMapper.selectCouponInfoByCodeId(id);
         ThrowBusinessExceptionUtil.checkNull(info,"卡券信息不存在");
+        CardCouponCode cardCouponCode = cardCouponCodeMapper.selectByPrimaryKey(id);
+        if (!cardCouponCode.getClientId().equals(clientId)) {
+            throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+        }
         info.setJoinShopList(cardCouponCodeMapper.selectJoinShopsByCouponId(info.getCouponId()));
         return new ResultData(info);
     }
