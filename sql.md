@@ -354,7 +354,7 @@ CREATE TABLE `pos_sale_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_code` varchar(20) NOT NULL COMMENT '订单号',
   `client_id` bigint(20) NOT NULL COMMENT '会员号id',
-  `shop_id` bigint(20)  NOT NULL COMMENT '线下商户id'，
+  `shop_id` bigint(20)  NOT NULL COMMENT '线下商户id',
   `payable` decimal(14,4) NOT NULL COMMENT '应付款，订单总额，未减去优惠额',
   `payment` decimal(14,4) NOT NULL COMMENT '订单实付总额，实际支付(如有优惠，减去优惠额)',
   `balance` decimal(14,4) NOT NULL COMMENT '退款后余额，如果没有退款，和实际支付一样；参与退款逻辑',
