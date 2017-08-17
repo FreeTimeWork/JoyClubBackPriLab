@@ -102,18 +102,12 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         if (!launch.getType().equals(CouponLaunchType.ONLINE_LAUNCH)) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "必须为线上发放");
         }
-        if (launch.getPayAmount().compareTo(BigDecimal.ZERO) != 0) {
-            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "卡券不能免费领取");
-        }
+
         if (cardCouponCodeMapper.checkOnlineCouponCodeNum(launchId, clientId) > 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "已领取");
         }
-        BigDecimal pointSum = BigDecimal.ZERO;
-        if (launch.getPayType().equals(CouponLaunchPayType.POINT)) {
-            pointSum = launch.getPayAmount();
-        }else {
-            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "该卡券不是积分支付");
-        }
+        BigDecimal pointSum = launch.getPayAmount();
+
         if (pointSum.intValue() > 0) {
 
             //积分
