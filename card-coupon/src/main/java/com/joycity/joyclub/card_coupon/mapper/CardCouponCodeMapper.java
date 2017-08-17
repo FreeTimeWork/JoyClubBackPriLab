@@ -38,7 +38,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     /**
      * 某个用户一段时间已领过该投放的卡券数量(条件投放类型)。
      */
-    @Select("select count(*) from card_coupon_code ccc INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 WHERE ccc.launch_id = #{launchId} and ccc.client_id = #{clientId} and ccc.receive_time > #{startTime} and ccc.receive_time < #{endTime}  AND ccl.type = 1 AND ccc.delete_flag = 0")
+    @Select("select count(*) from card_coupon_code ccc INNER JOIN card_coupon_launch ccl ON ccl.id = ccc.launch_id AND ccl.delete_flag = 0 WHERE ccc.launch_id = #{launchId} and ccc.client_id = #{clientId} and ccc.receive_time > #{startTime} and ccc.receive_time < #{endTime}  AND ccl.type = 1 and ccc.use_status != 3 AND ccc.delete_flag = 0")
     int todayConditionCouponCodeNum(@Param("launchId") Long launchId, @Param("clientId") Long clientId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
