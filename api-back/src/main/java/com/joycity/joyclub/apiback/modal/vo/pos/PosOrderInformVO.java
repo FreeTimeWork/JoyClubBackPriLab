@@ -11,6 +11,7 @@ public class PosOrderInformVO {
     private String vipCode;
     @NotNull
     private String orderCode;
+    @NotNull
     private String shopCode;
     @NotNull
     private BigDecimal payable;

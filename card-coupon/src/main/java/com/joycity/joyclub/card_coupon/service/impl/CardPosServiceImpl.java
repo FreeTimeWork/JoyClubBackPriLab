@@ -354,7 +354,7 @@ public class CardPosServiceImpl implements CardPosService {
             if (todayLimitNum > 0) {
                 //发卡数量
                 if ((todayLimitNum + diff) >= 0) {
-                    return diff;
+                    return -diff;
                 } else {
                     return todayLimitNum;
                 }
