@@ -62,6 +62,7 @@ alipay:
   returnUrl: http://ykh-bj.com/alipayresult
 
 #科传 crm
+
 crm:
   tech:
     url: http://joycitycrmws2.cofco.com:8082/CRM_VIP_Proxy.asmx
@@ -107,6 +108,15 @@ point:
         data: >-
           {"req":{"funcid":"9001","termid":"H5-001","oprtno":"JOYCITY-APP","oprtmd":"0","reqdate":"DATE"},"viptrack":"VIPCODE"}
         url: http://111.207.146.151:18080/LayerArchitecture/winpos/uf_stservice_term?reqjson={reqjson}
+
+async:
+  kechuan:
+  # 科传会员变动 通知我方
+    client:
+      userCode: kechuanClientAsync
+      privateKey: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMV+4slFS5omSc9AvvXhArHDuB/nYeGytzyyXureqowl8xlQwD95cMBy4WS/Vt4czlicFgBJcrbJYtfdC+m8ksecIlirSMiZB+hwkIPLlCzKvsUDvJugXlgeygIJyEpT/SymOFqjfLdXMp0oplbyvO+t+q2soOvIXq1BIrIMif/FAgMBAAECgYAmnKkgKqEeUTALCiCLl+Nb9+Tur+EuLC+w+TqfdssnPWAq6eO8RTTrG0q/1LzaDg21u0Z95d48qGDfzUK//vM/JNIm11NunQqitcosqQ8g+SdON5vhybycNEdYu9OwfY8OVlU5k5jUnqb7vScOgfguURBvTcRmBoKPSytrUlpxIQJBAP2z+yGKeyanfB4ZmyWXGRIFjcdA/oU8NpWhhKcOsfLzlBqRQoRLw5xgPNiTKHbjj6veplCYPz16CzaiVnvnyrkCQQDHSKFmSz2X6d5We5M14vue0wCNssoq+CKEWh5/oI3nnCEPIMCiXq5pF7zqgI6qY1lj2u1xGTOMGaSfshPNaqdtAkEAoIBdrxGB6alpr005xuU5ehpDYLwwiS/XxIADgQCd+Xq5xrkBINshrGuB8u3eWqCKgwv/ods/nu/36h93oTm6GQJAVHRlYjK00bKdNU19n7KoLDED5QlGQFuUVT7T+gaS3Pr/z6dzu9wgUg1rVH5S98bO1VCsm+ewPsmHSN5xIfb3KQJASGaFlchTGF8Jm8evxLfJHDpk+i0RfHJdwjsqH8E65AHdpo8z3rtpTB2Q0yoFsfxzikLsJDDc2+IRghOsJJ+F4g==
+      publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDFfuLJRUuaJknPQL714QKxw7gf52Hhsrc8sl7q3qqMJfMZUMA/eXDAcuFkv1beHM5YnBYASXK2yWLX3QvpvJLHnCJYq0jImQfocJCDy5Qsyr7FA7yboF5YHsoCCchKU/0spjhao3y3VzKdKKZW8rzvrfqtrKDryF6tQSKyDIn/xQIDAQAB
+
 ---
 spring:
     profiles: development
@@ -114,7 +124,6 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
       username: root
       password:
-
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
 alipay:

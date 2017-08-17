@@ -136,7 +136,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResultData updateManagerPassword(long id, String oldPassword, String password) {
         SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
-        if (!sysUser.getPassword().equals(MD5Util.MD5(oldPassword, PASSWORD_SALT)))
+        if (!sysUser.getPassword().toUpperCase().equals(MD5Util.MD5(oldPassword, PASSWORD_SALT).toUpperCase()))
             throw new BusinessException(OLD_PASSWORD_ERROR);
         return updateManagerPassword(id, password);
     }

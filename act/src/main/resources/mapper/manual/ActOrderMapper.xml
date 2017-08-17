@@ -15,7 +15,7 @@
         join sale_act act on act.id = attr.act_id
         where o.project_id=#{projectId} and o.client_id=#{clientId}
         <if test="status!=null">and o.status=#{status}</if>
-        order by create_time desc
+        order by o.id desc
         <include refid="limit"/>
    </select>
 

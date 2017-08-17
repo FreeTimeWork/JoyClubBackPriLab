@@ -24,6 +24,7 @@
         <module>title_carousel</module>
         <module>card-coupon</module>
         <module>we-chat</module>
+        <module>api-async</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
