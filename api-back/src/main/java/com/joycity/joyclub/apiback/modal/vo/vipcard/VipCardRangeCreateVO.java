@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 public class VipCardRangeCreateVO extends VipCardRangeBaseVO {
     @NotNull
     private String type;
+    @NotNull
+    private Long projectId;
 
     public String getType() {
         return type;
@@ -15,5 +17,13 @@ public class VipCardRangeCreateVO extends VipCardRangeBaseVO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 }

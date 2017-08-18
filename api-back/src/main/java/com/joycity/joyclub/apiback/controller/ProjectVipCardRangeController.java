@@ -12,8 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Created by CallMeXYZ on 2017/4/6.
@@ -24,20 +22,20 @@ public class ProjectVipCardRangeController extends BaseUserSessionController {
     @Autowired
     ProjectVipCardRangeService vipCardRangeService;
 
-    @RequestMapping(value = "/{projectId}/vipcard/ranges", method = GET)
+    @GetMapping("/{projectId}/vipcard/ranges")
     public ResultData getRanges(@PathVariable Long projectId, HttpSession session) {
         checkPlatformUser(session);
         return vipCardRangeService.getRanges(projectId);
 
     }
 
-    @RequestMapping(value = "vipcard/range", method = POST)
-    public ResultData createRange(@RequestParam Long projectId, @Valid @RequestBody VipCardRangeCreateVO createVO, HttpSession session) {
+    @PostMapping("vipcard/range")
+    public ResultData createRange(@Valid @RequestBody VipCardRangeCreateVO createVO, HttpSession session) {
         checkPlatformUser(session);
-        return vipCardRangeService.addRange(projectId, createVO.getType(), createVO.getMin(), createVO.getMax());
+        return vipCardRangeService.addRange(createVO.getProjectId(), createVO.getType(), createVO.getMin(), createVO.getMax());
     }
 
-    @RequestMapping(value = "vipcard/range/{id}", method = POST)
+    @PostMapping("vipcard/range/{id}")
     public ResultData updateRange(@PathVariable Long id, @Valid @RequestBody VipCardRangeBaseVO vo, HttpSession session) {
         checkPlatformUser(session);
         return vipCardRangeService.updateRange(id, vo.getMin(), vo.getMax());
