@@ -3,12 +3,12 @@ package com.joycity.joyclub.client.mapper;
 
 import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.modal.ClientExample;
-import com.joycity.joyclub.client.modal.WechatUserInfo;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample
     Long getIdByVipCode(String vipCode);
 
     @Select("select wx_head_img_url headimgurl,wx_nick_name nickName,wx_gender sex,wx_language language,wx_city city, wx_country country,wx_province province from client where id=#{id}")
-    WechatUserInfo getWechatInfo(Long id);
+    HashMap<String,String> getWechatInfo(Long id);
 
     @Select("select vip_point from client where id=#{id}")
     Integer getPoint(Long id);

@@ -10,7 +10,7 @@ import com.joycity.joyclub.we_chat.pay.wechat.PreOrder;
 import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.we_chat.pay.wechat.WxRefundRequest;
-import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
+import com.joycity.joyclub.we_chat.service.WechatService;
 import com.joycity.joyclub.we_chat.service.WxPayService;
 import com.joycity.joyclub.we_chat.util.HttpKit;
 import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
@@ -58,14 +58,14 @@ public class WxPayServiceImpl implements WxPayService{
     @Autowired
     private WxPayConfig wxPayConfig;
     @Autowired
-    private WechatOpenIdService wechatOpenIdService;
+    private WechatService wechatService;
     // TODO: 2017/5/11  增加项目的微信支付传参传参
 
     @Override
     public PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code, String wxPayNotifyUrl) {
         //先判断openid存在性
         //getOpneId需要的所在的微信项目id,如果是平台悦客会或者购物中心，微信项目id就是项目id，如果是商业或者地产悦客会，微信项目id对应的是商业悦客会的项目id
-        String openId = wechatOpenIdService.getOpenId(projectId, clientId);
+        String openId = wechatService.getOpenId(projectId, clientId);
         if (openId == null) {
             throw new BusinessException(DATA_NOT_EXIST, "会员微信openId获取失败");
         }

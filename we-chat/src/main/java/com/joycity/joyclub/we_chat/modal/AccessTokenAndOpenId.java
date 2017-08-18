@@ -1,4 +1,4 @@
-package com.joycity.joyclub.apifront.modal.wechat;
+package com.joycity.joyclub.we_chat.modal;
 
 /**
  * Created by Administrator on 2017/4/16.

@@ -1,11 +1,12 @@
-package com.joycity.joyclub.apifront.service.impl;
+package com.joycity.joyclub.we_chat.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.apifront.modal.wechat.AccessTokenAndOpenId;
-import com.joycity.joyclub.client.modal.WechatUserInfo;
+import com.joycity.joyclub.we_chat.mapper.WechatOpenIdMapper;
+import com.joycity.joyclub.we_chat.modal.AccessTokenAndOpenId;
+import com.joycity.joyclub.we_chat.modal.WechatUserInfo;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.apifront.service.WechatService;
+import com.joycity.joyclub.we_chat.service.WechatService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +26,8 @@ public class WechatServiceImpl implements WechatService {
     WxPayConfig wxpayConfig;
     @Autowired
     RestTemplate restTemplate;
+    @Autowired
+    WechatOpenIdMapper wechatOpenIdMapper;
     /**
      * 这个获取用户信息，如果没关注，只能获得openId,无法获取用户信息
      */
@@ -35,21 +38,6 @@ public class WechatServiceImpl implements WechatService {
      */
     private final String URL_USER_INFO = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 
-    /*   // TODO: 2017/5/12 appId应该根据project去取
-       @Override
-       public WechatUserInfo getUserInfo(String openid, String accessTokenUrl) {
-           if (StringUtils.isBlank(openid)) {
-               throw new BusinessException(WECHAT_ERROR, "获取微信用户信息失败，openId为空");
-           }
-           String url = URL_USER_INFO.replaceAll("ACCESS_TOKEN", getAccessToken(accessTokenUrl)).replaceAll("OPENID", openid);
-           WechatUserInfo info = restTemplate.getForObject(url, WechatUserInfo.class);
-           //基本上出错就是因为accessToken获取的原因
-           if (info.getOpenid() == null) {
-               logger.error("获取用户信息失败");
-               throw new BusinessException(WECHAT_ERROR, "获取微信用户信息失败");
-           }
-           return info;
-       }*/
     @Override
     public WechatUserInfo getUserInfo(String openid, String accessToken) {
         if (StringUtils.isBlank(openid)) {
@@ -57,7 +45,7 @@ public class WechatServiceImpl implements WechatService {
         }
         String url = URL_USER_INFO.replaceAll("ACCESS_TOKEN", accessToken).replaceAll("OPENID", openid);
         String result = restTemplate.getForObject(url, String.class);
-        WechatUserInfo info = JSON.parseObject(result,WechatUserInfo.class);
+        WechatUserInfo info = JSON.parseObject(result, WechatUserInfo.class);
         //如果超时的话，info里的值应该是空的，但是info却不空
         return info;
     }
@@ -74,5 +62,29 @@ public class WechatServiceImpl implements WechatService {
         return result;
     }
 
+    @Override
+    public String getOpenId(Long projectId, Long clientId) {
+        return wechatOpenIdMapper.getOpenId(projectId, clientId);
+    }
+
+    @Override
+    public void saveOrUpdateProjectOpenId(Long projectId, Long clientId, String openId) {
+        String nowOpenId = wechatOpenIdMapper.getOpenId(projectId, clientId);
+        //从未登陆，则新建
+        if (nowOpenId == null) {
+            wechatOpenIdMapper.saveOpenId(projectId, clientId, openId);
+        }
+        //用别的微信号登陆过，则替换
+        else if (!nowOpenId.equals(openId)) {
+            wechatOpenIdMapper.updateOpenId(projectId, clientId, openId);
+        }
+    }
+
+    @Override
+    public AccessTokenAndOpenId saveOrUpdateProjectOpenIdByCode(Long projectId, Long clientId, String code) {
+        AccessTokenAndOpenId tokenAndOpenId = getAccessTokenAndOpenId(code, projectId);
+        saveOrUpdateProjectOpenId(projectId, clientId, tokenAndOpenId.getOpenid());
+        return tokenAndOpenId;
+    }
 
 }

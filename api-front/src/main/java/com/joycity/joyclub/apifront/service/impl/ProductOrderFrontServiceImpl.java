@@ -1,29 +1,25 @@
 package com.joycity.joyclub.apifront.service.impl;
 
-import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
-import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
+import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
 import com.joycity.joyclub.apifront.modal.cart.ClientPostAddress;
 import com.joycity.joyclub.apifront.modal.project.ProductOrderItem;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderItemVO;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
-import com.joycity.joyclub.commons.modal.order.PreOrderResult;
-import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
-import com.joycity.joyclub.we_chat.service.WxPayService;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
-import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.OrderStatus;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.*;
@@ -32,7 +28,8 @@ import com.joycity.joyclub.product.modal.generated.SaleProductOrder;
 import com.joycity.joyclub.product.modal.generated.SaleProductOrderDetail;
 import com.joycity.joyclub.product.modal.generated.SaleProductOrderExample;
 import com.joycity.joyclub.product.modal.generated.SaleProductOrderStore;
-import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
+import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
+import com.joycity.joyclub.we_chat.service.WxPayService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +37,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.joycity.joyclub.commons.constant.OrderStatus.*;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
@@ -70,8 +70,6 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
     private String WX_PAY_NOTIFY_URL;
     @Value("${alipay.notifyUrl}")
     private String ALI_PAY_NOTIFY_URL;
-    @Autowired
-    WechatOpenIdService wechatOpenIdService;
     @Autowired
     ProductOrderMapper orderMapper;
     @Autowired

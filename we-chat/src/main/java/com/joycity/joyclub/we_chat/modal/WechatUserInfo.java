@@ -1,4 +1,4 @@
-package com.joycity.joyclub.client.modal;
+package com.joycity.joyclub.we_chat.modal;
 
 import org.apache.commons.lang3.StringUtils;
 

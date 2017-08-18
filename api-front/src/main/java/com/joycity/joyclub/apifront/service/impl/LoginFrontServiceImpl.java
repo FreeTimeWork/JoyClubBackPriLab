@@ -7,13 +7,13 @@ import com.joycity.joyclub.apifront.modal.project.SysProject;
 import com.joycity.joyclub.apifront.service.*;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
-import com.joycity.joyclub.client.modal.WechatUserInfo;
+import com.joycity.joyclub.we_chat.modal.WechatUserInfo;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
+import com.joycity.joyclub.we_chat.service.WechatService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,6 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     MsgAuthCodeService authCodeService;
     @Autowired
     KeChuanCrmService keChuanCrmService;
-    @Autowired
-    WechatOpenIdService wechatOpenIdService;
     @Autowired
     ProjectMapper projectMapper;
     @Autowired
@@ -252,7 +250,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         //可能用户在其他登陆中先创建了会员，然后再进行微信登陆
         //所以判断openid有没有存储，必须一直判断，而不是只放在userId==null时
         if (params.getOpenIdProjectId() != null) {
-            wechatOpenIdService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
+            wechatService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
         }
 
         addTokenCookie(response, user.getId());

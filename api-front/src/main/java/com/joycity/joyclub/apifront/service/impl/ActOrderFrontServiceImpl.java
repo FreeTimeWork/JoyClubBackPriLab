@@ -9,9 +9,8 @@ import com.joycity.joyclub.act.modal.MyActOrder;
 import com.joycity.joyclub.act.modal.generated.SaleActOrder;
 import com.joycity.joyclub.act.modal.generated.SaleActOrderExample;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
-import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.alipay.service.constant.AliPayConfig;
-import com.joycity.joyclub.alipay.service.modal.AliPayStoreInfo;
+import com.joycity.joyclub.alipay.service.service.AliPayService;
 import com.joycity.joyclub.apifront.mapper.manual.cart.PostAddressMapper;
 import com.joycity.joyclub.apifront.service.ActOrderFrontService;
 import com.joycity.joyclub.apifront.service.CartFrontService;
@@ -20,23 +19,22 @@ import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.constant.ActOrderConst;
-import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.LogConst;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import com.joycity.joyclub.product.mapper.ProductAttrMapper;
 import com.joycity.joyclub.product.mapper.ProductMapper;
-import com.joycity.joyclub.commons.modal.order.PreOrderResult;
 import com.joycity.joyclub.we_chat.pay.wechat.WxPayConfig;
 import com.joycity.joyclub.we_chat.service.WxPayService;
-import com.joycity.joyclub.we_chat.service.WechatOpenIdService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +64,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
     private String WX_PAY_NOTIFY_URL;
     @Value("${alipay.notifyUrl}")
     private String ALI_PAY_NOTIFY_URL;
-    @Autowired
-    WechatOpenIdService wechatOpenIdService;
-
     @Autowired
     KeChuanCrmService keChuanCrmService;
     @Autowired
@@ -101,35 +96,6 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
     ActAttrMapper actAttrMapper;
     private Log logger = LogFactory.getLog(ActOrderFrontServiceImpl.class);
     private Log taskLogger = LogFactory.getLog(LogConst.LOG_TASK);
-
-
-
-/*    */
-
-    /**
-     * @param clientId
-     * @param telParam 可以为null
-     * @return
-     *//*
-    private Integer getVipPoint(Long clientId, String telParam) {
-        String tel = telParam != null ? telParam : clientMapper.getTel(clientId);
-        if (tel == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "会员不存在");
-        }
-        Client client = keChuanCrmService.getMemberByTel(tel);
-        if (client == null) {
-            throw new BusinessException(DATA_NOT_EXIST, "无法获取会员信息");
-        }
-        return client.getVipPoint();
-    }
-
-    private Integer getVipPoint(Long clientId) {
-        return getVipPoint(clientId, null);
-    }
-
-    private Integer getVipPoint(String phone) {
-        return getVipPoint(null, phone);
-    }*/
 
     @Override
     public ResultData getList(final Long projectId, final Long clientId,final Byte status, final PageUtil pageUtil) {
