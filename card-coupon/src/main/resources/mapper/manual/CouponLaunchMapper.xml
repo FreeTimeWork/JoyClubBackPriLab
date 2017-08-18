@@ -266,7 +266,7 @@
         LEFT JOIN
         (
         select id, launch_id, count(*) AS receive_num from card_coupon_code WHERE delete_flag = 0 GROUP BY launch_id
-        ) cccn ON cccn.launnch_id = ccl.id
+        ) cccn ON cccn.launch_id = ccl.id
         where
             cc.project_id = #{projectId}
             AND now() <![CDATA[ > ]]> ccl.launch_start_time
