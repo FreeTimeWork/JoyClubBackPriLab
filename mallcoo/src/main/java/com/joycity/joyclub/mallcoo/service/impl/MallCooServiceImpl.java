@@ -29,10 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by CallMeXYZ on 2017/6/6.
@@ -106,7 +103,17 @@ public class MallCooServiceImpl implements MallCooService {
         body.put("MemberID", crmId);
         body.put("MinID", "0");
         body.put("PageSize", "100");
-        return postForDataObject(projectId, URL_GET_COUPONS, body, CouponsResult.class);
+        try {
+            return postForDataObject(projectId, URL_GET_COUPONS, body, CouponsResult.class);
+        } catch (BusinessException e) {
+            // 如果会员在猫酷系统不存在，会返回code 0 msg 失败
+            // 如果会员的卡券为空，会返回code 6 msg 暂无数据
+            // 因此在这里拦截BusinessException 返回空对象
+            CouponsResult result = new CouponsResult();
+            result.setCount(0);
+            result.setCouponInfoList(new ArrayList<>());
+            return result;
+        }
     }
 
     @Override
