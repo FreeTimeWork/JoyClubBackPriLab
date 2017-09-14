@@ -36,7 +36,8 @@ public interface ActMapper extends BaseMapperWithBLOBS<SaleAct, SaleActWithBLOBs
      * projectId,storeId都可以为空
      * 都空是查询所有
      */
-    List<ActSimple> selectSimpleList(@Param("projectId") Long projectId, @Param("storeId") Long storeId, @Param("pageUtil") PageUtil pageUtil);
+    List<ActSimple> selectSimpleList(@Param("projectId") Long projectId, @Param("storeId") Long storeId,
+                                     @Param("actTypeId")Long actTypeId, @Param("pageUtil") PageUtil pageUtil);
 
     /**
      *

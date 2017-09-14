@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.act.mapper.SaleActTypeMapper">
+  <sql id="limit">
+    limit #{pageUtil.offset},#{pageUtil.pageSize}
+  </sql>
+  <select id="selectList" resultType="com.joycity.joyclub.act.modal.ActTypeWithAct">
+    SELECT * FROM sale_act_type
+    ORDER BY display_weight DESC, id
+    <if test="limit">
+      <include refid="limit"/>
+    </if>
+  </select>
+
+  <select id="countList" resultType="long">
+    SELECT count(*) FROM sale_act_type
+  </select>
+
+<!--  <resultMap id="SaleActTypeResultMap" type="com.joycity.joyclub.act.modal.ActTypeWithAct">
+    <collection property="acts" resultMap="SaleActResultMap"/>
+  </resultMap>
+  <resultMap id="SaleActResultMap" type="com.joycity.joyclub.act.modal.generated.SaleAct"
+             extends="com.joycity.joyclub.act.mapper.ActMapper.BaseResultMap">
+
+  </resultMap>-->
+
+</mapper>

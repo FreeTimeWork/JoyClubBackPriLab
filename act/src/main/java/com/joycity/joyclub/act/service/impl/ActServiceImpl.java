@@ -137,9 +137,9 @@ public class ActServiceImpl implements ActService {
 
     // TODO: 2017/4/13 待完善
     @Override
-    public ResultData getList(Long projectId, Long storeId, PageUtil pageUtil) {
+    public ResultData getList(Long projectId, Long storeId,Long actTypeId, PageUtil pageUtil) {
 
-        return new ResultData(new ListResult(actMapper.selectSimpleList(projectId,storeId,pageUtil)));
+        return new ResultData(new ListResult(actMapper.selectSimpleList(projectId,storeId,actTypeId,pageUtil)));
     }
 
     @Override

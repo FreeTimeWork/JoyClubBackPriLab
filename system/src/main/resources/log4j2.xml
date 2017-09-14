@@ -25,5 +25,8 @@
         <Logger name="task" level="info">
             <AppenderRef ref="taskFile"/>
         </Logger>
+        <Logger name="com.joycity.joyclub.act.mapper" level="debug" additivity="false" >
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>

@@ -52,7 +52,7 @@ public interface ActService {
      * projectId,StoreId按顺序选择非空的值作为筛选条件
      * 如果projectId,StoreId,都空，搜索的所有
      */
-    ResultData getList(Long projectId, Long storeId, PageUtil pageUtil);
+    ResultData getList(Long projectId, Long storeId, Long actTypeId, PageUtil pageUtil);
 
     ResultData getAttrs(Long id);
 
