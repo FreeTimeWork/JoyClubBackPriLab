@@ -9,6 +9,7 @@ public class ActSimple {
      */
     private Long id;
     private String name;
+    private String info;
     private String portrait;
     private Float basePrice;
     private Float price;
@@ -34,6 +35,14 @@ public class ActSimple {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public String getPortrait() {

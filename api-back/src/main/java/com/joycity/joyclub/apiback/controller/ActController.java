@@ -100,6 +100,7 @@ public class ActController extends BaseUserSessionController {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         act.setStoreId(user.getInfoId());
+//        act.setStoreId(1L);
         return actService.createAct(act);
     }
 
@@ -136,7 +137,7 @@ public class ActController extends BaseUserSessionController {
      */
     @PostMapping("act/type")
     public ResultData createActType(@RequestBody SaleActType actType, HttpSession httpSession) {
-//        checkProjectUser(httpSession);
+        checkProjectUser(httpSession);
         return actTypeService.createActType(actType);
     }
 }

@@ -375,6 +375,66 @@ public class SaleActExample {
             return (Criteria) this;
         }
 
+        public Criteria andActTypeIdIsNull() {
+            addCriterion("act_type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdIsNotNull() {
+            addCriterion("act_type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdEqualTo(Long value) {
+            addCriterion("act_type_id =", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotEqualTo(Long value) {
+            addCriterion("act_type_id <>", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdGreaterThan(Long value) {
+            addCriterion("act_type_id >", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("act_type_id >=", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdLessThan(Long value) {
+            addCriterion("act_type_id <", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdLessThanOrEqualTo(Long value) {
+            addCriterion("act_type_id <=", value, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdIn(List<Long> values) {
+            addCriterion("act_type_id in", values, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotIn(List<Long> values) {
+            addCriterion("act_type_id not in", values, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdBetween(Long value1, Long value2) {
+            addCriterion("act_type_id between", value1, value2, "actTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActTypeIdNotBetween(Long value1, Long value2) {
+            addCriterion("act_type_id not between", value1, value2, "actTypeId");
+            return (Criteria) this;
+        }
+
         public Criteria andCategoryIdIsNull() {
             addCriterion("category_id is null");
             return (Criteria) this;
@@ -502,6 +562,76 @@ public class SaleActExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoIsNull() {
+            addCriterion("info is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoIsNotNull() {
+            addCriterion("info is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoEqualTo(String value) {
+            addCriterion("info =", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoNotEqualTo(String value) {
+            addCriterion("info <>", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoGreaterThan(String value) {
+            addCriterion("info >", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoGreaterThanOrEqualTo(String value) {
+            addCriterion("info >=", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoLessThan(String value) {
+            addCriterion("info <", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoLessThanOrEqualTo(String value) {
+            addCriterion("info <=", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoLike(String value) {
+            addCriterion("info like", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoNotLike(String value) {
+            addCriterion("info not like", value, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoIn(List<String> values) {
+            addCriterion("info in", values, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoNotIn(List<String> values) {
+            addCriterion("info not in", values, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoBetween(String value1, String value2) {
+            addCriterion("info between", value1, value2, "info");
+            return (Criteria) this;
+        }
+
+        public Criteria andInfoNotBetween(String value1, String value2) {
+            addCriterion("info not between", value1, value2, "info");
             return (Criteria) this;
         }
 

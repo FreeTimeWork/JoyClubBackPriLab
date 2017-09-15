@@ -84,7 +84,7 @@
         p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc-->
 
-        select a.id,a.store_id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address,store.name storeName,store.service_phone
+        select a.id,a.store_id,a.portrait,a.name,a.info,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address,store.name storeName,store.service_phone
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         LEFT join sys_act_category cat on a.category_id=cat.id
