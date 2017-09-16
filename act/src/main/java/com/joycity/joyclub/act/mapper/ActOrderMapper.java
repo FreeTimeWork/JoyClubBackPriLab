@@ -76,5 +76,10 @@ public interface ActOrderMapper extends BaseMapper<SaleActOrder,Long,SaleActOrde
      */
     List<MyActOrder> selectMyActOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId,@Param("status") Byte status, @Param("pageUtil")PageUtil pageUtil);
 
+    /**
+     * 根据 attrId 找到该活动已经申请多少人。
+     */
+    @Select("select count(*) from sale_act_order where attr_id = #{attrId} and (status = 2 or status = 4)")
+    Integer countActOrderByAttrId(@Param("attrId") Long attrId);
 
 }

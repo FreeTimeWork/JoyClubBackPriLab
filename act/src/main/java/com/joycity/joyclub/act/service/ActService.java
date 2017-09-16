@@ -54,8 +54,19 @@ public interface ActService {
      */
     ResultData getList(Long projectId, Long storeId, Long actTypeId, PageUtil pageUtil);
 
+    ResultData getHistoryList(PageUtil pageUtil);
+
     ResultData getAttrs(Long id);
 
+    /**
+     * 我发起的活动
+     */
+    ResultData getMineApplyAct(Long clientId);
+
+    /**
+     * 我参与的活动
+     */
+    ResultData getMineJoinAct(Long clientId);
 
 }
 

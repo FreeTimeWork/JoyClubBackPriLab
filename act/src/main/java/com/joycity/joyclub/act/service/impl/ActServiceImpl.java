@@ -3,15 +3,14 @@ package com.joycity.joyclub.act.service.impl;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
 import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.checkNull;
 
+import java.util.Date;
 import java.util.List;
 
 import com.joycity.joyclub.act.mapper.ActAttrMapper;
 import com.joycity.joyclub.act.mapper.ActMapper;
+import com.joycity.joyclub.act.mapper.ActOrderMapper;
 import com.joycity.joyclub.act.mapper.ActPriceMapper;
-import com.joycity.joyclub.act.modal.ActFormData;
-import com.joycity.joyclub.act.modal.ActInfoPage;
-import com.joycity.joyclub.act.modal.ActWithCategoryName;
-import com.joycity.joyclub.act.modal.ActWithStoreName;
+import com.joycity.joyclub.act.modal.*;
 import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
@@ -45,6 +44,9 @@ public class ActServiceImpl implements ActService {
 
     @Autowired
     ActAttrMapper attrMapper;
+    @Autowired
+    ActOrderMapper actOrderMapper;
+
     /**
      * @return resultData, data为按创建时间倒序的所有项目列表
      */
@@ -139,11 +141,61 @@ public class ActServiceImpl implements ActService {
     @Override
     public ResultData getList(Long projectId, Long storeId,Long actTypeId, PageUtil pageUtil) {
 
-        return new ResultData(new ListResult(actMapper.selectSimpleList(projectId,storeId,actTypeId,pageUtil)));
+        return new ResultData(new ListResult(actMapper.selectSimpleList(projectId,storeId,actTypeId,false,pageUtil)));
+    }
+
+    @Override
+    public ResultData getHistoryList(PageUtil pageUtil) {
+        return new AbstractGetListData<ActSimple>() {
+            @Override
+            public Long countByFilter() {
+                return actMapper.countSimpleList(null,null,null,false);
+            }
+
+            @Override
+            public List<ActSimple> selectByFilter() {
+                return actMapper.selectSimpleList(null, null, null, false, pageUtil);
+            }
+        }.getList(pageUtil);
+
     }
 
     @Override
     public ResultData getAttrs(Long id) {
         return new ResultData(new ListResult(attrMapper.selectAvailableSimple(id)));
+    }
+
+    @Override
+    public ResultData getMineApplyAct(Long clientId) {
+
+        List<MineAct> mineActs = actMapper.getListMineAct(clientId);
+        preMinAct(mineActs);
+        return new ResultData(new ListResult(mineActs));
+    }
+
+    @Override
+    public ResultData getMineJoinAct(Long clientId) {
+
+        List<MineAct> mineActs = actMapper.getListMineJoinAct(clientId);
+        preMinAct(mineActs);
+        return new ResultData(new ListResult(mineActs));
+    }
+
+    private void preMinAct(List<MineAct> mineActs){
+        Date now = new Date();
+        for (MineAct mineAct : mineActs) {
+            if (now.before(mineAct.getStartTime())) {
+                // 未开始
+                mineAct.setStatus(1);
+            } else if (mineAct.getStartTime().before(now) && now.before(mineAct.getEndTime())) {
+                //进行中
+                mineAct.setStatus(2);
+                Integer num = actOrderMapper.countActOrderByAttrId(mineAct.getAttrId());
+                mineAct.setApplyNum(num);
+            } else {
+                //已结束
+                mineAct.setStatus(3);
+            }
+        }
     }
 }

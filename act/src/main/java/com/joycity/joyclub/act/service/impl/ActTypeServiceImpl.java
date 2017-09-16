@@ -9,6 +9,7 @@ import com.joycity.joyclub.act.service.ActTypeService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class ActTypeServiceImpl implements ActTypeService {
             public List<ActTypeWithAct> selectByFilter() {
                 List<ActTypeWithAct> list = actTypeMapper.selectList(true, pageUtil);
                 for (ActTypeWithAct item : list) {
-                    List<ActSimple> actSimples = actMapper.selectSimpleList(null, null, item.getId(), new PageUtil());
+                    List<ActSimple> actSimples = actMapper.selectSimpleList(null, null, item.getId(),false, new PageUtil());
                     item.setActs(actSimples);
                 }
                 return list;
@@ -52,6 +53,12 @@ public class ActTypeServiceImpl implements ActTypeService {
     public ResultData createActType(SaleActType actType) {
         actTypeMapper.insertSelective(actType);
         return new ResultData(new CreateResult(actType.getId()));
+    }
+
+    @Override
+    public ResultData deleteActType(Long id) {
+        int num = actTypeMapper.deleteByPrimaryKey(id);
+        return new ResultData(new UpdateResult(num));
     }
 
 }

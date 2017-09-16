@@ -5,7 +5,7 @@
 <generatorConfiguration>
 
     <classPathEntry
-            location="D:\IDEA workspace\joyclubback\mysql-connector-java-5.1.40-bin.jar"/>
+            location="D:\IDEA workspace\JoyClubBacklab\mysql-connector-java-5.1.40-bin.jar"/>
     <context id="context1" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -15,9 +15,9 @@
                         connectionURL="jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=UTF-8"
                         userId="root" password=""/>
         <javaModelGenerator targetPackage="com.joycity.joyclub.act.modal.generated"
-                            targetProject="D:\IDEA workspace\joyclubback\act\src\main\java"/>
+                            targetProject="D:\IDEA workspace\JoyClubBacklab\act\src\main\java"/>
         <sqlMapGenerator targetPackage="mapper.generated"
-                         targetProject="D:\IDEA workspace\joyclubback\act\src\main\resources"/>
+                         targetProject="D:\IDEA workspace\JoyClubBacklab\act\src\main\resources"/>
         <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.act.mapper.generated"
                                   targetProject="D:\IDEA workspace\joyclubback\act\src\main\java"/>
      -->

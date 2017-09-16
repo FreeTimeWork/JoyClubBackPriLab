@@ -39,6 +39,17 @@ public class ActFrontController {
 
         return actService.getList(projectId,storeId,actTypeId,pageUtil);
     }
+
+    /**
+     * 所有历史活动
+     * @param pageUtil
+     * @return
+     */
+    @RequestMapping(value = "/acts/history", method = RequestMethod.GET)
+    public ResultData getActs(PageUtil pageUtil) {
+
+        return actService.getHistoryList(pageUtil);
+    }
     /**
      * 获得商品的属性
      *
@@ -59,9 +70,37 @@ public class ActFrontController {
         return applyActService.createApplyAct(applyAct);
     }
 
+    /**
+     * 得到申请活动里的活动类型
+     */
+    @GetMapping("/act/apply/type")
+    public ResultData createApplyAct() {
+
+        return applyActService.getListApplyActType();
+    }
+
+
     @GetMapping("act/group/type")
     public ResultData getActType(PageUtil pageUtil){
         return actTypeService.getList(pageUtil);
+    }
+
+    /**
+     * 我发起的活动
+     * @return
+     */
+    @GetMapping("act/mine/apply")
+    public ResultData getActMineApply(@CookieValue(Global.COOKIE_TOKEN) String token){
+        Long clientId = clientTokenService.getIdOrThrow(token);
+//        Long clientId = 1L;
+        return actService.getMineApplyAct(clientId);
+    }
+
+    @GetMapping("act/mine/join")
+    public ResultData getActMineJoin(@CookieValue(Global.COOKIE_TOKEN) String token){
+        Long clientId = clientTokenService.getIdOrThrow(token);
+//        Long clientId = 1L;
+        return actService.getMineJoinAct(clientId);
     }
 
 }

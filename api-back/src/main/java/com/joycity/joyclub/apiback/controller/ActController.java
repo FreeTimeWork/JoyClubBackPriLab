@@ -4,6 +4,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
 import javax.servlet.http.HttpSession;
 
+import com.joycity.joyclub.act.modal.generated.FrontApplyActType;
 import com.joycity.joyclub.act.modal.generated.SaleActType;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
 import com.joycity.joyclub.act.service.ActService;
@@ -133,11 +134,31 @@ public class ActController extends BaseUserSessionController {
     }
 
     /**
+     * 得到有效的申请活动列表，审核通过，并且没有关联活动
+     * @return
+     */
+    @GetMapping("/act/apply/effectivity")
+    public ResultData getEffectivityApplyActs(PageUtil pageUtil,HttpSession httpSession){
+        checkProjectUser(httpSession);
+        return applyActService.getEffListApplyAct(pageUtil);
+    }
+
+    /**
+     * 申请活动里的活动的类型创建
+     */
+    @PostMapping("/act/apply/type")
+    public ResultData createApplyActType(@RequestBody FrontApplyActType applyActType) {
+        return applyActService.createApplyActType(applyActType);
+    }
+
+    /**
      * 活动大类创建
      */
     @PostMapping("act/type")
     public ResultData createActType(@RequestBody SaleActType actType, HttpSession httpSession) {
         checkProjectUser(httpSession);
         return actTypeService.createActType(actType);
+
     }
+
 }

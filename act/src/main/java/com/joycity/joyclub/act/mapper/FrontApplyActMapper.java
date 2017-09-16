@@ -18,4 +18,7 @@ public interface FrontApplyActMapper extends BaseMapper<FrontApplyAct,Long,Front
     List<FrontApplyAct> selectList(@Param("reviewStatus") Byte reviewStatus, @Param("pageUtil") PageUtil pageUtil);
 
     int updateReviewApplyAct(@Param("id") Long id, @Param("reviewStatus") Byte reviewStatus, @Param("reviewInfo") String reviewInfo);
+
+    List<FrontApplyAct> selectEffList(@Param("pageUtil") PageUtil pageUtil);
+    Long countEffList();
 }

@@ -1,6 +1,7 @@
 package com.joycity.joyclub.act.service;
 
 import com.joycity.joyclub.act.modal.generated.FrontApplyAct;
+import com.joycity.joyclub.act.modal.generated.FrontApplyActType;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 
@@ -18,4 +19,13 @@ public interface FrontApplyActService {
     ResultData permitApplyAct(Long id);
 
     ResultData rejectApplyAct(Long id, String reviewInfo);
+
+    ResultData getEffListApplyAct(PageUtil pageUtil);
+
+    ResultData createApplyActType(FrontApplyActType applyActType);
+
+    ResultData getListApplyActType();
+
+    ResultData deleteApplyActType(Long id);
+
 }

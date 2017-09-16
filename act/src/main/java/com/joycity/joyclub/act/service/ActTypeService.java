@@ -14,4 +14,6 @@ public interface ActTypeService {
 
     ResultData createActType(SaleActType actType);
 
+    ResultData deleteActType(Long id);
+
 }

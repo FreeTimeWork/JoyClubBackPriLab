@@ -1,10 +1,13 @@
 package com.joycity.joyclub.act.service.impl;
 
 import com.joycity.joyclub.act.mapper.FrontApplyActMapper;
+import com.joycity.joyclub.act.mapper.FrontApplyActTypeMapper;
 import com.joycity.joyclub.act.modal.generated.FrontApplyAct;
+import com.joycity.joyclub.act.modal.generated.FrontApplyActType;
 import com.joycity.joyclub.act.service.FrontApplyActService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -21,6 +24,8 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
 
     @Autowired
     private FrontApplyActMapper applyActMapper;
+    @Autowired
+    private FrontApplyActTypeMapper applyActTypeMapper;
 
     @Override
     public ResultData createApplyAct(FrontApplyAct applyAct) {
@@ -56,5 +61,37 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
         return new ResultData(new UpdateResult(num));
     }
 
+    @Override
+    public ResultData getEffListApplyAct(PageUtil pageUtil) {
+        return new AbstractGetListData<FrontApplyAct>() {
+            @Override
+            public Long countByFilter() {
+                return applyActMapper.countEffList();
+            }
+
+            @Override
+            public List<FrontApplyAct> selectByFilter() {
+                return applyActMapper.selectEffList(pageUtil);
+            }
+        }.getList(pageUtil);
+    }
+
+    @Override
+    public ResultData createApplyActType(FrontApplyActType applyActType) {
+        applyActTypeMapper.insertSelective(applyActType);
+        return new ResultData(new CreateResult(applyActType.getId()));
+    }
+
+    @Override
+    public ResultData getListApplyActType() {
+        return new ResultData(new ListResult(applyActTypeMapper.selectList()));
+    }
+
+    @Override
+    public ResultData deleteApplyActType(Long id) {
+        int num = applyActTypeMapper.deleteByPrimaryKey(id);
+        return new ResultData(new UpdateResult(num));
+    }
+    
 
 }

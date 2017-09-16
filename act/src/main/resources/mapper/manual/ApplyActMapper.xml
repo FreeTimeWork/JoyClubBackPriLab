@@ -31,4 +31,19 @@
         </if>
         WHERE id = #{id}
     </update>
+
+    <select id="selectEffList" resultType="com.joycity.joyclub.act.modal.generated.FrontApplyAct">
+        SELECT faa.*
+        FROM front_apply_act faa
+        LEFT JOIN sale_act sa ON sa.apply_act_id = faa.id
+        WHERE faa.review_status = 1 AND sa.apply_act_id IS NULL
+        <include refid="limit"/>
+    </select>
+
+    <select id="countEffList" resultType="long">
+        SELECT count(*)
+        FROM front_apply_act faa
+        LEFT JOIN sale_act sa ON sa.apply_act_id = faa.id
+        WHERE faa.review_status = 1 AND sa.apply_act_id IS NULL
+    </select>
 </mapper>

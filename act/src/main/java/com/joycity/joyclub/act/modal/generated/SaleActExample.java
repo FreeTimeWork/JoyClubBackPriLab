@@ -495,6 +495,66 @@ public class SaleActExample {
             return (Criteria) this;
         }
 
+        public Criteria andApplyActIdIsNull() {
+            addCriterion("apply_act_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdIsNotNull() {
+            addCriterion("apply_act_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdEqualTo(Long value) {
+            addCriterion("apply_act_id =", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdNotEqualTo(Long value) {
+            addCriterion("apply_act_id <>", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdGreaterThan(Long value) {
+            addCriterion("apply_act_id >", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("apply_act_id >=", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdLessThan(Long value) {
+            addCriterion("apply_act_id <", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdLessThanOrEqualTo(Long value) {
+            addCriterion("apply_act_id <=", value, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdIn(List<Long> values) {
+            addCriterion("apply_act_id in", values, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdNotIn(List<Long> values) {
+            addCriterion("apply_act_id not in", values, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdBetween(Long value1, Long value2) {
+            addCriterion("apply_act_id between", value1, value2, "applyActId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyActIdNotBetween(Long value1, Long value2) {
+            addCriterion("apply_act_id not between", value1, value2, "applyActId");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;
