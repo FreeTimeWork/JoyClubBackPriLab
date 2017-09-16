@@ -14,11 +14,13 @@
         </where>
     </select>
 
-    <select id="selectList" resultType="com.joycity.joyclub.act.modal.generated.FrontApplyAct">
-        SELECT * FROM front_apply_act
+    <select id="selectList" resultType="com.joycity.joyclub.act.modal.ApplyActWithType">
+        SELECT faa.*,faat.name AS apply_act_type_name
+        FROM front_apply_act faa
+        JOIN front_apply_act_type faat ON faat.id = faa.apply_act_type_id
         <where>
             <if test="reviewStatus != null">
-                review_status = #{reviewStatus}
+                faa.review_status = #{reviewStatus}
             </if>
         </where>
         <include refid="limit"/>
@@ -32,9 +34,10 @@
         WHERE id = #{id}
     </update>
 
-    <select id="selectEffList" resultType="com.joycity.joyclub.act.modal.generated.FrontApplyAct">
-        SELECT faa.*
+    <select id="selectEffList" resultType="com.joycity.joyclub.act.modal.ApplyActWithType">
+        SELECT faa.*,faat.name AS apply_act_type_name
         FROM front_apply_act faa
+        INNER JOIN front_apply_act_type faat ON faat.id = faa.apply_act_type_id
         LEFT JOIN sale_act sa ON sa.apply_act_id = faa.id
         WHERE faa.review_status = 1 AND sa.apply_act_id IS NULL
         <include refid="limit"/>
