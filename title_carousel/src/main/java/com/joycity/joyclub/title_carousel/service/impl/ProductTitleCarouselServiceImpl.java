@@ -46,4 +46,10 @@ public class ProductTitleCarouselServiceImpl implements ProductTitleCarouselServ
         return new ResultData(new CreateResult(titleCarousel.getId()));
     }
 
+    @Override
+    public ResultData deleteProductTitleCarousel(Long id) {
+        Integer num = productTitleCarouselMapper.deleteByPrimaryKey(id);
+        return new ResultData(new UpdateResult(num));
+    }
+
 }

@@ -46,4 +46,10 @@ public class ActTitleCarouselServiceImpl implements ActTitleCarouselService {
         return new ResultData(new CreateResult(actTitleCarousel.getId()));
     }
 
+    @Override
+    public ResultData deleteActTitleCarousel(Long id) {
+        Integer num = actTitleCarouselMapper.deleteByPrimaryKey(id);
+        return new ResultData(new UpdateResult(num));
+    }
+
 }

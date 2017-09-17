@@ -8,6 +8,7 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.title_carousel.service.ActTitleCarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,8 @@ public class ActFrontController {
     private FrontApplyActService applyActService;
     @Autowired
     private ActTypeService actTypeService;
+    @Autowired
+    private ActTitleCarouselService actTitleCarouselService;
     @Autowired
     ClientTokenService clientTokenService;
 
@@ -101,6 +104,11 @@ public class ActFrontController {
         Long clientId = clientTokenService.getIdOrThrow(token);
 //        Long clientId = 1L;
         return actService.getMineJoinAct(clientId);
+    }
+
+    @GetMapping("act/carousels")
+    public ResultData getActCarousels(){
+        return actTitleCarouselService.getAllActTitleCarousel();
     }
 
 }

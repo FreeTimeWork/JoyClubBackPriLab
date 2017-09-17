@@ -16,4 +16,6 @@ public interface ActTitleCarouselService {
 
     ResultData createActTitleCarousel(SaleActTitleCarousel actTitleCarousel);
 
+    ResultData deleteActTitleCarousel(Long id);
+
 }
