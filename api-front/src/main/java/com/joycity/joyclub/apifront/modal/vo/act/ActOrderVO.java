@@ -12,6 +12,16 @@ public class ActOrderVO extends BaseSubProjectVO {
     private Long attrId;
     @NotNull
     private Boolean moneyOrPoint;
+    @NotNull
+    private Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     public Long getAttrId() {
         return attrId;
