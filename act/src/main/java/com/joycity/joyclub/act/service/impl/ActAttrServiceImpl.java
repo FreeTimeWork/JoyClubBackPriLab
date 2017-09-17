@@ -66,6 +66,7 @@ public class ActAttrServiceImpl implements ActAttrService {
 
     @Override
     public ResultData createActAttr(SaleActAttr actAttr) {
+        actAttr.setTargetNum(actAttr.getNum());
         actAttrMapper.insertSelective(actAttr);
         return new ResultData(new CreateResult(actAttr.getId()));
     }

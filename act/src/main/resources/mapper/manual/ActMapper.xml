@@ -136,7 +136,7 @@
     </select>
 
     <select id="getListMineAct" resultType="com.joycity.joyclub.act.modal.MineAct">
-        select a.name AS act_name,saa.id AS attr_id, saa.num AS target_num, p.start_time, p.end_time
+        select a.name AS act_name,saa.id AS attr_id, saa.target_num AS target_num, p.start_time, p.end_time
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         JOIN sale_act_attr saa ON saa.act_id = a.id
@@ -149,7 +149,7 @@
 
     <select id="getListMineJoinAct" resultType="com.joycity.joyclub.act.modal.MineAct">
         select a.name AS act_name,saa.id AS attr_id,
-        saa.num AS target_num, p.start_time, p.end_time
+        saa.target_num AS target_num, p.start_time, p.end_time
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         JOIN sale_act_attr saa ON saa.act_id = a.id

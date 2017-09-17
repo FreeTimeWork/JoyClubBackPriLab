@@ -64,7 +64,7 @@ public class ActOrderFrontController {
             @Valid @RequestBody ActOrderVO orderVO
     )
  {
-     return orderService.orderForWechat(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint());
+     return orderService.orderForWechat(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint(),orderVO.getNum());
     }
 
     /**
@@ -74,7 +74,7 @@ public class ActOrderFrontController {
     public ResultData orderForAli(
             @CookieValue(Global.COOKIE_TOKEN) String token,
             @Valid @RequestBody ActOrderVO orderVO) {
-        return orderService.orderForAli(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint());
+        return orderService.orderForAli(orderVO.getProjectId(), orderVO.getSubProjectId(), clientTokenService.getIdOrThrow(token), orderVO.getAttrId(), orderVO.getMoneyOrPoint(), orderVO.getNum());
     }
 
 /**

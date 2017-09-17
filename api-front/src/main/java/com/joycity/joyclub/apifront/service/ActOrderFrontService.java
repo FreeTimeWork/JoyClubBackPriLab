@@ -25,8 +25,8 @@ public interface ActOrderFrontService {
      * @param subProjectId 可空
      * @return
      */
-    ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, Long attrId,Boolean moneyOrPoint);
-    ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, Long attrId,Boolean moneyOrPoint);
+    ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, Long attrId,Boolean moneyOrPoint,Integer num);
+    ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, Long attrId,Boolean moneyOrPoint,Integer num);
 
     ResultData reorderForWechat(Long orderId);
     ResultData reorderForAli(Long orderId);

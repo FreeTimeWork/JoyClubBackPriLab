@@ -172,15 +172,15 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
     }
 
     @Override
-    public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint) {
-        return clientOrder(PAY_TYPE_WECHAT, projectId, subProjectId, clientId, attrId, moneyOrPoint);
+    public ResultData orderForWechat(Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
+        return clientOrder(PAY_TYPE_WECHAT, projectId, subProjectId, clientId, attrId, moneyOrPoint,num);
 
     }
 
     @Override
-    public ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint) {
+    public ResultData orderForAli(Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
 
-        return clientOrder(PAY_TYPE_ALI, projectId, subProjectId, clientId, attrId, moneyOrPoint);
+        return clientOrder(PAY_TYPE_ALI, projectId, subProjectId, clientId, attrId, moneyOrPoint,num);
     }
 
     @Override
@@ -225,9 +225,9 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
      * @param subProjectId 可空
      * @return
      */
-    private ResultData clientOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint) {
+    private ResultData clientOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
 
-        SaleActOrder order = createOrder(payType, projectId, subProjectId, clientId, attrId, moneyOrPoint);
+        SaleActOrder order = createOrder(payType, projectId, subProjectId, clientId, attrId, moneyOrPoint,num);
         PreOrderResult preOrderResult = null;
         //金钱业务
         if (order.getMoneySum() > 0) {
@@ -249,10 +249,10 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         return new ResultData(preOrderResult);
     }
 
-    private SaleActOrder createOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint) {
+    private SaleActOrder createOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
         ActInfoForOrder actInfo = actMapper.getActInfoForOrderByAttr(attrId);
         ThrowBusinessExceptionUtil.checkNull(actInfo, "该活动不存在");
-        if (actInfo.getNum() <= 0) {
+        if ((actInfo.getNum() - num) < 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAM_ERROR, "该活动属性已售罄");
         }
 
@@ -285,8 +285,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         mainOrder.setStatus(STATUS_NOT_PAYED);
         mainOrder.setPayType(payType);
         mainOrder.setSubProjectId(subProjectId);
-        //目前活动每次一件
-        mainOrder.setNum(1);
+        mainOrder.setNum(num);
 
 
         //再统计主订单的sum

@@ -445,6 +445,66 @@ public class SaleActAttrExample {
             return (Criteria) this;
         }
 
+        public Criteria andTargetNumIsNull() {
+            addCriterion("target_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumIsNotNull() {
+            addCriterion("target_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumEqualTo(Integer value) {
+            addCriterion("target_num =", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumNotEqualTo(Integer value) {
+            addCriterion("target_num <>", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumGreaterThan(Integer value) {
+            addCriterion("target_num >", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("target_num >=", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumLessThan(Integer value) {
+            addCriterion("target_num <", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumLessThanOrEqualTo(Integer value) {
+            addCriterion("target_num <=", value, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumIn(List<Integer> values) {
+            addCriterion("target_num in", values, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumNotIn(List<Integer> values) {
+            addCriterion("target_num not in", values, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumBetween(Integer value1, Integer value2) {
+            addCriterion("target_num between", value1, value2, "targetNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("target_num not between", value1, value2, "targetNum");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;
