@@ -32,7 +32,7 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attrs", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String actName, PageUtil pageUtil, HttpSession httpSession) {
-        SysUser user = checkPlatformOrProjectUser(httpSession);
+        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
         return actAttrService.getListByStoreIdAndActName(user.getInfoId(), actName, pageUtil);
     }
 
@@ -45,7 +45,7 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr/{id}", method = RequestMethod.GET)
     public ResultData getActAttr(@PathVariable Long id, HttpSession httpSession) {
-        checkPlatformOrProjectUser(httpSession);
+        checkPlatformOrProjectOrStoreUser(httpSession);
         return actAttrService.getActAttr(id);
     }
 
@@ -58,7 +58,7 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr/{id}", method = RequestMethod.POST)
     public ResultData updateActAttr(@PathVariable Long id, @RequestBody SaleActAttr actAttr, HttpSession httpSession) {
-        checkPlatformOrProjectUser(httpSession);
+        checkPlatformOrProjectOrStoreUser(httpSession);
         actAttr.setId(id);
         return actAttrService.updateActAttr(actAttr);
     }
@@ -71,7 +71,7 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr", method = RequestMethod.POST)
     public ResultData createActAttr(@RequestBody SaleActAttr actAttr, HttpSession httpSession) {
-        SysUser user = checkPlatformOrProjectUser(httpSession);
+        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
         return actAttrService.createActAttr(actAttr);
     }
 
