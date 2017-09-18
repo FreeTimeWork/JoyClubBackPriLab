@@ -26,19 +26,18 @@ public class ActAttrController extends BaseUserSessionController {
     private ManagerService managerService;
 
     /**
-     * 只有商户用户可以访问
+     *
      *
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/act/attrs", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String actName, PageUtil pageUtil, HttpSession httpSession) {
-        //确保是商户用户
-        SysUser user = checkStoreUser(httpSession);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actAttrService.getListByStoreIdAndActName(user.getInfoId(), actName, pageUtil);
     }
 
     /**
-     * 只有商户用户可以访问
+     *
      *
      * @param id
      * @param httpSession
@@ -46,14 +45,12 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr/{id}", method = RequestMethod.GET)
     public ResultData getActAttr(@PathVariable Long id, HttpSession httpSession) {
-        //确保是商户用户
-        checkStoreUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return actAttrService.getActAttr(id);
     }
 
 
     /**
-     * 只有商户用户可以访问
      *
      * @param id
      * @param httpSession
@@ -61,14 +58,12 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr/{id}", method = RequestMethod.POST)
     public ResultData updateActAttr(@PathVariable Long id, @RequestBody SaleActAttr actAttr, HttpSession httpSession) {
-        //确保是商户用户
-        checkStoreUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         actAttr.setId(id);
         return actAttrService.updateActAttr(actAttr);
     }
 
     /**
-     * 只有商户用户可以访问
      *
      * @param actAttr
      * @param httpSession
@@ -76,8 +71,7 @@ public class ActAttrController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/attr", method = RequestMethod.POST)
     public ResultData createActAttr(@RequestBody SaleActAttr actAttr, HttpSession httpSession) {
-        //确保是商户用户
-        SysUser user = checkStoreUser(httpSession);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actAttrService.createActAttr(actAttr);
     }
 

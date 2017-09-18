@@ -43,7 +43,7 @@ public class ActController extends BaseUserSessionController {
     @RequestMapping(value = "/acts", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
-        SysUser user = checkStoreUser(httpSession);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actService.getListByStoreIdAndName(user.getInfoId(), name, pageUtil);
     }
 
@@ -57,7 +57,7 @@ public class ActController extends BaseUserSessionController {
     @RequestMapping(value = "/act/{id}", method = RequestMethod.GET)
     public ResultData getAct(@PathVariable Long id, HttpSession httpSession) {
         //确保是商户用户
-        checkStoreUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return actService.getAct(id);
     }
 
@@ -70,7 +70,7 @@ public class ActController extends BaseUserSessionController {
     @RequestMapping(value = "/act/formdata", method = RequestMethod.GET)
     public ResultData getAct(HttpSession httpSession) {
         //确保是商户用户
-        SysUser user = checkStoreUser(httpSession);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actService.getActFormData(user.getInfoId());
     }
 
@@ -84,7 +84,7 @@ public class ActController extends BaseUserSessionController {
     @RequestMapping(value = "/act/{id}", method = RequestMethod.POST)
     public ResultData updateAct(@PathVariable Long id, @RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
         //确保是商户用户
-        checkStoreUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         act.setId(id);
         return actService.updateAct( act);
     }
@@ -98,16 +98,13 @@ public class ActController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act", method = RequestMethod.POST)
     public ResultData createAct(@RequestBody SaleActWithBLOBs act, HttpSession httpSession) {
-        //确保是商户用户
-        SysUser user = checkStoreUser(httpSession);
-        act.setStoreId(user.getInfoId());
-//        act.setStoreId(1L);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actService.createAct(act);
     }
 
     @RequestMapping(value = "/project/carousel/acts", method = RequestMethod.GET)
     public ResultData getCurrentAct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
-        SysUser user = checkProjectUser(httpSession);
+        SysUser user = checkPlatformOrProjectUser(httpSession);
         return actService.getListByActNameAndStoreName(user.getInfoId(), name, storeName, pageUtil);
     }
 
@@ -116,7 +113,7 @@ public class ActController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/apply", method = RequestMethod.GET)
     public ResultData getApplyAct(@RequestParam(required = false) Byte reviewStatus, PageUtil pageUtil, HttpSession httpSession) {
-        checkProjectUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return applyActService.getListApplyAct(reviewStatus, pageUtil);
     }
     /**
@@ -124,12 +121,12 @@ public class ActController extends BaseUserSessionController {
      */
     @PostMapping("/act/apply/{id}/review/permit")
     public ResultData permitApplyAct(@PathVariable Long id, HttpSession httpSession) {
-        checkProjectUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return applyActService.permitApplyAct(id);
     }
     @PostMapping("/act/apply/{id}/review/reject")
     public ResultData rejectApplyAct(@PathVariable Long id,@Validated @RequestBody reviewInfoVO vo, HttpSession httpSession) {
-        checkProjectUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return applyActService.rejectApplyAct(id, vo.getInfo());
     }
 
@@ -139,7 +136,7 @@ public class ActController extends BaseUserSessionController {
      */
     @GetMapping("/act/apply/effectivity")
     public ResultData getEffectivityApplyActs(PageUtil pageUtil,HttpSession httpSession){
-        checkProjectUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return applyActService.getEffListApplyAct(pageUtil);
     }
 
@@ -147,8 +144,15 @@ public class ActController extends BaseUserSessionController {
      * 申请活动里的活动的类型创建
      */
     @PostMapping("/act/apply/type")
-    public ResultData createApplyActType(@RequestBody FrontApplyActType applyActType) {
+    public ResultData createApplyActType(@RequestBody FrontApplyActType applyActType,HttpSession session) {
+        checkPlatformOrProjectUser(session);
         return applyActService.createApplyActType(applyActType);
+    }
+
+    @PostMapping("/act/apply/type/{id}/delete")
+    public ResultData deleteApplyActType(@PathVariable Long id,HttpSession session) {
+        checkPlatformOrProjectUser(session);
+        return applyActService.deleteApplyActType(id);
     }
 
     /**
@@ -156,9 +160,17 @@ public class ActController extends BaseUserSessionController {
      */
     @PostMapping("act/type")
     public ResultData createActType(@RequestBody SaleActType actType, HttpSession httpSession) {
-        checkProjectUser(httpSession);
+        checkPlatformOrProjectUser(httpSession);
         return actTypeService.createActType(actType);
 
     }
+
+    @PostMapping("act/type/{id}/delete")
+    public ResultData deleteActType(@PathVariable Long id, HttpSession httpSession) {
+        checkPlatformOrProjectUser(httpSession);
+        return actTypeService.deleteActType(id);
+
+    }
+
 
 }
