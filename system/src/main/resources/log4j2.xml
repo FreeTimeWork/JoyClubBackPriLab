@@ -27,6 +27,7 @@
         </Logger>
         <Logger name="com.joycity.joyclub.act.mapper" level="debug" additivity="false" >
             <AppenderRef ref="Console"/>
+            <AppenderRef ref="infoFile" />
         </Logger>
     </Loggers>
 </Configuration>
