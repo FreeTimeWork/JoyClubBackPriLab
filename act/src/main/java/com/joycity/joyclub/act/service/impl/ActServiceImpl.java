@@ -149,12 +149,12 @@ public class ActServiceImpl implements ActService {
         return new AbstractGetListData<ActSimple>() {
             @Override
             public Long countByFilter() {
-                return actMapper.countSimpleList(null,null,null,false);
+                return actMapper.countSimpleList(null,null,null,true);
             }
 
             @Override
             public List<ActSimple> selectByFilter() {
-                return actMapper.selectSimpleList(null, null, null, false, pageUtil);
+                return actMapper.selectSimpleList(null, null, null, true, pageUtil);
             }
         }.getList(pageUtil);
 
