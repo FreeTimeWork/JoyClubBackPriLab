@@ -125,14 +125,14 @@ public class ActServiceImpl implements ActService {
         checkNull(act, "活动不存在");
         SaleActPrice price = actPriceMapper.getNowPrice(id);
         checkNull(price, "活动未上架或者已下架");
-        IdNamePortrait store = storeMapper.getSimpleInfo(act.getStoreId());
-        checkNull(store, "商户不存在");
+//        IdNamePortrait store = storeMapper.getSimpleInfo(act.getStoreId());
+//        checkNull(store, "商户不存在");
         SysActCategory category  = categoryMapper.selectByPrimaryKey(act.getCategoryId());
         checkNull(category, "商户分类不存在");
         ActInfoPage infoPage = new ActInfoPage();
         infoPage.setAct(act);
         infoPage.setPrice(price);
-        infoPage.setStore(store);
+//        infoPage.setStore(store);
         infoPage.setCategory(category);
         return new ResultData(infoPage);
     }
