@@ -27,25 +27,26 @@
         join sale_act_attr attr on attr.id = o.attr_id
         join sale_act act on act.id = attr.act_id
         join client c on o.client_id = c.id
-        where act.store_id = #{storeId}
-        <choose>
-            <when test="actName != null">
-                and act.name like #{actNameLike}
-            </when>
-            <when test="code != null">
-                and o.code = #{code}
-            </when>
-            <when test="name != null">
-                and c.real_name = #{name}
-            </when>
-            <when test="phone != null">
-                and c.tel = #{phone}
-            </when>
-            <otherwise>
-                <if test="status!=null">and o.status =#{status}</if>
+        <where>
+            <choose>
+                <when test="actName != null">
+                    and act.name like #{actNameLike}
+                </when>
+                <when test="code != null">
+                    and o.code = #{code}
+                </when>
+                <when test="name != null">
+                    and c.real_name = #{name}
+                </when>
+                <when test="phone != null">
+                    and c.tel = #{phone}
+                </when>
+                <otherwise>
+                    <if test="status!=null">and o.status =#{status}</if>
 
-            </otherwise>
-        </choose>
+                </otherwise>
+            </choose>
+        </where>
     </select>
     <select id="selectForStore"
             resultType="com.joycity.joyclub.act.modal.ActOrderForBack">
@@ -55,26 +56,27 @@
         join sale_act_attr attr on attr.id = o.attr_id
         join sale_act act on act.id = attr.act_id
         join client c on o.client_id = c.id
-        where act.store_id = #{storeId}
+        <where>
 
-        <choose>
-            <when test="actName != null">
-                and act.name like #{actNameLike}
-            </when>
-            <when test="code != null">
-                and o.code = #{code}
-            </when>
-            <when test="name != null">
-                and c.real_name = #{name}
-            </when>
-            <when test="phone != null">
-                and c.tel = #{phone}
-            </when>
-            <otherwise>
-                <if test="status!=null">and o.status =#{status}</if>
+            <choose>
+                <when test="actName != null">
+                    and act.name like #{actNameLike}
+                </when>
+                <when test="code != null">
+                    and o.code = #{code}
+                </when>
+                <when test="name != null">
+                    and c.real_name = #{name}
+                </when>
+                <when test="phone != null">
+                    and c.tel = #{phone}
+                </when>
+                <otherwise>
+                    <if test="status!=null">and o.status =#{status}</if>
 
-            </otherwise>
-        </choose>
+                </otherwise>
+            </choose>
+        </where>
         <include refid="limit"/>
     </select>
 </mapper>
