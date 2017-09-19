@@ -3,6 +3,7 @@ package com.joycity.joyclub.title_carousel.service.impl;
 import java.util.List;
 
 import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.title_carousel.mapper.ActTitleCarouselMapper;
@@ -27,7 +28,7 @@ public class ActTitleCarouselServiceImpl implements ActTitleCarouselService {
     @Override
     public ResultData getAllActTitleCarousel() {
         List<SaleActTitleCarousel> saleTitleCarousels =  actTitleCarouselMapper.selectAllActTitleCarousel();
-        return new ResultData(saleTitleCarousels);
+        return new ResultData(new ListResult(saleTitleCarousels));
     }
 
     @Override
