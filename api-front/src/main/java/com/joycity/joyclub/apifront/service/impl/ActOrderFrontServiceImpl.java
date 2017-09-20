@@ -250,6 +250,9 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
     }
 
     private SaleActOrder createOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
+        if (num < 0) {
+            throw new BusinessException(ResultCode.REQUEST_PARAM_ERROR, "数量不能为负数");
+        }
         ActInfoForOrder actInfo = actMapper.getActInfoForOrderByAttr(attrId);
         ThrowBusinessExceptionUtil.checkNull(actInfo, "该活动不存在");
         if ((actInfo.getNum() - num) < 0) {
@@ -265,9 +268,9 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
         Float moneySum = 0f;
         Integer pointSum = 0;
         if (moneyOrPoint) {
-            moneySum = actPrice.getPrice();
+            moneySum = actPrice.getPrice() * num;
         } else {
-            pointSum = ((int) Math.ceil(actPrice.getPrice() * (actPrice.getPointRate() == null ? actInfo.getBasePointRate() : actPrice.getPointRate())));
+            pointSum = ((int) Math.ceil(actPrice.getPrice() * num * (actPrice.getPointRate() == null ? actInfo.getBasePointRate() : actPrice.getPointRate())));
         }
         //积分
         Integer nowPoint = clientMapper.getPoint(clientId);
