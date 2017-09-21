@@ -1065,6 +1065,66 @@ public class ClientExample {
             return (Criteria) this;
         }
 
+        public Criteria andJoinDateIsNull() {
+            addCriterion("join_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateIsNotNull() {
+            addCriterion("join_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateEqualTo(Date value) {
+            addCriterion("join_date =", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateNotEqualTo(Date value) {
+            addCriterion("join_date <>", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateGreaterThan(Date value) {
+            addCriterion("join_date >", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateGreaterThanOrEqualTo(Date value) {
+            addCriterion("join_date >=", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateLessThan(Date value) {
+            addCriterion("join_date <", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateLessThanOrEqualTo(Date value) {
+            addCriterion("join_date <=", value, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateIn(List<Date> values) {
+            addCriterion("join_date in", values, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateNotIn(List<Date> values) {
+            addCriterion("join_date not in", values, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateBetween(Date value1, Date value2) {
+            addCriterion("join_date between", value1, value2, "joinDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andJoinDateNotBetween(Date value1, Date value2) {
+            addCriterion("join_date not between", value1, value2, "joinDate");
+            return (Criteria) this;
+        }
+
         public Criteria andEduHisIsNull() {
             addCriterion("edu_his is null");
             return (Criteria) this;

@@ -7,6 +7,7 @@ import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.utils.Check;
+import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -265,6 +266,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
             member.setVipCardGrade(getMapString(map, "xf_grade"));
             member.setGroup13(getMapString(map, "xf_groupid13"));
             member.setTel((KeChuanEncryption.aesDecrypt(getMapString(map, "xf_telephone"), secretKey)));
+            member.setJoinDate(DateTimeUtil.parseYYYYMMDDHHMMSS(getMapString(map, "xf_jointdate")));
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(ResultCode.KECHUAN_INFO_ERROR, "获取会员信息失败");
