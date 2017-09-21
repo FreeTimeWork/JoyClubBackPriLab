@@ -17,6 +17,7 @@ public class MineAct {
     private Integer targetNum;
     private Date startTime;
     private Date endTime;
+    private String portrait;
 
     public Long getAttrId() {
         return attrId;
@@ -72,5 +73,13 @@ public class MineAct {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
     }
 }
