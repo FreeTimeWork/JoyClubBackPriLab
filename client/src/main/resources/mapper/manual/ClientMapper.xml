@@ -56,4 +56,10 @@
     </select>
 
 
+    <select id="getCrmId" resultType="string">
+        SELECT crm_id FROM sync_crm_id
+        WHERE STATUS = 0 and (type = 'VIP' OR type = '普通卡' or type = '朝阳大悦城-电子卡' OR type = '悦友卡' )
+        <include refid="limit"/>
+    </select>
+
 </mapper>

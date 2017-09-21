@@ -63,4 +63,10 @@ public interface ClientUserMapper extends BaseMapper<Client, Long, ClientExample
            @Param("phone") String phone,
            @Param("pageUtil") PageUtil pageUtil
     );
+
+    // TODO: 2017/9/21 用完删掉
+    /**
+     * 临时sql,为了从本地数据库中查找出crmId
+     */
+    List<String> getCrmId(@Param("pageUtil") PageUtil pageUtil);
 }
