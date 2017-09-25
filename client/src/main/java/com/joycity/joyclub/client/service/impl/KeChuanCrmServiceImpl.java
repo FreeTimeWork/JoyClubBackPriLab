@@ -255,7 +255,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
             //证件编号
             member.setIdCard(KeChuanEncryption.aesDecrypt(getMapString(map, "xf_vipid"), secretKey));
             //地址
-            member.setHomeAddress(getMapString(map, "address"));
+            member.setHomeAddress(getMapString(map, "xf_address1"));
             member.setHomePostCode(getMapString(map, "xf_postal"));
             //微信号
 //			member.setOpenId(getMapString(map, "weixin"));
@@ -283,7 +283,7 @@ public class KeChuanCrmServiceImpl implements KeChuanCrmService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String sex = getMapString(map, "sex");
+        String sex = getMapString(map, "xf_sex");
         if (StringUtils.isNotBlank(sex)) {
             // TODO: 2017/4/11  科传性别
             if ("M".equals(sex)) {
