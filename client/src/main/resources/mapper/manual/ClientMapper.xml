@@ -56,10 +56,4 @@
     </select>
 
 
-    <select id="getCrmId" resultType="string">
-        SELECT crm_id FROM sync_crm_id
-
-        <include refid="limit"/>
-    </select>
-
 </mapper>

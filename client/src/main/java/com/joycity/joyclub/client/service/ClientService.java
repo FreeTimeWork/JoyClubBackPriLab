@@ -37,6 +37,4 @@ public interface ClientService {
      * @return 返回从科传处取得的值，以及在本地的id
      */
     Client fetchClientByVipCodeFromKechuanAndAynclocal(String vipCode);
-
-    ResultData syncCrmId();
 }

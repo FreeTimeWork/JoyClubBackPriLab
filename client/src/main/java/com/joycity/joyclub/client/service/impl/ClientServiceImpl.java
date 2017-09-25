@@ -11,22 +11,16 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017/4/16.
  */
 @Service
 public class ClientServiceImpl implements ClientService {
-    private static final Log logger = LogFactory.getLog(ClientServiceImpl.class);
     @Autowired
     KeChuanCrmService keChuanCrmService;
     @Autowired
@@ -108,12 +102,7 @@ public class ClientServiceImpl implements ClientService {
         if (client != null) {
             Long clientId = clientUserMapper.getIdByVipCode(vipCode);
             if (clientId == null) {
-                Long id = null;
-                try {
-                     id = clientUserMapper.insertSelective(client);
-                } catch (Exception e) {
-                    logger.info("有问题的crmId：" + client.getVipCode());
-                }
+                Long id = clientUserMapper.insertSelective(client);
                 client.setId(id);
             } else {
                 client.setId(clientId);
@@ -124,28 +113,6 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
-    @Override
-    public ResultData syncCrmId() {
-        int num = 0;
-        int page = 1;
-        //一次取5万条
-        PageUtil pageUtil = new PageUtil(page,50000);
-        List<String> crmIds = clientUserMapper.getCrmId(pageUtil);
-        while (CollectionUtils.isNotEmpty(crmIds)) {
-            for (int i = 0; i < crmIds.size(); i++) {
-                fetchClientByVipCodeFromKechuanAndAynclocal(crmIds.get(i));
-            }
-            num += crmIds.size();
-            page ++ ;
-            pageUtil.setPage(page);
-            crmIds = clientUserMapper.getCrmId(pageUtil);
-            logger.info("同步会员数据个数num：" + num);
-        }
-        Map map = new HashMap<String, Integer>();
-        map.put("num", num);
-        return new ResultData(map);
-    }
-
     /**
      * 如果为空 抛出异常
      */
@@ -154,7 +121,4 @@ public class ClientServiceImpl implements ClientService {
             throw new BusinessException(ResultCode.DATA_NOT_EXIST, "会员不存在");
         }
     }
-
-
-
 }
