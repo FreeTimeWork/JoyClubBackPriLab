@@ -6,7 +6,7 @@
   </sql>
     <sql id="where_store_and_name">
         <where>
-            p.delete_flag=0 and p.store_id=#{storeId}
+            p.delete_flag=0
             <if test="nameLike!=null">
                 and p.name like #{nameLike}
             </if>
@@ -16,12 +16,9 @@
 
     <sql id="where_act_name_and_store_name">
         <where>
-            p.delete_flag=0 and ss.project_id=#{projectId}
+            p.delete_flag=0
             <if test="actName!=null">
                 and p.name like #{actName}
-            </if>
-            <if test="storeName!=null">
-                and ss.name like #{storeName}
             </if>
         </where>
 
@@ -30,16 +27,14 @@
     <select id="countByActNameAndStoreName" resultType="java.lang.Long">
 
         select count(*) from sale_act p
-        LEFT JOIN sys_store ss ON p.store_id = ss.id
         <include refid="where_act_name_and_store_name"/>
     </select>
 
     <select id="selectByActNameAndStoreName"
             resultType="com.joycity.joyclub.act.modal.ActWithStoreName">
 
-        select p.id, p.name, p.carousel, ss.name AS store_name
+        select p.id, p.name, p.carousel
         from sale_act p
-        LEFT JOIN sys_store ss ON p.store_id = ss.id
         <include refid="where_act_name_and_store_name"/>
         order by p.id desc
         <include refid="limit"/>
@@ -84,11 +79,10 @@
         p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
         order by a.display_weight desc,a.id desc-->
 
-        select a.id,a.store_id,a.portrait,a.name,a.info,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address,store.name storeName,store.service_phone
+        select a.id,a.store_id,a.portrait,a.name,a.info,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         LEFT join sys_act_category cat on a.category_id=cat.id
-        LEFT join sys_store store on a.store_id=store.id
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
 <!--        <if test="projectId!=null">
@@ -115,12 +109,9 @@
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         LEFT join sys_act_category cat on a.category_id=cat.id
-        LEFT join sys_store store on a.store_id=store.id
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
-        <if test="projectId!=null">
-            and store.project_id = #{projectId}
-        </if>
+
         <if test="storeId!=null">
             and a.store_id = #{storeId}
         </if>
@@ -136,7 +127,7 @@
     </select>
 
     <select id="getListMineAct" resultType="com.joycity.joyclub.act.modal.MineAct">
-        select saa.name AS act_name,saa.id AS attr_id, saa.target_num AS target_num, p.start_time, p.end_time, a.portrait
+        select a.id AS act_id,saa.name AS act_name,saa.id AS attr_id, saa.target_num AS target_num, p.start_time, p.end_time, a.portrait
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         JOIN sale_act_attr saa ON saa.act_id = a.id
@@ -148,7 +139,7 @@
     </select>
 
     <select id="getListMineJoinAct" resultType="com.joycity.joyclub.act.modal.MineAct">
-        select saa.name AS act_name,saa.id AS attr_id,
+        select a.id AS act_id,saa.name AS act_name,saa.id AS attr_id,
         saa.target_num AS target_num, p.start_time, p.end_time,a.portrait
         from sale_act_price p
         join sale_act a on p.act_id=a.id

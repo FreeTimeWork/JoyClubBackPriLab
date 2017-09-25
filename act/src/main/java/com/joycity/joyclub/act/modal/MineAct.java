@@ -12,12 +12,21 @@ public class MineAct {
      * 1.未开始 2.进行中 3.已结束
      */
     private Integer status;
+    private Long actId;
     private Long attrId;
     private Integer applyNum;
     private Integer targetNum;
     private Date startTime;
     private Date endTime;
     private String portrait;
+
+    public Long getActId() {
+        return actId;
+    }
+
+    public void setActId(Long actId) {
+        this.actId = actId;
+    }
 
     public Long getAttrId() {
         return attrId;
