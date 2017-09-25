@@ -112,9 +112,19 @@ public class ActController extends BaseUserSessionController {
      * 申请活动的列表
      */
     @RequestMapping(value = "/act/apply", method = RequestMethod.GET)
-    public ResultData getApplyAct(@RequestParam(required = false) Byte reviewStatus, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getApplyAct(@RequestParam(required = false) Byte reviewStatus,
+                                  @RequestParam(required = false) String name,
+                                  PageUtil pageUtil, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getListApplyAct(reviewStatus, pageUtil);
+        return applyActService.getListApplyAct(reviewStatus,name, pageUtil);
+    }
+    /**
+     * 申请活动的详情
+     */
+    @RequestMapping(value = "/act/apply{id}", method = RequestMethod.GET)
+    public ResultData getApplyAct( @PathVariable Long id, HttpSession httpSession) {
+        checkPlatformOrProjectOrStoreUser(httpSession);
+        return applyActService.getApplyActById(id);
     }
     /**
      * 申请活动审核通过
@@ -135,9 +145,9 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @GetMapping("/act/apply/effectivity")
-    public ResultData getEffectivityApplyActs(PageUtil pageUtil,HttpSession httpSession){
+    public ResultData getEffectivityApplyActs(@RequestParam(required = false) String name,PageUtil pageUtil,HttpSession httpSession){
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getEffListApplyAct(pageUtil);
+        return applyActService.getEffListApplyAct(name,pageUtil);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.joycity.joyclub.act.mapper;
 
+import com.joycity.joyclub.act.modal.ApplyActWithType;
 import com.joycity.joyclub.act.modal.generated.FrontApplyAct;
 import com.joycity.joyclub.act.modal.generated.FrontApplyActExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
@@ -14,11 +15,13 @@ import java.util.List;
  */
 public interface FrontApplyActMapper extends BaseMapper<FrontApplyAct,Long,FrontApplyActExample> {
 
-    Long countList(@Param("reviewStatus") Byte reviewStatus);
-    List<FrontApplyAct> selectList(@Param("reviewStatus") Byte reviewStatus, @Param("pageUtil") PageUtil pageUtil);
+    Long countList(@Param("reviewStatus") Byte reviewStatus,@Param("name")String name);
+    List<FrontApplyAct> selectList(@Param("reviewStatus") Byte reviewStatus, @Param("name")String name, @Param("pageUtil") PageUtil pageUtil);
 
     int updateReviewApplyAct(@Param("id") Long id, @Param("reviewStatus") Byte reviewStatus, @Param("reviewInfo") String reviewInfo);
 
-    List<FrontApplyAct> selectEffList(@Param("pageUtil") PageUtil pageUtil);
-    Long countEffList();
+    List<FrontApplyAct> selectEffList(@Param("name")String name,@Param("pageUtil") PageUtil pageUtil);
+    Long countEffList(@Param("name")String name);
+
+    ApplyActWithType selectApplyActById(@Param("id") Long id);
 }

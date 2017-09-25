@@ -9,7 +9,10 @@
         SELECT count(*) FROM front_apply_act
         <where>
             <if test="reviewStatus != null">
-               review_status = #{reviewStatus}
+               AND review_status = #{reviewStatus}
+            </if>
+            <if test="name != null">
+                AND name LIKE #{name}
             </if>
         </where>
     </select>
@@ -20,7 +23,10 @@
         JOIN front_apply_act_type faat ON faat.id = faa.apply_act_type_id
         <where>
             <if test="reviewStatus != null">
-                faa.review_status = #{reviewStatus}
+                AND faa.review_status = #{reviewStatus}
+            </if>
+            <if test="name != null">
+                AND faa.name LIKE #{name}
             </if>
         </where>
         <include refid="limit"/>
@@ -40,6 +46,9 @@
         INNER JOIN front_apply_act_type faat ON faat.id = faa.apply_act_type_id
         LEFT JOIN sale_act sa ON sa.apply_act_id = faa.id
         WHERE faa.review_status = 1 AND sa.apply_act_id IS NULL
+        <if test="name != null">
+            AND faa.name LIKE #{name}
+        </if>
         <include refid="limit"/>
     </select>
 
@@ -48,5 +57,15 @@
         FROM front_apply_act faa
         LEFT JOIN sale_act sa ON sa.apply_act_id = faa.id
         WHERE faa.review_status = 1 AND sa.apply_act_id IS NULL
+        <if test="name != null">
+            AND faa.name LIKE #{name}
+        </if>
+    </select>
+
+    <select id="selectApplyActById" resultType="com.joycity.joyclub.act.modal.ApplyActWithType">
+        SELECT faa.*,faat.name AS apply_act_type_name
+        FROM front_apply_act faa
+        JOIN front_apply_act_type faat ON faat.id = faa.apply_act_type_id
+        WHERE faa.id = #{id}
     </select>
 </mapper>
