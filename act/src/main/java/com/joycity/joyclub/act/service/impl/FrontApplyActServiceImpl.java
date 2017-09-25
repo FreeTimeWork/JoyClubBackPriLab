@@ -11,6 +11,8 @@ import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.commons.utils.SqlUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +43,7 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
 
     @Override
     public ResultData getListApplyAct(Byte reviewStatus,String name, PageUtil pageUtil) {
-        name = "%" + name + "%";
-        String finalName = name;
+        String finalName = SqlUtil.getLikeStr(name);
         return new AbstractGetListData<FrontApplyAct>() {
             @Override
             public Long countByFilter() {
@@ -70,8 +71,7 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
 
     @Override
     public ResultData getEffListApplyAct(String name,PageUtil pageUtil) {
-        name = "%" + name + "%";
-        String finalName = name;
+        String finalName = SqlUtil.getLikeStr(name);
         return new AbstractGetListData<FrontApplyAct>() {
             @Override
             public Long countByFilter() {
