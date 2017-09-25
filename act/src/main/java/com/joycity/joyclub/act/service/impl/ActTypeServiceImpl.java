@@ -8,6 +8,7 @@ import com.joycity.joyclub.act.modal.generated.SaleActType;
 import com.joycity.joyclub.act.service.ActTypeService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
+import com.joycity.joyclub.commons.modal.base.IdName;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
@@ -62,7 +63,7 @@ public class ActTypeServiceImpl implements ActTypeService {
     }
 
     @Override
-    public List<SaleActType> getSaleActTypes() {
+    public List<IdName> getSaleActTypes() {
         return actTypeMapper.selectSaleActTypes();
     }
 

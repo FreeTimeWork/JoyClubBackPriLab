@@ -4,6 +4,7 @@ import com.joycity.joyclub.act.modal.ActTypeWithAct;
 import com.joycity.joyclub.act.modal.generated.SaleActType;
 import com.joycity.joyclub.act.modal.generated.SaleActTypeExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.commons.modal.base.IdName;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,6 +19,6 @@ public interface SaleActTypeMapper extends BaseMapper<SaleActType,Long,SaleActTy
     Long countList();
     List<ActTypeWithAct> selectList(@Param("limit") Boolean limit, @Param("pageUtil") PageUtil pageUtil);
 
-    @Select("select * from sale_act_type")
-    List<SaleActType> selectSaleActTypes();
+    @Select("select id,name from sale_act_type")
+    List<IdName> selectSaleActTypes();
 }

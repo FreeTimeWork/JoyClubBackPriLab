@@ -12,6 +12,7 @@ import java.util.List;
 public class ActFormData {
 
     private List<IdName> categories;
+    private List<IdName> applyTypes;
 
 
     public List<IdName> getCategories() {
@@ -20,5 +21,13 @@ public class ActFormData {
 
     public void setCategories(List<IdName> categories) {
         this.categories = categories;
+    }
+
+    public List<IdName> getApplyTypes() {
+        return applyTypes;
+    }
+
+    public void setApplyTypes(List<IdName> applyTypes) {
+        this.applyTypes = applyTypes;
     }
 }

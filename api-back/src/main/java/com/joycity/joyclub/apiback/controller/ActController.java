@@ -70,8 +70,8 @@ public class ActController extends BaseUserSessionController {
     @RequestMapping(value = "/act/formdata", method = RequestMethod.GET)
     public ResultData getAct(HttpSession httpSession) {
         //确保是商户用户
-        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        return actService.getActFormData(user.getInfoId());
+//        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
+        return actService.getActFormData(null);
     }
 
     /**

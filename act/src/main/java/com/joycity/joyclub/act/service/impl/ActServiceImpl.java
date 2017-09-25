@@ -15,6 +15,7 @@ import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
 import com.joycity.joyclub.act.service.ActService;
+import com.joycity.joyclub.act.service.ActTypeService;
 import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.mapper.manual.StoreMapper;
@@ -46,6 +47,8 @@ public class ActServiceImpl implements ActService {
     ActAttrMapper attrMapper;
     @Autowired
     ActOrderMapper actOrderMapper;
+    @Autowired
+    ActTypeService actTypeService;
 
     /**
      * @return resultData, data为按创建时间倒序的所有项目列表
@@ -111,6 +114,7 @@ public class ActServiceImpl implements ActService {
     public ResultData getActFormData(Long storeId) {
         ActFormData formData = new ActFormData();
         formData.setCategories(categoryMapper.getSimpleList());
+        formData.setApplyTypes(actTypeService.getSaleActTypes());
         return new ResultData(formData);
     }
 

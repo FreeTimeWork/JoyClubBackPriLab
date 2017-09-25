@@ -1,6 +1,7 @@
 package com.joycity.joyclub.act.service;
 
 import com.joycity.joyclub.act.modal.generated.SaleActType;
+import com.joycity.joyclub.commons.modal.base.IdName;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
 
@@ -18,6 +19,6 @@ public interface ActTypeService {
 
     ResultData deleteActType(Long id);
 
-    List<SaleActType> getSaleActTypes();
+    List<IdName> getSaleActTypes();
 
 }
