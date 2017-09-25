@@ -121,7 +121,7 @@ public class ActController extends BaseUserSessionController {
     /**
      * 申请活动的详情
      */
-    @RequestMapping(value = "/act/apply{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/act/apply/{id}", method = RequestMethod.GET)
     public ResultData getApplyAct( @PathVariable Long id, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return applyActService.getApplyActById(id);
