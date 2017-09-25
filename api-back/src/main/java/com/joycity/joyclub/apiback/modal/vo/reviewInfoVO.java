@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
  * Created by fangchen.chai on 2017/7/20.
  */
 public class reviewInfoVO {
-    @NotNull
+//    @NotNull
     private String info;
 
     public String getInfo() {
