@@ -61,4 +61,9 @@ public class ActTypeServiceImpl implements ActTypeService {
         return new ResultData(new UpdateResult(num));
     }
 
+    @Override
+    public List<SaleActType> getSaleActTypes() {
+        return actTypeMapper.selectSaleActTypes();
+    }
+
 }

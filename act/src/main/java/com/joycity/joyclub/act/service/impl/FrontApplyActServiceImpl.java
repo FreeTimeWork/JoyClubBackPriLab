@@ -16,7 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fangchen.chai on 2017/9/14
@@ -28,7 +30,8 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
     private FrontApplyActMapper applyActMapper;
     @Autowired
     private FrontApplyActTypeMapper applyActTypeMapper;
-
+    @Autowired
+    private ActTypeServiceImpl actTypeService;
     @Override
     public ResultData createApplyAct(FrontApplyAct applyAct) {
 
@@ -93,7 +96,11 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
 
     @Override
     public ResultData getListApplyActType() {
-        return new ResultData(new ListResult(applyActTypeMapper.selectList()));
+        Map map = new HashMap();
+        map.put("applyType", applyActTypeMapper.selectList());
+        map.put("actType", actTypeService.getSaleActTypes());
+
+        return new ResultData(map);
     }
 
     @Override
