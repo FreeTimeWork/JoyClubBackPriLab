@@ -29,6 +29,7 @@
                 AND faa.name LIKE #{name}
             </if>
         </where>
+        order by faa.review_status ASC
         <include refid="limit"/>
     </select>
 
