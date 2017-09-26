@@ -135,7 +135,7 @@ public class ActController extends BaseUserSessionController {
         return applyActService.permitApplyAct(id);
     }
     @PostMapping("/act/apply/{id}/review/reject")
-    public ResultData rejectApplyAct(@PathVariable Long id,@Validated @RequestBody reviewInfoVO vo, HttpSession httpSession) {
+    public ResultData rejectApplyAct(@PathVariable Long id,@Validated @RequestBody(required = false) reviewInfoVO vo, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return applyActService.rejectApplyAct(id, vo.getInfo());
     }
