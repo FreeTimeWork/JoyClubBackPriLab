@@ -86,7 +86,7 @@ public class ActController extends BaseUserSessionController {
         //确保是商户用户
         checkPlatformOrProjectOrStoreUser(httpSession);
         act.setId(id);
-        return actService.updateAct( act);
+        return actService.updateAct(act);
     }
 
     /**
@@ -116,16 +116,18 @@ public class ActController extends BaseUserSessionController {
                                   @RequestParam(required = false) String name,
                                   PageUtil pageUtil, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getListApplyAct(reviewStatus,name, pageUtil);
+        return applyActService.getListApplyAct(reviewStatus, name, pageUtil);
     }
+
     /**
      * 申请活动的详情
      */
     @RequestMapping(value = "/act/apply/{id}", method = RequestMethod.GET)
-    public ResultData getApplyAct( @PathVariable Long id, HttpSession httpSession) {
+    public ResultData getApplyAct(@PathVariable Long id, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return applyActService.getApplyActById(id);
     }
+
     /**
      * 申请活动审核通过
      */
@@ -134,8 +136,9 @@ public class ActController extends BaseUserSessionController {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return applyActService.permitApplyAct(id);
     }
+
     @PostMapping("/act/apply/{id}/review/reject")
-    public ResultData rejectApplyAct(@PathVariable Long id,@Validated @RequestBody(required = false) reviewInfoVO vo, HttpSession httpSession) {
+    public ResultData rejectApplyAct(@PathVariable Long id, @Validated @RequestBody(required = false) reviewInfoVO vo, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         String info = null;
         if (vo != null) {
@@ -146,45 +149,76 @@ public class ActController extends BaseUserSessionController {
 
     /**
      * 得到有效的申请活动列表，审核通过，并且没有关联活动
+     *
      * @return
      */
     @GetMapping("/act/apply/effectivity")
-    public ResultData getEffectivityApplyActs(@RequestParam(required = false) String name,PageUtil pageUtil,HttpSession httpSession){
+    public ResultData getEffectivityApplyActs(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getEffListApplyAct(name,pageUtil);
+        return applyActService.getEffListApplyAct(name, pageUtil);
     }
 
     /**
      * 申请活动里的活动的类型创建
      */
     @PostMapping("/act/apply/type")
-    public ResultData createApplyActType(@RequestBody FrontApplyActType applyActType,HttpSession session) {
+    public ResultData createApplyActType(@RequestBody FrontApplyActType applyActType, HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
         return applyActService.createApplyActType(applyActType);
     }
 
     @PostMapping("/act/apply/type/{id}/delete")
-    public ResultData deleteApplyActType(@PathVariable Long id,HttpSession session) {
+    public ResultData deleteApplyActType(@PathVariable Long id, HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
         return applyActService.deleteApplyActType(id);
+    }
+
+    @PostMapping("/act/apply/type/{id}")
+    public ResultData updateApplyActType(@RequestBody FrontApplyActType applyActType, HttpSession session){
+        checkPlatformOrProjectOrStoreUser(session);
+        return applyActService.updateApplyActType(applyActType);
+    }
+
+    @GetMapping("/act/apply/type/{id}")
+    public ResultData getApplyActType(@PathVariable Long id){
+        return applyActService.getApplyActTypeById(id);
     }
 
     /**
      * 活动大类创建
      */
-    @PostMapping("act/type")
+    @PostMapping("/act/type")
     public ResultData createActType(@RequestBody SaleActType actType, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return actTypeService.createActType(actType);
 
     }
 
-    @PostMapping("act/type/{id}/delete")
+    @PostMapping("/act/type/{id}")
+    public ResultData updateActType(@RequestBody SaleActType actType, HttpSession httpSession) {
+        checkPlatformOrProjectOrStoreUser(httpSession);
+        return actTypeService.updateActType(actType);
+    }
+
+    @GetMapping("/act/type/{id}")
+    public ResultData getActType(@PathVariable Long id) {
+        return actTypeService.getActType(id);
+    }
+
+    @PostMapping("/act/type/{id}/delete")
     public ResultData deleteActType(@PathVariable Long id, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
         return actTypeService.deleteActType(id);
 
     }
 
+    @GetMapping("/act/apply/type")
+    public ResultData getApplyTypes(){
+        return applyActService.getListApplyActType();
+    }
 
+    @GetMapping("/act/type")
+    public ResultData getActTypes(){
+        return actTypeService.getAllSaleActTypes();
+    }
 }

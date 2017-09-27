@@ -21,4 +21,10 @@ public interface ActTypeService {
 
     List<IdName> getSaleActTypes();
 
+    ResultData getAllSaleActTypes();
+
+    ResultData updateActType(SaleActType actType);
+
+    ResultData getActType(Long id);
+
 }

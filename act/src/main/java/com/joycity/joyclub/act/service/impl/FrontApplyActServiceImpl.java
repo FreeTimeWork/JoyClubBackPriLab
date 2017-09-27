@@ -101,6 +101,17 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
         int num = applyActTypeMapper.deleteByPrimaryKey(id);
         return new ResultData(new UpdateResult(num));
     }
-    
+
+    @Override
+    public ResultData updateApplyActType(FrontApplyActType applyActType) {
+        int num = applyActTypeMapper.updateByPrimaryKeySelective(applyActType);
+        return new ResultData(new UpdateResult(num));
+    }
+
+    @Override
+    public ResultData getApplyActTypeById(Long id) {
+        return new ResultData(applyActTypeMapper.selectByPrimaryKey(id));
+    }
+
 
 }

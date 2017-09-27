@@ -67,4 +67,20 @@ public class ActTypeServiceImpl implements ActTypeService {
         return actTypeMapper.selectSaleActTypes();
     }
 
+    @Override
+    public ResultData getAllSaleActTypes() {
+        return new ResultData(actTypeMapper.selectAllSaleActTypes());
+    }
+
+    @Override
+    public ResultData updateActType(SaleActType actType) {
+        int num = actTypeMapper.updateByPrimaryKeySelective(actType);
+        return new ResultData(new UpdateResult(num));
+    }
+
+    @Override
+    public ResultData getActType(Long id) {
+        return new ResultData(actTypeMapper.selectByPrimaryKey(id));
+    }
+
 }

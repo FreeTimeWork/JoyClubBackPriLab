@@ -21,4 +21,7 @@ public interface SaleActTypeMapper extends BaseMapper<SaleActType,Long,SaleActTy
 
     @Select("select id,name from sale_act_type")
     List<IdName> selectSaleActTypes();
+
+    @Select("select * from sale_act_type")
+    List<SaleActType> selectAllSaleActTypes();
 }

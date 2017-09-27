@@ -30,4 +30,8 @@ public interface FrontApplyActService {
 
     ResultData deleteApplyActType(Long id);
 
+    ResultData updateApplyActType(FrontApplyActType applyActType);
+
+    ResultData getApplyActTypeById(Long id);
+
 }
