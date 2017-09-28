@@ -7,10 +7,7 @@ import com.joycity.joyclub.act.modal.ActTypeWithAct;
 import com.joycity.joyclub.act.modal.generated.SaleActType;
 import com.joycity.joyclub.act.service.ActTypeService;
 import com.joycity.joyclub.commons.AbstractGetListData;
-import com.joycity.joyclub.commons.modal.base.CreateResult;
-import com.joycity.joyclub.commons.modal.base.IdName;
-import com.joycity.joyclub.commons.modal.base.ResultData;
-import com.joycity.joyclub.commons.modal.base.UpdateResult;
+import com.joycity.joyclub.commons.modal.base.*;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +66,7 @@ public class ActTypeServiceImpl implements ActTypeService {
 
     @Override
     public ResultData getAllSaleActTypes() {
-        return new ResultData(actTypeMapper.selectAllSaleActTypes());
+        return new ResultData(new ListResult(actTypeMapper.selectAllSaleActTypes()));
     }
 
     @Override
