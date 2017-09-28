@@ -127,8 +127,8 @@ public class ActServiceImpl implements ActService {
     public ResultData getInfo(Long id) {
         SaleAct act = actMapper.selectByPrimaryKey(id);
         checkNull(act, "活动不存在");
-        SaleActPrice price = actPriceMapper.getNowPrice(id);
-        checkNull(price, "活动未上架或者已下架");
+        SaleActPrice price = actPriceMapper.getPrice(id);
+//        checkNull(price, "活动未上架或者已下架");
 //        IdNamePortrait store = storeMapper.getSimpleInfo(act.getStoreId());
 //        checkNull(store, "商户不存在");
         SysActCategory category  = categoryMapper.selectByPrimaryKey(act.getCategoryId());

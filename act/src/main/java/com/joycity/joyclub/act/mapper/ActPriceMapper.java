@@ -103,4 +103,7 @@ public interface ActPriceMapper extends BaseMapper<SaleActPrice, Long, SaleActPr
      */
     @Select("select * from sale_act_price where delete_flag=0 and  act_id=#{actId} and forbid_flag=false and review_status=1 and start_time<=now() and end_time>=now() limit 0,1 ")
     SaleActPrice getNowPrice(@Param("actId") Long actId);
+
+    @Select("select * from sale_act_price where delete_flag=0 and  act_id=#{actId} and forbid_flag=false and review_status=1  limit 0,1 ")
+    SaleActPrice getPrice(@Param("actId") Long actId);
 }
