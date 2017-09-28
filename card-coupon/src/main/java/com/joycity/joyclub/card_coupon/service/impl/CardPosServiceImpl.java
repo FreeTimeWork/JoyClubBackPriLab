@@ -13,12 +13,15 @@ import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
 import com.joycity.joyclub.card_coupon.service.ShopService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.modal.Client;
+import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.*;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +53,8 @@ public class CardPosServiceImpl implements CardPosService {
     private CardCouponLaunchMapper launchMapper;
     @Autowired
     private CardCouponCodeCache couponCodeCache;
-
+    @Autowired
+    KeChuanCrmService keChuanCrmService;
     @Override
     public ResultData getCurrentCoupons(Long projectId, String shopCode, String vipCode) {
         return new ResultData(new ListResult(cardCouponCodeMapper.selectCurrentCouponCode(projectId, shopCode, null, vipCode)));
@@ -154,7 +158,22 @@ public class CardPosServiceImpl implements CardPosService {
     public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
         ThrowBusinessExceptionUtil.checkNull(shop, "商户不存在");
+        ThrowBusinessExceptionUtil.checkNull(vipCode, "会员号不存在");
         Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        //如果clientId不存在，重新从科传同步一遍数据
+        if (clientId == null) {
+            Client client = keChuanCrmService.getMemberByVipCode(vipCode);
+            //找不到会员，不处理
+            if (client == null) {
+                return new ResultData();
+            }
+            //没有手机号，不处理
+            if (StringUtils.isBlank(client.getTel())) {
+                return new ResultData();
+            }
+            clientUserMapper.insertSelective(client);
+            clientId = client.getId();
+        }
         //记录流水，返回主键
         Long posSaleDetailId = createPosSaleDetail(shop.getId(), orderCode, clientId, payable, payment);
 
