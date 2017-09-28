@@ -174,8 +174,9 @@ public class ActController extends BaseUserSessionController {
     }
 
     @PostMapping("/act/apply/type/{id}")
-    public ResultData updateApplyActType(@RequestBody FrontApplyActType applyActType, HttpSession session){
+    public ResultData updateApplyActType(@PathVariable Long id, @RequestBody FrontApplyActType applyActType, HttpSession session){
         checkPlatformOrProjectOrStoreUser(session);
+        applyActType.setId(id);
         return applyActService.updateApplyActType(applyActType);
     }
 
@@ -195,8 +196,9 @@ public class ActController extends BaseUserSessionController {
     }
 
     @PostMapping("/act/type/{id}")
-    public ResultData updateActType(@RequestBody SaleActType actType, HttpSession httpSession) {
+    public ResultData updateActType(@PathVariable Long id,@RequestBody SaleActType actType, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
+        actType.setId(id);
         return actTypeService.updateActType(actType);
     }
 
