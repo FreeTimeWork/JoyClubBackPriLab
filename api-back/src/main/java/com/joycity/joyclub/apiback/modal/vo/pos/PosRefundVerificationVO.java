@@ -25,4 +25,12 @@ public class PosRefundVerificationVO {
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
     }
+
+    @Override
+    public String toString() {
+        return "PosRefundVerificationVO{" +
+                "orderCode='" + orderCode + '\'' +
+                ", shopCode='" + shopCode + '\'' +
+                '}';
+    }
 }

@@ -4,7 +4,10 @@ import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.vo.pos.*;
 import com.joycity.joyclub.apiback.util.CheckSecretKey;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
+import com.joycity.joyclub.card_coupon.service.impl.CardPosServiceImpl;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +23,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 @RestController
 @RequestMapping(URL_API_BACK+"/card/pos")
 public class CardPosController extends BaseUserSessionController {
-
+    private Log logger = LogFactory.getLog(CardPosController.class);
     @Value("${pos.secretKey}")
     private String secretKey;
     @Autowired
@@ -93,6 +96,7 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData refundVerification(@RequestHeader("sign") String sign,
                                          @RequestHeader("timestamp") Long timestamp,
                                          @RequestBody @Validated PosRefundVerificationVO vo) throws ParseException {
+        logger.info("refund-verify: "+vo);
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.refundVerification(vo.getOrderCode());
     }
@@ -104,6 +108,8 @@ public class CardPosController extends BaseUserSessionController {
     public ResultData refund(@RequestHeader("sign") String sign,
                              @RequestHeader("timestamp") Long timestamp,
                              @RequestBody @Validated PosRefundVO vo) {
+
+        logger.info("refund: "+vo);
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.refund(vo.getOrderCode(), vo.getRefundAmount());
     }
