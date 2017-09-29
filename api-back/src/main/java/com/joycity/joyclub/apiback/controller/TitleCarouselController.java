@@ -29,49 +29,49 @@ public class TitleCarouselController extends BaseUserSessionController {
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.POST)
     public ResultData updateProductTitleCarousel(@RequestBody SearchProductTitleCarouselsVO vo, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return productTitleCarouselService.updateProductTitleCarousel(vo.getTitleCarousels());
     }
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
     public ResultData getAllProductTitleCarousel(HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return productTitleCarouselService.getAllProductTitleCarousel();
     }
 
     @PostMapping("/system/product/carousel")
     public ResultData createProductTitleCarousel(@RequestBody SaleProductTitleCarousel productTitleCarousel, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return productTitleCarouselService.createProductTitleCarousel(productTitleCarousel);
     }
 
     @PostMapping("/system/product/carousel/{id}/delete")
     public ResultData createProductTitleCarousel(@PathVariable Long id, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return productTitleCarouselService.deleteProductTitleCarousel(id);
     }
 
     @RequestMapping(value = "/system/act/carousels", method = RequestMethod.POST)
     public ResultData updateActTitleCarousel(@RequestBody SearchActTitleCarouselsVO vo, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return actTitleCarouselService.updateActTitleCarousel(vo.getTitleCarousels());
     }
 
     @RequestMapping(value = "/system/act/carousels", method = RequestMethod.GET)
     public ResultData getAllActTitleCarousel(HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return actTitleCarouselService.getAllActTitleCarousel();
     }
 
     @PostMapping("/system/act/carousel")
     public ResultData createActTitleCarousel(@RequestBody SaleActTitleCarousel actTitleCarousel, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return actTitleCarouselService.createActTitleCarousel(actTitleCarousel);
     }
 
     @PostMapping("/system/act/carousel/{id}/delete")
     public ResultData deleteActTitleCarousel(@PathVariable Long id, HttpSession session){
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return actTitleCarouselService.deleteActTitleCarousel(id);
     }
 }
