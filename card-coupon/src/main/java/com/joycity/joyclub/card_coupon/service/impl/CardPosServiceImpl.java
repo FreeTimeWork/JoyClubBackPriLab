@@ -19,6 +19,8 @@ import com.joycity.joyclub.commons.modal.base.*;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,7 @@ import java.util.List;
  */
 @Service
 public class CardPosServiceImpl implements CardPosService {
+    private Log logger = LogFactory.getLog(CardPosServiceImpl.class);
 
     @Autowired
     private CardPosSaleDetailMapper cardPosSaleDetailMapper;
@@ -152,6 +155,8 @@ public class CardPosServiceImpl implements CardPosService {
 
     @Override
     public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
+        logger.info("posOrderInform: projectId:" + projectId + " vipCode:" + vipCode + "orderCode: " + orderCode + " shopCode：" + shopCode + " payable:" + payable.toString() + " payment:" + payment.toString());
+        payment = payable;
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
         ThrowBusinessExceptionUtil.checkNull(shop, "商户不存在");
         Long clientId = clientUserMapper.getIdByVipCode(vipCode);
