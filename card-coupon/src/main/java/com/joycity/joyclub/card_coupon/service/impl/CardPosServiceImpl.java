@@ -193,7 +193,7 @@ public class CardPosServiceImpl implements CardPosService {
     @Transactional
     public ResultData refund(String orderCode, BigDecimal refundAmount) {
         CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
-
+        logger.info("refund-CouponLaunchBetweenInfo:"+info);
         if (info.getRefundType() != null && info.getRefundType().equals(RefundType.FORBIT_REFUND)) {
 
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
@@ -203,9 +203,8 @@ public class CardPosServiceImpl implements CardPosService {
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
         }
-        if (refundAmount.compareTo(info.getDetail().getBalance()) > 0) {
-            throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
-        }
+        // 从订单里找退款金额
+        refundAmount = info.getDetail().getBalance();
         //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info, refundAmount);
         Integer num = actualNumSubtractSubNum(info, subCouponNum);
