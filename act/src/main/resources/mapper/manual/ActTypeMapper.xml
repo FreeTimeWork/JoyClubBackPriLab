@@ -5,7 +5,10 @@
     limit #{pageUtil.offset},#{pageUtil.pageSize}
   </sql>
   <select id="selectList" resultType="com.joycity.joyclub.act.modal.ActTypeWithAct">
-    SELECT * FROM sale_act_type
+    SELECT act_type.* FROM sale_act_type act_type
+    INNER JOIN (select DISTINCT(act.act_type_id) AS act_type_id from sale_act act
+    INNER JOIN `sale_act_price` price on price.`act_id`  = act.`id` AND price.`review_status` = 1 and price.`delete_flag` = 0 and price.`forbid_flag` = 0 and  now() between price.start_time and price.end_time
+    ) act ON act.act_type_id = act_type.id
     ORDER BY display_weight DESC, id
     <if test="limit">
       <include refid="limit"/>
@@ -13,7 +16,8 @@
   </select>
 
   <select id="countList" resultType="long">
-    SELECT count(*) FROM sale_act_type
+    SELECT count(DISTINCT act_type.id) FROM sale_act_type act_type
+    INNER JOIN sale_act act ON act.act_type_id = act_type.id
   </select>
 
 <!--  <resultMap id="SaleActTypeResultMap" type="com.joycity.joyclub.act.modal.ActTypeWithAct">
