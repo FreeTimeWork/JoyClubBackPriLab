@@ -28,5 +28,6 @@ public class TestApp {
     @Test
     public void test2() {
         mallCooService.getCoupons(1L, "0500307360");
+        System.out.println(1);
     }
 }

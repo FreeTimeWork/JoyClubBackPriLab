@@ -1,5 +1,7 @@
 package com.joycity.joyclub.card_coupon.modal;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.math.BigDecimal;
 
 /**
@@ -87,5 +89,10 @@ public class CouponLaunchBetweenInfo {
 
     public void setRefundType(Byte refundType) {
         this.refundType = refundType;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

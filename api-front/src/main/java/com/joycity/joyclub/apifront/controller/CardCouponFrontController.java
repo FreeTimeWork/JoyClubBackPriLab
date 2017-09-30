@@ -3,12 +3,17 @@ package com.joycity.joyclub.apifront.controller;
 import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponFreeGetVO;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +27,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 @RestController
 @RequestMapping(URL_API_FRONT)
 public class CardCouponFrontController {
+    private final Log logger = LogFactory.getLog(CardCouponFrontController.class);
 
     @Autowired
     private ClientTokenService clientTokenService;
@@ -29,6 +35,10 @@ public class CardCouponFrontController {
     private CardCouponLaunchService launchService;
     @Autowired
     private CardCouponCodeService couponCodeService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private ClientUserMapper clientUserMapper;
 
     /**
      * 某个项目中，某个会员能领取的卡券
@@ -82,17 +92,38 @@ public class CardCouponFrontController {
             @RequestParam Long projectId,
             @RequestParam(required = false) String ticket,
             @RequestParam(required = false) String vipCode) {
+        logger.info("available-mallcoo projectId: " + projectId + "ticket: " + ticket + " vipCode: " + vipCode);
+
         if (ticket == null && vipCode == null) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "ticket和vipCode不能同时为null");
         }
-
         return couponCodeService.getAvailableCardCouponsByMallcooTicket(projectId, ticket,vipCode);
     }
     @GetMapping("/card/coupon/code/{id}")
     public ResultData getCouponInfoByCodeId(
-            @CookieValue(Global.COOKIE_TOKEN) String token,
+//            @CookieValue(Global.COOKIE_TOKEN) String token,
             @PathVariable Long id) {
-        Long clientId = clientTokenService.getIdOrThrow(token);
+//        Long clientId = clientTokenService.getIdOrThrow(token);
+        return couponCodeService.getCouponInfoByCodeId(id, null);
+    }
+
+    @GetMapping("/card/mallcoo/coupon/code/{id}")
+    public ResultData getCouponInfoByCodeIdFromMallcoo(
+            @RequestParam(required = false)String tel,
+            @RequestParam(required = false)String vipCode,
+            @PathVariable Long id) {
+        if (tel == null && vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "tel和vipCode不能同时为null");
+        }
+        Long clientId = null;
+        if (StringUtils.isNotBlank(tel)) {
+            clientId = clientUserMapper.getIdByTel(tel);
+
+        }
+        if (StringUtils.isNotBlank(vipCode)) {
+            clientId = clientUserMapper.getIdByVipCode(vipCode);
+        }
+
         return couponCodeService.getCouponInfoByCodeId(id, clientId);
     }
     @GetMapping("/card/coupon/code/mallcoo")

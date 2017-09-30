@@ -269,10 +269,10 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
     public ResultData getCouponInfoByCodeId(Long id, Long clientId) {
         CouponInfoInBag info = cardCouponCodeMapper.selectCouponInfoByCodeId(id);
         ThrowBusinessExceptionUtil.checkNull(info,"卡券信息不存在");
-        CardCouponCode cardCouponCode = cardCouponCodeMapper.selectByPrimaryKey(id);
-        if (!cardCouponCode.getClientId().equals(clientId)) {
-            throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
-        }
+//        CardCouponCode cardCouponCode = cardCouponCodeMapper.selectByPrimaryKey(id);
+//        if (!cardCouponCode.getClientId().equals(clientId)) {
+//            throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+//        }
         info.setJoinShopList(cardCouponCodeMapper.selectJoinShopsByCouponId(info.getCouponId()));
         return new ResultData(info);
     }

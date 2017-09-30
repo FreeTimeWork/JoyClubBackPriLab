@@ -22,6 +22,8 @@ import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +38,7 @@ import java.util.List;
  */
 @Service
 public class CardPosServiceImpl implements CardPosService {
+    private Log logger = LogFactory.getLog(CardPosServiceImpl.class);
 
     @Autowired
     private CardPosSaleDetailMapper cardPosSaleDetailMapper;
@@ -156,6 +159,8 @@ public class CardPosServiceImpl implements CardPosService {
 
     @Override
     public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
+        logger.info("posOrderInform: projectId:" + projectId + " vipCode:" + vipCode + "orderCode: " + orderCode + " shopCode：" + shopCode + " payable:" + payable.toString() + " payment:" + payment.toString());
+        payment = payable;
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
         ThrowBusinessExceptionUtil.checkNull(shop, "商户不存在");
         ThrowBusinessExceptionUtil.checkNull(vipCode, "会员号不存在");
@@ -207,7 +212,7 @@ public class CardPosServiceImpl implements CardPosService {
     @Transactional
     public ResultData refund(String orderCode, BigDecimal refundAmount) {
         CouponLaunchBetweenInfo info = preRefundVerification(orderCode);
-
+        logger.info("refund-CouponLaunchBetweenInfo:"+info);
         if (info.getRefundType() != null && info.getRefundType().equals(RefundType.FORBIT_REFUND)) {
 
             throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
@@ -217,8 +222,9 @@ public class CardPosServiceImpl implements CardPosService {
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
         }
-        if (refundAmount.compareTo(info.getDetail().getBalance()) > 0) {
-            throw new BusinessException(ResultCode.COUPON_FORBID_REFUND);
+        // 如果 refundAmount = 0，直接 从订单里找退款金额
+        if (refundAmount != null && refundAmount.equals(BigDecimal.ZERO)) {
+            refundAmount = info.getDetail().getBalance();
         }
         //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info, refundAmount);
