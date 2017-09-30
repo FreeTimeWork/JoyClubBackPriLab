@@ -101,10 +101,10 @@ public class CardCouponFrontController {
     }
     @GetMapping("/card/coupon/code/{id}")
     public ResultData getCouponInfoByCodeId(
-            @CookieValue(Global.COOKIE_TOKEN) String token,
+//            @CookieValue(Global.COOKIE_TOKEN) String token,
             @PathVariable Long id) {
-        Long clientId = clientTokenService.getIdOrThrow(token);
-        return couponCodeService.getCouponInfoByCodeId(id, clientId);
+//        Long clientId = clientTokenService.getIdOrThrow(token);
+        return couponCodeService.getCouponInfoByCodeId(id, null);
     }
 
     @GetMapping("/card/mallcoo/coupon/code/{id}")
