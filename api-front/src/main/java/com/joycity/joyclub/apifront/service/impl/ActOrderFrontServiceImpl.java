@@ -226,8 +226,7 @@ public class ActOrderFrontServiceImpl implements ActOrderFrontService {
      * @return
      */
     private ResultData clientOrder(Byte payType, Long projectId, Long subProjectId, Long clientId, Long attrId, Boolean moneyOrPoint,Integer num) {
-        // TODO: 2017/9/21  前段num传的有问题，修改好要去掉
-        num = 1;
+
         SaleActOrder order = createOrder(payType, projectId, subProjectId, clientId, attrId, moneyOrPoint,num);
         PreOrderResult preOrderResult = null;
         //金钱业务
