@@ -64,5 +64,7 @@ public interface ActMapper extends BaseMapperWithBLOBS<SaleAct, SaleActWithBLOBs
      */
     List<MineAct> getListMineJoinAct(@Param("clientId") Long clientId);
 
+    @Select("select * from sale_act where id = #{id}")
+    SaleActInfo selectSaleActInfoById(@Param("id") Long id);
 
 }

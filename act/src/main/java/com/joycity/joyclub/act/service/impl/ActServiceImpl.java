@@ -6,11 +6,9 @@ import static com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil.check
 import java.util.Date;
 import java.util.List;
 
-import com.joycity.joyclub.act.mapper.ActAttrMapper;
-import com.joycity.joyclub.act.mapper.ActMapper;
-import com.joycity.joyclub.act.mapper.ActOrderMapper;
-import com.joycity.joyclub.act.mapper.ActPriceMapper;
+import com.joycity.joyclub.act.mapper.*;
 import com.joycity.joyclub.act.modal.*;
+import com.joycity.joyclub.act.modal.generated.FrontApplyAct;
 import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActPrice;
 import com.joycity.joyclub.act.modal.generated.SaleActWithBLOBs;
@@ -49,6 +47,8 @@ public class ActServiceImpl implements ActService {
     ActOrderMapper actOrderMapper;
     @Autowired
     ActTypeService actTypeService;
+    @Autowired
+    FrontApplyActMapper applyActMapper;
 
     /**
      * @return resultData, data为按创建时间倒序的所有项目列表
@@ -98,8 +98,12 @@ public class ActServiceImpl implements ActService {
 
     @Override
     public ResultData getAct(Long id) {
-        SaleActWithBLOBs act = actMapper.selectByPrimaryKey(id);
+        SaleActInfo act =  actMapper.selectSaleActInfoById(id);
         if (act == null || act.getDeleteFlag()) throw new BusinessException(DATA_NOT_EXIST, "该商品不存在");
+        FrontApplyAct applyAct = applyActMapper.selectByPrimaryKey(act.getApplyActId());
+        if (applyAct != null) {
+            act.setApplyActName(applyAct.getName());
+        }
         return new ResultData(act);
     }
 
@@ -128,7 +132,7 @@ public class ActServiceImpl implements ActService {
         SaleAct act = actMapper.selectByPrimaryKey(id);
         checkNull(act, "活动不存在");
         SaleActPrice price = actPriceMapper.getPrice(id);
-//        checkNull(price, "活动未上架或者已下架");
+        checkNull(price, "活动未上架或者已下架");
 //        IdNamePortrait store = storeMapper.getSimpleInfo(act.getStoreId());
 //        checkNull(store, "商户不存在");
         SysActCategory category  = categoryMapper.selectByPrimaryKey(act.getCategoryId());
