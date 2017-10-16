@@ -134,11 +134,12 @@ pos:
 
 ---
 spring:
-    profiles: development
-    datasource:
-      url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
-      username: root
-      password:
+  profiles: development
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
+    password: root
+    username: root
+
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
 alipay:
