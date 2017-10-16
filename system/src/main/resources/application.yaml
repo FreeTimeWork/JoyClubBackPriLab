@@ -1,7 +1,7 @@
 # 默认的是生产环境的变量，开发时请在运行时追加active profiles为development
 spring:
   datasource:
-    url: jdbc:mysql://rm-2zew10t27zxjjz7uh.mysql.rds.aliyuncs.com:3306/joyclub_test?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
+    url: jdbc:mysql://rm-2zew10t27zxjjz7uh.mysql.rds.aliyuncs.com:3306/joyclub2?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
     username: moma
     password: moma@#$123
     # 默认的是过时的com.mysql.jdbc.Driver
