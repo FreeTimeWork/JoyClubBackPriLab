@@ -32,10 +32,11 @@ public class ProductFrontController {
     public ResultData getProducts(@RequestParam(required = false,defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
                                   @RequestParam(required = false) Long storeId,
                                   @RequestParam(required = false) Long designerId,
+                                  @RequestParam(required = false) Long categoryId,
                                   PageUtil pageUtil
     ) {
         //projectId,store designer 取一个就好
-        return productService.getProductList(projectId, storeId, designerId, pageUtil);
+        return productService.getProductList(projectId, categoryId, storeId, designerId, pageUtil);
     }
 
     /**

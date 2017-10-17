@@ -55,6 +55,7 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
      */
     List<ProductSimple> selectByProject(
             @Param("projectId") Long selectByProject,
+            @Param("categoryId") Long categoryId,
             @Param("specialPriceFlag") Boolean specialPriceFlag,
             @Param("pageUtil") PageUtil pageUtil
     );

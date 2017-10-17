@@ -152,15 +152,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultData getProductList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil) {
+    public ResultData getProductList(Long projectId, Long categoryId, Long storeId, Long designerId, PageUtil pageUtil) {
 
-        return getProductList(projectId, storeId, designerId, null, pageUtil);
+        return getProductList(projectId,categoryId, storeId, designerId, null, pageUtil);
     }
 
     @Override
-    public ResultData getSpecialPriceProductList(Long projectId, Long storeId, Long designerId, PageUtil pageUtil) {
+    public ResultData getSpecialPriceProductList(Long projectId,Long categoryId, Long storeId, Long designerId, PageUtil pageUtil) {
 
-        return getProductList(projectId, storeId, designerId, true, pageUtil);
+        return getProductList(projectId, categoryId, storeId, designerId, true, pageUtil);
     }
 
     @Override
@@ -195,10 +195,10 @@ public class ProductServiceImpl implements ProductService {
      * @param pageUtil
      * @return
      */
-    private ResultData getProductList(Long projectId, Long storeId, Long designerId, Boolean specialPriceFlag, PageUtil pageUtil) {
+    private ResultData getProductList(Long projectId,Long categoryId, Long storeId, Long designerId, Boolean specialPriceFlag, PageUtil pageUtil) {
         List<ProductSimple> list;
         if (storeId == null && designerId == null) {
-            list = productMapper.selectByProject(projectId, specialPriceFlag, pageUtil);
+            list = productMapper.selectByProject(projectId, categoryId, specialPriceFlag, pageUtil);
         } else {
             list = productMapper.selectByFilter(storeId, designerId, specialPriceFlag, pageUtil);
         }

@@ -54,10 +54,11 @@ public class SpecialPriceController {
     public ResultData getSpecialPriceProducts(@RequestParam(required = false, defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
                                               @RequestParam(required = false) Long storeId,
                                               @RequestParam(required = false) Long designerId,
+                                              @RequestParam(required = false) Long categoryId,
                                               PageUtil pageUtil
     ) {
         //projectId,store designer 取一个就好
-        return productService.getSpecialPriceProductList(projectId, storeId, designerId, pageUtil);
+        return productService.getSpecialPriceProductList(projectId,categoryId, storeId, designerId, pageUtil);
     }
     /**
      * 获取某个特价活动的商品列表
