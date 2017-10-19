@@ -50,7 +50,7 @@ public class ProductFrontController {
         return productService.getAttrs(id);
     }
 
-    @GetMapping("/product/carousels")
+    @GetMapping("/product/slider/carousels")
     public ResultData getProductCarousel(){
         return productTitleCarouselService.getAllProductTitleCarousel();
     }
