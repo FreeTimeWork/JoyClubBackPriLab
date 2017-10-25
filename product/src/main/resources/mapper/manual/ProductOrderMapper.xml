@@ -151,6 +151,30 @@
         join sale_product product on product.id = attr.product_id
         order by  mo.create_time desc
     </select>
+
+    <select id="selectMyOrderDetail" resultMap="MainOrderWithStores">
+
+        select mo.id,mo.code,mo.project_id,mo.client_id,mo.status
+        ,mo.receive_type,mo.money_sum,mo.point_sum, mo.pay_type,mo.pay_time
+        ,mo.cancel_time,mo.canceler,mo.receiver_name,mo.receiver_phone,mo.receiver_address,mo.receiver_postcode,mo.create_time
+        ,so.id so_id,so.store_id so_store_id,so.money_sum so_money_sum,so.point_sum so_point_sum
+        ,so.status so_status,so.delivery_time so_delivery_time,so.delivery_company so_delivery_company
+        ,so.delivery_code so_delievery_code,so.receive_time so_receive_time,so.notice_refund_time so_notice_refund_time
+        ,so.refund_time so_refund_time,so.create_time so_create_time
+        ,store.name so_name,store.pickup_address so_pickup_address,store.service_phone so_service_phone
+        ,d.id so_d_id, d.num so_d_num,d.price so_d_price,d.point_rate so_d_point_rate,d.money_paid so_d_money_paid,d.point_paid
+        so_d_point_paid,d.create_time so_d_create_time
+        ,attr.name so_d_attr_name,product.name so_d_product_name,product.portrait so_d_portrait
+        from (select * from sale_product_order where id = #{orderId} and delete_flag=0 )
+        mo
+        left join sale_product_order_store so on so.order_id = mo.id
+        join sale_product_order_detail d on d.store_order_id = so.id
+        join sys_store store on store.id = so.store_id
+        join sale_product_attr attr on attr.id = d.product_attr
+        join sale_product product on product.id = attr.product_id
+        order by  mo.create_time desc
+    </select>
+
  <!--   <select id="selectMyStoreOrders" resultMap="MainOrder">
 
         select   so.*,d.num so_d_num,d.price so_d_price,d.point_rate so_d_point_rate,d.money_paid so_d_money_paid,d.point_paid

@@ -32,6 +32,14 @@ public interface ProductOrderMapper extends BaseMapper<SaleProductOrder, Long, S
     List<ProductMainOrderWithStores> selectMyOrders(@Param("projectId") Long projectId, @Param("clientId") Long clientId, @Param("status") Byte status, @Param("pageUtil") PageUtil pageUtil);
 
     /**
+     * 获取我的订单详情
+     *
+     * @return
+     */
+    ProductMainOrderWithStores selectMyOrderDetail(@Param("orderId") Long orderId);
+
+
+    /**
      * 获取我的待发货 待收货 已完成 订单
      *
      * @param projectId

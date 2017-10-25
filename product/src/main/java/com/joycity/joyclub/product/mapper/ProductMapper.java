@@ -33,6 +33,8 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
 
     ProductInfoPage getInfo(Long id);
 
+    List<ProductSimple> selectProductSimpleByIds(@Param("ids") String[] productIds);
+
     /**
      * @param storeId
      * @param designerId

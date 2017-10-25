@@ -25,6 +25,7 @@
         <module>card-coupon</module>
         <module>we-chat</module>
         <module>api-async</module>
+        <module>subject</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

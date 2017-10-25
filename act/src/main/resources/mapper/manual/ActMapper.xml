@@ -56,6 +56,20 @@
         <include refid="limit"/>
     </select>
 
+    <select id="selectActSimpleListByIds" resultType="com.joycity.joyclub.act.modal.ActSimple">
+        select a.id,a.store_id,a.portrait,a.name,a.info,a.base_price,p.price,p.point_rate,p.buy_type,cat.point_rate basePointRate,a.address
+        from sale_act_price p
+        join sale_act a on p.act_id=a.id
+        LEFT join sys_act_category cat on a.category_id=cat.id
+        <where>
+            now() between p.start_time and p.end_time
+            AND a.id IN
+            <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
 
     <sql id="list_column">
         a.id,a.portrait,a.name,a.base_price,p.price,a.store_id,s.name storeName,s.pickup_address storeAddress

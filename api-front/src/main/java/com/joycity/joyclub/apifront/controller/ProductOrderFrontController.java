@@ -3,11 +3,12 @@ package com.joycity.joyclub.apifront.controller;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderFormDataVO;
 import com.joycity.joyclub.apifront.modal.vo.product.order.ProductOrderVO;
 import com.joycity.joyclub.apifront.service.ProductOrderFrontService;
-import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.mapper.ProductOrderMapper;
+import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,6 +36,8 @@ public class ProductOrderFrontController {
     @Autowired
     ProductOrderFrontService productOrderService;
     @Autowired
+    ProductOrderMapper productOrderMapper;
+    @Autowired
     ClientTokenService clientTokenService;
     private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
 
@@ -50,6 +53,15 @@ public class ProductOrderFrontController {
             PageUtil pageUtil) {
 
         return productOrderService.getList(projectId, clientTokenService.getIdOrThrow(token), type, pageUtil);
+    }
+
+    /**
+     * 订单详情
+     */
+    @GetMapping("order")
+    public ResultData getOrder(@RequestParam Long orderId) {
+
+        return new ResultData(productOrderMapper.selectMyOrderDetail(orderId));
     }
 
     /**

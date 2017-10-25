@@ -25,6 +25,7 @@ public interface ActMapper extends BaseMapperWithBLOBS<SaleAct, SaleActWithBLOBs
 
     List<ActWithStoreName> selectByActNameAndStoreName(@Param("projectId") Long projectId, @Param("actName") String actName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
 
+    List<ActSimple> selectActSimpleListByIds(@Param("ids") String[] ids);
 
     //////////////////////////api front//////////////////
     @Select("select  * from sale_act where id =#{id}")

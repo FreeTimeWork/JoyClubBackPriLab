@@ -66,6 +66,24 @@
     <sql id="product_simple_columns">
         a.id,a.portrait,a.name,a.base_price,p.price,p.point_rate,p.special_price_flag, c.point_rate as basePointRate,p.start_time priceStartTime,p.end_time priceEndTime,sd.name designerName,sd.portrait designerPortrait
     </sql>
+
+    <select id="selectProductSimpleByIds"
+            resultType="com.joycity.joyclub.product.modal.ProductSimple">
+
+        select
+        <include refid="product_simple_columns"/>
+        from sale_product_price p
+        left join sale_product a on a.id = p.product_id
+        left join sys_product_category c on a.category_id=c.id
+        left join sale_store_designer sd on sd.id = a.designer_id
+        where
+        p.start_time&lt;=now() and p.end_time&gt;=now()
+        AND a.id IN
+        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="selectByFilter"
             resultType="com.joycity.joyclub.product.modal.ProductSimple">
 

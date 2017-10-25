@@ -21,6 +21,9 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
 
     List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
+    List<ShowCouponLaunchInfo> selectByLaunchIds(@Param("launchIds") String[] launchIds);
+
+
     @Update("update card_coupon_launch set delete_flag = 1, delete_time = now() where id = #{id}")
     int deleteCardCouponLaunchById(@Param("id") Long id);
 

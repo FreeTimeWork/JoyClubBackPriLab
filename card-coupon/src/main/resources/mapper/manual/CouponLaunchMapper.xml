@@ -119,6 +119,21 @@
         <include refid="limit"/>
     </select>
 
+    <select id="selectByLaunchIds" resultType="com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo">
+        SELECT
+        <include refid="CardCouponLaunchColumn"/>,
+        <include refid="status"/>,
+        cc.name AS coupon_name, cc.type AS coupon_type
+        FROM card_coupon_launch ccl
+        INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
+        <where>
+            AND ccl.id IN
+            <foreach collection="launchIds" separator="," item="launchId" index="index" open="(" close=")">
+                #{launchId}
+            </foreach>
+        </where>
+    </select>
+
     <!-- 正在投放期间的卡券信息 -->
     <select id="selectLaunchWithCouponById" resultType="com.joycity.joyclub.card_coupon.modal.CouponLaunchWithCoupon">
         SELECT
