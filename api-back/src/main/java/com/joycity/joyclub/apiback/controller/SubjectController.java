@@ -1,8 +1,12 @@
 package com.joycity.joyclub.apiback.controller;
 
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
+import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.subject.mapper.SubjectTypeMapper;
+import com.joycity.joyclub.subject.modal.generated.SubjectType;
 import com.joycity.joyclub.subject.modal.generated.SubjectWithBLOBs;
 import com.joycity.joyclub.subject.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,8 @@ public class SubjectController extends BaseUserSessionController {
 
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private SubjectTypeMapper subjectTypeMapper;
 
     @PostMapping("/subject")
     public ResultData createSubject(@RequestBody SubjectWithBLOBs subject, HttpSession session) {
@@ -38,5 +44,23 @@ public class SubjectController extends BaseUserSessionController {
     public ResultData getSubjectDetail(@PathVariable Long id) {
 
         return subjectService.getSubjectDetail(id);
+    }
+
+    @GetMapping("/subject/type")
+    public ResultData getSubjectTypes() {
+        return subjectService.getSubjectTypes();
+    }
+
+    @PostMapping("/subject/type")
+    public ResultData createSubjectType(@RequestBody SubjectType subjectType){
+        subjectTypeMapper.insertSelective(subjectType);
+        return new ResultData(new CreateResult(subjectType.getId()));
+    }
+
+    @PostMapping("/subject/type/{id}")
+    public ResultData updateSubjectType(@PathVariable Long id ,@RequestBody SubjectType subjectType) {
+        subjectType.setId(id);
+        int num = subjectTypeMapper.updateByPrimaryKeySelective(subjectType);
+        return new ResultData(new UpdateResult(num));
     }
 }
