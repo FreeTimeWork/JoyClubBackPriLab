@@ -58,10 +58,10 @@ public class ProductOrderFrontController {
     /**
      * 订单详情
      */
-    @GetMapping("order")
-    public ResultData getOrder(@RequestParam Long orderId) {
+    @GetMapping("/order/{id}")
+    public ResultData getOrder(@PathVariable("id") Long id) {
 
-        return new ResultData(productOrderMapper.selectMyOrderDetail(orderId));
+        return new ResultData(productOrderMapper.selectMyOrderDetail(id));
     }
 
     /**
