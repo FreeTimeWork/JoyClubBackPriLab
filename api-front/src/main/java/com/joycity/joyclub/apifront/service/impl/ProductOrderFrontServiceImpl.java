@@ -236,6 +236,7 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         for (ProductOrderItemVO voItem : vo.getItems()) {
             ProductOrderItem item = new ProductOrderItem(voItem);
             item.setInfo(orderMapper.getOrderRawDataItem(item.getAttrId()));
+            items.add(item);
         }
         //朱订单初始化
         SaleProductOrder mainOrder = new SaleProductOrder();
