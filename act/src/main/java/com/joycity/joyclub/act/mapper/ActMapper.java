@@ -1,7 +1,5 @@
 package com.joycity.joyclub.act.mapper;
 
-import java.util.List;
-
 import com.joycity.joyclub.act.modal.*;
 import com.joycity.joyclub.act.modal.generated.SaleAct;
 import com.joycity.joyclub.act.modal.generated.SaleActExample;
@@ -10,7 +8,8 @@ import com.joycity.joyclub.commons.mapper.BaseMapperWithBLOBS;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/5/17.
