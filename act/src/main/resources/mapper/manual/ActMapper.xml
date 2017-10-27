@@ -144,11 +144,10 @@
         from sale_act_price p
         join sale_act a on p.act_id=a.id
         JOIN sale_act_attr saa ON saa.act_id = a.id
-        JOIN front_apply_act faa ON faa.id = a.apply_act_id
         JOIN sale_act_order sao ON sao.attr_id = saa.id AND (sao.status = 2 OR sao.status = 4)
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
-        AND faa.client_id = #{clientId}
+        AND sao.client_id = #{clientId}
         order by a.display_weight desc,p.id desc
     </select>
 
