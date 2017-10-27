@@ -160,7 +160,7 @@ public class CardPosServiceImpl implements CardPosService {
     @Override
     public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
         logger.info("posOrderInform: projectId:" + projectId + " vipCode:" + vipCode + "orderCode: " + orderCode + " shopCode：" + shopCode + " payable:" + payable.toString() + " payment:" + payment.toString());
-        payment = payable;
+
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
         ThrowBusinessExceptionUtil.checkNull(shop, "商户不存在");
         ThrowBusinessExceptionUtil.checkNull(vipCode, "会员号不存在");
@@ -222,10 +222,10 @@ public class CardPosServiceImpl implements CardPosService {
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
         }
-        // 如果 refundAmount = 0，直接 从订单里找退款金额
-        if (refundAmount != null && refundAmount.equals(BigDecimal.ZERO)) {
-            refundAmount = info.getDetail().getBalance();
-        }
+//        // 如果 refundAmount = 0，直接 从订单里找退款金额
+//        if (refundAmount != null && refundAmount.intValue() == 0) {
+//            refundAmount = info.getDetail().getBalance();
+//        }
         //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info, refundAmount);
         Integer num = actualNumSubtractSubNum(info, subCouponNum);
@@ -389,5 +389,6 @@ public class CardPosServiceImpl implements CardPosService {
         }
         return receiveNum;
     }
+
 
 }
