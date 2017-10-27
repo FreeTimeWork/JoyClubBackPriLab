@@ -222,10 +222,10 @@ public class CardPosServiceImpl implements CardPosService {
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
         }
-        // 如果 refundAmount = 0，直接 从订单里找退款金额
-        if (refundAmount != null && refundAmount.equals(BigDecimal.ZERO)) {
-            refundAmount = info.getDetail().getBalance();
-        }
+//        // 如果 refundAmount = 0，直接 从订单里找退款金额
+//        if (refundAmount != null && refundAmount.intValue() == 0) {
+//            refundAmount = info.getDetail().getBalance();
+//        }
         //应该代金券拥有量
         int subCouponNum = getSubCouponNum(info, refundAmount);
         Integer num = actualNumSubtractSubNum(info, subCouponNum);
@@ -388,6 +388,12 @@ public class CardPosServiceImpl implements CardPosService {
             }
         }
         return receiveNum;
+    }
+
+    public static void main(String[] args) {
+        BigDecimal b0 = BigDecimal.ZERO;
+        BigDecimal b1 = new BigDecimal("0.0");
+        System.out.println(b1.equals(b0));
     }
 
 }
