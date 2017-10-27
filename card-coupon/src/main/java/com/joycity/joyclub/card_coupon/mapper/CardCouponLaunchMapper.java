@@ -77,4 +77,7 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
     Long countVisitorVisibleByCouponType(@Param("projectId") Long projectId, @Param("couponType") Byte couponType);
     List<ShowClientVisibleLaunchCoupon> selectVisitorVisibleByCouponType(@Param("projectId") Long projectId, @Param("couponType") Byte couponType, @Param("pageUtil") PageUtil pageUtil);
 
+    //根据专题里的卡券投放id查找
+    List<ShowClientVisibleLaunchCoupon> selectCouponsBySubjectCouponIds(@Param("projectId") Long projectId, @Param("couponType") Byte couponType, @Param("ids") String[] ids);
+
 }

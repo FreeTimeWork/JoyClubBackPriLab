@@ -1,6 +1,8 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponFreeGetVO;
+import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
+import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
@@ -9,8 +11,12 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.subject.mapper.SubjectMapper;
+import com.joycity.joyclub.subject.modal.SubjectDetail;
+import com.joycity.joyclub.subject.modal.generated.Subject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 
@@ -39,6 +47,10 @@ public class CardCouponFrontController {
     private ClientService clientService;
     @Autowired
     private ClientUserMapper clientUserMapper;
+    @Autowired
+    private CardCouponLaunchMapper launchMapper;
+    @Autowired
+    private SubjectMapper subjectMapper;
 
     /**
      * 某个项目中，某个会员能领取的卡券
@@ -51,7 +63,15 @@ public class CardCouponFrontController {
             @CookieValue(name = Global.COOKIE_TOKEN, required = false) String token,
             @RequestParam Long projectId,
             @RequestParam(required = false) Byte couponType,
+            @RequestParam(required = false) Long topId,
             PageUtil pageUtil) {
+
+        if (topId != null) {
+            Subject detail = subjectMapper.selectByPrimaryKey(topId);
+            String[] ids = detail.getContactCoupon().split(",");
+            List<ShowClientVisibleLaunchCoupon> list = launchMapper.selectCouponsBySubjectCouponIds(projectId, couponType, ids);
+            return new ResultData(new ListResult(list));
+        }
 
         Long clientId = token == null ? null : clientTokenService.getId(token);
         if (clientId == null) {

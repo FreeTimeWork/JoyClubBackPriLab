@@ -59,7 +59,7 @@ public class CardCouponLaunchController extends BaseUserSessionController {
                                             @RequestParam(required = false) Integer type,
                                             @RequestParam(required = false) Integer status,
                                             PageUtil pageUtil, HttpSession session) {
-        checkProjectUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, name, type, status, pageUtil);
     }
 

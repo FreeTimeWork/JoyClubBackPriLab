@@ -3,14 +3,19 @@ package com.joycity.joyclub.apiback.controller;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
 import com.joycity.joyclub.apiback.modal.generated.SysUser;
 import com.joycity.joyclub.apiback.service.ManagerService;
+import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.mapper.ProductMapper;
+import com.joycity.joyclub.product.modal.ProductSimple;
 import com.joycity.joyclub.product.modal.generated.SaleProductWithBLOBs;
 import com.joycity.joyclub.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_BACK;
 
@@ -23,6 +28,8 @@ public class ProductController extends BaseUserSessionController {
     @Autowired
     private ProductService productService;
     @Autowired
+    private ProductMapper productMapper;
+    @Autowired
     private ManagerService managerService;
 
     /**
@@ -31,9 +38,17 @@ public class ProductController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/products", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam(required = false) String name,
+                              @RequestParam(required = false) Boolean valid,
+                              PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
+        if (valid) {
+            List<ProductSimple> list = productMapper.selectByFilter( null, null, null, pageUtil);
+            ListResult result =  new ListResult(list);
+            result.setByPageUtil(pageUtil);
+            return new ResultData(result);
+        }
         return productService.getListByStoreIdAndName(user.getInfoId(), name, pageUtil);
     }
 

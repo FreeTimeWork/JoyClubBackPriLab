@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.vo.cart.CartNumVO;
 import com.joycity.joyclub.apifront.modal.vo.cart.CartVO;
 import com.joycity.joyclub.apifront.service.CartFrontService;
 import com.joycity.joyclub.client.service.ClientService;
@@ -50,7 +51,7 @@ CartFrontController {
      */
     @RequestMapping(value = "/cart", method = POST)
     public ResultData addToCart(@CookieValue(Global.COOKIE_TOKEN) String token,
-                                @Valid @RequestBody CartVO cartVO) {
+                                @RequestBody @Valid  CartVO cartVO) {
         return cartFrontService.addToCart(cartVO.getProjectId(), clientTokenService.getIdOrThrow(token), cartVO.getAttrId(), cartVO.getNum());
     }
 
@@ -59,9 +60,10 @@ CartFrontController {
      * 更改某个购物车商品的数量
      */
     @RequestMapping(value = "/cart/{cardId}", method = POST)
-    public ResultData changeCartNum(@PathVariable Long cardId, @RequestParam int num) {
+    public ResultData changeCartNum(@PathVariable Long cardId,
+                                    @RequestBody CartNumVO vo) {
         // TODO: 2017/4/5 增加购物车是否是当前用户的验证
-        return cartFrontService.setCartNum(cardId,num);
+        return cartFrontService.setCartNum(cardId,vo.getNum());
     }
     /**
      * 更改某个购物车商品的数量
