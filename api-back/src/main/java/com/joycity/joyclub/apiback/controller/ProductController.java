@@ -43,7 +43,7 @@ public class ProductController extends BaseUserSessionController {
                               PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        if (valid) {
+        if (valid != null && valid) {
             List<ProductSimple> list = productMapper.selectByFilter( null, null, null, pageUtil);
             ListResult result =  new ListResult(list);
             result.setByPageUtil(pageUtil);
