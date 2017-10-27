@@ -160,7 +160,7 @@ public class CardPosServiceImpl implements CardPosService {
     @Override
     public ResultData posOrderInform(Long projectId, String vipCode, String orderCode, String shopCode, BigDecimal payable, BigDecimal payment) throws ParseException {
         logger.info("posOrderInform: projectId:" + projectId + " vipCode:" + vipCode + "orderCode: " + orderCode + " shopCode：" + shopCode + " payable:" + payable.toString() + " payment:" + payment.toString());
-        payment = payable;
+
         SysShop shop = shopService.getShopByProjectIdAndCode(projectId, shopCode);
         ThrowBusinessExceptionUtil.checkNull(shop, "商户不存在");
         ThrowBusinessExceptionUtil.checkNull(vipCode, "会员号不存在");
@@ -390,10 +390,5 @@ public class CardPosServiceImpl implements CardPosService {
         return receiveNum;
     }
 
-    public static void main(String[] args) {
-        BigDecimal b0 = BigDecimal.ZERO;
-        BigDecimal b1 = new BigDecimal("0.0");
-        System.out.println(b1.equals(b0));
-    }
 
 }
