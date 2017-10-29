@@ -1,13 +1,12 @@
 package com.joycity.joyclub.commons.constant;
 
-import com.i360r.framework.i18n.EnumMessageTranslator;
-import com.i360r.framework.mybatis.typehandler.IdInterface;
+
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum Color implements IdInterface {
+public enum Color {
     RED(1, "RED", "Red"), 
     WHITE(2, "WHITE", "White"), 
     YELLOW(3, "YELLOW", "Yellow"), 
@@ -38,16 +37,6 @@ public enum Color implements IdInterface {
     public static Color fromCode(String code) {
         return code2Color.get(code);
     }
-    
-    public static Color fromName(String name) {
-        if(name2Color == null){  
-            name2Color = new ConcurrentHashMap<String, Color>();
-            for (Color color : Color.values()) {            
-                name2Color.put(color.getName(), color);
-            }
-        }       
-        return name2Color.get(name);
-    }
 
 
     Color(int id, String code, String description) {
@@ -56,7 +45,6 @@ public enum Color implements IdInterface {
         this.description = description;
     }
 
-    @Override
 	public int getId() {
         return id;
     }
@@ -69,8 +57,5 @@ public enum Color implements IdInterface {
         return description;
     }
 
-    public String getName() {
-        return EnumMessageTranslator.getName(getClass().getSimpleName() + "." + code);
-    }
 
 }
