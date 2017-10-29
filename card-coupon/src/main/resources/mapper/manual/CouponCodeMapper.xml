@@ -162,7 +162,7 @@
         <where>
             ccc.client_id = #{clientId}
             AND cc.type = 2
-            AND ccc.use_status != 3
+            AND ccc.use_status = 1
             AND ccc.belong = -1
             AND ccc.delete_flag = 0
         </where>
