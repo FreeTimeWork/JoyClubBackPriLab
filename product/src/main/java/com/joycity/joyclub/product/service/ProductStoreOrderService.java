@@ -2,6 +2,9 @@ package com.joycity.joyclub.product.service;
 
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.product.modal.ProductOrderStoreInfo;
+
+import java.util.List;
 
 /**
  * Created by CallMeXYZ on 2017/4/27.
@@ -21,4 +24,6 @@ public interface ProductStoreOrderService {
 
      */
     ResultData completeDelivery(Long storeOrderId, String deliveryCompany, String deliveryCode);
+
+    List<ProductOrderStoreInfo> getProductOrders();
 }

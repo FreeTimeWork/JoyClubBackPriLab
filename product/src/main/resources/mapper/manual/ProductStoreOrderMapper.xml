@@ -67,23 +67,27 @@
         from sale_product_order_store s
         left join sale_product_order mo on s.order_id = mo.id
         left join client c on c.id = mo.client_id
-        WHERE s.store_id = #{storeId}
-        <choose>
-            <when test="code != null">
-                and mo.code = #{code}
-            </when>
-            <when test="name != null">
-                and c.real_name = #{name}
-            </when>
-            <when test="code != null">
-                and c.tel = #{phone}
-            </when>
-            <otherwise>
-                <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
-                <if test="status!=null">and s.status =#{status}</if>
+        <where>
+            <if test="storeId != null">
+                AND s.store_id = #{storeId}
+            </if>
+            <choose>
+                <when test="code != null">
+                    and mo.code = #{code}
+                </when>
+                <when test="name != null">
+                    and c.real_name = #{name}
+                </when>
+                <when test="code != null">
+                    and c.tel = #{phone}
+                </when>
+                <otherwise>
+                    <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
+                    <if test="status!=null">and s.status =#{status}</if>
 
-            </otherwise>
-        </choose>
+                </otherwise>
+            </choose>
+        </where>
         <include refid="limit"/>
     </select>
 
@@ -93,23 +97,27 @@
         SELECT count(*) from sale_product_order_store s
         left join sale_product_order mo on s.order_id = mo.id
         left join client c on c.id = mo.client_id
-        WHERE s.store_id = #{storeId}
-        <choose>
-            <when test="code != null">
-                and mo.code = #{code}
-            </when>
-            <when test="name != null">
-                and c.real_name = #{name}
-            </when>
-            <when test="phone != null">
-                and c.tel = #{phone}
-            </when>
-            <otherwise>
-                <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
-                <if test="status!=null">and s.status =#{status}</if>
+        <where>
+            <if test="storeId != null">
+                AND s.store_id = #{storeId}
+            </if>
+            <choose>
+                <when test="code != null">
+                    and mo.code = #{code}
+                </when>
+                <when test="name != null">
+                    and c.real_name = #{name}
+                </when>
+                <when test="phone != null">
+                    and c.tel = #{phone}
+                </when>
+                <otherwise>
+                    <if test="receiveType!=null">and mo.receive_type = #{receiveType}</if>
+                    <if test="status!=null">and s.status =#{status}</if>
 
-            </otherwise>
-        </choose>
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
     <select id="selectById"

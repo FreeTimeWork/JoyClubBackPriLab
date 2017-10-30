@@ -86,7 +86,7 @@ public class ActOrderController extends BaseUserSessionController {
 
     @GetMapping("/act/order/down")
     public ResultData downExcel(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-//        checkPlatformOrProjectOrStoreUser(session);
+        checkPlatformOrProjectOrStoreUser(session);
         List<ActOrderForBack> actOrderForBacks = actOrderService.getActOrderList();
         HSSFWorkbook workbook = new HSSFWorkbook();
 

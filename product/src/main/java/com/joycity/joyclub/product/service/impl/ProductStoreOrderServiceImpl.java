@@ -59,6 +59,15 @@ public class ProductStoreOrderServiceImpl implements ProductStoreOrderService {
         storeOrderMapper.setDeliveryInfo(storeOrderId, OrderStatus.STORE_ORDER_STATUS_SENT, deliveryCompany, deliveryCode);
         return new ResultData();
     }
+
+    @Override
+    public List<ProductOrderStoreInfo> getProductOrders() {
+        PageUtil pageUtil = new PageUtil();
+        Long num = storeOrderMapper.countByFilter(null, null, null, null, null, null, null);
+        pageUtil.setPageSize(num.intValue());
+        List<ProductOrderStoreInfo> list = storeOrderMapper.selectByFilter(null, null, null, null, null, null, pageUtil);
+        return list;
+    }
     ////////////////////////////api front////////////////////////////
 
 }
