@@ -1,6 +1,6 @@
 package com.joycity.joyclub.apiback.controller;
 
-import com.joycity.joyclub.act.excel.FileExportUtils;
+import com.joycity.joyclub.act.excel.ActFileExportUtils;
 import com.joycity.joyclub.act.modal.ActOrderForBack;
 import com.joycity.joyclub.act.service.ActOrderService;
 import com.joycity.joyclub.apiback.controller.base.BaseUserSessionController;
@@ -9,7 +9,6 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.ExcelUtility;
 import com.joycity.joyclub.commons.utils.PageUtil;
-import com.joycity.joyclub.product.service.ProductStoreOrderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -91,7 +90,7 @@ public class ActOrderController extends BaseUserSessionController {
         List<ActOrderForBack> actOrderForBacks = actOrderService.getActOrderList();
         HSSFWorkbook workbook = new HSSFWorkbook();
 
-        FileExportUtils.createActOrderExcel(workbook, actOrderForBacks);
+        ActFileExportUtils.createActOrderExcel(workbook, actOrderForBacks);
         String fileName = "活动订单-" + DateTimeUtil.formatYYYYMMDDHHMMSS(new Date());
         OutputStream outputStream = null;
         try {

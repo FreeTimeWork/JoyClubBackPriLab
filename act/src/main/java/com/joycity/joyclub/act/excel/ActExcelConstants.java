@@ -1,6 +1,6 @@
 package com.joycity.joyclub.act.excel;
 
-public class ExcelConstants {
+public class ActExcelConstants {
 
 	public static final String SHEET_TITLE = "活动订单";
 	
