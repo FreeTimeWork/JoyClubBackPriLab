@@ -48,4 +48,12 @@ public class ActOrderServiceImpl implements ActOrderService {
         orderMapper.checkOrder(orderId);
         return new ResultData();
     }
+
+    @Override
+    public List<ActOrderForBack> getActOrderList() {
+        Long num = orderMapper.countForStore(null,null,null,null,null, null, null);
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setPageSize(num.intValue());
+        return orderMapper.selectForStore(null, null, null, null, null,null, pageUtil);
+    }
 }
