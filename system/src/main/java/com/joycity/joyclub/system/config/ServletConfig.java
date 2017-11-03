@@ -20,7 +20,7 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/api/back/*").excludePathPatterns("/api/back/login");
+//        registry.addInterceptor(authenticationInterceptor).addPathPatterns("/api/back/*").excludePathPatterns("/api/back/login");
     }
 
 
