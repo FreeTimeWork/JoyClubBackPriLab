@@ -56,12 +56,13 @@ public class ProductOrderController extends BaseUserSessionController {
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone,
+            @RequestParam Long infoId,
             PageUtil pageUtil,
             HttpSession session
     ) {
 
         SysUser sysUser = checkStoreUser(session);
-        return productStoreOrderService.getList(sysUser.getInfoId(), receiveType, status, code, name, phone, pageUtil);
+        return productStoreOrderService.getList(infoId, receiveType, status, code, name, phone, pageUtil);
     }
 
     @RequestMapping(value = "/product/order/{id}", method = GET)

@@ -39,12 +39,14 @@ public class ProductPriceController extends BaseUserSessionController {
                               @RequestParam(required = false) Integer reviewStatus,
                               @RequestParam(required = false) String storeName,
                               @RequestParam(required = false) String productName,
+                              @RequestParam Integer type,
+                              @RequestParam Long  infoId,
                               PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        Integer userType = user.getType();
+        Integer userType = type;
         if (userType.equals(USER_TYPE_STORE))
-            return productPriceService.getListForStore(user.getInfoId(),specialPriceFlag, reviewStatus, productName, pageUtil);
+            return productPriceService.getListForStore(infoId,specialPriceFlag, reviewStatus, productName, pageUtil);
         else if(userType.equals(USER_TYPE_PLATFORM)||userType.equals(USER_TYPE_PROJECT))
             return productPriceService.getListForProject(storeName,specialPriceFlag, reviewStatus, productName, pageUtil);
         else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);

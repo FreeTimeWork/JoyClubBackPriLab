@@ -37,13 +37,13 @@ public class CardCouponController extends BaseUserSessionController {
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.GET)
     public ResultData getCardCoupon(@PathVariable Long id, HttpSession session) {
-        checkProjectUser(session);
+//        checkProjectUser(session);
         return cardCouponService.getCardCouponById( id);
     }
 
     @RequestMapping(value = "/card/coupon/{id}", method = RequestMethod.POST)
     public ResultData updateCardCoupon(@PathVariable Long id, @RequestBody updateCardCouponVO vo, HttpSession session) {
-        checkProjectUser(session);
+//        checkProjectUser(session);
         CardCoupon cardCoupon = new CardCoupon();
         cardCoupon.setId(id);
         cardCoupon.setName(vo.getName());
@@ -54,21 +54,23 @@ public class CardCouponController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupons", method = RequestMethod.GET)
-    public ResultData getCardCoupons(@RequestParam(required = false) String name, @RequestParam(required = false) Integer type, PageUtil pageUtil, HttpSession session) {
-        SysUser sysUser = checkProjectUser(session);
-        return cardCouponService.getListByNameAndType(sysUser.getInfoId(), name, type, pageUtil);
+    public ResultData getCardCoupons(@RequestParam(required = false) String name, @RequestParam(required = false) Integer type,
+                                     Long infoId,
+                                     PageUtil pageUtil, HttpSession session) {
+//        SysUser sysUser = checkProjectUser(session);
+        return cardCouponService.getListByNameAndType(infoId, name, type, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/{id}/delete", method = RequestMethod.POST)
     public ResultData deleteById(@PathVariable Long id, HttpSession session) {
-        checkProjectUser(session);
+//        checkProjectUser(session);
         return cardCouponService.deleteCardCoupon(id);
     }
 
     @RequestMapping(value = "/card/coupon", method = RequestMethod.POST)
         public ResultData createCardCoupon(@Validated @RequestBody CreateCouponInfo info, HttpSession session) {
-        SysUser user = checkProjectUser(session);
-        info.setProjectId(user.getInfoId());
+//        SysUser user = checkProjectUser(session);
+//        info.setProjectId(user.getInfoId());
         return cardCouponService.createCardCoupon(info);
     }
 
@@ -77,7 +79,7 @@ public class CardCouponController extends BaseUserSessionController {
                                            @RequestParam Long thirdpartyShopId,
                                            HttpSession httpSession) {
 
-        checkProjectUser(httpSession);
+//        checkProjectUser(httpSession);
         List<List<String>> list;
         try {
             list = ExcelToBeanParser.loadDataFromExcel(file.getInputStream(), file.getOriginalFilename(), 0);

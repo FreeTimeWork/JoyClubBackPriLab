@@ -7,11 +7,21 @@ import javax.validation.constraints.NotNull;
  */
 public class BatchMakeCardVO {
     @NotNull
+    private Long infoId;
+    @NotNull
     private String batch;
     @NotNull
     private String type;
     @NotNull
     private Integer num;
+
+    public Long getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(Long infoId) {
+        this.infoId = infoId;
+    }
 
     public String getBatch() {
         return batch;

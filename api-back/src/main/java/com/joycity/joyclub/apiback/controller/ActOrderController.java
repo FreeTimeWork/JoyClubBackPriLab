@@ -52,12 +52,13 @@ public class ActOrderController extends BaseUserSessionController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String actName,
+            @RequestParam Long infoId,
             PageUtil pageUtil,
             HttpSession session
     ) {
 
         SysUser sysUser = checkStoreUser(session);
-        return actOrderService.getList(sysUser.getInfoId(), status, code, name, phone,actName, pageUtil);
+        return actOrderService.getList(infoId, status, code, name, phone,actName, pageUtil);
     }
 
   /*  @RequestMapping(value = "/act/order/{id}",method = GET)

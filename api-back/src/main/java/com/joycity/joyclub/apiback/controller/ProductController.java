@@ -40,6 +40,7 @@ public class ProductController extends BaseUserSessionController {
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String name,
                               @RequestParam(required = false) Boolean valid,
+                              @RequestParam Long infoId,
                               PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
@@ -49,7 +50,7 @@ public class ProductController extends BaseUserSessionController {
             result.setByPageUtil(pageUtil);
             return new ResultData(result);
         }
-        return productService.getListByStoreIdAndName(user.getInfoId(), name, pageUtil);
+        return productService.getListByStoreIdAndName(infoId, name, pageUtil);
     }
 
     /**
@@ -73,10 +74,10 @@ public class ProductController extends BaseUserSessionController {
      * @return 返回商品新建或者修改所需的基础数据，主要是Select标签的数据
      */
     @RequestMapping(value = "/product/formdata", method = RequestMethod.GET)
-    public ResultData getProduct(HttpSession httpSession) {
+    public ResultData getProductFormdata(@RequestParam Long infoId, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        return productService.getProductFormData(user.getInfoId());
+        return productService.getProductFormData(infoId);
     }
 
     /**
@@ -105,14 +106,15 @@ public class ProductController extends BaseUserSessionController {
     public ResultData createProduct(@RequestBody SaleProductWithBLOBs product, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        product.setStoreId(user.getInfoId());
+//        product.setStoreId(user.getInfoId());
         return productService.createProduct(product);
     }
 
     @RequestMapping(value = "/project/carousel/products", method = RequestMethod.GET)
-    public ResultData getCurrentProduct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getCurrentProduct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName,
+                                        @RequestParam Long infoId, PageUtil pageUtil, HttpSession httpSession) {
         SysUser user = checkProjectUser(httpSession);
-        return productService.getListByProductNameAndStoreName(user.getInfoId(), name, storeName, pageUtil);
+        return productService.getListByProductNameAndStoreName(infoId, name, storeName, pageUtil);
     }
 
 }

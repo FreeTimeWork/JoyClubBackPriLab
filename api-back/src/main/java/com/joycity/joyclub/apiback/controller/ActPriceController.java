@@ -37,13 +37,14 @@ public class ActPriceController extends BaseUserSessionController {
                               @RequestParam(required = false) String storeName,
                               @RequestParam(required = false) String actName,
                               @RequestParam(required = false) Byte buyType,
+                              @RequestParam Long infoId,
                               PageUtil pageUtil, HttpSession httpSession) {
         SysUser user = checkUser(httpSession);
         Integer userType = user.getType();
         if (userType.equals(USER_TYPE_STORE))
-            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
+            return actPriceService.getListForStore(infoId, reviewStatus, actName, buyType, pageUtil);
         else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
-            return actPriceService.getListForProject(user.getInfoId(), storeName, reviewStatus, actName, buyType, pageUtil);
+            return actPriceService.getListForProject(infoId, storeName, reviewStatus, actName, buyType, pageUtil);
         else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
 

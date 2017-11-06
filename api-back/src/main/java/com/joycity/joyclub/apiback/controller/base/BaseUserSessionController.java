@@ -49,20 +49,21 @@ public abstract class BaseUserSessionController{
         return checkUser(session, USER_TYPE_PLATFORM, USER_TYPE_PROJECT,USER_TYPE_STORE);
     }
     protected SysUser checkUser(HttpSession session, Integer... userType) {
-        SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
-        //目前验证user==null是多余的，因为在所有的api请求前都会验证session的存在
-        if (user == null) throw new BusinessException(USER_SESSION_NULL);
-        //如果没有提供角色，直接返回登陆用户
-        if(userType.length==0) return user;
-        boolean checkRight = false;
-        for (Integer type : userType) {
-            if (user.getType().equals(type)) {
-                checkRight = true;
-                break;
-            }
-        }
-        if (!checkRight) throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
-        return user;
+//        SysUser user = (SysUser) session.getAttribute(SESSION_ATTR_NAME_USER);
+//        //目前验证user==null是多余的，因为在所有的api请求前都会验证session的存在
+//        if (user == null) throw new BusinessException(USER_SESSION_NULL);
+//        //如果没有提供角色，直接返回登陆用户
+//        if(userType.length==0) return user;
+//        boolean checkRight = false;
+//        for (Integer type : userType) {
+//            if (user.getType().equals(type)) {
+//                checkRight = true;
+//                break;
+//            }
+//        }
+//        if (!checkRight) throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+//        return user;
+        return null;
 
     }
 }

@@ -44,9 +44,10 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
                                       @RequestParam(required = false) String couponLaunchName,
                                       @RequestParam(required = false) String code,
                                       @RequestParam(required = false) String tel,
+                                      @RequestParam Long infoId,
                                       PageUtil pageUtil,
                                       HttpSession session){
-        SysUser sysUser = checkProjectUser(session);
+//        SysUser sysUser = checkProjectUser(session);
         ShowCouponCodeFilter filter = new ShowCouponCodeFilter();
 
         if (couponName != null)
@@ -63,7 +64,7 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
 
         filter.setCode(code);
         filter.setTel(tel);
-        return cardThirdCouponCodeService.getListByFilter(sysUser.getInfoId(), filter, pageUtil);
+        return cardThirdCouponCodeService.getListByFilter(infoId, filter, pageUtil);
     }
 
     /**
@@ -81,9 +82,10 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
                                       @RequestParam(required = false) String couponLaunchName,
                                       @RequestParam(required = false) String code,
                                       @RequestParam(required = false) String tel,
+                                      @RequestParam Long infoId,
                                       PageUtil pageUtil,
                                       HttpSession session){
-        SysUser sysUser = checkThirdPartyShopUser(session);
+//        SysUser sysUser = checkThirdPartyShopUser(session);
         ShowCouponCodeFilter filter = new ShowCouponCodeFilter();
 
         if (couponName != null)
@@ -96,7 +98,7 @@ public class CardThirdCouponCodeController extends BaseUserSessionController{
 
         filter.setCode(code);
         filter.setTel(tel);
-        filter.setThirdPartyShopId(sysUser.getInfoId());
+        filter.setThirdPartyShopId(infoId);
         return cardThirdCouponCodeService.getListByFilter(null, filter, pageUtil);
     }
 

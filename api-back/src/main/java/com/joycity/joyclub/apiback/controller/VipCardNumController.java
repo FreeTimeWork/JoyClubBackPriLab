@@ -38,10 +38,11 @@ public class VipCardNumController extends BaseUserSessionController {
                               @RequestParam(required = false) String batch,
                               @RequestParam(required = false) String type,
                               @RequestParam(required = false) Byte status,
+                              @RequestParam Long infoId,
                               PageUtil pageUtil, HttpSession httpSession) {
 // TODO: 2017/4/27 平台用户返回所有的卡号，并且前端每条记录增加门店的信息和门店的筛选功能
         SysUser sysUser = checkProjectUser(httpSession);
-        return vipCardNumService.getList(sysUser.getInfoId(), batch, type, status, pageUtil);
+        return vipCardNumService.getList(infoId, batch, type, status, pageUtil);
     }
 
     /**
@@ -56,7 +57,7 @@ public class VipCardNumController extends BaseUserSessionController {
                                  @Valid @RequestBody BatchMakeCardVO makeCardVO, HttpSession httpSession) {
 
         SysUser sysUser = checkProjectUser(httpSession);
-        return vipCardNumService.createCardNum(sysUser.getInfoId(), makeCardVO.getBatch(), makeCardVO.getType(), makeCardVO.getNum());
+        return vipCardNumService.createCardNum(makeCardVO.getInfoId(), makeCardVO.getBatch(), makeCardVO.getType(), makeCardVO.getNum());
     }
 
     /**
@@ -65,9 +66,9 @@ public class VipCardNumController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/num/formdata", method = GET)
-    public ResultData getFormData(HttpSession httpSession) {
+    public ResultData getFormData(@RequestParam Long infoId, HttpSession httpSession) {
         // TODO: 2017/4/27 平台用户返回所有的卡号，并且前端每条记录增加门店的信息和门店的筛选功能
         SysUser sysUser = checkProjectUser(httpSession);
-        return vipCardNumService.getFormData(sysUser.getInfoId());
+        return vipCardNumService.getFormData(infoId);
     }
 }

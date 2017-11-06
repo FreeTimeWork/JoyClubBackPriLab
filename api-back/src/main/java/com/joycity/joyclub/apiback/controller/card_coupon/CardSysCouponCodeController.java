@@ -36,9 +36,10 @@ public class CardSysCouponCodeController extends BaseUserSessionController{
                                       @RequestParam(required = false) String couponLaunchName,
                                       @RequestParam(required = false) String code,
                                       @RequestParam(required = false) String tel,
+                                      @RequestParam Long infoId,
                                       PageUtil pageUtil,
                                       HttpSession session){
-        SysUser sysUser = checkProjectUser(session);
+//        SysUser sysUser = checkProjectUser(session);
         ShowCouponCodeFilter filter = new ShowCouponCodeFilter();
         if (couponName != null)
             couponName = "%" + couponName + "%";
@@ -51,7 +52,7 @@ public class CardSysCouponCodeController extends BaseUserSessionController{
         filter.setCouponLaunchName(couponLaunchName);
         filter.setCode(code);
         filter.setTel(tel);
-        return cardCouponCodeService.getListByFilter(sysUser.getInfoId(), filter, pageUtil);
+        return cardCouponCodeService.getListByFilter(infoId, filter, pageUtil);
     }
 
     @RequestMapping(value = "card/coupon/code/{id}/check", method = RequestMethod.POST)
@@ -68,11 +69,11 @@ public class CardSysCouponCodeController extends BaseUserSessionController{
             throw new BusinessException(ResultCode.COUPON_CHECK_ERROR, errorText);
         }
 
-        if (cardCouponCodeDb.getBelong().equals(-1L)) {
-            checkProjectUser(session);
-        } else {
-            checkThirdPartyShopUser(session);
-        }
+//        if (cardCouponCodeDb.getBelong().equals(-1L)) {
+//            checkProjectUser(session);
+//        } else {
+//            checkThirdPartyShopUser(session);
+//        }
         return cardCouponCodeService.checkCouponCode(id, null);
     }
 

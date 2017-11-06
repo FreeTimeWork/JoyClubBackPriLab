@@ -76,7 +76,7 @@ public class ProjectController extends BaseUserSessionController {
     public ResultData updateMyProfile(@RequestBody SysProject project, HttpSession httpSession) {
         //确保是平台用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
-        project.setId(user.getInfoId());
+//        project.setId(user.getInfoId());
         return projectService.updateProject(project);
     }
 
@@ -88,10 +88,10 @@ public class ProjectController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/project/profile", method = RequestMethod.GET)
-    public ResultData getMyProfile(HttpSession httpSession) {
+    public ResultData getMyProfile(@RequestParam Long infoId, HttpSession httpSession) {
         //确保是平台用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
-        return projectService.getProject(user.getInfoId());
+        return projectService.getProject(infoId);
     }
 
     /**

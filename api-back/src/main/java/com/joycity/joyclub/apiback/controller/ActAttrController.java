@@ -31,9 +31,10 @@ public class ActAttrController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/act/attrs", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) String actName, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam(required = false) String actName,
+                              @RequestParam Long infoId, PageUtil pageUtil, HttpSession httpSession) {
         SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        return actAttrService.getListByStoreIdAndActName(user.getInfoId(), actName, pageUtil);
+        return actAttrService.getListByStoreIdAndActName(infoId, actName, pageUtil);
     }
 
     /**

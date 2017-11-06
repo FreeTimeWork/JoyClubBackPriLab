@@ -28,10 +28,11 @@ public class ProductAttrController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/product/attrs", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) String productName, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam(required = false) String productName,
+                              @RequestParam Long infoId, PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        return productAttrService.getListByStoreIdAndProductName(user.getInfoId(), productName, pageUtil);
+        return productAttrService.getListByStoreIdAndProductName(infoId, productName, pageUtil);
     }
 
     /**

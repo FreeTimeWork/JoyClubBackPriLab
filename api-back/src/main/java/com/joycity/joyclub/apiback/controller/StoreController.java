@@ -31,10 +31,10 @@ public class StoreController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/stores", method = RequestMethod.GET)
-    public ResultData getList(PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam Long infoId, PageUtil pageUtil, HttpSession httpSession) {
         //确保是平台或项目用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
-        return storeService.getList(user.getInfoId(), pageUtil);
+        return storeService.getList(infoId, pageUtil);
     }
 
     /**
@@ -57,10 +57,10 @@ public class StoreController extends BaseUserSessionController {
      * @return
      */
     @RequestMapping(value = "/store/profile", method = RequestMethod.GET)
-    public ResultData getProfile(HttpSession httpSession) {
+    public ResultData getProfile(@RequestParam Long  infoId, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        return storeService.getStore(user.getInfoId());
+        return storeService.getStore(infoId);
     }
     /**
      * 只有商户用户可以访问
@@ -73,7 +73,7 @@ public class StoreController extends BaseUserSessionController {
     public ResultData updateProfile(@RequestBody SysStore store, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        store.setId(user.getInfoId());
+//        store.setId(user.getInfoId());
         return storeService.updateStore(store);
     }
 
@@ -103,7 +103,7 @@ public class StoreController extends BaseUserSessionController {
     public ResultData createStore(@RequestBody SysStore store, HttpSession httpSession) {
         //确保是平台或项目用户
         SysUser user = checkPlatformOrProjectUser(httpSession);
-        store.setProjectId(user.getInfoId());
+//        store.setProjectId(user.getInfoId());
         return storeService.createStore(store);
     }
 

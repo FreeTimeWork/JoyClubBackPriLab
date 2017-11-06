@@ -30,10 +30,11 @@ public class DesignerController extends BaseUserSessionController {
      * @return data
      */
     @RequestMapping(value = "/designers", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam(required = false) String name,
+                              @RequestParam Long infoId, PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
-        return designerService.getListByStoreId(user.getInfoId());
+        return designerService.getListByStoreId(infoId);
     }
 
     /**
@@ -73,7 +74,7 @@ public class DesignerController extends BaseUserSessionController {
      * @param httpSession
      * @return
      */
-    @RequestMapping(value = "/designer", method = RequestMethod.POST)
+        @RequestMapping(value = "/designer", method = RequestMethod.POST)
     public ResultData createDesigner(@RequestBody SaleStoreDesignerWithBLOBs
                                                  designer, HttpSession httpSession) {
         //确保是商户用户

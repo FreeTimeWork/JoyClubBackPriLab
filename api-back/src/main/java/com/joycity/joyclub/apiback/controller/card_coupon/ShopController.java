@@ -21,20 +21,24 @@ public class ShopController extends BaseUserSessionController {
     private ShopService shopService;
 
     @RequestMapping(value = "/offline/shops", method = RequestMethod.GET)
-    public ResultData getShopsByNameAndCode(@RequestParam(required = false) String name, @RequestParam(required = false) String code, HttpSession session) {
-        SysUser sysUser = checkProjectUser(session);
-        return shopService.getAllShopByNameAndCode(sysUser.getInfoId(), name, code);
+    public ResultData getShopsByNameAndCode(@RequestParam(required = false) String name,
+                                            @RequestParam(required = false) String code,
+                                            @RequestParam Long infoId,
+                                            HttpSession session) {
+//        SysUser sysUser = checkProjectUser(session);
+        return shopService.getAllShopByNameAndCode(infoId, name, code);
     }
 
     @RequestMapping(value = "/group/subcommercial/shops", method = RequestMethod.GET)
-    public ResultData getShopsByCodeAndSubCommercial(HttpSession session) {
+    public ResultData getShopsByCodeAndSubCommercial(@RequestParam Long infoId,
+                                                     HttpSession session) {
         SysUser sysUser = checkProjectUser(session);
-        return shopService.getShopsGroupBySubCommercial(sysUser.getInfoId());
+        return shopService.getShopsGroupBySubCommercial(infoId);
     }
 
     @PostMapping(value = "/offline/shops/sync")
-    public ResultData syncShops(HttpSession session) {
+    public ResultData syncShops(@RequestParam Long infoId,HttpSession session) {
         SysUser sysUser = checkUser(session);
-        return shopService.syncMallCooShop(sysUser.getInfoId());
+        return shopService.syncMallCooShop(infoId);
     }
 }

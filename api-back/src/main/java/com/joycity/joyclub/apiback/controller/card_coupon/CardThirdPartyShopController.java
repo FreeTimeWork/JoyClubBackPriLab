@@ -27,26 +27,29 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
     private ManagerService managerService;
 
     @RequestMapping(value = "/card/third/shop", method = RequestMethod.POST)
-    public ResultData createThirdPartyShop(@RequestBody CardThirdPartyShop thirdPartyShop, HttpSession session) {
+    public ResultData createThirdPartyShop(@RequestBody CardThirdPartyShop thirdPartyShop,
+                                           HttpSession session) {
 
-        SysUser user = checkProjectUser(session);
-        thirdPartyShop.setProjectId(user.getInfoId());
+//        SysUser user = checkProjectUser(session);
+//        thirdPartyShop.setProjectId(user.getInfoId());
         return thirdPartyShopService.createThirdPartyShop(thirdPartyShop);
     }
 
     @RequestMapping(value = "/card/third/shop/{id}", method = RequestMethod.POST)
     public ResultData updateShop(@PathVariable Long id, @RequestBody CardThirdPartyShop shop, HttpSession httpSession) {
         //确保是平台或项目用户
-        checkProjectUser(httpSession);
+//        checkProjectUser(httpSession);
         shop.setId(id);
         return thirdPartyShopService.updateShop(shop);
     }
 
     @RequestMapping(value = "/card/third/shops", method = RequestMethod.GET)
-    public ResultData getListByName(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getListByName(@RequestParam(required = false) String name,
+                                    @RequestParam Long infoId,
+                                    PageUtil pageUtil, HttpSession httpSession) {
 
-        SysUser user = checkProjectUser(httpSession);
-        return thirdPartyShopService.getListByName(user.getInfoId(), name, pageUtil);
+//        SysUser user = checkProjectUser(httpSession);
+        return thirdPartyShopService.getListByName(infoId, name, pageUtil);
     }
     /**
      * 只有项目用户可以访问
@@ -58,7 +61,7 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
     @RequestMapping(value = "card/third/shop/{id}", method = RequestMethod.GET)
     public ResultData getThirdPartyShop(@PathVariable Long id, HttpSession httpSession) {
         //确保是项目用户
-        checkProjectUser(httpSession);
+//        checkProjectUser(httpSession);
         return thirdPartyShopService.getShop(id);
     }
     /**
@@ -71,8 +74,8 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
     @RequestMapping(value = "/card/third/shop/profile", method = RequestMethod.POST)
     public ResultData updateProfile(@RequestBody CardThirdPartyShop shop, HttpSession httpSession) {
         //确保是商户用户
-        SysUser user = checkThirdPartyShopUser(httpSession);
-        shop.setId(user.getInfoId());
+//        SysUser user = checkThirdPartyShopUser(httpSession);
+//        shop.setId(user.getInfoId());
         return thirdPartyShopService.updateShop(shop);
     }
 
@@ -83,10 +86,10 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
      * @return
      */
     @RequestMapping(value = "/card/third/shop/profile", method = RequestMethod.GET)
-    public ResultData getProfile(HttpSession httpSession) {
+    public ResultData getProfile(@RequestParam Long infoId, HttpSession httpSession) {
         //确保是第三方商户用户
-        SysUser user = checkThirdPartyShopUser(httpSession);
-        return thirdPartyShopService.getShop(user.getInfoId());
+//        SysUser user = checkThirdPartyShopUser(httpSession);
+        return thirdPartyShopService.getShop(infoId);
     }
 
     /**
@@ -99,7 +102,7 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
     @RequestMapping(value = "/card/third/shop/{id}/manager", method = RequestMethod.POST)
     public ResultData createShopManager(@PathVariable Long id, @RequestBody SysUser user, HttpSession httpSession) {
         //确保是项目用户
-        checkProjectUser(httpSession);
+//        checkProjectUser(httpSession);
         return managerService.createThirdPartyShopManager(id, user);
     }
 
@@ -113,7 +116,7 @@ public class CardThirdPartyShopController extends BaseUserSessionController{
     @RequestMapping(value = "/card/third/shop/{id}/managers", method = RequestMethod.GET)
     public ResultData getShopManagers(@PathVariable Long id, HttpSession httpSession) {
         //确保项目用户
-        checkProjectUser(httpSession);
+//        checkProjectUser(httpSession);
         return managerService.getThirdPartyShopManagersByShopId(id);
     }
 }
