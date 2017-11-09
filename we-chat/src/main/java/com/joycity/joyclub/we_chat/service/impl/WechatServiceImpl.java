@@ -56,6 +56,7 @@ public class WechatServiceImpl implements WechatService {
         String url = URL_ACCESS_TOKEN.replaceAll("APPID", wxpayConfig.getAppid()).replaceAll("SECRET", wxpayConfig.getAppsecret()).replace("CODE", code);
         String resultStr = restTemplate.getForObject(url, String.class);
         AccessTokenAndOpenId result = JSON.parseObject(resultStr, AccessTokenAndOpenId.class);
+        logger.info("getAccessTokenAndOpenId: result="+ resultStr);
         if (result == null || result.getErrcode() != null || result.getOpenid() == null) {
             throw new BusinessException(WECHAT_ERROR, "获取微信openId失败");
         }

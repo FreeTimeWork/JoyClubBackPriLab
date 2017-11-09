@@ -1,5 +1,7 @@
 package com.joycity.joyclub.apifront.modal.vo.auth;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,4 +18,10 @@ public class WechatLoginVO extends WechatAutoLoginVO {
     public void setAuthCode(String authCode) {
         this.authCode = authCode;
     }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
 }

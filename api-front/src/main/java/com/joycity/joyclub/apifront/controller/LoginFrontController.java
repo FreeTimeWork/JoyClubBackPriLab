@@ -5,6 +5,8 @@ import com.joycity.joyclub.apifront.service.LoginFrontService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 @RestController
 @RequestMapping(URL_API_FRONT)
 public class LoginFrontController {
+    private Log logger = LogFactory.getLog(LoginFrontController.class);
     @Autowired
     LoginFrontService loginFrontService;
     @Autowired
@@ -31,6 +34,7 @@ public class LoginFrontController {
      */
     @RequestMapping(value = "/login/wechat", method = {RequestMethod.POST})
     public ResultData wechatLogin(@Valid @RequestBody WechatLoginVO vo, HttpServletResponse response) {
+        logger.info("/login/wechat" + vo);
         return loginFrontService.wechatLogin(response, vo.getProjectId(), vo.getPhone(), vo.getAuthCode(), vo.getOpenId(), vo.getAccessToken());
     }
 
@@ -47,6 +51,7 @@ public class LoginFrontController {
     @RequestMapping(value = "/login/auto/wechat", method = {RequestMethod.POST})
     public ResultData wechatAutoLogin(
             @Valid @RequestBody WechatAutoLoginVO vo, HttpServletResponse response) {
+        logger.info("/login/auto/wechat = "+vo);
         return loginFrontService.wechatAutoLogin(response, vo.getProjectId(), vo.getPhone(), vo.getOpenId(), vo.getAccessToken(), vo.getFrom());
     }
 
@@ -66,6 +71,7 @@ public class LoginFrontController {
      */
     @RequestMapping(value = "/login/subproject/auto/wechat", method = {RequestMethod.POST})
     public ResultData subProjectWechatAutoLogin(@Valid @RequestBody SubProjectWechatAutoLoginVO vo, HttpServletResponse response) {
+       logger.info("/login/subproject/auto/wechat = "+ vo);
         return loginFrontService.subProjectWechatAutoLogin(response, vo.getSubProjectId(), vo.getPhone(), vo.getOpenId(), vo.getAccessToken(), vo.getFrom());
     }
 

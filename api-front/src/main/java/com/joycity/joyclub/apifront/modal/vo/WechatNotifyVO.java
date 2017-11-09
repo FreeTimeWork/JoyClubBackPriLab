@@ -1,5 +1,7 @@
 package com.joycity.joyclub.apifront.modal.vo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,4 +31,10 @@ public class WechatNotifyVO {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
 }

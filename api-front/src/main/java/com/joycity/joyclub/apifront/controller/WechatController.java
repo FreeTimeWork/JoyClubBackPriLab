@@ -9,6 +9,8 @@ import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.we_chat.modal.AccessTokenAndOpenId;
 import com.joycity.joyclub.we_chat.modal.WechatUserInfo;
 import com.joycity.joyclub.we_chat.service.WechatService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 @RestController
 @RequestMapping(URL_API_FRONT)
 public class WechatController {
+    Log logger = LogFactory.getLog(WechatController.class);
     @Autowired
     WechatService wechatService;
     @Autowired
@@ -46,6 +49,7 @@ public class WechatController {
      */
     @RequestMapping("/wechat/openid")
     public ResultData getAuthCode(@RequestParam String code, @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId) {
+        logger.info("/wechat/openid = " + code);
         return new ResultData(wechatService.getAccessTokenAndOpenId(code, projectId));
     }
 
@@ -55,6 +59,7 @@ public class WechatController {
      */
     @PostMapping("/wechat/notify")
     public ResultData notifyWechat(@CookieValue(Global.COOKIE_TOKEN) String token, @Valid @RequestBody WechatNotifyVO vo) {
+        logger.info("/wechat/notify = " + vo);
         Long clientId = clientTokenService.getIdOrThrow(token);
         AccessTokenAndOpenId accessTokenAndOpenId = wechatService.saveOrUpdateProjectOpenIdByCode(vo.getProjectId(), clientId, vo.getCode());
         WechatUserInfo userInfo = wechatService.getUserInfo(accessTokenAndOpenId.getOpenid(), accessTokenAndOpenId.getAccess_token());
@@ -69,6 +74,7 @@ public class WechatController {
         client.setWxNickName(userInfo.getNickname());
         // 注意selective
         clientUserMapper.updateByPrimaryKeySelective(client);
+        logger.info("/wechat/notify end");
         return new ResultData();
     }
 
