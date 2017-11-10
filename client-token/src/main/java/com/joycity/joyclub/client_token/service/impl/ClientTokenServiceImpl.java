@@ -1,8 +1,6 @@
 package com.joycity.joyclub.client_token.service.impl;
 
-import java.util.Calendar;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.LogConst;
@@ -74,13 +72,15 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 
     @Override
     public void clearExpireToken() {
-        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(CLIENT_TOKEN);
-        Cursor<Map.Entry<String, String>> cursor = tokenHO.scan(new ScanOptions.ScanOptionsBuilder().build());
+        BoundHashOperations<String, String, String> tokenHO = redisTemplate.boundHashOps(RedisKeyConst.CARD_VIP_BATCH.getName());
+        Set<String> keys = tokenHO.keys();
+        Iterator<String> cursor = keys.iterator();
         Long startTime = System.currentTimeMillis();
         int clearNum = 0;
         boolean singleResult;
         while (cursor.hasNext()) {
-            singleResult = !checkToken(cursor.next().getKey());
+            String key = cursor.next();
+            singleResult = !checkToken(key);
             if (singleResult) {
                 clearNum++;
             }
