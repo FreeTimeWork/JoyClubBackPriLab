@@ -16,6 +16,7 @@ import com.joycity.joyclub.card_coupon.service.CardVipBatchService;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import org.apache.ibatis.annotations.Param;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -53,14 +54,15 @@ public class CardCouponLaunchController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/card/coupon/launches", method = RequestMethod.GET)
-    public ResultData getCardCouponLaunches(@RequestParam(required = false) String couponName,
+    public ResultData getCardCouponLaunches(@RequestParam(required = false) Long projectId,
+                                            @RequestParam(required = false) String couponName,
                                             @RequestParam(required = false) Integer couponType,
                                             @RequestParam(required = false) String name,
                                             @RequestParam(required = false) Integer type,
                                             @RequestParam(required = false) Integer status,
                                             PageUtil pageUtil, HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
-        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(couponName, couponType, name, type, status, pageUtil);
+        return cardCouponLaunchService.getListByCouponNameAndCouponTypeAndStatus(projectId,couponName, couponType, name, type, status, pageUtil);
     }
 
     @RequestMapping(value = "/card/coupon/launch/{id}/review/permit", method = RequestMethod.POST)

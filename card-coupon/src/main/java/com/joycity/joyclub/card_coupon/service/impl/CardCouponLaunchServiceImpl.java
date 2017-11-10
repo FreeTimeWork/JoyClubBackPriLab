@@ -87,7 +87,7 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     }
 
     @Override
-    public ResultData getListByCouponNameAndCouponTypeAndStatus(String couponName, Integer couponType, String name, Integer type, Integer status, PageUtil pageUtil) {
+    public ResultData getListByCouponNameAndCouponTypeAndStatus(Long projectId, String couponName, Integer couponType, String name, Integer type, Integer status, PageUtil pageUtil) {
         if (name != null) {
             name = "%" + name + "%";
         }
@@ -100,12 +100,12 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
         return new AbstractGetListData<ShowCouponLaunchInfo>() {
             @Override
             public Long countByFilter() {
-                return launchMapper.countByCouponNameAndCouponTypeAndStatus(finalCouponName, couponType, finalName, type, status, now, pageUtil);
+                return launchMapper.countByCouponNameAndCouponTypeAndStatus(projectId,finalCouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
             @Override
             public List<ShowCouponLaunchInfo> selectByFilter() {
-                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(finalCouponName, couponType, finalName, type, status, now, pageUtil);
+                return launchMapper.selectByCouponNameAndCouponTypeAndStatus(projectId,finalCouponName, couponType, finalName, type, status, now, pageUtil);
             }
 
         }.getList(pageUtil);

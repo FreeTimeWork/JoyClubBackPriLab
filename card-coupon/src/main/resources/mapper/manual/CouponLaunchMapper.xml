@@ -46,6 +46,9 @@
 
     <sql id="name_type_status">
         ccl.delete_flag = 0
+        <if test="projectId != null">
+            AND cc.project_id = #{projectId}
+        </if>
         <if test="couponName != null">
             AND cc.name LIKE #{couponName}
         </if>

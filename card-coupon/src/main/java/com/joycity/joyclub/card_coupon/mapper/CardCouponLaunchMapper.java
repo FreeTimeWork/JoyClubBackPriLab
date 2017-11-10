@@ -17,9 +17,9 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Long, CardCouponLaunchExample> {
 
-    Long countByCouponNameAndCouponTypeAndStatus(@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
+    Long countByCouponNameAndCouponTypeAndStatus(@Param("projectId")Long projectId,@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
+    List<ShowCouponLaunchInfo> selectByCouponNameAndCouponTypeAndStatus(@Param("projectId")Long projectId,@Param("couponName") String couponName, @Param("couponType") Integer couponType, @Param("name") String name, @Param("type") Integer type, @Param("status") Integer status, @Param("now") Date now, @Param("pageUtil") PageUtil pageUtil);
 
     List<ShowCouponLaunchInfo> selectByLaunchIds(@Param("launchIds") String[] launchIds);
 
