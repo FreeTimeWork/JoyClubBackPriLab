@@ -20,6 +20,11 @@ public class WxPayConfig {
 	 */
 	@Value("${wxpay.mchid}")
 	private String mchid;
+	/**
+	 * 商户号
+	 */
+	@Value("${wxpay.cbMchid}")
+	private String cbMchid;
 /*
 	*//**
 	 * 服务商appid
@@ -38,6 +43,12 @@ public class WxPayConfig {
 	 */
 	@Value("${wxpay.sign}")
 	private String sign;
+
+	/**
+	 * 朝北的签名
+	 */
+	@Value("${wxpay.cbSign}")
+	private String cbSign;
 	
 	/**
 	 * 证书
@@ -50,6 +61,14 @@ public class WxPayConfig {
 	 */
 	@Value("${wxpay.notifyUrl}")
 	private String notifyUrl;
+
+	public String getCbMchid() {
+		return cbMchid;
+	}
+
+	public void setCbMchid(String cbMchid) {
+		this.cbMchid = cbMchid;
+	}
 
 	public String getAppid() {
 		return appid;
@@ -98,6 +117,14 @@ public class WxPayConfig {
 	public void setSubMchid(String subMchid) {
 		this.subMchid = subMchid;
 	}*/
+
+	public String getCbSign() {
+		return cbSign;
+	}
+
+	public void setCbSign(String cbSign) {
+		this.cbSign = cbSign;
+	}
 
 	public String getNotifyUrl() {
 		return notifyUrl;

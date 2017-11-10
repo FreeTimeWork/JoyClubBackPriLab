@@ -3,6 +3,8 @@ package com.joycity.joyclub.we_chat.service.impl;
 
 
 
+import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
+import com.joycity.joyclub.apifront.modal.project.SysProject;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.order.PreOrderResult;
@@ -60,6 +62,8 @@ public class WxPayServiceImpl implements WxPayService{
     @Autowired
     private WechatService wechatService;
     // TODO: 2017/5/11  增加项目的微信支付传参传参
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @Override
     public PreOrderResult getWechatPreOrderResult(Long projectId, Long clientId, Float moneySum, String code, String wxPayNotifyUrl) {
@@ -87,7 +91,7 @@ public class WxPayServiceImpl implements WxPayService{
 
         // TODO: 2017/5/11  增加项目的微信支付传参传参
         preOrder.setNotifyUrl(wxPayNotifyUrl);
-        String prepayResultStr = precreate(preOrder);
+        String prepayResultStr = precreate(preOrder,projectId);
 
         Map<String, String> prepayResult = WechatXmlUtil.xmlToMap(prepayResultStr);
         String prepay_id = prepayResult.get("prepay_id");
@@ -95,17 +99,23 @@ public class WxPayServiceImpl implements WxPayService{
             logger.error("微信统一下单失败,错误返回值为 " + prepayResultStr);
             throw new BusinessException(ResultCode.WECHAT_PAY_REQUEST_ERROR, "微信统一下单失败");
         }
-        return getWechatPayParams(prepay_id);
+        return getWechatPayParams(prepay_id,projectId);
     }
 
-    private Map<String, Object> getWechatPayParams(String prepayId) {
+    private Map<String, Object> getWechatPayParams(String prepayId,Long projectId) {
+        SysProject project = projectMapper.selectByPrimaryKey(projectId);
         Map<String, Object> param = new HashMap<>();
-        param.put("appId", wxPayConfig.getAppid());
+        param.put("appId", project.getWechatAppId());
         param.put("timeStamp", String.valueOf(new Date().getTime()));
         param.put("nonceStr", "12345678");
         param.put("package", "prepay_id=" + prepayId);
         param.put("signType", "MD5");
-        String sign = SignUtils.paySign(param, wxPayConfig.getSign());
+        String sign = null;
+        if (projectId.equals(2L)) {
+            sign = SignUtils.paySign(param, wxPayConfig.getCbSign());
+        } else {
+            sign = SignUtils.paySign(param, wxPayConfig.getSign());
+        }
         param.put("paySign", sign.toUpperCase());
         return param;
     }
@@ -114,8 +124,8 @@ public class WxPayServiceImpl implements WxPayService{
      * @param precreateRequest
      * @return
      */
-    private String precreate(PreOrder precreateRequest) {
-        Map<String, Object> params = getSubmitMap();
+    private String precreate(PreOrder precreateRequest,Long projectId) {
+        Map<String, Object> params = getSubmitMap(projectId);
         params.put("out_trade_no", precreateRequest.getOutTradeNo());
         params.put("body", precreateRequest.getBody());
         //微信则需提供到分
@@ -141,46 +151,53 @@ public class WxPayServiceImpl implements WxPayService{
         return out;
     }
 
-    public String refund(WxRefundRequest refundRequest) {
-        Map<String, Object> params = getSubmitMap();
-        if (!StringUtils.isBlank(refundRequest.getTransactionId())) {
-            params.put("transaction_id", refundRequest.getTransactionId());
-        }
-        if (!StringUtils.isBlank(refundRequest.getOutTradeNo())) {
-            params.put("out_trade_no", refundRequest.getOutTradeNo());
-        }
-        params.put("out_refund_no", refundRequest.getOutRefundNo());
-        Double totolFee = Double.valueOf(refundRequest.getTotalFee());
-        params.put("total_fee", String.valueOf(Math.round(totolFee * 100)));
-        Double refundFee = Double.valueOf(refundRequest.getRefundFee());
-        params.put("refund_fee", String.valueOf(Math.round(refundFee * 100)));
-        params.put("op_user_id", refundRequest.getOpUserId());
-        sign(params);
-        String in = WechatXmlUtil.mapToXml(params);
-        String resultXml = null;
-        try {
-            resultXml = cert(in,
-                    URL_REFUND);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("微信退款异常", e);
-        }
-        if (resultXml == null) {
-            throw new RuntimeException("微信支付异常......... wxpay error");
-
-        }
-        return resultXml;
-    }
+//    public String refund(WxRefundRequest refundRequest) {
+//        Map<String, Object> params = getSubmitMap();
+//        if (!StringUtils.isBlank(refundRequest.getTransactionId())) {
+//            params.put("transaction_id", refundRequest.getTransactionId());
+//        }
+//        if (!StringUtils.isBlank(refundRequest.getOutTradeNo())) {
+//            params.put("out_trade_no", refundRequest.getOutTradeNo());
+//        }
+//        params.put("out_refund_no", refundRequest.getOutRefundNo());
+//        Double totolFee = Double.valueOf(refundRequest.getTotalFee());
+//        params.put("total_fee", String.valueOf(Math.round(totolFee * 100)));
+//        Double refundFee = Double.valueOf(refundRequest.getRefundFee());
+//        params.put("refund_fee", String.valueOf(Math.round(refundFee * 100)));
+//        params.put("op_user_id", refundRequest.getOpUserId());
+//        sign(params);
+//        String in = WechatXmlUtil.mapToXml(params);
+//        String resultXml = null;
+//        try {
+//            resultXml = cert(in,
+//                    URL_REFUND);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("微信退款异常", e);
+//        }
+//        if (resultXml == null) {
+//            throw new RuntimeException("微信支付异常......... wxpay error");
+//
+//        }
+//        return resultXml;
+//    }
 
     /**
      * 微信请求数据的前几个
      *
      * @return
      */
-    private Map<String, Object> getSubmitMap() {
+    private Map<String, Object> getSubmitMap(Long projectId) {
+        SysProject project = projectMapper.selectByPrimaryKey(projectId);
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("appid", wxPayConfig.getAppid());
-        params.put("mch_id", wxPayConfig.getMchid());
+        params.put("appid", project.getWechatAppId());
+        if (projectId.equals(2L)) {
+
+            params.put("mch_id", wxPayConfig.getMchid());
+        } else {
+            params.put("mch_id", wxPayConfig.getCbMchid());
+
+        }
         params.put("nonce_str", RandomStringUtils.random(8, "123456789"));
 //		if(StringUtils.isNotEmpty(wxPayConfig.getSubAppid())) {
 //			params.put("sub_appid", wxPayConfig.getSubAppid());

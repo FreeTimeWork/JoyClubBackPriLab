@@ -1,6 +1,8 @@
 package com.joycity.joyclub.we_chat.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.joycity.joyclub.apifront.mapper.manual.ProjectMapper;
+import com.joycity.joyclub.apifront.modal.project.SysProject;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.we_chat.mapper.WechatOpenIdMapper;
 import com.joycity.joyclub.we_chat.modal.AccessTokenAndOpenId;
@@ -28,6 +30,9 @@ public class WechatServiceImpl implements WechatService {
     RestTemplate restTemplate;
     @Autowired
     WechatOpenIdMapper wechatOpenIdMapper;
+
+    @Autowired
+    private ProjectMapper projectMapper;
     /**
      * 这个获取用户信息，如果没关注，只能获得openId,无法获取用户信息
      */
@@ -52,8 +57,9 @@ public class WechatServiceImpl implements WechatService {
 
     @Override
     public AccessTokenAndOpenId getAccessTokenAndOpenId(String code, Long projectId) {
-        // TODO: 2017/4/18 不同的项目appid不同 
-        String url = URL_ACCESS_TOKEN.replaceAll("APPID", wxpayConfig.getAppid()).replaceAll("SECRET", wxpayConfig.getAppsecret()).replace("CODE", code);
+        SysProject project = projectMapper.selectByPrimaryKey(projectId);
+        // TODO: 2017/4/18 不同的项目appid不同
+        String url = URL_ACCESS_TOKEN.replaceAll("APPID",project.getWechatAppId()).replaceAll("SECRET", project.getWechatAppSecret()).replace("CODE", code);
         String resultStr = restTemplate.getForObject(url, String.class);
         AccessTokenAndOpenId result = JSON.parseObject(resultStr, AccessTokenAndOpenId.class);
         logger.info("getAccessTokenAndOpenId: result="+ resultStr);
