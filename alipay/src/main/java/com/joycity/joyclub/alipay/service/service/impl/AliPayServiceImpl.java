@@ -52,7 +52,7 @@ public class AliPayServiceImpl implements AliPayService {
             storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
 
         } else {
-            // TODO: 2017/5/9 非项目用户
+            storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
         }
         //
         String formStr = wapPay(code, moneySum, storeInfo, wxPayNotifyUrl);

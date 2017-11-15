@@ -2,6 +2,8 @@ package com.joycity.joyclub.we_chat.pay.wechat;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 public class SignUtils {
 
+    private static Log logger = LogFactory.getLog(SignUtils.class);
     /**
      * 公共签名规则
      *
@@ -65,6 +68,7 @@ public class SignUtils {
     public static String paySign(Map<String, Object> params, String payKey) {
         String string1 = basicSign(params, false);
         string1 += "&key=" + payKey;
+        logger.info("微信付款签名="+string1);
         String paySign = DigestUtils.md5Hex(string1);
         return paySign;
     }

@@ -78,4 +78,6 @@ public class WechatController {
         return new ResultData();
     }
 
+
+
 }

@@ -126,6 +126,7 @@ public class WxPayServiceImpl implements WxPayService{
      */
     private String precreate(PreOrder precreateRequest,Long projectId) {
         Map<String, Object> params = getSubmitMap(projectId);
+        logger.info("WxPayServiceImpl.precreate"+precreateRequest +"---projectId="+projectId+"params = "+params);
         params.put("out_trade_no", precreateRequest.getOutTradeNo());
         params.put("body", precreateRequest.getBody());
         //微信则需提供到分
@@ -135,7 +136,7 @@ public class WxPayServiceImpl implements WxPayService{
         params.put("notify_url", precreateRequest.getNotifyUrl());
         params.put("trade_type", "JSAPI");
         params.put("openid", precreateRequest.getOpenId());
-        sign(params);
+        sign(params,projectId);
 //
         String out = null;
         try {
@@ -193,9 +194,9 @@ public class WxPayServiceImpl implements WxPayService{
         params.put("appid", project.getWechatAppId());
         if (projectId.equals(2L)) {
 
-            params.put("mch_id", wxPayConfig.getMchid());
-        } else {
             params.put("mch_id", wxPayConfig.getCbMchid());
+        } else {
+            params.put("mch_id", wxPayConfig.getMchid());
 
         }
         params.put("nonce_str", RandomStringUtils.random(8, "123456789"));
@@ -259,8 +260,16 @@ public class WxPayServiceImpl implements WxPayService{
     }
 
 
-    private void sign(Map<String, Object> params) {
-        String sign = SignUtils.paySign(params, wxPayConfig.getSign());
+    private void sign(Map<String, Object> params,Long projectId) {
+        String sign = null;
+
+        if (projectId.equals(2L)) {
+
+            sign = SignUtils.paySign(params, wxPayConfig.getCbSign());
+        } else {
+            sign = SignUtils.paySign(params, wxPayConfig.getSign());
+
+        }
         params.put("sign", sign.toUpperCase());
     }
 

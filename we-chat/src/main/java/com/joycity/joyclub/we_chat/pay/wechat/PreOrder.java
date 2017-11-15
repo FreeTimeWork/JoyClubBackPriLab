@@ -1,6 +1,8 @@
 package com.joycity.joyclub.we_chat.pay.wechat;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 统一下单内容,预支付交易单
  */
@@ -103,5 +105,10 @@ public class PreOrder {
 
 	public void setNotifyUrl(String notifyUrl) {
 		this.notifyUrl = notifyUrl;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
 	}
 }

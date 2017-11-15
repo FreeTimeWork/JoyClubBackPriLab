@@ -18,6 +18,8 @@ import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CardVipBatchServiceImpl implements CardVipBatchService {
+
+    private Log logger = LogFactory.getLog(CardVipBatchServiceImpl.class);
 
     @Autowired
     private CardVipBatchMapper cardVipBatchMapper;
@@ -64,6 +68,7 @@ public class CardVipBatchServiceImpl implements CardVipBatchService {
             cardVipBatchCache.put(findBatch,findBatch);
 
         List<CardVipBatch> cardVipBatches = prepareCardVipBatch(tels,findBatch);
+        logger.info("cardVipBatches = " + cardVipBatches + " tels = " + tels);
         if (cardVipBatches.isEmpty()) {
             throw new BusinessException(ResultCode.ERR_IMPORT_EXCEL,"手机号不存在");
         }

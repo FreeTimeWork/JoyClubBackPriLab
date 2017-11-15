@@ -38,7 +38,7 @@ public class CardPosController extends BaseUserSessionController {
                                      @RequestBody @Validated PosCurrentVO vo) {
 
         //TODO: cfc  projectId根据秘钥对应，得到到底是哪个项目的商家
-        Long projectId = 1L;
+        Long projectId = 2L;
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.getCurrentCoupons(projectId, vo.getShopCode(), vo.getVipCode());
     }
@@ -84,7 +84,7 @@ public class CardPosController extends BaseUserSessionController {
                                      @RequestHeader("timestamp") Long timestamp,
                                      @RequestBody @Validated PosOrderInformVO vo) throws ParseException {
         //TODO: cfc  projectId根据秘钥对应，得到到底是哪个项目的商家
-        Long projectId = 1L;
+        Long projectId = 2L;
         CheckSecretKey.checkSecretKey(vo,secretKey,sign,timestamp);
         return cardPosService.posOrderInform(projectId, vo.getVipCode(), vo.getOrderCode(), vo.getShopCode(), vo.getPayable(), vo.getPayment());
     }
