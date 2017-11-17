@@ -44,9 +44,10 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
     /**
      * 根据卡券code，查找卡券的信息，
      * belong -1 为系统券，其他为第三方商户id
+     *
      * @return
      */
-    ShowPosCurrentCouponCodeInfo selectByCode(@Param("code") String code, @Param("belong") Long belong);
+    ShowPosCurrentCouponCodeInfo selectByCode(@Param("code") String code, @Param("belong") Long belong, @Param("couponId") Long couponId);
 
 
     /**
@@ -63,7 +64,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      * 在条件投放期间内，正在投放中，在触发的商户范围内,卡券的基本信息
      */
     @Select(
-            " SELECT ccl.id as launch_id, ccl.condition_amount, ccl.max_receive, cc.subtract_amount   " +
+            " SELECT ccl.id as launch_id, ccl.condition_amount, ccl.max_receive, cc.subtract_amount, cc.amount   " +
             " FROM card_coupon_launch ccl" +
             " inner join card_coupon cc on cc.id = ccl.coupon_id and cc.type != 3 and cc.delete_flag = 0 " +
             " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id "+

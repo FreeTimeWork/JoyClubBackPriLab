@@ -85,7 +85,17 @@
         inner join card_coupon_launch ccl on ccl.id = ccc.launch_id and ccl.delete_flag = 0
         inner join card_coupon cc on cc.id = ccl.coupon_id and cc.delete_flag = 0 and cc.`type` != 3
         inner join client c on c.id = ccc.client_id and c.delete_flag = 0
-        WHERE ccc.code = #{code} AND ccc.belong = #{belong}
+        <where>
+            <if test="code != null">
+                AND ccc.code = #{code}
+            </if>
+            <if test="belong != null">
+                AND ccc.belong = #{belong}
+            </if>
+            <if test="couponId != null">
+                AND ccc.id = #{couponId}
+            </if>
+        </where>
     </select>
 
     <select id="selectCurrentCouponCode"

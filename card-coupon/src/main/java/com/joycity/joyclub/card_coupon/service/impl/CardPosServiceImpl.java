@@ -3,10 +3,7 @@ package com.joycity.joyclub.card_coupon.service.impl;
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.RefundType;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponCodeMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardCouponStoreScopeMapper;
-import com.joycity.joyclub.card_coupon.mapper.CardPosSaleDetailMapper;
+import com.joycity.joyclub.card_coupon.mapper.*;
 import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.generated.*;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
@@ -20,6 +17,7 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.*;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.ThrowBusinessExceptionUtil;
+import com.joycity.joyclub.message.service.MessageService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -58,6 +56,9 @@ public class CardPosServiceImpl implements CardPosService {
     private CardCouponCodeCache couponCodeCache;
     @Autowired
     KeChuanCrmService keChuanCrmService;
+    @Autowired
+    private MessageService messageService;
+
     @Override
     public ResultData getCurrentCoupons(Long projectId, String shopCode, String vipCode) {
         return new ResultData(new ListResult(cardCouponCodeMapper.selectCurrentCouponCode(projectId, shopCode, null, vipCode)));
@@ -72,7 +73,7 @@ public class CardPosServiceImpl implements CardPosService {
     private ShowPosCurrentCouponCodeInfo preExamineCouponCode(String vipCode, String shopCode, String couponCode){
         String  notUseInfo = null;
         Date date = new Date();
-        ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(couponCode, -1L);
+        ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(couponCode, -1L,null);
         if (info == null) {
             notUseInfo = "卡券不存在";
             info = new ShowPosCurrentCouponCodeInfo();
@@ -193,12 +194,40 @@ public class CardPosServiceImpl implements CardPosService {
                 for (int i= 0 ; i < receiveNum ; i++) {
                     boolean result = couponCodeCache.sendCouponCode(info.getLaunchId());
                     if (result) {
-                        cardCouponCodeService.sendCouponCode(clientId, info.getLaunchId(), launch.getCouponId());
+                        Long id = cardCouponCodeService.sendCouponCode(clientId, info.getLaunchId(), launch.getCouponId());
+                        if (id != null) {
+                            // 发短信消息通知该用户已发送卡券
+                            sendCardCouponMessage(id);
+                        }
                     }
                 }
             }
+            // 没有在每日限制领券范围内，当消费金额不够发券，发短信提示
+            Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
+            Date end = DateTimeUtil.addDays(start, 1);
+            int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
+            //每日限制数量 - 当日已领取代金券数量
+            int todayLimitNum = info.getMaxReceive() - cashCouponNum;
+            if (todayLimitNum > 0) {
+                BigDecimal payAgain = info.getConditionAmount().subtract(info.getSumPaid());
+                if (payAgain.compareTo(BigDecimal.ZERO) < 0) {
+                    payAgain = BigDecimal.ONE;
+                }
+                Client client = clientUserMapper.selectByPrimaryKey(info.getDetail().getClientId());
+                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid()+"元，再消费"+payAgain+"元即可参加满"+info.getAmount()+"送"+info.getSubtractAmount()+"的优惠活动！回T退订");
+                logger.info("sendMessage response:" + result);
+            }
         }
         return new ResultData(new CreateResult(posSaleDetailId));
+    }
+
+    private void sendCardCouponMessage(Long couponId) {
+        ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(null,-1L,couponId);
+        Client client = clientUserMapper.selectByPrimaryKey(new Long(info.getClientId()));
+        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+client.getRealName()+",您好，已给您送一张满"+info.getAmount().toString()+"减"+info.getSubtractAmount().toString()+"的代金券，请前往悦客会券包查看！回T退订");
+        logger.info("sendMessage response:" + result);
+
+
     }
 
     @Override
