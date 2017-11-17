@@ -209,12 +209,12 @@ public class CardPosServiceImpl implements CardPosService {
             //每日限制数量 - 当日已领取代金券数量
             int todayLimitNum = info.getMaxReceive() - cashCouponNum;
             if (todayLimitNum > 0) {
-                BigDecimal payAgain = info.getConditionAmount().subtract(info.getSumPaid());
-                if (payAgain.compareTo(BigDecimal.ZERO) < 0) {
-                    payAgain = BigDecimal.ONE;
-                }
-                Client client = clientUserMapper.selectByPrimaryKey(info.getDetail().getClientId());
-                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid()+"元，再消费"+payAgain+"元即可参加满"+info.getAmount()+"送"+info.getSubtractAmount()+"的优惠活动！回T退订");
+                BigDecimal[] payAgains = info.getSumPaid().divideAndRemainder(info.getConditionAmount());
+                BigDecimal payAgain = info.getConditionAmount().subtract(payAgains[1]);
+                Client client = clientUserMapper.selectByPrimaryKey(clientId);
+//                String str = "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订";
+//                System.out.println(str);
+                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订");
                 logger.info("sendMessage response:" + result);
             }
         }
@@ -224,7 +224,7 @@ public class CardPosServiceImpl implements CardPosService {
     private void sendCardCouponMessage(Long couponId) {
         ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(null,-1L,couponId);
         Client client = clientUserMapper.selectByPrimaryKey(new Long(info.getClientId()));
-        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+client.getRealName()+",您好，已给您送一张满"+info.getAmount().toString()+"减"+info.getSubtractAmount().toString()+"的代金券，请前往悦客会券包查看！回T退订");
+        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+client.getRealName()+",您好，已给您送一张满"+info.getAmount().intValue()+"减"+info.getSubtractAmount().intValue()+"的代金券，请前往悦客会券包查看！回T退订");
         logger.info("sendMessage response:" + result);
 
 
