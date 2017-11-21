@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -214,7 +215,11 @@ public class CardPosServiceImpl implements CardPosService {
                 Client client = clientUserMapper.selectByPrimaryKey(clientId);
 //                String str = "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订";
 //                System.out.println(str);
-                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+client.getRealName()+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订");
+                String name = "";
+                if (StringUtils.isNotBlank(client.getRealName())) {
+                    name = client.getRealName();
+                }
+                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+name+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订");
                 logger.info("sendMessage response:" + result);
             }
         }
@@ -224,7 +229,11 @@ public class CardPosServiceImpl implements CardPosService {
     private void sendCardCouponMessage(Long couponId) {
         ShowPosCurrentCouponCodeInfo info = cardCouponCodeMapper.selectByCode(null,-1L,couponId);
         Client client = clientUserMapper.selectByPrimaryKey(new Long(info.getClientId()));
-        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+client.getRealName()+",您好，已给您送一张满"+info.getAmount().intValue()+"减"+info.getSubtractAmount().intValue()+"的代金券，请前往悦客会券包查看！回T退订");
+        String name = "";
+        if (StringUtils.isNotBlank(client.getRealName())) {
+            name = client.getRealName();
+        }
+        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+name+",您好，已给您送一张满"+info.getAmount().intValue()+"减"+info.getSubtractAmount().intValue()+"的代金券，请前往悦客会券包查看！回T退订");
         logger.info("sendMessage response:" + result);
 
 
@@ -386,7 +395,7 @@ public class CardPosServiceImpl implements CardPosService {
      * @return
      */
     private int getSubCouponNum(CouponLaunchBetweenInfo info, BigDecimal refundAmount) {
-        return (info.getSumPaid().subtract(refundAmount).divide(info.getConditionAmount())).intValue();
+        return (info.getSumPaid().subtract(refundAmount).divide(info.getConditionAmount(), RoundingMode.HALF_UP)).intValue();
     }
 
     /**
