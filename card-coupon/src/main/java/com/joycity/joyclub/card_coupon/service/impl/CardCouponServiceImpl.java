@@ -42,7 +42,7 @@ public class CardCouponServiceImpl implements CardCouponService {
     @Override
     @Transactional
     public ResultData createCardCoupon(CreateCouponInfo info) {
-        if (info.getType().equals(CouponType.THIRD_PARTY_COUPON)) {
+        if (info.getType().equals(CouponType.THIRD_PARTY_COUPON) && !info.getSysgenFlag()) {
             int num = thirdpartyCouponCodeMapper.countByBatch(info.getBatch());
             info.setNum(num);
         }
