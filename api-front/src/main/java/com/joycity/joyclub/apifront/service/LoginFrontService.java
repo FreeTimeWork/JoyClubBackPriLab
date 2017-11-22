@@ -1,5 +1,6 @@
 package com.joycity.joyclub.apifront.service;
 
+import com.joycity.joyclub.apifront.modal.login.LoginMethodParam;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +9,14 @@ import javax.servlet.http.HttpServletResponse;
  * Created by CallMeXYZ on 2017/4/10.
  */
 public interface LoginFrontService {
+
+    /**
+     * 登录，会同步crm
+     * @param params
+     * @param response
+     * @return
+     */
+    Long clientLogin(LoginMethodParam params, HttpServletResponse response);
     /**
      *
      * @param accessToken 网页授权的accessToken

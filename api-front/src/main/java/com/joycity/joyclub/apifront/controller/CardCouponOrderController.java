@@ -1,11 +1,17 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponOrderVO;
+import com.joycity.joyclub.apifront.service.LoginFrontService;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponOrderService;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import com.joycity.joyclub.we_chat.util.WechatXmlUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -30,6 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping(URL_API_FRONT + "/card/coupon/")
 public class CardCouponOrderController {
+    private Log logger = LogFactory.getLog(CardCouponOrderController.class);
 
     @Autowired
     private CardCouponOrderService couponOrderService;
@@ -37,8 +44,12 @@ public class CardCouponOrderController {
     private CardCouponCodeService couponCodeService;
     @Autowired
     ClientTokenService clientTokenService;
-    private Log logger = LogFactory.getLog(ProductOrderFrontController.class);
-
+    @Autowired
+    MallCooService mallCooService;
+    @Autowired
+    LoginFrontService loginFrontService;
+    @Autowired
+    private ClientUserMapper clientUserMapper;
     /**
      * 微信下单,
      * 如果需要支付金钱，返回微信支付参数
@@ -59,6 +70,21 @@ public class CardCouponOrderController {
     public ResultData orderForAli(@CookieValue(Global.COOKIE_TOKEN) String token,
                                   @Valid @RequestBody CouponOrderVO vo) {
         return couponOrderService.orderForAli(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
+    }
+
+    /**
+     * 猫酷支付宝下单 ，返回form参数 其他参照微信支付
+     */
+    @PostMapping("/order/ali/mallcoo")
+    public ResultData orderForAliMallcoo(@RequestParam String ticket,
+                                  @Valid @RequestBody CouponOrderVO vo) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, ticket);
+        String vipCode = info.getThirdPartyCardID();
+        if (vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
+        }
+        Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        return couponOrderService.orderForAli(clientId, vo.getLaunchId());
     }
 
     /**

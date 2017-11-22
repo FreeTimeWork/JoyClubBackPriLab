@@ -187,7 +187,8 @@ public class LoginFrontServiceImpl implements LoginFrontService {
      *
      * @return Client 只包含 id tel
      */
-    private Long clientLogin(LoginMethodParam params, HttpServletResponse response) {
+    @Override
+    public Long clientLogin(LoginMethodParam params, HttpServletResponse response) {
         SysProject project = projectMapper.selectByPrimaryKey(params.getCardProjectId());
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");

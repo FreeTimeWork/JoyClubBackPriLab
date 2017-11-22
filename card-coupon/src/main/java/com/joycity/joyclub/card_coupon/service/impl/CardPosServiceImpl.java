@@ -225,7 +225,7 @@ public class CardPosServiceImpl implements CardPosService {
                 if (StringUtils.isNotBlank(client.getRealName())) {
                     name = client.getRealName();
                 }
-                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+name+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().doubleValue()+"元，再消费"+payAgain.doubleValue()+"元即可参加满"+info.getAmount().doubleValue()+"送"+info.getSubtractAmount().doubleValue()+"的优惠活动！回T退订");
+                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+name+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().doubleValue()+"元，再消费"+payAgain.doubleValue()+"元即可获得（满"+info.getAmount().doubleValue()+"元减"+info.getSubtractAmount().doubleValue()+"元）的代金券！回T退订");
                 logger.info("sendMessage response:" + result);
             }
         }

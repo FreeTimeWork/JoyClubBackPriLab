@@ -1,6 +1,8 @@
 package com.joycity.joyclub.apifront.controller;
 
+import com.joycity.joyclub.apifront.modal.login.LoginMethodParam;
 import com.joycity.joyclub.apifront.modal.vo.card_coupon.CouponFreeGetVO;
+import com.joycity.joyclub.apifront.service.LoginFrontService;
 import com.joycity.joyclub.card_coupon.mapper.CardCouponLaunchMapper;
 import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
@@ -14,6 +16,8 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.PageUtil;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import com.joycity.joyclub.subject.mapper.SubjectMapper;
 import com.joycity.joyclub.subject.modal.SubjectDetail;
 import com.joycity.joyclub.subject.modal.generated.Subject;
@@ -23,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import java.util.List;
@@ -51,6 +56,10 @@ public class CardCouponFrontController {
     private CardCouponLaunchMapper launchMapper;
     @Autowired
     private SubjectMapper subjectMapper;
+    @Autowired
+    MallCooService mallCooService;
+    @Autowired
+    LoginFrontService loginFrontService;
 
     /**
      * 某个项目中，某个会员能领取的卡券
@@ -82,6 +91,37 @@ public class CardCouponFrontController {
     }
 
     /**
+     * 猫酷卡券的列表
+     */
+    @GetMapping("/card/coupon/launches/mallcoo")
+    public ResultData getCouponsClientCanReceiveMallcoo(
+            @RequestParam String ticket,
+            @RequestParam Long projectId,
+            @RequestParam(required = false) Byte couponType,
+            PageUtil pageUtil, HttpServletResponse response) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
+        String vipCode = info.getThirdPartyCardID();
+        if (vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
+        }
+        Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        if (clientId == null) {
+            LoginMethodParam param = LoginMethodParam
+                    .LoginMethodParamBuilder
+                    .create()
+                    .setCardProjectId(projectId)
+                    .setPhone(info.getMobile()).build();
+            clientId = loginFrontService.clientLogin(param, response);
+        }
+        if (clientId == null) {
+            return launchService.getVisitorVisibleListByCouponType(projectId, couponType, pageUtil);
+        } else {
+            return launchService.getClientVisibleListByCouponType(projectId, clientId, couponType, pageUtil);
+        }
+    }
+
+
+    /**
      * 免费领取
      */
     @PostMapping("/card/coupon/point/receive")
@@ -89,6 +129,20 @@ public class CardCouponFrontController {
                                         @Valid @RequestBody CouponFreeGetVO vo) {
 
         return couponCodeService.freeOrPointReceiveCoupon(clientTokenService.getIdOrThrow(token), vo.getLaunchId());
+    }
+    /**
+     * 猫酷免费领取
+     */
+    @PostMapping("/card/coupon/point/receive/mallcoo")
+    public ResultData freeReceiveCouponMallcoo(@RequestParam String ticket,
+                                        @Valid @RequestBody CouponFreeGetVO vo) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, ticket);
+        String vipCode = info.getThirdPartyCardID();
+        if (vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
+        }
+        Long clientId = clientUserMapper.getIdByVipCode(vipCode);
+        return couponCodeService.freeOrPointReceiveCoupon(clientId, vo.getLaunchId());
     }
 
     /**
