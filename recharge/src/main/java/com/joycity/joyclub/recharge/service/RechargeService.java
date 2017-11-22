@@ -18,9 +18,9 @@ public interface RechargeService {
 //     */
 //    void rechargeFlow(String phone,int flowSize,boolean ifNationFlow);
 
-    void rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException;
+    String rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException;
 
-    void rechargeFlux(RechargeVO vo, Long clientId) throws Exception;
+    String rechargeFlux(RechargeVO vo, Long clientId) throws Exception;
 
     /**
      * 查询规格

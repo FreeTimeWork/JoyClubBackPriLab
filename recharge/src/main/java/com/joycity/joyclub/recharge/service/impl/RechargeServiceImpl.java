@@ -82,11 +82,11 @@ public class RechargeServiceImpl implements RechargeService {
 //    }
 
     @Override
-    public void rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
+    public String rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
         XiangfuRechargeDetail detail = recharge(vo, clientId);
         String result = receiverToMiteno(detail);
-        System.out.println(result);
-
+        logger.info("RechargeServiceImpl-rechargeMoney-result = "+result);
+        return result;
     }
 
     private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
@@ -99,7 +99,7 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
     @Override
-    public void rechargeFlux(RechargeVO vo, Long clientId) throws Exception {
+    public String rechargeFlux(RechargeVO vo, Long clientId) throws Exception {
         XiangfuRechargeDetail detail = recharge(vo, clientId);
         FluxTemp temp = new FluxTemp();
         temp.setProvince("110");
@@ -109,6 +109,7 @@ public class RechargeServiceImpl implements RechargeService {
         temp.setScope("province");
         String result = buyQuota(detail, temp);
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
+        return result;
     }
 
     @Override
@@ -184,10 +185,14 @@ public class RechargeServiceImpl implements RechargeService {
         detail.setAmount(vo.getAmount());
         detail.setClientId(clientId);
         detail.setOrderCode(createOrderCode());
-        if (vo.getType().equals(XiangfuRechargeType.FLOWCARD.getCode())) {
+        if (vo.getType().equals(XiangfuRechargeType.RECHARGECARD.getCode())) {
             detail.setPayable(vo.getAmount());
-        } else if (vo.getType().equals(XiangfuRechargeType.RECHARGECARD.getCode())) {
-            detail.setPayable(RFluxMoney.getMoneyByFlux(vo.getAmount().intValue()).getMoney());
+        } else if (vo.getType().equals(XiangfuRechargeType.FLOWCARD.getCode())) {
+            RFluxMoney fluxMoney = RFluxMoney.getMoneyByFlux(vo.getAmount().intValue());
+            if (fluxMoney == null) {
+                throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "不支持该档位充值");
+            }
+            detail.setPayable(fluxMoney.getMoney());
         } else {
             detail.setPayable(BigDecimal.ZERO);
         }

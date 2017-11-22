@@ -39,15 +39,16 @@ public class XiangfuController {
                                       @RequestBody RechargeVO vo) throws Exception {
 //        Long clienId = clientTokenService.getIdOrThrow(token);
         Long clienId = 1L;
+        String result = null;
         if (vo.getType() == null) {
             new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
         }
         if (vo.getType().equals("rechargecard")) {
-            rechargeService.rechargeMoney(vo, clienId);
+            result = rechargeService.rechargeMoney(vo, clienId);
         } else if (vo.getType().equals("flowcard")) {
-            rechargeService.rechargeFlux(vo, clienId);
+            result = rechargeService.rechargeFlux(vo, clienId);
         }
-        return new ResultData();
+        return new ResultData(result);
     }
 
     @PostMapping("/callback")

@@ -1,6 +1,7 @@
 package com.joycity.joyclub.recharge.constants;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,12 +22,12 @@ public enum RFluxMoney {
 
     public static Map<Integer, RFluxMoney> map;
     static {
-        map.put(F_100m.getFlux(), F_100m);
-        map.put(F_200m.getFlux(), F_200m);
-        map.put(F_300m.getFlux(), F_300m);
-        map.put(F_500m.getFlux(), F_500m);
-        map.put(F_1G.getFlux(), F_1G);
+        map = new HashMap<>();
+        for (RFluxMoney fluxMoney : RFluxMoney.values()) {
+            map.put(fluxMoney.getFlux(), fluxMoney);
+        }
     }
+
     RFluxMoney() {
         
     }
