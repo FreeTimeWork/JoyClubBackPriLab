@@ -1,6 +1,5 @@
 package com.joycity.joyclub.recharge.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.commons.constant.ResultCode;
@@ -12,8 +11,6 @@ import com.joycity.joyclub.recharge.RechargeMoneyConfig;
 import com.joycity.joyclub.recharge.constants.RFluxMoney;
 import com.joycity.joyclub.recharge.constants.XiangfuRechargeType;
 import com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper;
-import com.joycity.joyclub.recharge.modal.RechargeFlowResult;
-import com.joycity.joyclub.recharge.modal.RechargePostData;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
@@ -21,10 +18,6 @@ import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
 import com.joycity.joyclub.recharge.service.RechargeService;
 import com.joycity.joyclub.recharge.util.RSAUtil;
 import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +28,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,7 +82,7 @@ public class RechargeServiceImpl implements RechargeService {
 //    }
 
     @Override
-    public void rechargeMoney(RechargeVO vo,Long clientId) {
+    public void rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
         XiangfuRechargeDetail detail = recharge(vo, clientId);
         String result = receiverToMiteno(detail);
         System.out.println(result);
@@ -134,7 +129,7 @@ public class RechargeServiceImpl implements RechargeService {
     /**
      * 2.1.	缴费接口
      */
-    private String receiverToMiteno(XiangfuRechargeDetail detail) {
+    private String receiverToMiteno(XiangfuRechargeDetail detail) throws UnsupportedEncodingException {
         HttpHeaders headers = new HttpHeaders();
         //  请勿轻易改变此提交方式，大部分的情况下，提交方式都是表单提交
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -142,6 +137,7 @@ public class RechargeServiceImpl implements RechargeService {
         MultiValueMap<String, String> body= new LinkedMultiValueMap<String, String>();
 
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+        callback = URLEncoder.encode(callback, "utf-8");
         body.add("agentid", rechargeMoneyConfig.getMchid());
         body.add("orderId", detail.getOrderCode());
         body.add("amount", detail.getPayable().toString());
@@ -163,6 +159,7 @@ public class RechargeServiceImpl implements RechargeService {
 
         Map<String, Object> body= new HashMap<>();
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+        callback = URLEncoder.encode(callback, "utf-8");
         body.put("appId", rechargeFluxConfig.getAppId());
         body.put("customerOrderId", detail.getOrderCode());
         body.put("operatorType", temp.getOperatorType());
@@ -230,4 +227,10 @@ public class RechargeServiceImpl implements RechargeService {
 //        postData.setSign(DigestUtils.md5Hex(JSON.toJSONString(businessBody) + rechargeConfig.getKey()));
 //        return postData;
 //    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+        callback = URLEncoder.encode(callback, "utf-8");
+        System.out.println(callback);
+    }
 }

@@ -5,18 +5,16 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.recharge.RechargeFluxConfig;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
 import com.joycity.joyclub.recharge.service.RechargeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
@@ -37,10 +35,10 @@ public class XiangfuController {
     private ClientTokenService clientTokenService;
 
     @PostMapping("/recharge")
-    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
+    public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
                                       @RequestBody RechargeVO vo) throws Exception {
-        Long clienId = clientTokenService.getIdOrThrow(token);
-//        Long clienId = 1L;
+//        Long clienId = clientTokenService.getIdOrThrow(token);
+        Long clienId = 1L;
         if (vo.getType() == null) {
             new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
         }

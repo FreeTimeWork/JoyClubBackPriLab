@@ -4,6 +4,8 @@ import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
 import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by CallMeXYZ on 2017/6/14.
  */
@@ -16,7 +18,7 @@ public interface RechargeService {
 //     */
 //    void rechargeFlow(String phone,int flowSize,boolean ifNationFlow);
 
-    void rechargeMoney(RechargeVO vo,Long clientId);
+    void rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException;
 
     void rechargeFlux(RechargeVO vo, Long clientId) throws Exception;
 
