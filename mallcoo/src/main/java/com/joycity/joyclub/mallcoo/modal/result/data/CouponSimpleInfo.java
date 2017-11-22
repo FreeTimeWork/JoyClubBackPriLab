@@ -25,6 +25,15 @@ public class CouponSimpleInfo {
     private String youHuiInfo;
     private Date enableTime;
     private Date overdueTime;
+    private String codeFrom;
+
+    public String getCodeFrom() {
+        return codeFrom;
+    }
+
+    public void setCodeFrom(String codeFrom) {
+        this.codeFrom = codeFrom;
+    }
 
     public Long getCouponId() {
         return couponId;

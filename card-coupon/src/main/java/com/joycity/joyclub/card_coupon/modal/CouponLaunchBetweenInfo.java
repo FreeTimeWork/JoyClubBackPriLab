@@ -15,6 +15,7 @@ public class CouponLaunchBetweenInfo {
     private Integer usedNum;        //已使用数量
     private BigDecimal sumPaid;     //付款总额
     private BigDecimal conditionAmount; // 触发条件投放的总额
+    private BigDecimal amount; //代金券满多少可以使用的额度
     private BigDecimal subtractAmount;   //卡券折扣金额
     private PosSaleDetailWithCouponCode detail;
     private Byte refundType;
@@ -53,6 +54,14 @@ public class CouponLaunchBetweenInfo {
 
     public BigDecimal getSumPaid() {
         return sumPaid;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public void setSumPaid(BigDecimal sumPaid) {
