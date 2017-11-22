@@ -29,8 +29,10 @@ public class HttpJsonUtil {
     public static String url_balance="http://new.yxuntong.com/emmpdata/sms/Balance";//余额提醒地址
     public static String token = "111111";//安全验证key
     public static String phone = "";//手机号码
-    public static String userName = "200110"; // 用户名
-    public static String password = "jy&yxt1219"; // 密码
+//    public static String userName = "200110"; // 用户名
+//    public static String password = "jy&yxt1219"; // 密码
+    public static String userName = "2002541"; // 用户名
+    public static String password = "4w$sw+'F"; // 密码
     public static String content = "你好，测试短信"; // 短信内容
     public static String sign = "【朝阳大悦城】"; // 短信内容
 
