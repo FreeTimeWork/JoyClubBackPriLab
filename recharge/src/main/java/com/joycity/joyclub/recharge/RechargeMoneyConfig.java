@@ -7,11 +7,29 @@ import org.springframework.stereotype.Component;
  * Created by CallMeXYZ on 2017/6/14.
  */
 @Component
-@ConfigurationProperties("point.recharge")
-public class RechargeConfig {
+@ConfigurationProperties("point.recharge.miteno")
+public class RechargeMoneyConfig {
     private String url;
     private String user;
+    private String password;
+    private String mchid;
     private String key;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMchid() {
+        return mchid;
+    }
+
+    public void setMchid(String mchid) {
+        this.mchid = mchid;
+    }
 
     public String getUrl() {
         return url;

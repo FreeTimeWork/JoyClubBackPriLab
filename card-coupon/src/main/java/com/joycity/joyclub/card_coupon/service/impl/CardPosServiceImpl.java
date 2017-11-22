@@ -219,7 +219,7 @@ public class CardPosServiceImpl implements CardPosService {
                 if (StringUtils.isNotBlank(client.getRealName())) {
                     name = client.getRealName();
                 }
-                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+name+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().intValue()+"元，再消费"+payAgain.intValue()+"元即可参加满"+info.getAmount().intValue()+"送"+info.getSubtractAmount().intValue()+"的优惠活动！回T退订");
+                String result = messageService.sendMessage("sms",client.getTel() , "尊敬的会员"+name+"您好，您本笔消费"+payment+"元，已累计消费"+info.getSumPaid().doubleValue()+"元，再消费"+payAgain.doubleValue()+"元即可参加满"+info.getAmount().doubleValue()+"送"+info.getSubtractAmount().doubleValue()+"的优惠活动！回T退订");
                 logger.info("sendMessage response:" + result);
             }
         }
@@ -233,7 +233,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (StringUtils.isNotBlank(client.getRealName())) {
             name = client.getRealName();
         }
-        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+name+",您好，已给您送一张满"+info.getAmount().intValue()+"减"+info.getSubtractAmount().intValue()+"的代金券，请前往悦客会券包查看！回T退订");
+        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+name+",您好，已给您送一张满"+info.getAmount().doubleValue()+"减"+info.getSubtractAmount().doubleValue()+"的代金券，请前往悦客会券包查看！回T退订");
         logger.info("sendMessage response:" + result);
 
 
