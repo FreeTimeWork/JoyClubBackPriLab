@@ -25,9 +25,9 @@
         <Logger name="task" level="info">
             <AppenderRef ref="taskFile"/>
         </Logger>
-<!--        <Logger name="com.joycity.joyclub.product.mapper" level="debug" additivity="false" >
+       <Logger name="com.joycity.joyclub.card_coupon.mapper" level="debug" additivity="false" >
             <AppenderRef ref="Console"/>
             <AppenderRef ref="infoFile" />
-        </Logger>-->
+        </Logger>
     </Loggers>
 </Configuration>

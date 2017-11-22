@@ -138,6 +138,12 @@ public class CardPosServiceImpl implements CardPosService {
         if (orderAmount.compareTo(BigDecimal.ZERO) < 0) {
             orderAmount = BigDecimal.ZERO;
         }
+        //短信通知，已核销卡券
+        String name = "";
+        if (info.getClientName() != null) {
+            name = info.getClientName();
+        }
+        messageService.sendMessage("sms", info.getTel(), "尊敬的会员" + name + "您好，您已使用一张满" + info.getAmount().doubleValue() + "元减" + info.getSubtractAmount().doubleValue() + "元的卡券！回T退订");
         return new ResultData(new PosCheckResult(orderAmount, checkResult, resultInfo));
     }
 
@@ -233,7 +239,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (StringUtils.isNotBlank(client.getRealName())) {
             name = client.getRealName();
         }
-        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+name+",您好，已给您送一张满"+info.getAmount().doubleValue()+"减"+info.getSubtractAmount().doubleValue()+"的代金券，请前往悦客会券包查看！回T退订");
+        String result = messageService.sendMessage("sms", client.getTel(), "尊敬的会员"+name+",您好，已给您送一张满"+info.getAmount().doubleValue()+"减"+info.getSubtractAmount().doubleValue()+"的代金券，请前往朝阳大悦城App我的券包查看！回T退订");
         logger.info("sendMessage response:" + result);
 
 
@@ -323,6 +329,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (forbidRefundNum > 0) {
             CouponLaunchBetweenInfo info = new CouponLaunchBetweenInfo();
             info.setRefundType(RefundType.FORBIT_REFUND);
+            logger.info("FORBIT_REFUND-forbidRefundNum = "+forbidRefundNum);
             return info;
         }
         CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(detail.getShopId(), detail.getCreateTime(), detail.getClientId());
@@ -344,6 +351,7 @@ public class CardPosServiceImpl implements CardPosService {
         int diff = actualNumSubtractSubNum(info, subCouponNum);
         if (diff > info.getNotUsedNum() ) {
             info.setRefundType(RefundType.FORBIT_REFUND);
+            logger.info("FORBIT_REFUND-diff = "+diff + " NotUsedNum = "+info.getNotUsedNum());
             return info;
         }
         //订单是否关联卡券

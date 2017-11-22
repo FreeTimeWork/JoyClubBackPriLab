@@ -27,6 +27,24 @@ public class ShowPosCurrentCouponCodeInfo {
     private Date effectiveEndTime;
     private Boolean useFlag;
     private String notUseInfo;
+    private String tel;
+    private String clientName;
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
     public Long getCouponId() {
         return couponId;

@@ -5,8 +5,11 @@ import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
+import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
+import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
 import com.joycity.joyclub.recharge.service.RechargeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAM_ERROR;
@@ -78,8 +82,11 @@ public class XiangfuController {
 
 
     @GetMapping("/tel/type")
-    public ResultData getTelType(@RequestParam String tel) {
-
-        return new ResultData();
+    public ResultData getTelType(@RequestParam String tel) throws Exception {
+        FluxTemp temp = new FluxTemp();
+        temp.setProvince("110");
+        temp.setTimeStamp(DateTimeUtil.formatYYYYMMDDHHMMSS(new Date()));
+        SpecListModel model = rechargeService.getSpecList(tel, temp);
+        return new ResultData(model.getMo());
     }
 }

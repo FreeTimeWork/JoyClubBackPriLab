@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by CallMeXYZ on 2017/6/14.
@@ -116,7 +117,6 @@ public class RechargeServiceImpl implements RechargeService {
     public SpecListModel getSpecList(String tel,FluxTemp temp) throws Exception {
         String url = rechargeFluxConfig.getUrl() + "/manage/services/getSpecList?appId={appId}&phoneNo={tel}&province={province}&timeStamp={timeStamp}&signature={sign}";
         Map<String, Object> params= new HashMap<>();
-        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
         params.put("appId", rechargeFluxConfig.getAppId());
         params.put("phoneNo", tel);
         params.put("province", temp.getProvince());
@@ -234,8 +234,9 @@ public class RechargeServiceImpl implements RechargeService {
 //    }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
-        callback = URLEncoder.encode(callback, "utf-8");
-        System.out.println(callback);
+//        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+//        callback = URLEncoder.encode(callback, "utf-8");
+//        System.out.println(callback);
+
     }
 }

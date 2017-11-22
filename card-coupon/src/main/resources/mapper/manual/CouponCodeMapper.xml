@@ -80,7 +80,7 @@
         select
         cc.id AS coupon_id, cc.name AS coupon_name, cc.type AS coupon_type, cc.amount, cc.subtract_amount,
         ccl.name AS launch_name, ccl.type AS launch_type, ccc.id AS coupon_code_id, ccc.code, ccc.use_status,
-        ccc.client_id, c.vip_code, ccl.effective_start_time, ccl.effective_end_time
+        ccc.client_id,c.tel,c.real_name as client_name c.vip_code, ccl.effective_start_time, ccl.effective_end_time
         from card_coupon_code ccc
         inner join card_coupon_launch ccl on ccl.id = ccc.launch_id and ccl.delete_flag = 0
         inner join card_coupon cc on cc.id = ccl.coupon_id and cc.delete_flag = 0 and cc.`type` != 3
