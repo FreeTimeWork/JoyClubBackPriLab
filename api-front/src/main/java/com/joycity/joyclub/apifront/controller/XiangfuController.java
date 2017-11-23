@@ -79,45 +79,46 @@ public class XiangfuController {
         result.setSign(sign);
         result.setTrxamount(trxamount);
         result.setUserToken(userToken);
+        logger.info("XiangfuController - callback-result=" + result);
         Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(result.getOrderId());
         XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
         detail.setId(id);
         detail.setOutOrder(result.getSid());
+        detail.setStatus(Integer.valueOf(result.getReturncode()));
         detail.setPayment(new BigDecimal(result.getTrxamount()));
         xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         System.out.println(result);
-        logger.info("XiangfuController - callback-result=" + result);
         response.getWriter().write("success");
     }
 
 
-//    @PostMapping("/flux/callback")
-//    public void xiangfuFluxCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String customerOrderId = request.getParameter("customerOrderId");
-//        String operatorType = request.getParameter("operatorType");
-//        String phoneNo = request.getParameter("phoneNo");
-//        String spec = request.getParameter("spec");
-//        String scope = request.getParameter("scope");
-//        String Status = request.getParameter("Status");
-//        String signature = request.getParameter("signature");
-//        String sign = request.getParameter("sign");
-//        Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(customerOrderId);
-//        XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
-//        detail.setId(id);
-//        detail.setOutOrder(result.getSid());
-//        detail.setPayment(new BigDecimal(result.getTrxamount()));
-//        xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
-//        System.out.println(result);
-//        logger.info("XiangfuController - callback-result=" + result);
-//        response.getWriter().write("success");
-//    }
+    @PostMapping("/flux/callback")
+    public void xiangfuFluxCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String customerOrderId = request.getParameter("customerOrderId");
+        String operatorType = request.getParameter("operatorType");
+        String phoneNo = request.getParameter("phoneNo");
+        String spec = request.getParameter("spec");
+        String scope = request.getParameter("scope");
+        String outStatus = request.getParameter("Status");
+        String signature = request.getParameter("signature");
+        String sign = request.getParameter("sign");
+        logger.info("XiangfuController-flux-result-outStatus=" + outStatus);
+        Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(customerOrderId);
+        XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
+        detail.setId(id);
+        if (outStatus.equals("success")) {
+            detail.setStatus(4);
+            xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
+            response.getWriter().write("success");
+        } else {
+            response.getWriter().write("fail");
+        }
+    }
 
     @GetMapping("/tel/type")
     public ResultData getTelType(@RequestParam String tel) throws Exception {
         FluxTemp temp = new FluxTemp();
-        temp.setProvince("110");
-        temp.setTimeStamp(DateTimeUtil.formatYYYYMMDDHHMMSS(new Date()));
-        SpecListModel model = rechargeService.getSpecList(tel, temp);
+        SpecListModel model = rechargeService.getSpecList(tel);
         return new ResultData(model.getMo());
     }
 }

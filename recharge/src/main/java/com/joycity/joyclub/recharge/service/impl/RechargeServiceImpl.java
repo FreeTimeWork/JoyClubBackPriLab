@@ -91,11 +91,11 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
     private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
-        Integer point = clientService.getPoint(clientId);
-        if (point < vo.getPoint().intValue()) {
-            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH);
-        }
-        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
+//        Integer point = clientService.getPoint(clientId);
+//        if (point < vo.getPoint().intValue()) {
+//            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH);
+//        }
+//        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
         return  createXiangfuOrder(vo, clientId);
     }
 
@@ -104,9 +104,10 @@ public class RechargeServiceImpl implements RechargeService {
         XiangfuRechargeDetail detail = recharge(vo, clientId);
         FluxTemp temp = new FluxTemp();
         temp.setProvince("110");
-        temp.setTimeStamp(DateTimeUtil.formatYYYYMMDDHHMMSS(new Date()));
-        SpecListModel model = getSpecList(vo.getTel(), temp);
-        temp.setOperatorType(model.getMo());
+        temp.setTimeStamp(SDF.format(new Date()));
+        SpecListModel model = getSpecList(vo.getTel());
+//        temp.setOperatorType(model.getMo());
+        temp.setOperatorType("2");
         temp.setScope("province");
         String result = buyQuota(detail, temp);
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
@@ -114,15 +115,17 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
     @Override
-    public SpecListModel getSpecList(String tel,FluxTemp temp) throws Exception {
-        String url = rechargeFluxConfig.getUrl() + "/manage/services/getSpecList?appId={appId}&phoneNo={tel}&province={province}&timeStamp={timeStamp}&signature={sign}";
+    public SpecListModel getSpecList(String tel) throws Exception {
+        String url = rechargeFluxConfig.getUrl() + "/manage/services/getSpecList?appId={appId}&phoneNo={phoneNo}&province={province}&timeStamp={timeStamp}&signature={signature}";
+//        String url = rechargeFluxConfig.getUrl() + "/manage/services/getSpecList?appId={appId}&province={province}&timeStamp={timeStamp}&signature={signature}";
         Map<String, Object> params= new HashMap<>();
         params.put("appId", rechargeFluxConfig.getAppId());
-        params.put("phoneNo", tel);
-        params.put("province", temp.getProvince());
-        params.put("timeStamp", temp.getTimeStamp());
+        params.put("phoneNo", "17611578727");
+        params.put("province", "110");
+        params.put("timeStamp", SDF.format(new Date()));
         params.put("signature", createFluxSign(params));
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class, params);
+
         SpecListModel model = JSONObject.parseObject(responseEntity.getBody(), SpecListModel.class);
         return model;
     }
@@ -138,7 +141,7 @@ public class RechargeServiceImpl implements RechargeService {
         MultiValueMap<String, String> body= new LinkedMultiValueMap<String, String>();
 
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
-        callback = URLEncoder.encode(callback, "utf-8");
+//        callback = URLEncoder.encode(callback, "utf-8");
         body.add("agentid", rechargeMoneyConfig.getMchid());
         body.add("orderId", detail.getOrderCode());
         body.add("amount", detail.getPayable().toString());
@@ -156,11 +159,11 @@ public class RechargeServiceImpl implements RechargeService {
      * 1.	流量充值
      */
     private String buyQuota(XiangfuRechargeDetail detail, FluxTemp temp) throws Exception {
-        String baseUrl = rechargeFluxConfig.getUrl();
+        String baseUrl = rechargeFluxConfig.getUrl()+"/manage/services/buyQuota";
 
         Map<String, Object> body= new HashMap<>();
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/flux/callback";
-        callback = URLEncoder.encode(callback, "utf-8");
+//        callback = URLEncoder.encode(callback, "utf-8");
         body.put("appId", rechargeFluxConfig.getAppId());
         body.put("customerOrderId", detail.getOrderCode());
         body.put("operatorType", temp.getOperatorType());

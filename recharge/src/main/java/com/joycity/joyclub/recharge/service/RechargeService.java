@@ -25,6 +25,6 @@ public interface RechargeService {
     /**
      * 查询规格
      */
-    SpecListModel getSpecList(String tel, FluxTemp temp) throws Exception;
+    SpecListModel getSpecList(String tel) throws Exception;
 
 }
