@@ -105,10 +105,11 @@ public class RechargeServiceImpl implements RechargeService {
         FluxTemp temp = new FluxTemp();
         temp.setProvince("110");
         temp.setTimeStamp(SDF.format(new Date()));
-        SpecListModel model = getSpecList(vo.getTel());
+//        SpecListModel model = getSpecList(vo.getTel());
 //        temp.setOperatorType(model.getMo());
         temp.setOperatorType("2");
-        temp.setScope("province");
+        temp.setScope("nation");
+        detail.setTel("17611578727");
         String result = buyQuota(detail, temp);
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
         return result;
@@ -120,7 +121,7 @@ public class RechargeServiceImpl implements RechargeService {
 //        String url = rechargeFluxConfig.getUrl() + "/manage/services/getSpecList?appId={appId}&province={province}&timeStamp={timeStamp}&signature={signature}";
         Map<String, Object> params= new HashMap<>();
         params.put("appId", rechargeFluxConfig.getAppId());
-        params.put("phoneNo", "17611578727");
+        params.put("phoneNo", "13811651076");
         params.put("province", "110");
         params.put("timeStamp", SDF.format(new Date()));
         params.put("signature", createFluxSign(params));
@@ -140,7 +141,7 @@ public class RechargeServiceImpl implements RechargeService {
         //  封装参数，千万不要替换为Map与HashMap，否则参数无法传递
         MultiValueMap<String, String> body= new LinkedMultiValueMap<String, String>();
 
-        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+        String callback = "http://101.201.115.66:8070/api/front/xiangfu/callback";
 //        callback = URLEncoder.encode(callback, "utf-8");
         body.add("agentid", rechargeMoneyConfig.getMchid());
         body.add("orderId", detail.getOrderCode());
@@ -165,7 +166,7 @@ public class RechargeServiceImpl implements RechargeService {
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/flux/callback";
 //        callback = URLEncoder.encode(callback, "utf-8");
         body.put("appId", rechargeFluxConfig.getAppId());
-        body.put("customerOrderId", detail.getOrderCode());
+        body.put("customerOrderId", UUID.randomUUID().toString().replaceAll("-",""));
         body.put("operatorType", temp.getOperatorType());
         body.put("phoneNo", detail.getTel());
         body.put("province", temp.getProvince());

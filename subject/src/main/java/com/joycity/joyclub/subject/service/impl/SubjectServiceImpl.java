@@ -66,15 +66,29 @@ public class SubjectServiceImpl implements SubjectService {
         String[] acts = subject.getContactAct().split(",");
         List<ActSimple> actSimples = actMapper.selectActSimpleListByIds(acts);
         subject.setActs(actSimples);
+        String actsName = "";
+        for (ActSimple actSimple : actSimples) {
+            actsName += actSimple.getName();
+        }
+        subject.setActsName(actsName);
         // 卡券
         String[] coupons = subject.getContactCoupon().split(",");
         List<ShowCouponLaunchInfo> launchInfos = launchMapper.selectByLaunchIds(coupons);
         subject.setCoupons(launchInfos);
+        String couponsName = "";
+        for (ShowCouponLaunchInfo info : launchInfos) {
+            couponsName += info.getCouponName();
+        }
+        subject.setCouponsName(couponsName);
         //商品
         String[] products = subject.getContactProduct().split(",");
         List<ProductSimple> productSimples = productMapper.selectProductSimpleByIds(products);
         subject.setProducts(productSimples);
-
+        String productsName = "";
+        for (ProductSimple simple : productSimples) {
+            productsName += simple.getName();
+        }
+        subject.setProductsName(productsName);
         return new ResultData(subject);
     }
 

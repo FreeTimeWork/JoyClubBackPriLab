@@ -12,8 +12,11 @@ import java.util.List;
 public class SubjectDetail extends SubjectWithType {
 
     private List<ActSimple> acts;
+    private String actsName;
     private List<ShowCouponLaunchInfo> coupons;
+    private String couponsName;
     private List<ProductSimple> products;
+    private String productsName;
 
     public List<ActSimple> getActs() {
         return acts;
@@ -37,5 +40,29 @@ public class SubjectDetail extends SubjectWithType {
 
     public void setProducts(List<ProductSimple> products) {
         this.products = products;
+    }
+
+    public String getActsName() {
+        return actsName;
+    }
+
+    public void setActsName(String actsName) {
+        this.actsName = actsName;
+    }
+
+    public String getCouponsName() {
+        return couponsName;
+    }
+
+    public void setCouponsName(String couponsName) {
+        this.couponsName = couponsName;
+    }
+
+    public String getProductsName() {
+        return productsName;
+    }
+
+    public void setProductsName(String productsName) {
+        this.productsName = productsName;
     }
 }

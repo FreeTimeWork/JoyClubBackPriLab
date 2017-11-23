@@ -113,8 +113,9 @@ public class CardCouponFrontController {
                     .setPhone(info.getMobile()).build();
             clientId = loginFrontService.clientLogin(param, response);
         }
+        logger.info("vipCode = " + vipCode + "clientId = " + clientId);
         if (clientId == null) {
-            return launchService.getVisitorVisibleListByCouponType(projectId, couponType, pageUtil);
+            return new ResultData();
         } else {
             return launchService.getClientVisibleListByCouponType(projectId, clientId, couponType, pageUtil);
         }

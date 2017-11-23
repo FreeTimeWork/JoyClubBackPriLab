@@ -43,7 +43,7 @@ public class XiangfuController {
     @Autowired
     XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
 
-    @PostMapping("/recharge")
+    @PostMapping("/exchange")
     public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
                                       @RequestBody RechargeVO vo) throws Exception {
 //        Long clienId = clientTokenService.getIdOrThrow(token);
