@@ -68,6 +68,10 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             if (!launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
                 throw new BusinessException(COUPON_LAUNCH_ERROR, "代金券只能选择条件投放");
             }
+        } else if (cardCoupon.getType().equals(CouponType.THIRD_PARTY_COUPON)) {
+            if (launch.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
+                throw new BusinessException(COUPON_LAUNCH_ERROR, "第三方只能选择批量或线上投放");
+            }
         }
         if (launch.getType().equals(CouponLaunchType.BATCH_LAUNCH)) {
             launch.setLaunchEndTime(launch.getLaunchStartTime());

@@ -159,7 +159,7 @@ public class RechargeServiceImpl implements RechargeService {
         String baseUrl = rechargeFluxConfig.getUrl();
 
         Map<String, Object> body= new HashMap<>();
-        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
+        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/flux/callback";
         callback = URLEncoder.encode(callback, "utf-8");
         body.put("appId", rechargeFluxConfig.getAppId());
         body.put("customerOrderId", detail.getOrderCode());

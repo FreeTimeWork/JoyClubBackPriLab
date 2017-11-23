@@ -197,7 +197,7 @@
         <if test="shopName != null">
             AND cc.name LIKE #{shopName}
         </if>
-        AND ccl.confirm_flag = 1 AND ccl.review_status = 1 AND ccl.delete_flag = 0
+        AND ccl.confirm_flag = 1 AND ccl.review_status = 1 AND ccl.delete_flag = 0 AND ccc.use_status = 2
         GROUP BY psd.shop_id
         ORDER BY count(ccc.id) DESC
         <include refid="limit"/>

@@ -7,6 +7,8 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
+import com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper;
+import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
 import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
@@ -37,6 +40,8 @@ public class XiangfuController {
     private RechargeService rechargeService;
     @Autowired
     private ClientTokenService clientTokenService;
+    @Autowired
+    XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
 
     @PostMapping("/recharge")
     public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
@@ -74,12 +79,38 @@ public class XiangfuController {
         result.setSign(sign);
         result.setTrxamount(trxamount);
         result.setUserToken(userToken);
-
+        Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(result.getOrderId());
+        XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
+        detail.setId(id);
+        detail.setOutOrder(result.getSid());
+        detail.setPayment(new BigDecimal(result.getTrxamount()));
+        xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         System.out.println(result);
         logger.info("XiangfuController - callback-result=" + result);
         response.getWriter().write("success");
     }
 
+
+//    @PostMapping("/flux/callback")
+//    public void xiangfuFluxCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String customerOrderId = request.getParameter("customerOrderId");
+//        String operatorType = request.getParameter("operatorType");
+//        String phoneNo = request.getParameter("phoneNo");
+//        String spec = request.getParameter("spec");
+//        String scope = request.getParameter("scope");
+//        String Status = request.getParameter("Status");
+//        String signature = request.getParameter("signature");
+//        String sign = request.getParameter("sign");
+//        Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(customerOrderId);
+//        XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
+//        detail.setId(id);
+//        detail.setOutOrder(result.getSid());
+//        detail.setPayment(new BigDecimal(result.getTrxamount()));
+//        xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
+//        System.out.println(result);
+//        logger.info("XiangfuController - callback-result=" + result);
+//        response.getWriter().write("success");
+//    }
 
     @GetMapping("/tel/type")
     public ResultData getTelType(@RequestParam String tel) throws Exception {

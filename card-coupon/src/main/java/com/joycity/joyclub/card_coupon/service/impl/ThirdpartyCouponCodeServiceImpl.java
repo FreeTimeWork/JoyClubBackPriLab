@@ -17,6 +17,8 @@ import com.joycity.joyclub.commons.utils.AbstractBatchInsertlUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,6 +29,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeService {
+
+    private Log logger = LogFactory.getLog(ThirdpartyCouponCodeServiceImpl.class);
 
     @Autowired
     private CardThirdpartyCouponCodeMapper thirdpartyCouponCodeMapper;
@@ -59,6 +63,7 @@ public class ThirdpartyCouponCodeServiceImpl implements ThirdpartyCouponCodeServ
             count = thirdpartyCouponCodeMapper.countIncludeDeleteByBatch(findBatch);
         } while (thirdpartyCouponBatchCache.hasKey(findBatch) || count > 0);
         thirdpartyCouponBatchCache.put(findBatch,findBatch);
+        logger.info("cardNos= "+cardNos);
         List<CardThirdpartyCouponCode> thirdpartyCouponCodes = prepareThirdpartyCouponCode(cardNos, findBatch, thirdpartyShopId);
 
         int sum = 0;
