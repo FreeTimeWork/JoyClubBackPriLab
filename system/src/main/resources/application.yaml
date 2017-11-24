@@ -152,12 +152,12 @@ pos:
 spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
-    password: root
-    username: root
-#    url: jdbc:mysql://rm-2zew10t27zxjjz7uho.mysql.rds.aliyuncs.com:3306/joyclub_test?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
-#    username: moma
-#    password: moma@#$123
+#    url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
+#    password: root
+#    username: root
+    url: jdbc:mysql://rm-2zew10t27zxjjz7uho.mysql.rds.aliyuncs.com:3306/joyclub_test?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
+    username: moma
+    password: moma@#$123
 
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify

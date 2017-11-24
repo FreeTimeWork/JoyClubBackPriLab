@@ -68,27 +68,33 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setActs(actSimples);
         String actsName = "";
         for (ActSimple actSimple : actSimples) {
-            actsName += actSimple.getName();
+            actsName += actSimple.getName()+",";
         }
-        subject.setActsName(actsName);
+        if (actsName.length() > 1) {
+            subject.setActsName(actsName.substring(0,actsName.length() - 1));
+        }
         // 卡券
         String[] coupons = subject.getContactCoupon().split(",");
         List<ShowCouponLaunchInfo> launchInfos = launchMapper.selectByLaunchIds(coupons);
         subject.setCoupons(launchInfos);
         String couponsName = "";
         for (ShowCouponLaunchInfo info : launchInfos) {
-            couponsName += info.getCouponName();
+            couponsName += info.getCouponName()+",";
         }
-        subject.setCouponsName(couponsName);
+        if (couponsName.length() > 1) {
+            subject.setCouponsName(couponsName.substring(0,couponsName.length() - 1));
+        }
         //商品
         String[] products = subject.getContactProduct().split(",");
         List<ProductSimple> productSimples = productMapper.selectProductSimpleByIds(products);
         subject.setProducts(productSimples);
         String productsName = "";
         for (ProductSimple simple : productSimples) {
-            productsName += simple.getName();
+            productsName += simple.getName()+",";
         }
-        subject.setProductsName(productsName);
+        if (productsName.length() > 1) {
+            subject.setProductsName(productsName.substring(0,productsName.length() - 1));
+        }
         return new ResultData(subject);
     }
 
@@ -105,4 +111,5 @@ public class SubjectServiceImpl implements SubjectService {
         subjectTypeMapper.updateByPrimaryKeySelective(subjectType);
         return null;
     }
+
 }
