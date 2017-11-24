@@ -8,6 +8,7 @@ import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
@@ -168,11 +169,11 @@ public class CardCouponFrontController {
             @RequestParam(required = false) String ticket,
             @RequestParam(required = false) String vipCode) {
         logger.info("available-mallcoo projectId: " + projectId + "ticket: " + ticket + " vipCode: " + vipCode);
-
         if (ticket == null && vipCode == null) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "ticket和vipCode不能同时为null");
         }
-        return couponCodeService.getAvailableCardCouponsByMallcooTicket(projectId, ticket,vipCode);
+        Client client = loginFrontService.mallcooSysn(projectId,ticket);
+        return couponCodeService.getAvailableCardCouponsByMallcooTicket(projectId, ticket,client.getVipCode());
     }
     @GetMapping("/card/coupon/code/{id}")
     public ResultData getCouponInfoByCodeId(

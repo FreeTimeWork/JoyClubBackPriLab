@@ -1,6 +1,7 @@
 package com.joycity.joyclub.apifront.service;
 
 import com.joycity.joyclub.apifront.modal.login.LoginMethodParam;
+import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface LoginFrontService {
 
+
+    /**
+     * 同步猫酷，crm和自己
+     */
+    Client mallcooSysn(Long projectId, String ticket);
     /**
      * 登录，会同步crm
      * @param params

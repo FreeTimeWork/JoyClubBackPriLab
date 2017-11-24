@@ -7,6 +7,9 @@ import com.joycity.joyclub.apifront.modal.project.SysProject;
 import com.joycity.joyclub.apifront.service.*;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import com.joycity.joyclub.we_chat.modal.WechatUserInfo;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
@@ -48,6 +51,9 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     ClientLoginLogMapper clientLoginLogMapper;
     @Autowired
     ClientTokenService clientTokenService;
+    @Autowired
+    private MallCooService mallCooService;
+
     private Log logger = LogFactory.getLog(LoginFrontServiceImpl.class);
 
     /**
@@ -172,8 +178,26 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         client.setWxNickName(getStrBeforeCheck(info.getNickname()));
         client.setWxProvince(getStrBeforeCheck(info.getProvince()));
     }
-// TODO: 2017/5/11 参数对象化
 
+    @Override
+    public Client mallcooSysn(Long projectId,String ticket) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
+        String vipCode = info.getThirdPartyCardID();
+        if (vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
+        }
+        Long clientId = clientMapper.getIdByVipCode(vipCode);
+        if (clientId == null) {
+            LoginMethodParam param = LoginMethodParam
+                    .LoginMethodParamBuilder
+                    .create()
+                    .setCardProjectId(projectId)
+                    .setPhone(info.getMobile()).build();
+            clientId = clientLogin(param, null);
+        }
+        return clientMapper.selectByPrimaryKey(clientId);
+    }
+// TODO: 2017/5/11 参数对象化
     /**
      * 用户登陆逻辑
      * 商场项目使用平台的悦客会，登录时发自己项目的卡，但是记录平台的openId
@@ -253,8 +277,9 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         if (params.getOpenIdProjectId() != null) {
             wechatService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
         }
-
-        addTokenCookie(response, user.getId());
+        if (response == null) {
+            addTokenCookie(response, user.getId());
+        }
         return user.getId();
     }
 
