@@ -21,7 +21,7 @@
         <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.act.mapper.generated"
                                   targetProject="D:\IDEA workspace\joyclubback\act\src\main\java"/>
      -->
-        <table tableName="front_apply_act_type">
+        <table tableName="front_apply_act">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
