@@ -13,7 +13,7 @@ public interface SubjectService {
 
     ResultData getSubjectDetail(Long id);
 
-    ResultData getSubjectTypes();
+    ResultData getSubjectTypes(Long projectId);
 
     ResultData updateSubjectType(SubjectType subjectType);
 

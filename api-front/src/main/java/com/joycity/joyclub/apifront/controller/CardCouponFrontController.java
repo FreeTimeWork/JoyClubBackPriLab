@@ -136,9 +136,8 @@ public class CardCouponFrontController {
      * 猫酷免费领取
      */
     @PostMapping("/card/coupon/point/receive/mallcoo")
-    public ResultData freeReceiveCouponMallcoo(@RequestParam String ticket,
-                                        @Valid @RequestBody CouponFreeGetVO vo) {
-        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, ticket);
+    public ResultData freeReceiveCouponMallcoo(@Valid @RequestBody CouponFreeGetVO vo) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, vo.getTicket());
         String vipCode = info.getThirdPartyCardID();
         if (vipCode == null) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");

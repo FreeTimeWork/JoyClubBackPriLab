@@ -5,6 +5,15 @@ package com.joycity.joyclub.apifront.modal.vo.card_coupon;
  */
 public class CouponOrderVO {
     private Long launchId;
+    private String ticket;
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
+    }
 
     public Long getLaunchId() {
         return launchId;

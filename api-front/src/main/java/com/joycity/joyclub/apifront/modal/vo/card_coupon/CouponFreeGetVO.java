@@ -11,6 +11,15 @@ import javax.validation.constraints.NotNull;
 public class CouponFreeGetVO {
     @NotNull
     private Long launchId;
+    private String ticket;
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
+    }
 
     public Long getLaunchId() {
         return launchId;

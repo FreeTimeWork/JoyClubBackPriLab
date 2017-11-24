@@ -76,9 +76,9 @@ public class CardCouponOrderController {
      * 猫酷支付宝下单 ，返回form参数 其他参照微信支付
      */
     @PostMapping("/order/ali/mallcoo")
-    public ResultData orderForAliMallcoo(@RequestParam String ticket,
+    public ResultData orderForAliMallcoo(
                                   @Valid @RequestBody CouponOrderVO vo) {
-        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, ticket);
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(2L, vo.getTicket());
         String vipCode = info.getThirdPartyCardID();
         if (vipCode == null) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");

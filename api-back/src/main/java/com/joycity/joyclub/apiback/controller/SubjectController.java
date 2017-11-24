@@ -47,8 +47,8 @@ public class SubjectController extends BaseUserSessionController {
     }
 
     @GetMapping("/subject/type")
-    public ResultData getSubjectTypes() {
-        return subjectService.getSubjectTypes();
+    public ResultData getSubjectTypes(@RequestParam(required = false) Long projectId) {
+        return subjectService.getSubjectTypes(projectId);
     }
 
     @PostMapping("/subject/type")

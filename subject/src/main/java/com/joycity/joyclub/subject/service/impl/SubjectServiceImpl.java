@@ -100,9 +100,12 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public ResultData getSubjectTypes() {
+    public ResultData getSubjectTypes(Long projectId) {
         SubjectTypeExample example = new SubjectTypeExample();
-
+        SubjectTypeExample.Criteria criteria = example.createCriteria();
+        if (projectId != null) {
+            criteria.andProjectIdEqualTo(projectId);
+        }
         List<SubjectType> subjects = subjectTypeMapper.selectByExample(example);
         return new ResultData(new ListResult(subjects));
     }
