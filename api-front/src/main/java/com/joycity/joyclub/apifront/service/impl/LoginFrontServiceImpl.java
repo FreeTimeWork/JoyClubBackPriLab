@@ -282,7 +282,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         if (params.getOpenIdProjectId() != null) {
             wechatService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
         }
-        if (response == null) {
+        if (response != null) {
             addTokenCookie(response, user.getId());
         }
         logger.info("同步科传后的user = "+user);
