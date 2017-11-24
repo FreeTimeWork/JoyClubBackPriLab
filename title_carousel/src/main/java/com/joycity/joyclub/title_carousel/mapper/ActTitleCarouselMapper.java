@@ -6,6 +6,7 @@ import com.joycity.joyclub.commons.mapper.BaseMapper;
 import com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarousel;
 import com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarouselExample;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -13,11 +14,7 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface ActTitleCarouselMapper extends BaseMapper<SaleActTitleCarousel, Long, SaleActTitleCarouselExample> {
 
-    @Select("select id, picture, target_address from sale_act_title_carousel ")
-    List<SaleActTitleCarousel> selectAllActTitleCarousel();
-
-    @Delete("DELETE FROM `sale_act_title_carousel`;")
-    void deleteAll();
+    List<SaleActTitleCarousel> selectAllActTitleCarousel(@Param("projectId") Long projectId);
 
 
 

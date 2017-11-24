@@ -10,9 +10,7 @@ import com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarousel;
  */
 public interface ActTitleCarouselService {
 
-    ResultData getAllActTitleCarousel();
-
-    ResultData updateActTitleCarousel(List<SaleActTitleCarousel> actTitleCarousels);
+    ResultData getAllActTitleCarousel(Long projectId);
 
     ResultData createActTitleCarousel(SaleActTitleCarousel actTitleCarousel);
 

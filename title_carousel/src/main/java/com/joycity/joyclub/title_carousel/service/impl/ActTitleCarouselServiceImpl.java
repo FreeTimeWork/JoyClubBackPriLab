@@ -26,19 +26,9 @@ public class ActTitleCarouselServiceImpl implements ActTitleCarouselService {
     private ActTitleCarouselMapper actTitleCarouselMapper;
 
     @Override
-    public ResultData getAllActTitleCarousel() {
-        List<SaleActTitleCarousel> saleTitleCarousels =  actTitleCarouselMapper.selectAllActTitleCarousel();
+    public ResultData getAllActTitleCarousel(Long projectId) {
+        List<SaleActTitleCarousel> saleTitleCarousels =  actTitleCarouselMapper.selectAllActTitleCarousel(projectId);
         return new ResultData(new ListResult(saleTitleCarousels));
-    }
-
-    @Override
-    @Transactional
-    public ResultData updateActTitleCarousel(List<SaleActTitleCarousel> actTitleCarousels) {
-        actTitleCarouselMapper.deleteAll();
-        for (SaleActTitleCarousel carousel : actTitleCarousels) {
-            actTitleCarouselMapper.insertSelective(carousel);
-        }
-        return new ResultData(new UpdateResult(actTitleCarousels.size()));
     }
 
     @Override

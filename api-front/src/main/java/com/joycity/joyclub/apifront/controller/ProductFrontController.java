@@ -51,8 +51,8 @@ public class ProductFrontController {
     }
 
     @GetMapping("/product/slider/carousels")
-    public ResultData getProductCarousel(){
-        return productTitleCarouselService.getAllProductTitleCarousel();
+    public ResultData getProductCarousel(@RequestParam(required = false) Long projectId){
+        return productTitleCarouselService.getAllProductTitleCarousel(projectId);
     }
 
 }

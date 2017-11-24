@@ -26,8 +26,8 @@ public class ProductTitleCarouselServiceImpl implements ProductTitleCarouselServ
     private ProductTitleCarouselMapper productTitleCarouselMapper;
 
     @Override
-    public ResultData getAllProductTitleCarousel() {
-        List<SaleProductTitleCarousel> saleTitleCarousels =  productTitleCarouselMapper.selectAllSaleProductTitleCarousel();
+    public ResultData getAllProductTitleCarousel(Long projectId) {
+        List<SaleProductTitleCarousel> saleTitleCarousels =  productTitleCarouselMapper.selectAllSaleProductTitleCarousel(projectId);
         return new ResultData(new ListResult(saleTitleCarousels));
     }
 

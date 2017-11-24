@@ -107,8 +107,8 @@ public class ActFrontController {
     }
 
     @GetMapping("act/carousels")
-    public ResultData getActCarousels(){
-        return actTitleCarouselService.getAllActTitleCarousel();
+    public ResultData getActCarousels(@RequestParam(required = false) Long projectId){
+        return actTitleCarouselService.getAllActTitleCarousel(projectId);
     }
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.title_carousel.mapper.ActTitleCarouselMapper">
+
+  <select id="selectAllActTitleCarousel" resultType="com.joycity.joyclub.title_carousel.modal.generated.SaleActTitleCarousel">
+    select id, picture, target_address from sale_act_title_carousel
+    <where>
+      <if test="projectId != null">
+        AND project_id = #{projectId}
+      </if>
+    </where>
+  </select>
+</mapper>

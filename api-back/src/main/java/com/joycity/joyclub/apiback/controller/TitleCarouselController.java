@@ -34,9 +34,9 @@ public class TitleCarouselController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/system/product/carousels", method = RequestMethod.GET)
-    public ResultData getAllProductTitleCarousel(HttpSession session) {
+    public ResultData getAllProductTitleCarousel(@RequestParam(required = false) Long projectId,HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
-        return productTitleCarouselService.getAllProductTitleCarousel();
+        return productTitleCarouselService.getAllProductTitleCarousel(projectId);
     }
 
     @PostMapping("/system/product/carousel")
@@ -51,16 +51,11 @@ public class TitleCarouselController extends BaseUserSessionController {
         return productTitleCarouselService.deleteProductTitleCarousel(id);
     }
 
-    @RequestMapping(value = "/system/act/carousels", method = RequestMethod.POST)
-    public ResultData updateActTitleCarousel(@RequestBody SearchActTitleCarouselsVO vo, HttpSession session) {
-        checkPlatformOrProjectOrStoreUser(session);
-        return actTitleCarouselService.updateActTitleCarousel(vo.getTitleCarousels());
-    }
 
     @RequestMapping(value = "/system/act/carousels", method = RequestMethod.GET)
-    public ResultData getAllActTitleCarousel(HttpSession session) {
+    public ResultData getAllActTitleCarousel(@RequestParam(required = false) Long projectId, HttpSession session) {
         checkPlatformOrProjectOrStoreUser(session);
-        return actTitleCarouselService.getAllActTitleCarousel();
+        return actTitleCarouselService.getAllActTitleCarousel(projectId);
     }
 
     @PostMapping("/system/act/carousel")
