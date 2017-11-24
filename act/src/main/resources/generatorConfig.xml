@@ -12,16 +12,16 @@
             <!--  <property name="addRemarkComments" value="true"/>-->
         </commentGenerator>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&amp;characterEncoding=UTF-8"
-                        userId="root" password=""/>
+                        connectionURL="jdbc:mysql://rm-2zew10t27zxjjz7uho.mysql.rds.aliyuncs.com:3306/joyclub2?useUnicode=true&amp;characterEncoding=UTF-8"
+                        userId="moma" password="moma@#$123"/>
         <javaModelGenerator targetPackage="com.joycity.joyclub.act.modal.generated"
-                            targetProject="D:\IDEA workspace\JoyClubBacklab\act\src\main\java"/>
+                            targetProject="D:\IDEA workspace\JoyClubBackPriLab\act\src\main\java"/>
         <sqlMapGenerator targetPackage="mapper.generated"
-                         targetProject="D:\IDEA workspace\JoyClubBacklab\act\src\main\resources"/>
+                         targetProject="D:\IDEA workspace\JoyClubBackPriLab\act\src\main\resources"/>
         <!--     <javaClientGenerator type="XMLMAPPER" targetPackage="com.joycity.joyclub.act.mapper.generated"
                                   targetProject="D:\IDEA workspace\joyclubback\act\src\main\java"/>
      -->
-        <table tableName="front_apply_act">
+        <table tableName="front_apply_act_type">
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
