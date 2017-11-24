@@ -1,5 +1,7 @@
 package com.joycity.joyclub.recharge.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.commons.constant.ResultCode;
@@ -9,12 +11,14 @@ import com.joycity.joyclub.commons.utils.MD5Util;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
 import com.joycity.joyclub.recharge.RechargeMoneyConfig;
 import com.joycity.joyclub.recharge.constants.RFluxMoney;
+import com.joycity.joyclub.recharge.constants.TelOperator;
 import com.joycity.joyclub.recharge.constants.XiangfuRechargeType;
 import com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
 import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
+import com.joycity.joyclub.recharge.modal.vo.TelOperatorResult;
 import com.joycity.joyclub.recharge.service.RechargeService;
 import com.joycity.joyclub.recharge.util.RSAUtil;
 import com.joycity.joyclub.we_chat.pay.wechat.SignUtils;
@@ -56,31 +60,6 @@ public class RechargeServiceImpl implements RechargeService {
     @Autowired
     private XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
 
-//    /**
-//     * 参考文档 http://wiki.madaikr.com/flow-api-doc/
-//     *
-//     * @param phone
-//     * @param flowSize 流量包大小，以M为单位
-//     */
-//    @Override
-//    public void rechargeFlow(String phone, int flowSize, boolean ifNationFlow) {
-//        Map<String, Object> businessBody = new HashedMap();
-//        businessBody.put("action", "CZ");
-//        businessBody.put("orderId", createOrderCode());
-//        businessBody.put("chargeAcct", phone);
-//        businessBody.put("chargeType", 1);
-//        businessBody.put("flowPackageType", ifNationFlow ? 0 : 1);
-//        businessBody.put("flowPackageSize", flowSize);
-//        // TODO: 2017/6/14 回调地址
-////        businessBody.put("retUrl", URLEncoder.encode("http://www.baidu.com?a=1&b=张三","UTF-8"));
-//
-//        System.out.println(rechargeConfig.getUrl());
-//        System.out.println(JSON.toJSONString(getPostData("CZ", businessBody)));
-//        String result = restTemplate.postForObject(rechargeConfig.getUrl(), getPostData("CZ", businessBody), String.class);
-//        JSON.parseObject(result, RechargeFlowResult.class);
-//
-//
-//    }
 
     @Override
     public String rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
@@ -105,11 +84,9 @@ public class RechargeServiceImpl implements RechargeService {
         FluxTemp temp = new FluxTemp();
         temp.setProvince("110");
         temp.setTimeStamp(SDF.format(new Date()));
-//        SpecListModel model = getSpecList(vo.getTel());
-//        temp.setOperatorType(model.getMo());
-        temp.setOperatorType("2");
+        TelOperatorResult model = getTelOperator(vo.getTel());
+        temp.setOperatorType(TelOperator.mapNameKey.get(model.getCatName()).getCode());
         temp.setScope("nation");
-        detail.setTel("17611578727");
         String result = buyQuota(detail, temp);
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
         return result;
@@ -129,6 +106,16 @@ public class RechargeServiceImpl implements RechargeService {
 
         SpecListModel model = JSONObject.parseObject(responseEntity.getBody(), SpecListModel.class);
         return model;
+    }
+
+    @Override
+    public TelOperatorResult getTelOperator(String tel) {
+        String url = "https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel={tel}";
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class, tel);
+        String json = responseEntity.getBody();
+        json = json.substring(json.indexOf("{"), json.length());
+        TelOperatorResult telOperatorResult = JSONObject.parseObject(json,TelOperatorResult.class);
+        return telOperatorResult;
     }
 
     /**
@@ -229,18 +216,21 @@ public class RechargeServiceImpl implements RechargeService {
         return finalSign;
     }
 
-//    private RechargePostData getPostData(String action, Map businessBody) {
-//        RechargePostData postData = new RechargePostData();
-//        postData.setAgentAccount(rechargeConfig.getUser());
-//        postData.setBusiBody(businessBody);
-//        postData.setSign(DigestUtils.md5Hex(JSON.toJSONString(businessBody) + rechargeConfig.getKey()));
-//        return postData;
-//    }
-
     public static void main(String[] args) throws UnsupportedEncodingException {
-//        String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/callback";
-//        callback = URLEncoder.encode(callback, "utf-8");
-//        System.out.println(callback);
+        String json = "__GetZoneResult_ = {\n" +
+                "    mts:'1761157',\n" +
+                "    province:'北京',\n" +
+                "    catName:'中国联通',\n" +
+                "    telString:'17611578727',\n" +
+                "\tareaVid:'29400',\n" +
+                "\tispVid:'137815084',\n" +
+                "\tcarrier:'北京联通'\n" +
+                "}";
+        json = json.substring(json.indexOf("{"), json.length());
+        JSONObject.parseObject(json,TelOperatorResult.class);
+        System.out.println();
 
     }
+
+
 }

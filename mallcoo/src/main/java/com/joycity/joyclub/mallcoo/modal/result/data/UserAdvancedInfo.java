@@ -1,5 +1,7 @@
 package com.joycity.joyclub.mallcoo.modal.result.data;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * 猫酷返回的高级用户信息
  */
@@ -63,5 +65,10 @@ public class UserAdvancedInfo extends  UserSimpleInfo{
 
     public void setMallCardTypeID(Long mallCardTypeID) {
         this.mallCardTypeID = mallCardTypeID;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

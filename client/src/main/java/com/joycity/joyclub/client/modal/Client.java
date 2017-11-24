@@ -1,5 +1,7 @@
 package com.joycity.joyclub.client.modal;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Date;
 
 /**
@@ -961,5 +963,10 @@ public class Client {
      */
     public void setDeleteTime(Date deleteTime) {
         this.deleteTime = deleteTime;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

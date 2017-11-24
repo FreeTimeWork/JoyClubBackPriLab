@@ -7,11 +7,13 @@ import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
+import com.joycity.joyclub.recharge.constants.TelOperator;
 import com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
 import com.joycity.joyclub.recharge.modal.vo.SpecListModel;
+import com.joycity.joyclub.recharge.modal.vo.TelOperatorResult;
 import com.joycity.joyclub.recharge.service.RechargeService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -117,8 +119,7 @@ public class XiangfuController {
 
     @GetMapping("/tel/type")
     public ResultData getTelType(@RequestParam String tel) throws Exception {
-        FluxTemp temp = new FluxTemp();
-        SpecListModel model = rechargeService.getSpecList(tel);
-        return new ResultData(model.getMo());
+        TelOperatorResult result = rechargeService.getTelOperator(tel);
+        return new ResultData(TelOperator.mapNameKey.get(result.getCatName()).getCode());
     }
 }

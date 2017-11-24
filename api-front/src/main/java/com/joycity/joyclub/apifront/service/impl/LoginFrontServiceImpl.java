@@ -182,11 +182,13 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     @Override
     public Client mallcooSysn(Long projectId,String ticket) {
         UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
+        logger.info("UserAdvancedInfo = "+info);
         String vipCode = info.getThirdPartyCardID();
         if (vipCode == null) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
         }
         Long clientId = clientMapper.getIdByVipCode(vipCode);
+        logger.info("clientId-1 = "+clientId);
         if (clientId == null) {
             LoginMethodParam param = LoginMethodParam
                     .LoginMethodParamBuilder
@@ -195,6 +197,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
                     .setPhone(info.getMobile()).build();
             clientId = clientLogin(param, null);
         }
+        logger.info("clientId-2 = "+clientId);
         return clientMapper.selectByPrimaryKey(clientId);
     }
 // TODO: 2017/5/11 参数对象化
@@ -213,6 +216,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
      */
     @Override
     public Long clientLogin(LoginMethodParam params, HttpServletResponse response) {
+        logger.info("into clientLogin--------------------");
         SysProject project = projectMapper.selectByPrimaryKey(params.getCardProjectId());
         if (project == null) {
             throw new BusinessException(DATA_NOT_EXIST, "请提供正确的项目编号");
@@ -223,6 +227,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         }
         //先从科传处查看用户注册情况
         Client kechuanClient = keChuanCrmService.getMemberByTel(params.getPhone());
+        logger.info("科传会员数据："+kechuanClient);
         //如果科传处没有该号码用户，立刻新建
         if (kechuanClient == null) {
             // TODO: 2017/4/18 这里是先将卡设为使用，如果创建会员失败，再设置为不可用 。而不是先找到可用的号码，创建成功后再设置为已用。
@@ -280,6 +285,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         if (response == null) {
             addTokenCookie(response, user.getId());
         }
+        logger.info("同步科传后的user = "+user);
         return user.getId();
     }
 
