@@ -61,6 +61,11 @@ public interface ProductMapper extends BaseMapperWithBLOBS<SaleProduct, SaleProd
             @Param("specialPriceFlag") Boolean specialPriceFlag,
             @Param("pageUtil") PageUtil pageUtil
     );
+    Long countByProject(
+            @Param("projectId") Long selectByProject,
+            @Param("categoryId") Long categoryId,
+            @Param("specialPriceFlag") Boolean specialPriceFlag
+    );
 
     @Select("select * from sale_special_price_act where id =#{id}")
     SpecialPriceAct getSpecialPriceAct(@Param("id") Long id);

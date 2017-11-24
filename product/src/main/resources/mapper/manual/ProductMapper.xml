@@ -121,19 +121,46 @@
         left join sys_product_category c on a.category_id=c.id
         left join sys_store ss on a.store_id = ss.id
         left join sale_store_designer sd on sd.id = a.designer_id
-        where
-        ss.project_id = #{projectId}
-        <if test="specialPriceFlag!=null">
-         and p.special_price_flag = #{specialPriceFlag}
-        </if>
-        <if test="categoryId!= null">
-         and a.category_id = #{categoryId}
-        </if>
-        and p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+        <where>
+            p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+            <if test="projectId != null">
+                AND ss.project_id = #{projectId}
+            </if>
+            <if test="specialPriceFlag!=null">
+                and p.special_price_flag = #{specialPriceFlag}
+            </if>
+            <if test="categoryId!= null">
+                and a.category_id = #{categoryId}
+            </if>
+        </where>
         order by a.display_weight desc,p.id desc
         <include refid="limit"/>
 
     </select>
+
+    <select id="countByProject" resultType="long">
+        select
+        count(*)
+        from sale_product_price p
+        left join sale_product a on a.id = p.product_id
+        left join sys_product_category c on a.category_id=c.id
+        left join sys_store ss on a.store_id = ss.id
+        left join sale_store_designer sd on sd.id = a.designer_id
+        <where>
+            p.forbid_flag=0 and p.delete_flag=0 and p.review_status=1 and p.start_time&lt;=now() and p.end_time&gt;=now()
+            <if test="projectId != null">
+                AND ss.project_id = #{projectId}
+            </if>
+            <if test="specialPriceFlag!=null">
+                and p.special_price_flag = #{specialPriceFlag}
+            </if>
+            <if test="categoryId!= null">
+                and a.category_id = #{categoryId}
+            </if>
+        </where>
+
+    </select>
+
     <!--join的目的是初始化@prev为0-->
     <select id="selectSpecialPriceActProducts"
             resultType="com.joycity.joyclub.product.modal.ProductSimple">

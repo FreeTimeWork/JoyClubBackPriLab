@@ -40,12 +40,17 @@ public class ProductController extends BaseUserSessionController {
     @RequestMapping(value = "/products", method = RequestMethod.GET)
     public ResultData getList(@RequestParam(required = false) String name,
                               @RequestParam(required = false) Boolean valid,
+                              @RequestParam(required = false) Long projectId,
                               PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkStoreUser(httpSession);
         if (valid != null && valid) {
-            List<ProductSimple> list = productMapper.selectByFilter( null, null, null, pageUtil);
+            Long num = productMapper.countByProject(projectId, null, null);
+            List<ProductSimple> list = productMapper.selectByProject( projectId, null, null, pageUtil);
             ListResult result =  new ListResult(list);
+            result.setSum(num);
+            result.setPage(pageUtil.getPage());
+            result.setPageSize(pageUtil.getPageSize());
             result.setByPageUtil(pageUtil);
             return new ResultData(result);
         }
