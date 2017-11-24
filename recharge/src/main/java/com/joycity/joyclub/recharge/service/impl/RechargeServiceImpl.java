@@ -153,7 +153,7 @@ public class RechargeServiceImpl implements RechargeService {
         String callback = "http://joy-cb.ykh-bj.com/api/front/xiangfu/flux/callback";
 //        callback = URLEncoder.encode(callback, "utf-8");
         body.put("appId", rechargeFluxConfig.getAppId());
-        body.put("customerOrderId", UUID.randomUUID().toString().replaceAll("-",""));
+        body.put("customerOrderId", detail.getOrderCode());
         body.put("operatorType", temp.getOperatorType());
         body.put("phoneNo", detail.getTel());
         body.put("province", temp.getProvince());

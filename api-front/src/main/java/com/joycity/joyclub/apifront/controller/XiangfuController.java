@@ -101,10 +101,10 @@ public class XiangfuController {
         String phoneNo = request.getParameter("phoneNo");
         String spec = request.getParameter("spec");
         String scope = request.getParameter("scope");
-        String outStatus = request.getParameter("Status");
+        String outStatus = request.getParameter("status");
         String signature = request.getParameter("signature");
         String sign = request.getParameter("sign");
-        logger.info("XiangfuController-flux-result-outStatus=" + outStatus);
+        logger.info("XiangfuController-flux-result-outStatus =" + outStatus + " customerOrderId = "+customerOrderId);
         Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(customerOrderId);
         XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
         detail.setId(id);
@@ -113,8 +113,10 @@ public class XiangfuController {
             xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
             response.getWriter().write("success");
         } else {
+            detail.setStatus(5);
             response.getWriter().write("fail");
         }
+        xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
     }
 
     @GetMapping("/tel/type")
