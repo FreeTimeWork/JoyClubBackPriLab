@@ -35,9 +35,9 @@ public class SubjectController extends BaseUserSessionController {
     }
 
     @GetMapping("/subjects")
-    public ResultData getSubjects(PageUtil pageUtil, HttpSession session) {
+    public ResultData getSubjects(@RequestParam(required = false)Long projectId, PageUtil pageUtil, HttpSession session) {
 //        checkPlatformOrProjectOrStoreUser(session);
-        return subjectService.getSubjects(pageUtil);
+        return subjectService.getSubjects(projectId,pageUtil);
     }
 
     @GetMapping("/subject/{id}")

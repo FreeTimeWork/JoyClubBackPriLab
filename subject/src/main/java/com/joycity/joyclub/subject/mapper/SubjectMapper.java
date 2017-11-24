@@ -14,9 +14,9 @@ import java.util.List;
 
 public interface SubjectMapper extends BaseMapperWithBLOBS<Subject, SubjectWithBLOBs, Long, SubjectExample> {
 
-    List<SubjectWithType> getSubjectList(@Param("pageUtil") PageUtil pageUtil);
+    List<SubjectWithType> getSubjectList(@Param("projectId") Long projectId,@Param("pageUtil") PageUtil pageUtil);
 
-    Long countSubjectList();
+    Long countSubjectList(@Param("projectId") Long projectId);
 
     @Select("select * from subject where id = #{id}")
     SubjectDetail selectSubjectById(@Param("id") Long id);

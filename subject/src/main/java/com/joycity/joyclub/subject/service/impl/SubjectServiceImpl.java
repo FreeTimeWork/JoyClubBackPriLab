@@ -8,6 +8,7 @@ import com.joycity.joyclub.commons.AbstractGetListData;
 import com.joycity.joyclub.commons.modal.base.CreateResult;
 import com.joycity.joyclub.commons.modal.base.ListResult;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.UpdateResult;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.product.mapper.ProductMapper;
 import com.joycity.joyclub.product.modal.ProductSimple;
@@ -44,16 +45,16 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public ResultData getSubjects(PageUtil pageUtil) {
+    public ResultData getSubjects(Long projectId,PageUtil pageUtil) {
         return new AbstractGetListData<SubjectWithType>() {
             @Override
             public Long countByFilter() {
-                return subjectMapper.countSubjectList();
+                return subjectMapper.countSubjectList(projectId);
             }
 
             @Override
             public List<SubjectWithType> selectByFilter() {
-                return subjectMapper.getSubjectList(pageUtil);
+                return subjectMapper.getSubjectList(projectId,pageUtil);
             }
         }.getList(pageUtil);
     }
@@ -108,8 +109,8 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public ResultData updateSubjectType(SubjectType subjectType) {
-        subjectTypeMapper.updateByPrimaryKeySelective(subjectType);
-        return null;
+        int num = subjectTypeMapper.updateByPrimaryKeySelective(subjectType);
+        return new ResultData(new UpdateResult(num));
     }
 
 }

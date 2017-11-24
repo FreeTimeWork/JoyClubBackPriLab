@@ -9,7 +9,7 @@ public interface SubjectService {
 
     ResultData createSubject(SubjectWithBLOBs subjectWithBLOBs);
 
-    ResultData getSubjects(PageUtil pageUtil);
+    ResultData getSubjects(Long projectId,PageUtil pageUtil);
 
     ResultData getSubjectDetail(Long id);
 

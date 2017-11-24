@@ -9,11 +9,21 @@
         select s.*,st.name AS subject_type_name
         FROM subject s
         INNER JOIN subject_type st ON st.id = s.subject_type_id
+        <where>
+            <if test="projectId != null">
+                AND s.project_id = #{projectId}
+            </if>
+        </where>
         ORDER BY s.display_weight DESC ,s.id DESC
         <include refid="limit"/>
     </select>
 
     <select id="countSubjectList" resultType="long">
-        SELECT count(*) FROM subject
+        SELECT count(*) FROM subject s
+        <where>
+            <if test="projectId != null">
+                AND s.project_id = #{projectId}
+            </if>
+        </where>
     </select>
 </mapper>
