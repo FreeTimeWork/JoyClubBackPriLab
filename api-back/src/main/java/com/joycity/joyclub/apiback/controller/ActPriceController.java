@@ -33,18 +33,19 @@ public class ActPriceController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/act/prices", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) Integer reviewStatus,
+    public ResultData getList(@RequestParam(required = false)Long projectId,
+                              @RequestParam(required = false) Integer reviewStatus,
                               @RequestParam(required = false) String storeName,
                               @RequestParam(required = false) String actName,
                               @RequestParam(required = false) Byte buyType,
                               PageUtil pageUtil, HttpSession httpSession) {
-        SysUser user = checkUser(httpSession);
-        Integer userType = user.getType();
-        if (userType.equals(USER_TYPE_STORE))
-            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
-        else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
-            return actPriceService.getListForProject(user.getInfoId(), storeName, reviewStatus, actName, buyType, pageUtil);
-        else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+//        SysUser user = checkUser(httpSession);
+//        Integer userType = user.getType();
+//        if (userType.equals(USER_TYPE_STORE))
+//            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
+//        else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
+            return actPriceService.getListForProject(projectId, storeName, reviewStatus, actName, buyType, pageUtil);
+//        else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
 
     /**
