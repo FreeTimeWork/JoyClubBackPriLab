@@ -29,7 +29,7 @@
                 AND faa.review_status = #{reviewStatus}
             </if>
             <if test="projectId != null">
-                AND project_id = #{projectId}
+                AND faa.project_id = #{projectId}
             </if>
             <if test="name != null">
                 AND faa.name LIKE #{name}
