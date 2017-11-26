@@ -19,9 +19,9 @@ public interface ActTypeService {
 
     ResultData deleteActType(Long id);
 
-    List<IdName> getSaleActTypes();
+    List<IdName> getSaleActTypes(Long projectId);
 
-    ResultData getAllSaleActTypes();
+    ResultData getAllSaleActTypes(Long projectId);
 
     ResultData updateActType(SaleActType actType);
 

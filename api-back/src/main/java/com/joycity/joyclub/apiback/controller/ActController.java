@@ -68,10 +68,10 @@ public class ActController extends BaseUserSessionController {
      * @return 返回商品新建或者修改所需的基础数据，主要是Select标签的数据
      */
     @RequestMapping(value = "/act/formdata", method = RequestMethod.GET)
-    public ResultData getAct(HttpSession httpSession) {
+    public ResultData getActFormdata(@RequestParam(required = false) Long projectId,HttpSession httpSession) {
         //确保是商户用户
 //        SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        return actService.getActFormData(null);
+        return actService.getActFormData(projectId);
     }
 
     /**
@@ -221,7 +221,7 @@ public class ActController extends BaseUserSessionController {
     }
 
     @GetMapping("/act/type")
-    public ResultData getActTypes(){
-        return actTypeService.getAllSaleActTypes();
+    public ResultData getActTypes(@RequestParam(required = false) Long projectId){
+        return actTypeService.getAllSaleActTypes(projectId);
     }
 }

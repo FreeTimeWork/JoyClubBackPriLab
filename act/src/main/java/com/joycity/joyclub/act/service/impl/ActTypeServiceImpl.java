@@ -60,13 +60,13 @@ public class ActTypeServiceImpl implements ActTypeService {
     }
 
     @Override
-    public List<IdName> getSaleActTypes() {
-        return actTypeMapper.selectSaleActTypes();
+    public List<IdName> getSaleActTypes(Long projectId) {
+        return actTypeMapper.selectSaleActTypes(projectId);
     }
 
     @Override
-    public ResultData getAllSaleActTypes() {
-        return new ResultData(new ListResult(actTypeMapper.selectAllSaleActTypes()));
+    public ResultData getAllSaleActTypes(Long projectId) {
+        return new ResultData(new ListResult(actTypeMapper.selectAllSaleActTypes(projectId)));
     }
 
     @Override

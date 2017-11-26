@@ -115,10 +115,10 @@ public class ActServiceImpl implements ActService {
     }
 
     @Override
-    public ResultData getActFormData(Long storeId) {
+    public ResultData getActFormData(Long projectId) {
         ActFormData formData = new ActFormData();
         formData.setCategories(categoryMapper.getSimpleList());
-        formData.setApplyTypes(actTypeService.getSaleActTypes());
+        formData.setApplyTypes(actTypeService.getSaleActTypes(projectId));
         return new ResultData(formData);
     }
 

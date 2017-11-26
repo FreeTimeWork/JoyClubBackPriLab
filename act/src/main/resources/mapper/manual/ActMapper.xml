@@ -23,6 +23,9 @@
             <if test="actName!=null">
                 and p.name like #{actName}
             </if>
+            <if test="projectId != null">
+                and p.project_id = #{projectId}
+            </if>
         </where>
 
     </sql>

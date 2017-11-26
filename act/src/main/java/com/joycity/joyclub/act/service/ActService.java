@@ -40,10 +40,9 @@ public interface ActService {
     /**
      * 返回添加或者编辑项目所需的formData
      *
-     * @param storeId
      * @return data为 {@link com.joycity.joyclub.act.modal.ActFormData}
      */
-    ResultData getActFormData(Long storeId);
+    ResultData getActFormData(Long projectId);
 
     ////////////////////////////////api front//////////////////////
     ResultData getInfo(Long id);

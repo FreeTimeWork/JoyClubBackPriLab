@@ -28,4 +28,20 @@
 
   </resultMap>-->
 
+  <select id="selectSaleActTypes" resultType="com.joycity.joyclub.commons.modal.base.IdName">
+    select id,name from sale_act_type
+    <where>
+      AND project_id = #{projectId}
+    </where>
+  </select>
+
+  <select id="selectAllSaleActTypes" resultType="com.joycity.joyclub.act.modal.generated.SaleActType">
+    select * from sale_act_type
+    <where>
+      <if test="projectId != null">
+        AND project_id = #{projectId}
+      </if>
+    </where>
+  </select>
+
 </mapper>

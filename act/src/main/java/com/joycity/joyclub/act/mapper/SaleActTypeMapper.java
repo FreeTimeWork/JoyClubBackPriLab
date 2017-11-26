@@ -19,9 +19,7 @@ public interface SaleActTypeMapper extends BaseMapper<SaleActType,Long,SaleActTy
     Long countList();
     List<ActTypeWithAct> selectList(@Param("limit") Boolean limit, @Param("pageUtil") PageUtil pageUtil);
 
-    @Select("select id,name from sale_act_type")
-    List<IdName> selectSaleActTypes();
+    List<IdName> selectSaleActTypes(@Param("projectId") Long projectId);
 
-    @Select("select * from sale_act_type")
-    List<SaleActType> selectAllSaleActTypes();
+    List<SaleActType> selectAllSaleActTypes(@Param("projectId")Long projectId);
 }
