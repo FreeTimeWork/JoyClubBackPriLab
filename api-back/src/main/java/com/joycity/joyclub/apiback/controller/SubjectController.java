@@ -34,6 +34,12 @@ public class SubjectController extends BaseUserSessionController {
         return subjectService.createSubject(subject);
     }
 
+    @PostMapping("/subject/{id}")
+    public ResultData updateSubjectDetail(@PathVariable Long id,@RequestBody SubjectWithBLOBs subject) {
+        subject.setId(id);
+        return subjectService.updateSubject(subject);
+    }
+
     @GetMapping("/subjects")
     public ResultData getSubjects(@RequestParam(required = false)Long projectId, PageUtil pageUtil, HttpSession session) {
 //        checkPlatformOrProjectOrStoreUser(session);
@@ -45,6 +51,7 @@ public class SubjectController extends BaseUserSessionController {
 
         return subjectService.getSubjectDetail(id);
     }
+
 
     @GetMapping("/subject/type")
     public ResultData getSubjectTypes(@RequestParam(required = false) Long projectId) {

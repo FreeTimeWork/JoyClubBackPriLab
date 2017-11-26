@@ -45,6 +45,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public ResultData updateSubject(SubjectWithBLOBs subjectWithBLOBs) {
+        int num = subjectMapper.updateByPrimaryKeySelective(subjectWithBLOBs);
+
+        return new ResultData(new UpdateResult(num));
+    }
+
+    @Override
     public ResultData getSubjects(Long projectId,PageUtil pageUtil) {
         return new AbstractGetListData<SubjectWithType>() {
             @Override

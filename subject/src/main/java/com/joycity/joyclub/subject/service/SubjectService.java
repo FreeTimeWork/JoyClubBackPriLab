@@ -9,6 +9,8 @@ public interface SubjectService {
 
     ResultData createSubject(SubjectWithBLOBs subjectWithBLOBs);
 
+    ResultData updateSubject(SubjectWithBLOBs subjectWithBLOBs);
+
     ResultData getSubjects(Long projectId,PageUtil pageUtil);
 
     ResultData getSubjectDetail(Long id);
