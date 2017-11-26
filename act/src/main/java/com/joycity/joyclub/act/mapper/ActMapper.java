@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface ActMapper extends BaseMapperWithBLOBS<SaleAct, SaleActWithBLOBs, Long, SaleActExample> {
     //////////////////////////api back//////////////////
-    Long countByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+    Long countByStoreIdAndName(@Param("projectId") Long projectId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ActWithCategoryName> selectByStoreIdAndName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+    List<ActWithCategoryName> selectByStoreIdAndName(@Param("projectId") Long projectId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
 
     Long countByActNameAndStoreName(@Param("projectId") Long projectId, @Param("actName") String actName, @Param("storeName") String storeName, @Param("pageUtil") PageUtil pageUtil);
 

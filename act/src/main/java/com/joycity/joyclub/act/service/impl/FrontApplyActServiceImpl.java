@@ -42,17 +42,17 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
     }
 
     @Override
-    public ResultData getListApplyAct(Byte reviewStatus,String name, PageUtil pageUtil) {
+    public ResultData getListApplyAct(Long projectId,Byte reviewStatus,String name, PageUtil pageUtil) {
         String finalName = SqlUtil.getLikeStr(name);
         return new AbstractGetListData<FrontApplyAct>() {
             @Override
             public Long countByFilter() {
-                return applyActMapper.countList(reviewStatus, finalName);
+                return applyActMapper.countList(projectId,reviewStatus, finalName);
             }
 
             @Override
             public List<FrontApplyAct> selectByFilter() {
-                return applyActMapper.selectList(reviewStatus, finalName,pageUtil);
+                return applyActMapper.selectList(projectId,reviewStatus, finalName,pageUtil);
             }
         }.getList(pageUtil);
     }
@@ -70,17 +70,17 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
     }
 
     @Override
-    public ResultData getEffListApplyAct(String name,PageUtil pageUtil) {
+    public ResultData getEffListApplyAct(Long projectId,String name,PageUtil pageUtil) {
         String finalName = SqlUtil.getLikeStr(name);
         return new AbstractGetListData<FrontApplyAct>() {
             @Override
             public Long countByFilter() {
-                return applyActMapper.countEffList(finalName);
+                return applyActMapper.countEffList(projectId,finalName);
             }
 
             @Override
             public List<FrontApplyAct> selectByFilter() {
-                return applyActMapper.selectEffList(finalName,pageUtil);
+                return applyActMapper.selectEffList(projectId,finalName,pageUtil);
             }
         }.getList(pageUtil);
     }

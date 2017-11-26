@@ -15,13 +15,13 @@ import java.util.List;
  */
 public interface FrontApplyActMapper extends BaseMapper<FrontApplyAct,Long,FrontApplyActExample> {
 
-    Long countList(@Param("reviewStatus") Byte reviewStatus,@Param("name")String name);
-    List<FrontApplyAct> selectList(@Param("reviewStatus") Byte reviewStatus, @Param("name")String name, @Param("pageUtil") PageUtil pageUtil);
+    Long countList(@Param("projectId")Long projectId,@Param("reviewStatus") Byte reviewStatus,@Param("name")String name);
+    List<FrontApplyAct> selectList(@Param("projectId")Long projectId,@Param("reviewStatus") Byte reviewStatus, @Param("name")String name, @Param("pageUtil") PageUtil pageUtil);
 
     int updateReviewApplyAct(@Param("id") Long id, @Param("reviewStatus") Byte reviewStatus, @Param("reviewInfo") String reviewInfo);
 
-    List<FrontApplyAct> selectEffList(@Param("name")String name,@Param("pageUtil") PageUtil pageUtil);
-    Long countEffList(@Param("name")String name);
+    List<FrontApplyAct> selectEffList(@Param("projectId")Long projectId,@Param("name")String name,@Param("pageUtil") PageUtil pageUtil);
+    Long countEffList(@Param("projectId")Long projectId,@Param("name")String name);
 
     ApplyActWithType selectApplyActById(@Param("id") Long id);
 }

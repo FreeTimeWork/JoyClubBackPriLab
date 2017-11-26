@@ -16,13 +16,13 @@ public interface FrontApplyActService {
 
     ResultData getApplyActById(Long id);
 
-    ResultData getListApplyAct(Byte reviewStatus,String name, PageUtil pageUtil);
+    ResultData getListApplyAct(Long projectId,Byte reviewStatus,String name, PageUtil pageUtil);
 
     ResultData permitApplyAct(Long id);
 
     ResultData rejectApplyAct(Long id, String reviewInfo);
 
-    ResultData getEffListApplyAct(String name,PageUtil pageUtil);
+    ResultData getEffListApplyAct(Long projectId,String name,PageUtil pageUtil);
 
     ResultData createApplyActType(FrontApplyActType applyActType);
 

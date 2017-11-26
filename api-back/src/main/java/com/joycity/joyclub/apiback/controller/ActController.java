@@ -41,10 +41,10 @@ public class ActController extends BaseUserSessionController {
      * @return data为按创建时间倒序的所有项目列表
      */
     @RequestMapping(value = "/acts", method = RequestMethod.GET)
-    public ResultData getList(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getList(@RequestParam(required = false) Long projectId,@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
         //确保是商户用户
         SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        return actService.getListByStoreIdAndName(user.getInfoId(), name, pageUtil);
+        return actService.getListByStoreIdAndName(projectId, name, pageUtil);
     }
 
     /**
@@ -103,20 +103,21 @@ public class ActController extends BaseUserSessionController {
     }
 
     @RequestMapping(value = "/project/carousel/acts", method = RequestMethod.GET)
-    public ResultData getCurrentAct(@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getCurrentAct(@RequestParam(required = false) Long projectId,@RequestParam(required = false) String name, @RequestParam(required = false) String storeName, PageUtil pageUtil, HttpSession httpSession) {
         SysUser user = checkPlatformOrProjectOrStoreUser(httpSession);
-        return actService.getListByActNameAndStoreName(user.getInfoId(), name, storeName, pageUtil);
+        return actService.getListByActNameAndStoreName(projectId, name, storeName, pageUtil);
     }
 
     /**
      * 申请活动的列表
      */
     @RequestMapping(value = "/act/apply", method = RequestMethod.GET)
-    public ResultData getApplyAct(@RequestParam(required = false) Byte reviewStatus,
+    public ResultData getApplyAct(@RequestParam(required = false) Long projectId,
+                                  @RequestParam(required = false) Byte reviewStatus,
                                   @RequestParam(required = false) String name,
                                   PageUtil pageUtil, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getListApplyAct(reviewStatus, name, pageUtil);
+        return applyActService.getListApplyAct(projectId,reviewStatus, name, pageUtil);
     }
 
     /**
@@ -153,9 +154,9 @@ public class ActController extends BaseUserSessionController {
      * @return
      */
     @GetMapping("/act/apply/effectivity")
-    public ResultData getEffectivityApplyActs(@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
+    public ResultData getEffectivityApplyActs(@RequestParam(required = false) Long projectId,@RequestParam(required = false) String name, PageUtil pageUtil, HttpSession httpSession) {
         checkPlatformOrProjectOrStoreUser(httpSession);
-        return applyActService.getEffListApplyAct(name, pageUtil);
+        return applyActService.getEffListApplyAct(projectId,name, pageUtil);
     }
 
     /**
