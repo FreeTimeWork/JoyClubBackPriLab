@@ -16,9 +16,9 @@ import java.util.List;
  * Created by CallMeXYZ on 2017/5/17.
  */
 public interface ActAttrMapper extends BaseMapper<SaleActAttr,Long,SaleActAttrExample> {
-    Long countByStoreIdAndActName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+    Long countByStoreIdAndActName(@Param("projectId") Long projectId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
 
-    List<ActAttrWithActName> selectByStoreIdAndActName(@Param("storeId") Long storeId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
+    List<ActAttrWithActName> selectByStoreIdAndActName(@Param("projectId") Long projectId, @Param("nameLike") String nameLike, @Param("pageUtil") PageUtil pageUtil);
     /**
      * 返回有库存的属性
      * 数据库默认排序，

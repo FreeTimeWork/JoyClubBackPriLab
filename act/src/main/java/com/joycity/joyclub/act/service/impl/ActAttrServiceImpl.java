@@ -37,7 +37,7 @@ public class ActAttrServiceImpl implements ActAttrService {
      * @return resultData, data为按创建时间倒序的所有项目列表
      */
     @Override
-    public ResultData getListByStoreIdAndActName(final Long storeId, String name, final PageUtil pageUtil) {
+    public ResultData getListByStoreIdAndActName(final Long projectId, String name, final PageUtil pageUtil) {
         if (name != null) {
             name = "%" + name + "%";
         }
@@ -45,12 +45,12 @@ public class ActAttrServiceImpl implements ActAttrService {
         return new AbstractGetListData<ActAttrWithActName>() {
             @Override
             public Long countByFilter() {
-                return actAttrMapper.countByStoreIdAndActName(storeId, nameValue, pageUtil);
+                return actAttrMapper.countByStoreIdAndActName(projectId, nameValue, pageUtil);
             }
 
             @Override
             public List<ActAttrWithActName> selectByFilter() {
-                return actAttrMapper.selectByStoreIdAndActName(storeId, nameValue, pageUtil);
+                return actAttrMapper.selectByStoreIdAndActName(projectId, nameValue, pageUtil);
             }
         }.getList(pageUtil);
 

@@ -11,6 +11,9 @@
             <if test="nameLike!=null">
                 and a.name like #{nameLike}
             </if>
+            <if test="projectId != null">
+                AND p.project_id = #{projectId}
+            </if>
         </where>
 
     </sql>
