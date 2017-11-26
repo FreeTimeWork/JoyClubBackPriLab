@@ -153,16 +153,16 @@ public class ActServiceImpl implements ActService {
     }
 
     @Override
-    public ResultData getHistoryList(PageUtil pageUtil) {
+    public ResultData getHistoryList(Long projectId,PageUtil pageUtil) {
         return new AbstractGetListData<ActSimple>() {
             @Override
             public Long countByFilter() {
-                return actMapper.countSimpleList(null,null,null,true);
+                return actMapper.countSimpleList(projectId,null,null,true);
             }
 
             @Override
             public List<ActSimple> selectByFilter() {
-                return actMapper.selectSimpleList(null, null, null, true, pageUtil);
+                return actMapper.selectSimpleList(projectId, null, null, true, pageUtil);
             }
         }.getList(pageUtil);
 

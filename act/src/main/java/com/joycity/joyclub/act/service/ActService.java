@@ -53,7 +53,7 @@ public interface ActService {
      */
     ResultData getList(Long projectId, Long storeId, Long actTypeId, PageUtil pageUtil);
 
-    ResultData getHistoryList(PageUtil pageUtil);
+    ResultData getHistoryList(Long projectId,PageUtil pageUtil);
 
     ResultData getAttrs(Long id);
 

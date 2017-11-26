@@ -49,9 +49,9 @@ public class ActFrontController {
      * @return
      */
     @RequestMapping(value = "/acts/history", method = RequestMethod.GET)
-    public ResultData getActs(PageUtil pageUtil) {
+    public ResultData getActs(@RequestParam(required = false) Long projectId, PageUtil pageUtil) {
 
-        return actService.getHistoryList(pageUtil);
+        return actService.getHistoryList(projectId,pageUtil);
     }
     /**
      * 获得商品的属性
@@ -77,7 +77,7 @@ public class ActFrontController {
      * 得到申请活动里的活动类型
      */
     @GetMapping("/act/apply/type")
-    public ResultData getApplyActType(@RequestParam Long projectId) {
+    public ResultData getApplyActType(@RequestParam(required = false) Long projectId) {
 
         return applyActService.getListApplyActType(projectId);
     }
