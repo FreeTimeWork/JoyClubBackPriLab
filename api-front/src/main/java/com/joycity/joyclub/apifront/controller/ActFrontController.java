@@ -77,15 +77,15 @@ public class ActFrontController {
      * 得到申请活动里的活动类型
      */
     @GetMapping("/act/apply/type")
-    public ResultData createApplyAct() {
+    public ResultData getApplyActType(@RequestParam Long projectId) {
 
-        return applyActService.getListApplyActType();
+        return applyActService.getListApplyActType(projectId);
     }
 
 
     @GetMapping("act/group/type")
-    public ResultData getActType(PageUtil pageUtil){
-        return actTypeService.getList(pageUtil);
+    public ResultData getActType(@RequestParam(required = false) Long projectId, PageUtil pageUtil){
+        return actTypeService.getList(projectId,pageUtil);
     }
 
     /**

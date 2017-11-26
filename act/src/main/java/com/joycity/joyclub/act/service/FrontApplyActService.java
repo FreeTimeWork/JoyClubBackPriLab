@@ -26,7 +26,7 @@ public interface FrontApplyActService {
 
     ResultData createApplyActType(FrontApplyActType applyActType);
 
-    ResultData getListApplyActType();
+    ResultData getListApplyActType(Long projectId);
 
     ResultData deleteApplyActType(Long id);
 

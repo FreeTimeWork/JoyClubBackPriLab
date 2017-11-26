@@ -216,8 +216,8 @@ public class ActController extends BaseUserSessionController {
     }
 
     @GetMapping("/act/apply/type")
-    public ResultData getApplyTypes(){
-        return applyActService.getListApplyActType();
+    public ResultData getApplyTypes(@RequestParam(required = false) Long projectId){
+        return applyActService.getListApplyActType(projectId);
     }
 
     @GetMapping("/act/type")

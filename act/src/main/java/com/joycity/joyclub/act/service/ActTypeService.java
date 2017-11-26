@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ActTypeService {
 
-    ResultData getList(PageUtil pageUtil);
+    ResultData getList(Long projectId,PageUtil pageUtil);
 
     ResultData createActType(SaleActType actType);
 

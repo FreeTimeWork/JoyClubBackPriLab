@@ -27,19 +27,19 @@ public class ActTypeServiceImpl implements ActTypeService {
     private ActMapper actMapper;
 
     @Override
-    public ResultData getList(PageUtil pageUtil) {
+    public ResultData getList(Long projectId,PageUtil pageUtil) {
 
         return new AbstractGetListData<ActTypeWithAct>() {
             @Override
             public Long countByFilter() {
-                return actTypeMapper.countList();
+                return actTypeMapper.countList(projectId);
             }
 
             @Override
             public List<ActTypeWithAct> selectByFilter() {
-                List<ActTypeWithAct> list = actTypeMapper.selectList(true, pageUtil);
+                List<ActTypeWithAct> list = actTypeMapper.selectList(projectId,true, pageUtil);
                 for (ActTypeWithAct item : list) {
-                    List<ActSimple> actSimples = actMapper.selectSimpleList(null, null, item.getId(),false, new PageUtil());
+                    List<ActSimple> actSimples = actMapper.selectSimpleList(projectId, null, item.getId(),false, new PageUtil());
                     item.setActs(actSimples);
                 }
                 return list;

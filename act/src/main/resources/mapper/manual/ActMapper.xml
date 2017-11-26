@@ -105,9 +105,9 @@
         LEFT join sys_act_category cat on a.category_id=cat.id
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
-<!--        <if test="projectId!=null">
-            and store.project_id = #{projectId}
-        </if>-->
+        <if test="projectId!=null">
+            and a.project_id = #{projectId}
+        </if>
         <if test="storeId!=null">
             and a.store_id = #{storeId}
         </if>
@@ -132,8 +132,8 @@
         where
         p.delete_flag=0 and p.forbid_flag=0 and p.review_status=1
 
-        <if test="storeId!=null">
-            and a.store_id = #{storeId}
+        <if test="projectId!=null">
+            and a.project_id = #{projectId}
         </if>
         <if test="actTypeId!=null">
             and a.act_type_id = #{actTypeId}

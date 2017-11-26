@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface SaleActTypeMapper extends BaseMapper<SaleActType,Long,SaleActTypeExample> {
 
-    Long countList();
-    List<ActTypeWithAct> selectList(@Param("limit") Boolean limit, @Param("pageUtil") PageUtil pageUtil);
+    Long countList(@Param("projectId") Long projectId);
+    List<ActTypeWithAct> selectList(@Param("projectId")Long projectId,@Param("limit") Boolean limit, @Param("pageUtil") PageUtil pageUtil);
 
     List<IdName> selectSaleActTypes(@Param("projectId") Long projectId);
 

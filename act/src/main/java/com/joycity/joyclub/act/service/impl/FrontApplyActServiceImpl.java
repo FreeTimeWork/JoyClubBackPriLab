@@ -92,8 +92,8 @@ public class FrontApplyActServiceImpl implements FrontApplyActService {
     }
 
     @Override
-    public ResultData getListApplyActType() {
-        return new ResultData(new ListResult(applyActTypeMapper.selectList()));
+    public ResultData getListApplyActType(Long projectId) {
+        return new ResultData(new ListResult(applyActTypeMapper.selectList(projectId)));
     }
 
     @Override
