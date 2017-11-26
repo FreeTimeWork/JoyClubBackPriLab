@@ -22,17 +22,17 @@ public class ActOrderServiceImpl implements ActOrderService {
     @Autowired
     ActOrderMapper orderMapper;
     @Override
-    public ResultData getList(final Long storeId, final Byte status, final String code, final String name, final String phone,final String actName, final PageUtil pageUtil) {
+    public ResultData getList(final Long projectId, final Byte status, final String code, final String name, final String phone,final String actName, final PageUtil pageUtil) {
         final String actNameLike =SqlUtil.getLikeStr(actName);
         return new AbstractGetListData<ActOrderForBack>() {
             @Override
             public Long countByFilter() {
-                return orderMapper.countForStore(storeId, status, code, name, phone,actNameLike, pageUtil);
+                return orderMapper.countForStore(projectId, status, code, name, phone,actNameLike, pageUtil);
             }
 
             @Override
             public List<ActOrderForBack> selectByFilter() {
-                return orderMapper.selectForStore(storeId, status, code, name, phone,actNameLike, pageUtil);
+                return orderMapper.selectForStore(projectId, status, code, name, phone,actNameLike, pageUtil);
 
             }
         }.getList(pageUtil);

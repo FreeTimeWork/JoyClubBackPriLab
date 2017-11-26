@@ -10,7 +10,7 @@ import java.util.List;
  * Created by CallMeXYZ on 2017/5/22.
  */
 public interface ActOrderService {
-    ResultData getList(Long storeId,Byte status, String code, String name, String phone,String actName, PageUtil pageUtil);
+    ResultData getList(Long projectId,Byte status, String code, String name, String phone,String actName, PageUtil pageUtil);
    /* ResultData getInfo(Long orderId);*/
 
     ResultData checkOrder(Long orderId);

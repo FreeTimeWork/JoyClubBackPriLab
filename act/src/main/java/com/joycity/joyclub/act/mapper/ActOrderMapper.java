@@ -16,7 +16,7 @@ import java.util.List;
  * Created by CallMeXYZ on 2017/5/17.
  */
 public interface ActOrderMapper extends BaseMapper<SaleActOrder,Long,SaleActOrderExample> {
-    Long countForStore(@Param("storeId") Long storeId,
+    Long countForStore(@Param("projectId") Long projectId,
                        @Param("status") Byte status,
                        @Param("code") String code,
                        @Param("name") String name,
@@ -24,7 +24,7 @@ public interface ActOrderMapper extends BaseMapper<SaleActOrder,Long,SaleActOrde
                        @Param("actName") String actName,
                        @Param("pageUtil") PageUtil pageUtil);
 
-    List<ActOrderForBack> selectForStore(@Param("storeId") Long storeId,
+    List<ActOrderForBack> selectForStore(@Param("projectId") Long projectId,
                                          @Param("status") Byte status,
                                          @Param("code") String code,
                                          @Param("name") String name,

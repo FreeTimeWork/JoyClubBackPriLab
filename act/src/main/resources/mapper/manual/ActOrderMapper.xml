@@ -29,6 +29,9 @@
         join client c on o.client_id = c.id
         <where>
             <choose>
+                <when test="projectId != null">
+                    and act.project_id like #{projectId}
+                </when>
                 <when test="actName != null">
                     and act.name like #{actNameLike}
                 </when>
@@ -59,6 +62,9 @@
         <where>
 
             <choose>
+                <when test="projectId != null">
+                    and act.project_id like #{projectId}
+                </when>
                 <when test="actName != null">
                     and act.name like #{actNameLike}
                 </when>

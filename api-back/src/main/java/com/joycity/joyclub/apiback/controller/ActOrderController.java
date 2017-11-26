@@ -47,6 +47,7 @@ public class ActOrderController extends BaseUserSessionController {
      */
     @RequestMapping(value = "/act/orders",method = GET)
     public ResultData getList(
+            @RequestParam(required = false) Long projectId,
             @RequestParam(required = false) Byte status,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) String name,
@@ -57,7 +58,7 @@ public class ActOrderController extends BaseUserSessionController {
     ) {
 
         SysUser sysUser = checkStoreUser(session);
-        return actOrderService.getList(sysUser.getInfoId(), status, code, name, phone,actName, pageUtil);
+        return actOrderService.getList(projectId, status, code, name, phone,actName, pageUtil);
     }
 
   /*  @RequestMapping(value = "/act/order/{id}",method = GET)
