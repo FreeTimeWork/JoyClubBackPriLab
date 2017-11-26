@@ -50,10 +50,10 @@ public class ActOrderServiceImpl implements ActOrderService {
     }
 
     @Override
-    public List<ActOrderForBack> getActOrderList() {
-        Long num = orderMapper.countForStore(null,null,null,null,null, null, null);
+    public List<ActOrderForBack> getActOrderList(Long projectId) {
+        Long num = orderMapper.countForStore(projectId,null,null,null,null, null, null);
         PageUtil pageUtil = new PageUtil();
         pageUtil.setPageSize(num.intValue());
-        return orderMapper.selectForStore(null, null, null, null, null,null, pageUtil);
+        return orderMapper.selectForStore(projectId, null, null, null, null,null, pageUtil);
     }
 }

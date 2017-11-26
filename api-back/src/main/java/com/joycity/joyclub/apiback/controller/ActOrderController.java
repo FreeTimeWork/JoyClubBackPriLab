@@ -11,6 +11,7 @@ import com.joycity.joyclub.commons.utils.ExcelUtility;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -86,9 +87,9 @@ public class ActOrderController extends BaseUserSessionController {
     }
 
     @GetMapping("/act/order/down")
-    public ResultData downExcel(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    public ResultData downExcel(@RequestParam(required = false)Long projectId, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         checkPlatformOrProjectOrStoreUser(session);
-        List<ActOrderForBack> actOrderForBacks = actOrderService.getActOrderList();
+        List<ActOrderForBack> actOrderForBacks = actOrderService.getActOrderList(projectId);
         HSSFWorkbook workbook = new HSSFWorkbook();
 
         ActFileExportUtils.createActOrderExcel(workbook, actOrderForBacks);

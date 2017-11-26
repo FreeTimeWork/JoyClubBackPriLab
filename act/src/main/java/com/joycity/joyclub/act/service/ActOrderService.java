@@ -15,6 +15,6 @@ public interface ActOrderService {
 
     ResultData checkOrder(Long orderId);
 
-    List<ActOrderForBack> getActOrderList();
+    List<ActOrderForBack> getActOrderList(Long projectId);
 
 }
