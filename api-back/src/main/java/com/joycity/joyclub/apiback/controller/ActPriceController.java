@@ -41,11 +41,11 @@ public class ActPriceController extends BaseUserSessionController {
                               PageUtil pageUtil, HttpSession httpSession) {
         SysUser user = checkUser(httpSession);
         Integer userType = user.getType();
-        if (userType.equals(USER_TYPE_STORE))
-            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
-        else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
+//        if (userType.equals(USER_TYPE_STORE))
+//            return actPriceService.getListForStore(user.getInfoId(), reviewStatus, actName, buyType, pageUtil);
+//        else if (userType.equals(USER_TYPE_PLATFORM) || userType.equals(USER_TYPE_PROJECT))
             return actPriceService.getListForProject(projectId, storeName, reviewStatus, actName, buyType, pageUtil);
-        else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
+//        else throw new BusinessException(API_NO_PERMISSION_FOR_CURRENT_USER);
     }
 
     /**

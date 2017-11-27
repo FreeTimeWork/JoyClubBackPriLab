@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.joycity.joyclub.commons.constant.Global.URL_API_FRONT;
 import static com.joycity.joyclub.commons.constant.ResultCode.REQUEST_PARAM_ERROR;
@@ -122,6 +124,8 @@ public class XiangfuController {
     @GetMapping("/tel/type")
     public ResultData getTelType(@RequestParam String tel) throws Exception {
         TelOperatorResult result = rechargeService.getTelOperator(tel);
-        return new ResultData(TelOperator.mapNameKey.get(result.getCatName()).getCode());
+        Map<String, String> map = new HashMap<>();
+        map.put("type", TelOperator.mapNameKey.get(result.getCatName()).getCode());
+        return new ResultData(map);
     }
 }
