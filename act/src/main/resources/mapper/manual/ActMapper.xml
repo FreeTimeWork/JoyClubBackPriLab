@@ -13,6 +13,9 @@
             <if test="projectId != null">
                 and p.project_id = #{projectId}
             </if>
+            <if test="effective">
+                AND now() between sap.start_time and sap.end_time
+            </if>
         </where>
 
     </sql>
@@ -49,6 +52,7 @@
     <select id="countByStoreIdAndName" resultType="java.lang.Long">
 
         select count(*) from sale_act p
+        LEFT JOIN sale_act_price sap ON sap.act_id = p.id
         <include refid="where_store_and_name"/>
     </select>
     <select id="selectByStoreIdAndName"
@@ -56,6 +60,7 @@
 
         select p.id,p.name,p.base_price,p.category_id,c.name categoryName
         from sale_act p
+        LEFT JOIN sale_act_price sap ON sap.act_id = p.id
         left join sys_act_category c on c.id=p.category_id
         <include refid="where_store_and_name"/>
         order by p.id desc

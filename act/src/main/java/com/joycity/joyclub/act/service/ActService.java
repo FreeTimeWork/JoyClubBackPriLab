@@ -14,7 +14,7 @@ public interface ActService {
     /**
      * @return data为按创建时间倒序的所有项目列表
      */
-    ResultData getListByStoreIdAndName(Long storeId, String name, PageUtil pageUtil);
+    ResultData getListByStoreIdAndName(Boolean effective,Long storeId, String name, PageUtil pageUtil);
 
     /**
      * @return data返回按搜索条件返回的列表
