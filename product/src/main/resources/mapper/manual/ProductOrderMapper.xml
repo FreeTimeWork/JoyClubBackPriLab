@@ -208,7 +208,7 @@
         ,attr.name so_d_attr_name,product.name so_d_product_name,product.portrait so_d_portrait
         from
         (
-        select so.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
+        select mo.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
         ,so.status status,so.delivery_time delivery_time,so.delivery_company delivery_company
         ,so.delivery_code delievery_code,so.receive_time receive_time,so.notice_refund_time notice_refund_time
         ,so.refund_time refund_time,so.create_time create_time
@@ -236,7 +236,7 @@
         ,attr.name so_d_attr_name,product.name so_d_product_name,product.portrait so_d_portrait
         from
         (
-        select so.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
+        select mo.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
         ,so.status status,so.delivery_time delivery_time,so.delivery_company delivery_company
         ,so.delivery_code delievery_code,so.receive_time receive_time,so.notice_refund_time notice_refund_time
         ,so.refund_time refund_time,so.create_time create_time

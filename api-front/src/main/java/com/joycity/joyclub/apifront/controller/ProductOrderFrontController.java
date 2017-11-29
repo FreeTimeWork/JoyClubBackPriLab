@@ -48,11 +48,11 @@ public class ProductOrderFrontController {
     @RequestMapping(value = "/orders", method = GET)
     public ResultData getOrders(
             @RequestParam(defaultValue = PLATFORM_ID_REQUEST_PARAM) Long projectId,
-            @CookieValue(Global.COOKIE_TOKEN) String token,
+//            @CookieValue(Global.COOKIE_TOKEN) String token,
             @RequestParam String type,
             PageUtil pageUtil) {
 
-        return productOrderService.getList(projectId, clientTokenService.getIdOrThrow(token), type, pageUtil);
+        return productOrderService.getList(projectId, /*clientTokenService.getIdOrThrow(token)*/1795L, type, pageUtil);
     }
 
     /**
