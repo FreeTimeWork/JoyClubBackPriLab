@@ -212,7 +212,7 @@
         ,so.status status,so.delivery_time delivery_time,so.delivery_company delivery_company
         ,so.delivery_code delievery_code,so.receive_time receive_time,so.notice_refund_time notice_refund_time
         ,so.refund_time refund_time,so.create_time create_time
-        ,mo.id mo_id,mo.code mo_code,mo.project_id mo_project_id,mo.client_id mo_client_id,mo.status mo_status
+        ,mo.id order_id,mo.code mo_code,mo.project_id mo_project_id,mo.client_id mo_client_id,mo.status mo_status
         ,mo.receive_type mo_receive_type,mo.money_sum mo_money_sum,mo.point_sum mo_point_sum, mo.pay_type mo_pay_type,mo.pay_time mo_pay_time
         ,mo.cancel_time mo_cancel_time,mo.canceler mo_canceler,mo.receiver_name mo_receiver_name,mo.receiver_phone mo_receiver_phone,mo.receiver_address mo_receiver_address,mo.receiver_postcode mo_receiver_postcode,mo.create_time mo_create_time
         from sale_product_order_store so
