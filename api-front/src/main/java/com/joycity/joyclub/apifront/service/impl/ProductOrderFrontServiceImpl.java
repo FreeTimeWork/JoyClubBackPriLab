@@ -274,7 +274,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
         Float moneySum = 0f;
         Integer pointSum = 0;
         for (ProductOrderItem rawData : items) {
-
+            Float storeMoney = 0f;
+            Integer storePoint = 0;
             ProductOrderFormDataItem info = rawData.getInfo();
             Float pointRate = info.getPointRate() != null ? info.getPointRate() : info.getBasePointRate();
             Float itemMoney = rawData.getNum() * info.getPrice();
@@ -282,9 +283,10 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             Integer itemPoint = ((int) Math.ceil(rawData.getNum() * info.getPrice() * pointRate));
             if (rawData.getMoneyOrPoint()) {
                 moneySum += itemMoney;
-
+                storeMoney = itemMoney;
             } else {
                 pointSum += itemPoint;
+                storePoint = itemPoint;
             }
             //初始化商品订单信息
             SaleProductOrderDetail detailOrder = new SaleProductOrderDetail();
@@ -322,8 +324,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             if (!hasStore) {
                 SaleProductOrderStore storeOrder = new SaleProductOrderStore();
                 storeOrder.setStoreId(info.getStoreId());
-                storeOrder.setPointSum(itemPoint);
-                storeOrder.setMoneySum(itemMoney);
+                storeOrder.setPointSum(storePoint);
+                storeOrder.setMoneySum(storeMoney);
                 storeOrder.setStatus(OrderStatus.STORE_ORDER_STATUS_NOT_PAYED);
                 StoreOrderWithDetails storeWithDetail = new StoreOrderWithDetails();
                 storeWithDetail.setOrderStore(storeOrder);
