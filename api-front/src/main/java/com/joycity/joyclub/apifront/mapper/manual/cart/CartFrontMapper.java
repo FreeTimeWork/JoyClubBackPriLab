@@ -26,7 +26,7 @@ public interface CartFrontMapper extends BaseMapper<Cart, Long, CartExample> {
 
     @Select("select num from sale_cart where id = #{id}")
     Integer getNumById(@Param("id") Long id);
-    @Select("select num from sale_cart where   project_id=#{projectId} and client_id=#{clientId} and attr_id = #{attrId}")
+    @Select("select num from sale_cart where   project_id=#{projectId} and client_id=#{clientId} and attr_id = #{attrId} and delete_flag = 0")
     Integer getNumByFilter(@Param("projectId") Long projectId,
                            @Param("clientId") Long clientId,
                            @Param("attrId") Long attrId);
