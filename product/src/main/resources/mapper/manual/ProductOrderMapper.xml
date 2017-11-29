@@ -208,7 +208,7 @@
         ,attr.name so_d_attr_name,product.name so_d_product_name,product.portrait so_d_portrait
         from
         (
-        select mo.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
+        select so.id AS store_order_id,mo.id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
         ,so.status status,so.delivery_time delivery_time,so.delivery_company delivery_company
         ,so.delivery_code delievery_code,so.receive_time receive_time,so.notice_refund_time notice_refund_time
         ,so.refund_time refund_time,so.create_time create_time
@@ -221,7 +221,7 @@
         order by  so.create_time desc
         <include refid="limit"/>
         ) so
-        join sale_product_order_detail d on d.store_order_id = so.id
+        join sale_product_order_detail d on d.store_order_id = so.store_order_id
         join sys_store store on store.id = so.store_id
         join sale_product_attr attr on attr.id = d.product_attr
         join sale_product product on product.id = attr.product_id
@@ -236,7 +236,7 @@
         ,attr.name so_d_attr_name,product.name so_d_product_name,product.portrait so_d_portrait
         from
         (
-        select mo.id id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
+        select so.id AS store_order_id,mo.id,so.store_id store_id,so.money_sum money_sum,so.point_sum point_sum
         ,so.status status,so.delivery_time delivery_time,so.delivery_company delivery_company
         ,so.delivery_code delievery_code,so.receive_time receive_time,so.notice_refund_time notice_refund_time
         ,so.refund_time refund_time,so.create_time create_time
@@ -251,7 +251,7 @@
         order by  so.create_time desc
        <include refid="limit"/>
         ) so
-        join sale_product_order_detail d on d.store_order_id = so.id
+        join sale_product_order_detail d on d.store_order_id = so.store_order_id
         join sys_store store on store.id = so.store_id
         join sale_product_attr attr on attr.id = d.product_attr
         join sale_product product on product.id = attr.product_id

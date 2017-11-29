@@ -322,8 +322,8 @@ public class ProductOrderFrontServiceImpl implements ProductOrderFrontService {
             if (!hasStore) {
                 SaleProductOrderStore storeOrder = new SaleProductOrderStore();
                 storeOrder.setStoreId(info.getStoreId());
-                storeOrder.setPointSum(pointSum);
-                storeOrder.setMoneySum(moneySum);
+                storeOrder.setPointSum(itemPoint);
+                storeOrder.setMoneySum(itemMoney);
                 storeOrder.setStatus(OrderStatus.STORE_ORDER_STATUS_NOT_PAYED);
                 StoreOrderWithDetails storeWithDetail = new StoreOrderWithDetails();
                 storeWithDetail.setOrderStore(storeOrder);
