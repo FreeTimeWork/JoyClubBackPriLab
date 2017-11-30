@@ -48,10 +48,10 @@ public class XiangfuController {
     XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
 
     @PostMapping("/exchange")
-    public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
+    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
                                       @RequestBody RechargeVO vo) throws Exception {
-//        Long clienId = clientTokenService.getIdOrThrow(token);
-        Long clienId = 1L;
+        Long clienId = clientTokenService.getIdOrThrow(token);
+//        Long clienId = 1L;
         String result = null;
         if (vo.getType() == null) {
             new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");

@@ -70,11 +70,11 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
     private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
-//        Integer point = clientService.getPoint(clientId);
-//        if (point < vo.getPoint().intValue()) {
-//            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH);
-//        }
-//        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
+        Integer point = clientService.getPoint(clientId);
+        if (point < vo.getPoint().intValue()) {
+            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH);
+        }
+        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
         return  createXiangfuOrder(vo, clientId);
     }
 
