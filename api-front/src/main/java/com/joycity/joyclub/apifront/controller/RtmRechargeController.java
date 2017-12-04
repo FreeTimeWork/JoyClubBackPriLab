@@ -63,9 +63,9 @@ public class RtmRechargeController {
         vo.setTimestamp(timestamp);
         vo.setSign(sign);
         logger.info("RtmRechargeController-rtm-auth-vo:{} - sys={}", vo,sys);
-        RTMResult rtmResult = null;
+        RTMResult rtmResult = new RTMResult();
         //本系统不需要验证签名
-        if (sys) {
+        if (sys == null || !sys) {
             rtmResult = checkSign(sign, rtmMD5Util.getRtmSign1(vo));
         }
         if (rtmResult.getStatus()) {
