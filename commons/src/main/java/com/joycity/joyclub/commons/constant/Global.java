@@ -27,6 +27,7 @@ public class Global {
     public static final String SEX_FEMALE = "0";
 
     public static final String COOKIE_TOKEN = "token";
+    public static final String COOKIE_PHONE = "phone";
 
     public static final String PROFILE_DEVELOPMENT = "development";
     public static final String PROFILE_NOT_DEVELOPMENT = "!" + PROFILE_DEVELOPMENT;

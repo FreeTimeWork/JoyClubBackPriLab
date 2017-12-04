@@ -283,17 +283,21 @@ public class LoginFrontServiceImpl implements LoginFrontService {
             wechatService.saveOrUpdateProjectOpenId(params.getOpenIdProjectId(), user.getId(), params.getOpenId());
         }
         if (response != null) {
-            addTokenCookie(response, user.getId());
+            addTokenCookie(response, user);
         }
         logger.info("同步科传后的user = "+user);
         return user.getId();
     }
 
-    private void addTokenCookie(HttpServletResponse response, Long clientId) {
-        Cookie cookie = new Cookie(Global.COOKIE_TOKEN, clientTokenService.setToken(clientId));
+    private void addTokenCookie(HttpServletResponse response, Client user) {
+        Cookie cookie = new Cookie(Global.COOKIE_TOKEN, clientTokenService.setToken(user.getId()));
         cookie.setMaxAge(3600 * 24 * 30);
         cookie.setPath("/");
         response.addCookie(cookie);
+        Cookie cookiePhone = new Cookie(Global.COOKIE_PHONE, user.getTel());
+        cookiePhone.setMaxAge(3600);
+        cookiePhone.setPath("/");
+        response.addCookie(cookiePhone);
     }
 
     /**

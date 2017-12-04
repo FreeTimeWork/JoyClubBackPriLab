@@ -113,6 +113,15 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    @Override
+    public Boolean checkPoint(String tel,Double checkPoint) {
+        Integer nowPoint = keChuanCrmService.getMemberByTel(tel).getVipPoint();
+        if (nowPoint < checkPoint) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 如果为空 抛出异常
      */

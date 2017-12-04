@@ -1,12 +1,9 @@
 package com.joycity.joyclub.recharge.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
-import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.commons.utils.MD5Util;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
 import com.joycity.joyclub.recharge.RechargeMoneyConfig;
@@ -34,12 +31,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by CallMeXYZ on 2017/6/14.
@@ -72,7 +67,7 @@ public class RechargeServiceImpl implements RechargeService {
     private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
         Integer point = clientService.getPoint(clientId);
         if (point < vo.getPoint().intValue()) {
-            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH);
+            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH,"积分不足");
         }
         clientService.addPoint(clientId, -vo.getPoint().doubleValue());
         return  createXiangfuOrder(vo, clientId);

@@ -126,6 +126,10 @@ point:
           {"req":{"funcid":"9001","termid":"H5-001","oprtno":"JOYCITY-APP","oprtmd":"0","reqdate":"DATE"},"viptrack":"VIPCODE"}
         url: http://111.207.146.151:18080/LayerArchitecture/winpos/uf_stservice_term?reqjson={reqjson}
 
+# 京东钢镚
+rtm:
+  key: 1
+
 async:
   kechuan:
   # 科传会员变动 通知我方
@@ -152,12 +156,12 @@ pos:
 spring:
   profiles: development
   datasource:
-#    url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
-#    password: root
-#    username: root
-    url: jdbc:mysql://rm-2zew10t27zxjjz7uho.mysql.rds.aliyuncs.com:3306/joyclub2?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
-    username: moma
-    password: moma@#$123
+    url: jdbc:mysql://127.0.0.1:3306/joyclub?useUnicode=true&characterEncoding=utf8&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong&useSSL=false
+    password: root
+    username: root
+#    url: jdbc:mysql://rm-2zew10t27zxjjz7uho.mysql.rds.aliyuncs.com:3306/joyclub2?characterEncoding=utf-8&autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Hong_Kong
+#    username: moma
+#    password: moma@#$123
 
 wxpay:
   notifyUrl: http://callmexyz.ngrok.cc/api/front/order/pay/wechat/notify
