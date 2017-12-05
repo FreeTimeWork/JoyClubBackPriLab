@@ -25,7 +25,7 @@
         <Logger name="task" level="info">
             <AppenderRef ref="taskFile"/>
         </Logger>
-       <Logger name="com.joycity.joyclub" level="info" additivity="false" >
+       <Logger name="com.joycity.joyclub" level="debug" additivity="false" >
             <AppenderRef ref="Console"/>
             <AppenderRef ref="infoFile" />
         </Logger>

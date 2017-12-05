@@ -112,7 +112,7 @@
         SELECT
             <include refid="CardCouponLaunchColumn"/>,
             <include refid="status"/>,
-            cc.name AS coupon_name, cc.type AS coupon_type,cc.portrait AS portrait
+            cc.name AS coupon_name, cc.type AS coupon_type
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         <where>
