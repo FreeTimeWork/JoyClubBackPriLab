@@ -180,6 +180,19 @@ public class LoginFrontServiceImpl implements LoginFrontService {
     }
 
     @Override
+    public ResultData mallcooAutoLogin(Long projectId, String ticket,HttpServletResponse response) {
+        UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
+        String vipCode = info.getThirdPartyCardID();
+        if (vipCode == null) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
+        }
+        Long clientId = clientMapper.getIdByVipCode(vipCode);
+        Client user = clientMapper.selectByPrimaryKey(clientId);
+        addTokenCookie(response,user);
+        return new ResultData();
+    }
+
+    @Override
     public Client mallcooSysn(Long projectId,String ticket) {
         UserAdvancedInfo info = mallCooService.getUserAdvancedInfoByTicket(projectId, ticket);
         logger.info("UserAdvancedInfo = "+info);

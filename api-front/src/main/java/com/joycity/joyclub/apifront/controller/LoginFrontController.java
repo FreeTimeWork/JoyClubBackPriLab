@@ -4,7 +4,11 @@ import com.joycity.joyclub.apifront.modal.vo.auth.*;
 import com.joycity.joyclub.apifront.service.LoginFrontService;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
 import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.ResultCode;
+import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.mallcoo.modal.result.data.UserAdvancedInfo;
+import com.joycity.joyclub.mallcoo.service.MallCooService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ public class LoginFrontController {
     LoginFrontService loginFrontService;
     @Autowired
     KeChuanCrmService keChuanCrmService;
+    @Autowired
+    MallCooService mallCooService;
 
     /**
      * 微信登陆
@@ -89,5 +95,18 @@ public class LoginFrontController {
             @CookieValue(Global.COOKIE_TOKEN) String token
     ) {
         return loginFrontService.logout(token);
+    }
+
+    /**
+     * 猫酷联合登录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/login/auto/mallcoo", method = {RequestMethod.GET})
+    public ResultData mallcooAutoLogin(
+            @RequestParam String ticket,@RequestParam Long projectId, HttpServletResponse response) {
+        logger.info("/login/auto/mallcoo ticket= "+ticket);
+        return loginFrontService.mallcooAutoLogin(projectId, ticket,response);
+
     }
 }

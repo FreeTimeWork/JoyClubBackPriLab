@@ -13,6 +13,10 @@ public interface LoginFrontService {
 
 
     /**
+     * 猫酷联合登录
+     */
+    ResultData mallcooAutoLogin(Long projectId, String ticket,HttpServletResponse response);
+    /**
      * 同步猫酷，crm和自己
      */
     Client mallcooSysn(Long projectId, String ticket);
