@@ -10,6 +10,15 @@ public class ShowCouponLaunchInfo extends CardCouponLaunch {
     private String couponName;
     private Byte couponType;
     private Integer status;
+    private String portrait;
+
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
 
     public String getCouponName() {
         return couponName;
