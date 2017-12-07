@@ -67,13 +67,13 @@ public class RechargeServiceImpl implements RechargeService {
     private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
         Integer point = clientService.getPoint(clientId);
         if (vo.getPoint().intValue() < 0) {
-            new BusinessException(ResultCode.REQUEST_PARAMS_ERROR,"积分不能为负数");
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR,"积分不能为负数");
         }
-        if (point < vo.getPoint().intValue()) {
-            new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH,"积分不足");
+        Boolean b = point.intValue() < vo.getPoint().intValue();
+        if (b) {
+            throw new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH,"积分不足");
         }
-        // TODO: 2017/12/4  上线以后，这里要恢复
-//        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
+        clientService.addPoint(clientId, -vo.getPoint().doubleValue());
         return  createXiangfuOrder(vo, clientId);
     }
 
