@@ -54,7 +54,7 @@ public class XiangfuController {
 //        Long clienId = 1L;
         String result = null;
         if (vo.getType() == null) {
-            new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
+            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
         }
         if (vo.getType().equals("rechargecard")) {
             result = rechargeService.rechargeMoney(vo, clienId);
