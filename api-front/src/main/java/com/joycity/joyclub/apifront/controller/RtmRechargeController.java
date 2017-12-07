@@ -125,8 +125,8 @@ public class RtmRechargeController {
         vo.setSign(sign);
         logger.info("RtmRechargeController-rtm-point-vo:{}",vo);
 
-//        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign1(vo));
-        RTMResult rtmResult = new RTMResult();
+        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign1(vo));
+//        RTMResult rtmResult = new RTMResult();
         if (!rtmResult.getStatus()) {
             return rtmResult;
         }
@@ -161,8 +161,8 @@ public class RtmRechargeController {
         vo.setPointType(pointType);
         logger.info("RtmRechargeController-rtm-delete-vo:{}",vo);
 
-//        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign2(vo));
-        RTMResult rtmResult = new RTMResult();
+        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign2(vo));
+//        RTMResult rtmResult = new RTMResult();
         if (!rtmResult.getStatus()) {
             return rtmResult;
         }
@@ -191,8 +191,8 @@ public class RtmRechargeController {
         RtmParamVo vo = createVo(uid, credits, clientId, timestamp, description, rtmOrderNum, pointType, sign);
         logger.info("RtmRechargeController-rtm-back-vo:{}",vo);
 
-//        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign2(vo));
-        RTMResult rtmResult = new RTMResult();
+        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign2(vo));
+//        RTMResult rtmResult = new RTMResult();
         if (!rtmResult.getStatus()) {
             return rtmResult;
         }
@@ -244,8 +244,8 @@ public class RtmRechargeController {
 
         RtmParamVo vo = createVo(null, null, clientId, timestamp, rtmOrderNum, null, null, sign);
         logger.info("RtmRechargeController-rtm-orderDetail-vo:{}",vo);
-//        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign3(vo));
-        RTMResult rtmResult = new RTMResult();
+        RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign3(vo));
+//        RTMResult rtmResult = new RTMResult();
         if (!rtmResult.getStatus()) {
             return rtmResult;
         }
