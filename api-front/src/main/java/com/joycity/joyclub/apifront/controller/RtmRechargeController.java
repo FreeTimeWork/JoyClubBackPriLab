@@ -9,6 +9,7 @@ import com.joycity.joyclub.recharge.modal.vo.RtmParamVo;
 import com.joycity.joyclub.recharge.service.RtmRechargeOrderService;
 import com.joycity.joyclub.recharge.util.RtmMD5Util;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +86,7 @@ public class RtmRechargeController {
                 if (clientUserId == null) {
                     urlParams.put("status", Boolean.FALSE.toString());
                     urlParams.put("code", ResultCode.DATA_NOT_EXIST + "");
-                    urlParams.put("msg", "会员不存在");
+                    urlParams.put("msg", "vip not exist");
                     urlParams.put("clientId", "");
                     urlParams.put("userStatus", "0");
                 } else {
@@ -92,7 +94,7 @@ public class RtmRechargeController {
                     Client user = clientUserMapper.selectByPrimaryKey(clientUserId);
                     urlParams.put("status", Boolean.TRUE.toString());
                     urlParams.put("code", "200");
-                    urlParams.put("msg", "成功");
+                    urlParams.put("msg", "success");
                     urlParams.put("userStatus", "1");
                     urlParams.put("uid", user.getTel());
                     urlParams.put("timestamp", timestamp);
@@ -286,7 +288,7 @@ public class RtmRechargeController {
     private RTMResult checkSign(String outSign, String mySign) {
         RTMResult result = new RTMResult();
         if (!outSign.toUpperCase().equals(mySign.toUpperCase())) {
-            result.setMsg("sign校验失败");
+            result.setMsg("sign check fail");
             result.setCode("5002");
             result.setStatus(false);
         }
