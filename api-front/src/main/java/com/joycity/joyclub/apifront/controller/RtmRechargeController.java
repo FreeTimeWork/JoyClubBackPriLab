@@ -8,6 +8,7 @@ import com.joycity.joyclub.recharge.modal.RTMResult;
 import com.joycity.joyclub.recharge.modal.vo.RtmParamVo;
 import com.joycity.joyclub.recharge.service.RtmRechargeOrderService;
 import com.joycity.joyclub.recharge.util.RtmMD5Util;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class RtmRechargeController {
 
         RtmParamVo vo = new RtmParamVo();
         vo.setClientId(clientId);
-        if (uid != null) {
+        if (StringUtils.isNotBlank(uid)) {
             vo.setUid(uid);
         }
         vo.setDescription(description);
