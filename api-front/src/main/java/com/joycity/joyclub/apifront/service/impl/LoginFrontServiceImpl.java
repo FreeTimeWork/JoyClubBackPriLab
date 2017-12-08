@@ -308,7 +308,7 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         cookie.setPath("/");
         response.addCookie(cookie);
         Cookie cookiePhone = new Cookie(Global.COOKIE_PHONE, user.getTel());
-        cookiePhone.setMaxAge(3600);
+        cookiePhone.setMaxAge(3600 * 24 * 30);
         cookiePhone.setPath("/");
         response.addCookie(cookiePhone);
     }
