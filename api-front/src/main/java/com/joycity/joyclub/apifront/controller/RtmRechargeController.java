@@ -49,14 +49,13 @@ public class RtmRechargeController {
     private static final String real_url = "https://point.jd.com/unionaccount/bindNotice";//生产地址
 
     @GetMapping("/auth")
-    public void rtmRuth(@RequestParam(required = false) String uid,
+    public RTMResult rtmRuth(@RequestParam(required = false) String uid,
                              @RequestParam String clientId,
                              @RequestParam String timestamp,
                              @RequestParam(required = false) String description,
                              @RequestParam String sign,
                              @RequestParam(required = false) Boolean sys,
                              HttpServletResponse response) throws IOException {
-
         RtmParamVo vo = new RtmParamVo();
         vo.setClientId(clientId);
         if (StringUtils.isNotBlank(uid)) {
@@ -67,50 +66,66 @@ public class RtmRechargeController {
         vo.setSign(sign);
         logger.info("RtmRechargeController-rtm-auth-vo:{} - sys={}", vo,sys);
         RTMResult rtmResult = new RTMResult();
-        //本系统不需要验证签名
+        //京东需要验证签名
         if (sys == null || !sys) {
             rtmResult = checkSign(sign, rtmMD5Util.getRtmSign1(vo));
         }
-        if (rtmResult.getStatus()) {
-            Map<String, String> urlParams = new HashMap<>();
-            urlParams.put("clientId", clientId);
-            urlParams.put("timestamp", timestamp);
-            urlParams.put("sign", sign);
-            //没有uid返回到登录页面
-            if (StringUtils.isBlank(uid)) {
-                String loginUrl = "http://joy-cb.ykh-bj.com/login?clientId={clientId}&timestamp={timestamp}&sign={sign}";
-                loginUrl = replaceUrl(loginUrl, urlParams);
-                response.sendRedirect(loginUrl);
-            } else { //回调京东
-                Long clientUserId = clientUserMapper.getIdByTel(uid);
-                if (clientUserId == null) {
-                    urlParams.put("status", Boolean.FALSE.toString());
-                    urlParams.put("code", ResultCode.DATA_NOT_EXIST + "");
-                    urlParams.put("msg", "vip not exist");
-                    urlParams.put("clientId", "");
-                    urlParams.put("userStatus", "0");
-                } else {
-                    timestamp = System.currentTimeMillis() + "";
-                    Client user = clientUserMapper.selectByPrimaryKey(clientUserId);
-                    urlParams.put("status", Boolean.TRUE.toString());
-                    urlParams.put("code", "200");
-                    urlParams.put("msg", "success");
-                    urlParams.put("userStatus", "1");
-                    urlParams.put("uid", user.getTel());
-                    urlParams.put("timestamp", timestamp);
-                    RtmParamVo rtmParamVo = new RtmParamVo();
-                    rtmParamVo.setTimestamp(timestamp);
-                    rtmParamVo.setUid(user.getTel());
-                    rtmParamVo.setClientId(clientId);
-                    urlParams.put("sign", rtmMD5Util.getRtmSign1(rtmParamVo));
+        if (!rtmResult.getStatus()) {
+            return rtmResult;
+        }
+
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("clientId", clientId);
+        urlParams.put("timestamp", timestamp);
+        urlParams.put("sign", sign);
+        //没有uid返回到登录页面
+        if (StringUtils.isBlank(uid)) {
+            String loginUrl = "http://joy-cb.ykh-bj.com/login?clientId={clientId}&timestamp={timestamp}&sign={sign}";
+            loginUrl = replaceUrl(loginUrl, urlParams);
+            response.sendRedirect(loginUrl);
+        } else { //回调京东
+            Long clientUserId = clientUserMapper.getIdByTel(uid);
+            if (clientUserId == null) {
+                rtmResult.setStatus(Boolean.FALSE);
+                rtmResult.setCode( ResultCode.DATA_NOT_EXIST + "");
+                rtmResult.setMsg("vip not exist");
+                rtmResult.setClientId(clientId);
+                rtmResult.setUserStatus("0");
+            } else {
+                //本系统需要回调
+                Client user = clientUserMapper.selectByPrimaryKey(clientUserId);
+                timestamp = System.currentTimeMillis() + "";
+                urlParams.put("status", Boolean.TRUE.toString());
+                urlParams.put("code", "200");
+                urlParams.put("msg", "success");
+                urlParams.put("userStatus", "1");
+                urlParams.put("uid", user.getTel());
+                urlParams.put("timestamp", timestamp);
+                RtmParamVo rtmParamVo = new RtmParamVo();
+                rtmParamVo.setTimestamp(timestamp);
+                rtmParamVo.setUid(user.getTel());
+                rtmParamVo.setClientId(clientId);
+                urlParams.put("sign", rtmMD5Util.getRtmSign1(rtmParamVo));
+                //京东直接返回
+                if (sys == null || !sys) {
+                    rtmResult.setStatus(true);
+                    rtmResult.setClientId(clientId);
+                    rtmResult.setUid(user.getTel());
+                    rtmResult.setUserStatus("1");
+                    rtmResult.setTimestamp(timestamp);
+                    rtmResult.setSign(urlParams.get("sign"));
+                } else { // 本系统的跳转
+
+                    String bindUrl = dev_url + "?status={status}&code={code}&msg={msg}&clientId={clientId}&uid={uid}&userStatus={userStatus}&timestamp={timestamp}&sign={sign}";
+                    bindUrl = replaceUrl(bindUrl, urlParams);
+                    response.sendRedirect(bindUrl);
                 }
-                String bindUrl = dev_url + "?status={status}&code={code}&msg={msg}&clientId={clientId}&uid={uid}&userStatus={userStatus}&timestamp={timestamp}&sign={sign}";
-                bindUrl = replaceUrl(bindUrl, urlParams);
-                response.sendRedirect(bindUrl);
+
             }
 
         }
 
+        return rtmResult;
 
     }
 

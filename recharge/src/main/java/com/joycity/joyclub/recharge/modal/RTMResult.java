@@ -10,7 +10,7 @@ public class RTMResult {
     private Boolean status = true;// 状态
     private String code = "200"  ;// 状态编码
     private String orderNum ;// 商户的订单号
-    private String msg = "成功"; //返回描述信息
+    private String msg = "success"; //返回描述信息
     /**
     *
     *   订单状态
