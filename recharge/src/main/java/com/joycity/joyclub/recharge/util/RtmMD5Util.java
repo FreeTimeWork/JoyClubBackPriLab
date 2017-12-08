@@ -89,6 +89,7 @@ public class RtmMD5Util {
                 .replace("key", key)
                 .replace("timestamp", vo.getTimestamp())
                 .replace("rtmOrderNum", vo.getRtmOrderNum())
+                .replace("uid", vo.getUid())
                 .replace("credits", vo.getCredits());
         return toMD5(template);
     }
