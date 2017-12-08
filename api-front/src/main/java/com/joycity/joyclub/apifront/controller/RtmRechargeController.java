@@ -260,7 +260,7 @@ public class RtmRechargeController {
                                     @RequestParam String rtmOrderNum ,
                                     @RequestParam String sign) {
 
-        RtmParamVo vo = createVo(null, null, clientId, timestamp, rtmOrderNum, null, null, sign);
+        RtmParamVo vo = createVo(null, null, clientId, timestamp, null, rtmOrderNum, null, sign);
         logger.info("RtmRechargeController-rtm-orderDetail-vo:{}",vo);
         RTMResult rtmResult = checkSign(sign, rtmMD5Util.getRtmSign3(vo));
 //        RTMResult rtmResult = new RTMResult();
