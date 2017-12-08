@@ -75,7 +75,7 @@ public class RtmRechargeController {
             urlParams.put("timestamp", timestamp);
             urlParams.put("sign", sign);
             //没有uid返回到登录页面
-            if (uid == null) {
+            if (StringUtils.isBlank(uid)) {
                 String loginUrl = "http://joy-cb.ykh-bj.com/login?clientId={clientId}&timestamp={timestamp}&sign={sign}";
                 loginUrl = replaceUrl(loginUrl, urlParams);
                 response.sendRedirect(loginUrl);
