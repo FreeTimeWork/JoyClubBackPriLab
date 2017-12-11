@@ -187,6 +187,14 @@ public class LoginFrontServiceImpl implements LoginFrontService {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "获取猫酷会员信息失败！");
         }
         Long clientId = clientMapper.getIdByVipCode(vipCode);
+        if (clientId == null) {
+            LoginMethodParam param = LoginMethodParam
+                    .LoginMethodParamBuilder
+                    .create()
+                    .setCardProjectId(projectId)
+                    .setPhone(info.getMobile()).build();
+            clientId = clientLogin(param, response);
+        }
         Client user = clientMapper.selectByPrimaryKey(clientId);
         addTokenCookie(response,user);
         return new ResultData();
