@@ -176,10 +176,12 @@ public class RechargeServiceImpl implements RechargeService {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String json = responseEntity.getBody();
         Map resultMap = JSONObject.parseObject(json, Map.class);
-        if (resultMap.get("code").equals("0")) {
-            return true;
+        Object code =  resultMap.get("code");
+
+        if (!code.equals(0)) {
+          throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, (String) resultMap.get("data"));
         }
-        return false;
+        return true;
     }
 
 
