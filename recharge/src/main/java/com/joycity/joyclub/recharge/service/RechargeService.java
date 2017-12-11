@@ -12,9 +12,9 @@ import java.io.UnsupportedEncodingException;
  */
 public interface RechargeService {
 
-    String rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException;
+    Boolean rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException;
 
-    String rechargeFlux(RechargeVO vo, Long clientId) throws Exception;
+    Boolean rechargeFlux(RechargeVO vo, Long clientId) throws Exception;
 
     /**
      * 查询规格

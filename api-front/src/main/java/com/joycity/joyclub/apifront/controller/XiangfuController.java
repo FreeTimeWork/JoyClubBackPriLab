@@ -52,7 +52,7 @@ public class XiangfuController {
                                       @RequestBody RechargeVO vo) throws Exception {
         Long clienId = clientTokenService.getIdOrThrow(token);
 //        Long clienId = 1L;
-        String result = null;
+        Boolean result = null;
         if (vo.getType() == null) {
             throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
         }

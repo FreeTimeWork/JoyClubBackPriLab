@@ -1,5 +1,6 @@
 package com.joycity.joyclub.recharge.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.commons.constant.ResultCode;
@@ -57,14 +58,17 @@ public class RechargeServiceImpl implements RechargeService {
 
 
     @Override
-    public String rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
-        XiangfuRechargeDetail detail = recharge(vo, clientId);
-        String result = receiverToMiteno(detail);
+    public Boolean rechargeMoney(RechargeVO vo,Long clientId) throws UnsupportedEncodingException {
+        XiangfuRechargeDetail detail = createXiangfuOrder(vo, clientId);
+        Boolean result = receiverToMiteno(detail);
+        if (result) {
+            result = recharge(vo, clientId);
+        }
         logger.info("RechargeServiceImpl-rechargeMoney-result = "+result);
         return result;
     }
 
-    private XiangfuRechargeDetail recharge(RechargeVO vo,Long clientId){
+    private Boolean recharge(RechargeVO vo,Long clientId){
         Integer point = clientService.getPoint(clientId);
         if (vo.getPoint().intValue() < 0) {
             throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR,"积分不能为负数");
@@ -74,20 +78,23 @@ public class RechargeServiceImpl implements RechargeService {
             throw new BusinessException(ResultCode.VIP_POINT_NOT_ENOUGH,"积分不足");
         }
         clientService.addPoint(clientId, -vo.getPoint().doubleValue());
-        return  createXiangfuOrder(vo, clientId);
+        return  true;
     }
 
     @Override
-    public String rechargeFlux(RechargeVO vo, Long clientId) throws Exception {
-        XiangfuRechargeDetail detail = recharge(vo, clientId);
+    public Boolean rechargeFlux(RechargeVO vo, Long clientId) throws Exception {
+        XiangfuRechargeDetail detail = createXiangfuOrder(vo, clientId);
         FluxTemp temp = new FluxTemp();
         temp.setProvince("110");
         temp.setTimeStamp(SDF.format(new Date()));
         TelOperatorResult model = getTelOperator(vo.getTel());
         temp.setOperatorType(TelOperator.mapNameKey.get(model.getCatName()).getCode());
         temp.setScope("nation");
-        String result = buyQuota(detail, temp);
+        Boolean result = buyQuota(detail, temp);
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
+        if (result) {
+            result = recharge(vo, clientId);
+        }
         return result;
     }
 
@@ -120,7 +127,7 @@ public class RechargeServiceImpl implements RechargeService {
     /**
      * 2.1.	缴费接口
      */
-    private String receiverToMiteno(XiangfuRechargeDetail detail) throws UnsupportedEncodingException {
+    private Boolean receiverToMiteno(XiangfuRechargeDetail detail) throws UnsupportedEncodingException {
         HttpHeaders headers = new HttpHeaders();
         //  请勿轻易改变此提交方式，大部分的情况下，提交方式都是表单提交
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -139,13 +146,16 @@ public class RechargeServiceImpl implements RechargeService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
         ResponseEntity<String> response = restTemplate.exchange(rechargeMoneyConfig.getUrl()+"/Receiver", HttpMethod.POST,request,String.class);
         logger.info("mitenoResponse = " + response.getBody());
-        return response.getBody();
+        if (response.getBody().endsWith("000000")) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * 1.	流量充值
      */
-    private String buyQuota(XiangfuRechargeDetail detail, FluxTemp temp) throws Exception {
+    private Boolean buyQuota(XiangfuRechargeDetail detail, FluxTemp temp) throws Exception {
         String baseUrl = rechargeFluxConfig.getUrl()+"/manage/services/buyQuota";
 
         Map<String, Object> body= new HashMap<>();
@@ -164,7 +174,12 @@ public class RechargeServiceImpl implements RechargeService {
         String params = SignUtils.basicSign(body,false);
         String url = baseUrl +"?"+ params;
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-        return responseEntity.getBody();
+        String json = responseEntity.getBody();
+        Map resultMap = JSONObject.parseObject(json, Map.class);
+        if (resultMap.get("code").equals("0")) {
+            return true;
+        }
+        return false;
     }
 
 
