@@ -146,10 +146,10 @@ public class RechargeServiceImpl implements RechargeService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
         ResponseEntity<String> response = restTemplate.exchange(rechargeMoneyConfig.getUrl()+"/Receiver", HttpMethod.POST,request,String.class);
         logger.info("mitenoResponse = " + response.getBody());
-        if (response.getBody().endsWith("000000")) {
-            return true;
+        if (!response.getBody().contains("000000")) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, response.getBody());
         }
-        return false;
+        return true;
     }
 
     /**
@@ -233,18 +233,20 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String json = "__GetZoneResult_ = {\n" +
-                "    mts:'1761157',\n" +
-                "    province:'北京',\n" +
-                "    catName:'中国联通',\n" +
-                "    telString:'17611578727',\n" +
-                "\tareaVid:'29400',\n" +
-                "\tispVid:'137815084',\n" +
-                "\tcarrier:'北京联通'\n" +
-                "}";
-        json = json.substring(json.indexOf("{"), json.length());
-        JSONObject.parseObject(json,TelOperatorResult.class);
-        System.out.println();
+//        String json = "__GetZoneResult_ = {\n" +
+//                "    mts:'1761157',\n" +
+//                "    province:'北京',\n" +
+//                "    catName:'中国联通',\n" +
+//                "    telString:'17611578727',\n" +
+//                "\tareaVid:'29400',\n" +
+//                "\tispVid:'137815084',\n" +
+//                "\tcarrier:'北京联通'\n" +
+//                "}";
+//        json = json.substring(json.indexOf("{"), json.length());
+//        JSONObject.parseObject(json,TelOperatorResult.class);
+//        System.out.println();
+        String str = "sss000000ss";
+        System.out.println(str.contains("0000000"));
 
     }
 
