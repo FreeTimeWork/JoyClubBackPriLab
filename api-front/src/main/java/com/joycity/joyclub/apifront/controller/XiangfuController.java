@@ -3,6 +3,7 @@ package com.joycity.joyclub.apifront.controller;
 import com.joycity.joyclub.apifront.modal.MitenoResult;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
+import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
@@ -52,7 +53,7 @@ public class XiangfuController {
                                       @RequestBody RechargeVO vo) throws Exception {
         Long clienId = clientTokenService.getIdOrThrow(token);
 //        Long clienId = 1L;
-        Boolean result = null;
+        Boolean result = false;
         if (vo.getType() == null) {
             throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
         }
@@ -60,6 +61,9 @@ public class XiangfuController {
             result = rechargeService.rechargeMoney(vo, clienId);
         } else if (vo.getType().equals("flowcard")) {
             result = rechargeService.rechargeFlux(vo, clienId);
+        }
+        if (!result) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "充值失败!");
         }
         return new ResultData(result);
     }
