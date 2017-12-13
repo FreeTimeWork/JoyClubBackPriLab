@@ -129,7 +129,12 @@ public class XiangfuController {
     public ResultData getTelType(@RequestParam String tel) throws Exception {
         TelOperatorResult result = rechargeService.getTelOperator(tel);
         Map<String, String> map = new HashMap<>();
-        map.put("type", TelOperator.mapNameKey.get(result.getCatName()).getCode());
+        TelOperator telOperator = TelOperator.mapNameKey.get(result.getCatName());
+        if (telOperator != null) {
+            map.put("type", telOperator.getCode());
+        } else {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "不支持该手机号！");
+        }
         return new ResultData(map);
     }
 }
