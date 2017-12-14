@@ -99,18 +99,18 @@ public class RtmRechargeController {
                 urlParams.put("code", "200");
                 urlParams.put("msg", "success");
                 urlParams.put("userStatus", "1");
-                urlParams.put("uid", user.getTel());
+                urlParams.put("uid", rtmMD5Util.encodeBase64(user.getTel()));
                 urlParams.put("timestamp", timestamp);
                 RtmParamVo rtmParamVo = new RtmParamVo();
                 rtmParamVo.setTimestamp(timestamp);
-                rtmParamVo.setUid(user.getTel());
+                rtmParamVo.setUid(urlParams.get("uid"));
                 rtmParamVo.setClientId(clientId);
                 urlParams.put("sign", rtmMD5Util.getRtmSign1(rtmParamVo));
                 //京东直接返回
                 if (sys == null || !sys) {
                     rtmResult.setStatus(true);
                     rtmResult.setClientId(clientId);
-                    rtmResult.setUid(user.getTel());
+                    rtmResult.setUid(rtmParamVo.getUid());
                     rtmResult.setUserStatus("1");
                     rtmResult.setTimestamp(timestamp);
                     rtmResult.setSign(urlParams.get("sign"));
@@ -149,6 +149,7 @@ public class RtmRechargeController {
             return rtmResult;
         }
         try {
+            uid = rtmMD5Util.decodeBase64(uid);
             rtmResult = rtmRechargeOrderService.getPoint(uid);
         } catch (Exception e) {
             rtmResult.setStatus(false);
@@ -186,6 +187,7 @@ public class RtmRechargeController {
         }
 
         try {
+            uid = rtmMD5Util.decodeBase64(uid);
             rtmResult = rtmRechargeOrderService.deletePoint(uid,new BigDecimal(credits),pointType,rtmOrderNum);
         } catch (Exception e) {
             rtmResult.setStatus(false);
@@ -215,6 +217,7 @@ public class RtmRechargeController {
             return rtmResult;
         }
         try {
+            uid = rtmMD5Util.decodeBase64(uid);
             rtmResult = rtmRechargeOrderService.backPoint(uid,new BigDecimal(credits),pointType,rtmOrderNum);
         } catch (Exception e) {
             rtmResult.setStatus(false);
@@ -244,6 +247,7 @@ public class RtmRechargeController {
             return rtmResult;
         }
         try {
+            uid = rtmMD5Util.decodeBase64(uid);
             rtmResult = rtmRechargeOrderService.addPoint(uid, new BigDecimal(credits), pointType, rtmOrderNum);
         } catch (Exception e) {
             rtmResult.setStatus(false);

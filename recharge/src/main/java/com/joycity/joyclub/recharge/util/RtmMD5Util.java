@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -98,5 +99,15 @@ public class RtmMD5Util {
         String sign = "clientId#uid_key#timestamp";
         sign.replace("uid", "");
         System.out.println(sign);
+        System.out.println(encodeBase64("15105492645"));
+        System.out.println(decodeBase64(encodeBase64("15105492645")));
+    }
+
+    public static String encodeBase64(String text) {
+        return Base64Utils.encodeToString(text.getBytes());
+    }
+
+    public static String decodeBase64(String text) {
+        return new String(Base64Utils.decodeFromString(text));
     }
 }
