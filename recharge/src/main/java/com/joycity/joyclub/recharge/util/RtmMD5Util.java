@@ -99,7 +99,7 @@ public class RtmMD5Util {
         String sign = "clientId#uid_key#timestamp";
         sign.replace("uid", "");
         System.out.println(sign);
-        System.out.println(encodeBase64("15105492645"));
+        System.out.println(encodeBase64("17611578727"));
         System.out.println(decodeBase64(encodeBase64("15105492645")));
     }
 
