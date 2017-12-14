@@ -84,6 +84,9 @@ public class RtmRechargeController {
             loginUrl = replaceUrl(loginUrl, urlParams);
             response.sendRedirect(loginUrl);
         } else { //回调京东
+            if (sys == null || !sys) {
+                uid = rtmMD5Util.decodeBase64(uid);
+            }
             Long clientUserId = clientUserMapper.getIdByTel(uid);
             if (clientUserId == null) {
                 rtmResult.setStatus(Boolean.FALSE);
@@ -114,7 +117,7 @@ public class RtmRechargeController {
                     rtmResult.setUserStatus("1");
                     rtmResult.setTimestamp(timestamp);
                     rtmResult.setSign(urlParams.get("sign"));
-                } else { // 本系统的跳转
+                } else { // 异步通知京东
 
                     String bindUrl = dev_url + "?status={status}&code={code}&msg={msg}&clientId={clientId}&uid={uid}&userStatus={userStatus}&timestamp={timestamp}&sign={sign}";
                     bindUrl = replaceUrl(bindUrl, urlParams);
