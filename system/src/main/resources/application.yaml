@@ -66,6 +66,7 @@ alipay:
   publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMKDX3hDReM4qm8ZcvXdyPOOf4oUnb2tCJkOxQiUmNsNa2JW35VfYaPyuk2aQpWb9a6LO2RMjRQ+vE2k+7wGRCOcfLIflo+5iQ9LPbWK/TLKy+1OF+HI4KnHaEvF76+Kb2QLWvZLIL9rH7PyVVPypOpQpPFBbF50XdZ/QR4Z5KzAMZrm+C43EsCJWd0j1xj2JRh8aUpl4xz+58sIhrV1yyOjob7Tpsjd7Hy13mKcTwOKjBTA6oggwqiC+gVv95q39Z3MSnvzzKEXyMCx3LFnpL3XPiu9InWBMX9v7yhJN5Osm4ev4LBO9nTLMy8ZBRNCLB+DgfUmEyZLC3YKcbncvQIDAQAB
   notifyUrl: http://ykh-bj.com/api/front/order/pay/ali/notify
   returnUrl: http://ykh-bj.com/alipayresult
+  returnUrl-cb: http://joy-cb.ykh-bj.com/alipayresult
 
 #科传 crm
 crm:

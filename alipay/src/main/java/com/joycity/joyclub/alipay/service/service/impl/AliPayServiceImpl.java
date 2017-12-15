@@ -27,6 +27,8 @@ public class AliPayServiceImpl implements AliPayService {
 
     @Value("${alipay.returnUrl}")
     private String returnUrl;
+    @Value("${alipay.returnUrl-cb}")
+    private String returnUrl_cb;
 
 
     @Autowired
@@ -47,15 +49,16 @@ public class AliPayServiceImpl implements AliPayService {
         //涉及金钱，应该等微信支付回调在处理积分
         preOrderResult.setIfUseMoney(true);
         AliPayStoreInfo storeInfo = null;
+        String aliReturnUrl = returnUrl;
         if (projectId.equals(Global.PLATFORM_ID)) {
 
             storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
 
         } else {
+            aliReturnUrl = returnUrl_cb;
             storeInfo = new AliPayStoreInfo(aliPayConfig.getAppId(), aliPayConfig.getPrivateKey(), aliPayConfig.getPublicKey());
         }
-        //
-        String formStr = wapPay(code, moneySum, storeInfo, wxPayNotifyUrl);
+        String formStr = wapPay(code, moneySum, storeInfo, wxPayNotifyUrl,aliReturnUrl);
         preOrderResult.setFormString(formStr);
         return preOrderResult;
     }
@@ -63,12 +66,12 @@ public class AliPayServiceImpl implements AliPayService {
     /**
      * 手机网站支付，返回的是页面对应的html
      */
-    private String wapPay(String tradeNo, Float total, /*String title, String body,*/ AliPayStoreInfo storeInfo, String wxPayNotifyUrl) {
-        return wapPay(tradeNo, String.format("%.2f", Math.ceil(total*100)/100), PAY_TITLE, storeInfo, wxPayNotifyUrl);
+    private String wapPay(String tradeNo, Float total, /*String title, String body,*/ AliPayStoreInfo storeInfo, String wxPayNotifyUrl,String aliReturnUrl) {
+        return wapPay(tradeNo, String.format("%.2f", Math.ceil(total*100)/100), PAY_TITLE, storeInfo, wxPayNotifyUrl,aliReturnUrl);
     }
 
 
-    public String wapPay(String tradeNo, String total, String title/*,String body*/, AliPayStoreInfo storeInfo, String wxPayNotifyUrl) {
+    public String wapPay(String tradeNo, String total, String title/*,String body*/, AliPayStoreInfo storeInfo, String wxPayNotifyUrl,String aliReturnUrl) {
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         Map<String, String> map = new HashMap<String, String>();
         map.put("out_trade_no", tradeNo);
@@ -80,7 +83,7 @@ public class AliPayServiceImpl implements AliPayService {
 //        map.put("body", body);
         String biz = paramToJson(map);
         request.setNotifyUrl(wxPayNotifyUrl);
-        request.setReturnUrl(returnUrl);
+        request.setReturnUrl(aliReturnUrl);
         request.setBizContent(biz);
         AlipayClient client = getAliPayClient(storeInfo);
         String form = null;
