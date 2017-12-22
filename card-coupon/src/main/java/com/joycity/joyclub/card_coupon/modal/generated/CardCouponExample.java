@@ -766,6 +766,76 @@ public class CardCouponExample {
             return (Criteria) this;
         }
 
+        public Criteria andTargetAddressIsNull() {
+            addCriterion("target_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressIsNotNull() {
+            addCriterion("target_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressEqualTo(String value) {
+            addCriterion("target_address =", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressNotEqualTo(String value) {
+            addCriterion("target_address <>", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressGreaterThan(String value) {
+            addCriterion("target_address >", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("target_address >=", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressLessThan(String value) {
+            addCriterion("target_address <", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressLessThanOrEqualTo(String value) {
+            addCriterion("target_address <=", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressLike(String value) {
+            addCriterion("target_address like", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressNotLike(String value) {
+            addCriterion("target_address not like", value, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressIn(List<String> values) {
+            addCriterion("target_address in", values, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressNotIn(List<String> values) {
+            addCriterion("target_address not in", values, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressBetween(String value1, String value2) {
+            addCriterion("target_address between", value1, value2, "targetAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetAddressNotBetween(String value1, String value2) {
+            addCriterion("target_address not between", value1, value2, "targetAddress");
+            return (Criteria) this;
+        }
+
         public Criteria andNumIsNull() {
             addCriterion("num is null");
             return (Criteria) this;
