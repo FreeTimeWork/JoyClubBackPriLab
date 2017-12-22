@@ -8,6 +8,7 @@ public class updateCardCouponVO {
     private String info;
     private Integer displayWeight;
     private String portrait;
+    private String targetAddress;
 
     public String getName() {
         return name;
@@ -39,5 +40,13 @@ public class updateCardCouponVO {
 
     public void setPortrait(String portrait) {
         this.portrait = portrait;
+    }
+
+    public String getTargetAddress() {
+        return targetAddress;
+    }
+
+    public void setTargetAddress(String targetAddress) {
+        this.targetAddress = targetAddress;
     }
 }

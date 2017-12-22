@@ -20,6 +20,7 @@ public class ShowClientVisibleLaunchCoupon extends CardCouponLaunch{
      */
     private Integer remainNum;
     private String portrait;
+    private String targetAddress;
     private String info;
     private BigDecimal amount;
     private BigDecimal subtractAmount;
@@ -62,6 +63,14 @@ public class ShowClientVisibleLaunchCoupon extends CardCouponLaunch{
 
     public void setPortrait(String portrait) {
         this.portrait = portrait;
+    }
+
+    public String getTargetAddress() {
+        return targetAddress;
+    }
+
+    public void setTargetAddress(String targetAddress) {
+        this.targetAddress = targetAddress;
     }
 
     public String getInfo() {

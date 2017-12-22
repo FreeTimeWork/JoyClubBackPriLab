@@ -231,7 +231,7 @@
         <include refid="receiveStatus"/>,
         <include refid="CardCouponLaunchColumn"/>,
         ccl.launch_num - IFNULL(cccn.receive_num,0) AS remain_num,
-        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait, cc.info, cc.amount, cc.subtract_amount
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait, cc.target_address, cc.info, cc.amount, cc.subtract_amount
         from card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         INNER JOIN card_coupon_vip_scope ccvs ON ccvs.coupon_id = cc.id
@@ -278,7 +278,7 @@
         0 AS receive_status,
         <include refid="CardCouponLaunchColumn"/>,
         ccl.launch_num - IFNULL(cccn.receive_num,0) AS remain_num,
-        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait, cc.info, cc.amount, cc.subtract_amount
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait,cc.target_address, cc.info, cc.amount, cc.subtract_amount
         from card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         LEFT JOIN
@@ -323,7 +323,7 @@
         0 AS receive_status,
         <include refid="CardCouponLaunchColumn"/>,
         ccl.launch_num - IFNULL(cccn.receive_num,0) AS remain_num,
-        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait, cc.info, cc.amount, cc.subtract_amount
+        cc.name AS coupon_name, cc.type AS coupon_type, cc.portrait,cc.target_address, cc.info, cc.amount, cc.subtract_amount
         from card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id
         LEFT JOIN

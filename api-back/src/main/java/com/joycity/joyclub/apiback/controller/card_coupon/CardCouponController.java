@@ -50,6 +50,7 @@ public class CardCouponController extends BaseUserSessionController {
         cardCoupon.setInfo(vo.getInfo());
         cardCoupon.setDisplayWeight(vo.getDisplayWeight());
         cardCoupon.setPortrait(vo.getPortrait());
+        cardCoupon.setTargetAddress(vo.getTargetAddress());
         return cardCouponService.updateCardCoupon(cardCoupon);
     }
 
@@ -69,6 +70,7 @@ public class CardCouponController extends BaseUserSessionController {
         public ResultData createCardCoupon(@Validated @RequestBody CreateCouponInfo info, HttpSession session) {
         SysUser user = checkProjectUser(session);
         info.setProjectId(user.getInfoId());
+//        info.setProjectId(1L);
         return cardCouponService.createCardCoupon(info);
     }
 
