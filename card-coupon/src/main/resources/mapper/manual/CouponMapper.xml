@@ -6,7 +6,7 @@
     </sql>
 
     <sql id="CardCouponColumn">
-        cc.id, cc.project_id, cc.name, cc.type, cc.batch, cc.thirdparty_shop_id, cc.sysgen_flag, cc.portrait, cc.num, cc.amount, cc.subtract_amount,
+        cc.id, cc.project_id, cc.name, cc.type, cc.batch, cc.thirdparty_shop_id, cc.sysgen_flag, cc.portrait, cc.target_address, cc.num, cc.amount, cc.subtract_amount,
         cc.support_refund_flag, cc.info, cc.create_time, cc.last_update, cc.delete_flag, cc.delete_time
     </sql>
 
