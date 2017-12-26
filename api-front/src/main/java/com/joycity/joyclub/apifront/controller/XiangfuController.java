@@ -1,6 +1,7 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.modal.MitenoResult;
+import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.ResultCode;
@@ -47,6 +48,8 @@ public class XiangfuController {
     private ClientTokenService clientTokenService;
     @Autowired
     XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
+    @Autowired
+    private ClientService clientService;
 
     @PostMapping("/exchange")
     public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
@@ -89,11 +92,15 @@ public class XiangfuController {
         result.setUserToken(userToken);
         logger.info("XiangfuController - callback-result=" + result);
         Long id = xiangfuRechargeDetailMapper.selectIdByXiangfuOrderCode(result.getOrderId());
-        XiangfuRechargeDetail detail = new XiangfuRechargeDetail();
+        XiangfuRechargeDetail detail = xiangfuRechargeDetailMapper.selectByPrimaryKey(id);
         detail.setId(id);
         detail.setOutOrder(result.getSid());
         detail.setStatus(Integer.valueOf(result.getReturncode()));
         detail.setPayment(new BigDecimal(result.getTrxamount()));
+        //如果充值失败，积分补回
+        if (detail.getStatus().equals(5)) {
+            clientService.addPoint(detail.getClientId(), detail.getPoint().doubleValue());
+        }
         xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         System.out.println(result);
         response.getWriter().write("success");
