@@ -97,6 +97,7 @@ public class XiangfuController {
         detail.setOutOrder(result.getSid());
         detail.setStatus(Integer.valueOf(result.getReturncode()));
         detail.setPayment(new BigDecimal(result.getTrxamount()));
+        detail.setLastUpdate(null);
         //如果充值失败，积分补回
         if (detail.getStatus().equals(5)) {
             clientService.addPoint(detail.getClientId(), detail.getPoint().doubleValue());
