@@ -119,7 +119,7 @@ public class RtmRechargeController {
                     rtmResult.setSign(urlParams.get("sign"));
                 } else { // 异步通知京东
 
-                    String bindUrl = dev_url + "?status={status}&code={code}&msg={msg}&clientId={clientId}&uid={uid}&userStatus={userStatus}&timestamp={timestamp}&sign={sign}";
+                    String bindUrl = real_url + "?status={status}&code={code}&msg={msg}&clientId={clientId}&uid={uid}&userStatus={userStatus}&timestamp={timestamp}&sign={sign}";
                     bindUrl = replaceUrl(bindUrl, urlParams);
                     response.sendRedirect(bindUrl);
                 }
