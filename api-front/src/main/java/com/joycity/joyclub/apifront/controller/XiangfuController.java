@@ -55,32 +55,32 @@ public class XiangfuController {
     @Autowired
     ClientUserMapper clientUserMapper;
 
-    @PostMapping("/exchange")
-    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
-                                      @RequestBody RechargeVO vo) throws Exception {
-        Long clienId = clientTokenService.getIdOrThrow(token);
-//        Long clienId = 1L;
-        Boolean result = false;
-        if (vo.getType() == null) {
-            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型！");
-        }
-        Client client = clientUserMapper.selectByPrimaryKey(clienId);
-
-        Boolean checkPoint = clientService.checkPoint(client.getTel(),vo.getPoint().doubleValue());
-        if (!checkPoint) {
-            throw new BusinessException(REQUEST_PARAM_ERROR, "积分不够");
-        }
-
-        if (vo.getType().equals("rechargecard")) {
-            result = rechargeService.rechargeMoney(vo, clienId);
-        } else if (vo.getType().equals("flowcard")) {
-            result = rechargeService.rechargeFlux(vo, clienId);
-        }
-        if (!result) {
-            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "充值失败!");
-        }
-        return new ResultData(result);
-    }
+//    @PostMapping("/exchange")
+//    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
+//                                      @RequestBody RechargeVO vo) throws Exception {
+//        Long clienId = clientTokenService.getIdOrThrow(token);
+////        Long clienId = 1L;
+//        Boolean result = false;
+//        if (vo.getType() == null) {
+//            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型！");
+//        }
+//        Client client = clientUserMapper.selectByPrimaryKey(clienId);
+//
+//        Boolean checkPoint = clientService.checkPoint(client.getTel(),vo.getPoint().doubleValue());
+//        if (!checkPoint) {
+//            throw new BusinessException(REQUEST_PARAM_ERROR, "积分不够");
+//        }
+//
+//        if (vo.getType().equals("rechargecard")) {
+//            result = rechargeService.rechargeMoney(vo, clienId);
+//        } else if (vo.getType().equals("flowcard")) {
+//            result = rechargeService.rechargeFlux(vo, clienId);
+//        }
+//        if (!result) {
+//            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "充值失败!");
+//        }
+//        return new ResultData(result);
+//    }
 
     @PostMapping("/callback")
     public void xiangfuCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
