@@ -1,6 +1,8 @@
 package com.joycity.joyclub.apifront.controller;
 
 import com.joycity.joyclub.apifront.modal.MitenoResult;
+import com.joycity.joyclub.client.mapper.ClientUserMapper;
+import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.service.ClientService;
 import com.joycity.joyclub.client_token.service.ClientTokenService;
 import com.joycity.joyclub.commons.constant.Global;
@@ -50,6 +52,8 @@ public class XiangfuController {
     XiangfuRechargeDetailMapper xiangfuRechargeDetailMapper;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    ClientUserMapper clientUserMapper;
 
     @PostMapping("/exchange")
     public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
@@ -58,8 +62,15 @@ public class XiangfuController {
 //        Long clienId = 1L;
         Boolean result = false;
         if (vo.getType() == null) {
-            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型");
+            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型！");
         }
+        Client client = clientUserMapper.selectByPrimaryKey(clienId);
+
+        Boolean checkPoint = clientService.checkPoint(client.getTel(),vo.getPoint().doubleValue());
+        if (!checkPoint) {
+            throw new BusinessException(REQUEST_PARAM_ERROR, "积分不够");
+        }
+
         if (vo.getType().equals("rechargecard")) {
             result = rechargeService.rechargeMoney(vo, clienId);
         } else if (vo.getType().equals("flowcard")) {
