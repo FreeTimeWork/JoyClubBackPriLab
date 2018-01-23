@@ -65,7 +65,7 @@ public class RechargeServiceImpl implements RechargeService {
             result = recharge(vo, clientId);
         } else {
             detail.setLastUpdate(null);
-            detail.setStatus(5);
+            detail.setStatus(-1);
             xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         }
         logger.info("RechargeServiceImpl-rechargeMoney-result = "+result);
@@ -100,7 +100,7 @@ public class RechargeServiceImpl implements RechargeService {
             result = recharge(vo, clientId);
         } else {
             detail.setLastUpdate(null);
-            detail.setStatus(5);
+            detail.setStatus(-1);
             xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         }
         return result;
