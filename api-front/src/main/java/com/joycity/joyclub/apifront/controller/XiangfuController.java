@@ -58,10 +58,10 @@ public class XiangfuController {
     ClientUserMapper clientUserMapper;
 
     @PostMapping("/exchange")
-    public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
+    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
                                       @RequestBody RechargeVO vo) throws Exception {
-//        Long clienId = clientTokenService.getIdOrThrow(token);
-        Long clienId = 1774L;
+        Long clienId = clientTokenService.getIdOrThrow(token);
+//        Long clienId = 1774L;
         Boolean result = false;
         Client client = checkXiangfuRecharge(vo,clienId);
         if (vo.getType().equals("rechargecard")) {
