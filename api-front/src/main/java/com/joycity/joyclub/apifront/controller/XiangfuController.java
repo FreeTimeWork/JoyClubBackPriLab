@@ -95,6 +95,7 @@ public class XiangfuController {
         range.setFrom(DateTimeUtil.getFirstDayOfMonth(now));
         range.setTo(now);
         filter.setTimeRange(range);
+        filter.setValid(true);
         Integer num = xiangfuRechargeDetailMapper.selectRechargeNumOnMonth(filter);
         if (num >= 2) {
             throw new BusinessException(REQUEST_PARAM_ERROR, "当月充值次数已达上限");
