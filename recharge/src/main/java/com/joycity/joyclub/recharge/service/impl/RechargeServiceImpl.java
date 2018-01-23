@@ -63,6 +63,10 @@ public class RechargeServiceImpl implements RechargeService {
         Boolean result = receiverToMiteno(detail);
         if (result) {
             result = recharge(vo, clientId);
+        } else {
+            detail.setLastUpdate(null);
+            detail.setStatus(5);
+            xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         }
         logger.info("RechargeServiceImpl-rechargeMoney-result = "+result);
         return result;
@@ -94,6 +98,10 @@ public class RechargeServiceImpl implements RechargeService {
         logger.info("RechargeServiceImpl-rechargeFlux"+result);
         if (result) {
             result = recharge(vo, clientId);
+        } else {
+            detail.setLastUpdate(null);
+            detail.setStatus(5);
+            xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
         }
         return result;
     }
@@ -144,10 +152,17 @@ public class RechargeServiceImpl implements RechargeService {
         body.add("extendinfo", "joycity");
         body.add("sign", createMitenoSign(detail));
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = restTemplate.exchange(rechargeMoneyConfig.getUrl()+"/Receiver", HttpMethod.POST,request,String.class);
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(rechargeMoneyConfig.getUrl()+"/Receiver", HttpMethod.POST,request,String.class);
+        } catch (Exception e) {
+            logger.info("话费接口异常", e);
+            return false;
+        }
         logger.info("mitenoResponse = " + response.getBody());
         if (!response.getBody().contains("000000")) {
-            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, response.getBody());
+            logger.info("缴费失败原因="+response.getBody());
+            return false;
         }
         return true;
     }
@@ -173,13 +188,20 @@ public class RechargeServiceImpl implements RechargeService {
         body.put("signature", createFluxSign(body));
         String params = SignUtils.basicSign(body,false);
         String url = baseUrl +"?"+ params;
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> responseEntity = null;
+        try {
+            responseEntity = restTemplate.getForEntity(url, String.class);
+        } catch (Exception e) {
+            logger.info("流量接口异常",e);
+            return false;
+        }
         String json = responseEntity.getBody();
         Map resultMap = JSONObject.parseObject(json, Map.class);
         Object code =  resultMap.get("code");
 
         if (!code.equals(0)) {
-          throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, (String) resultMap.get("data"));
+            logger.info("流量充值失败原因"+resultMap.get("data"));
+            return false;
         }
         return true;
     }

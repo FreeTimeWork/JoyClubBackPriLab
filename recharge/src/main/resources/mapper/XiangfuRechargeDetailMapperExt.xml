@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper">
+
+  <sql id="XiangfuRechargeDetailFilter">
+    <if test="filter != null">
+      <if test="filter.clientId != null">
+        AND xrd.client_id = #{filter.clientId}
+      </if>
+      <if test="filter.type != null">
+        AND xrd.type = #{filter.type}
+      </if>
+      <if test="filter.timeRange != null">
+        AND #{filter.timeRange.from} <![CDATA[ <= ]]> xrd.create_time
+        AND xrd.create_time <![CDATA[ < ]]> #{filter.timeRange.to}
+      </if>
+      <if test="filter.valid != null and filter.valid">
+        AND xrd.status in (0,1,2,3,4)
+      </if>
+    </if>
+  </sql>
+
+  <select id="selectRechargeNumOnMonth" resultType="int">
+    SELECT count(*) FROM xiangfu_recharge_detail xrd
+    <where>
+      <include refid="XiangfuRechargeDetailFilter"/>
+    </where>
+  </select>
+</mapper>

@@ -9,10 +9,12 @@ import com.joycity.joyclub.commons.constant.Global;
 import com.joycity.joyclub.commons.constant.ResultCode;
 import com.joycity.joyclub.commons.exception.BusinessException;
 import com.joycity.joyclub.commons.modal.base.ResultData;
+import com.joycity.joyclub.commons.modal.base.TimeRange;
 import com.joycity.joyclub.commons.utils.DateTimeUtil;
 import com.joycity.joyclub.recharge.RechargeFluxConfig;
 import com.joycity.joyclub.recharge.constants.TelOperator;
 import com.joycity.joyclub.recharge.mapper.XiangfuRechargeDetailMapper;
+import com.joycity.joyclub.recharge.modal.filter.XiangfuRechargeDetailFilter;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.vo.FluxTemp;
 import com.joycity.joyclub.recharge.modal.vo.RechargeVO;
@@ -55,32 +57,52 @@ public class XiangfuController {
     @Autowired
     ClientUserMapper clientUserMapper;
 
-//    @PostMapping("/exchange")
-//    public ResultData xiangfuRecharge(@CookieValue(Global.COOKIE_TOKEN)String token,
-//                                      @RequestBody RechargeVO vo) throws Exception {
+    @PostMapping("/exchange")
+    public ResultData xiangfuRecharge(/*@CookieValue(Global.COOKIE_TOKEN)String token,*/
+                                      @RequestBody RechargeVO vo) throws Exception {
 //        Long clienId = clientTokenService.getIdOrThrow(token);
-////        Long clienId = 1L;
-//        Boolean result = false;
-//        if (vo.getType() == null) {
-//            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型！");
-//        }
-//        Client client = clientUserMapper.selectByPrimaryKey(clienId);
-//
-//        Boolean checkPoint = clientService.checkPoint(client.getTel(),vo.getPoint().doubleValue());
-//        if (!checkPoint) {
-//            throw new BusinessException(REQUEST_PARAM_ERROR, "积分不够");
-//        }
-//
-//        if (vo.getType().equals("rechargecard")) {
-//            result = rechargeService.rechargeMoney(vo, clienId);
-//        } else if (vo.getType().equals("flowcard")) {
-//            result = rechargeService.rechargeFlux(vo, clienId);
-//        }
-//        if (!result) {
-//            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "充值失败!");
-//        }
-//        return new ResultData(result);
-//    }
+        Long clienId = 1774L;
+        Boolean result = false;
+        Client client = checkXiangfuRecharge(vo,clienId);
+        if (vo.getType().equals("rechargecard")) {
+            result = rechargeService.rechargeMoney(vo, clienId);
+        } else if (vo.getType().equals("flowcard")) {
+            result = rechargeService.rechargeFlux(vo, clienId);
+        }
+        if (!result) {
+            throw new BusinessException(ResultCode.REQUEST_PARAMS_ERROR, "充值失败!");
+        }
+        return new ResultData(result);
+    }
+
+    private Client checkXiangfuRecharge(RechargeVO vo,Long clienId){
+        Date now = new Date();
+        if (vo.getType() == null) {
+            throw new BusinessException(REQUEST_PARAM_ERROR, "没有充值类型！");
+        }
+        Client client = clientUserMapper.selectByPrimaryKey(clienId);
+        if (!client.getTel().equals(vo.getTel())) {
+            throw new BusinessException(REQUEST_PARAM_ERROR, "只能给当前用户手机号充值");
+        }
+        Boolean checkPoint = clientService.checkPoint(client.getTel(),vo.getPoint().doubleValue());
+        if (!checkPoint) {
+            throw new BusinessException(REQUEST_PARAM_ERROR, "积分不够");
+        }
+        XiangfuRechargeDetailFilter filter = new XiangfuRechargeDetailFilter();
+        filter.setClientId(clienId);
+        filter.setType(vo.getType());
+        TimeRange range = new TimeRange();
+        range.setFrom(DateTimeUtil.getFirstDayOfMonth(now));
+        range.setTo(now);
+        filter.setTimeRange(range);
+        Integer num = xiangfuRechargeDetailMapper.selectRechargeNumOnMonth(filter);
+        if (num >= 2) {
+            throw new BusinessException(REQUEST_PARAM_ERROR, "当月充值次数已达上限");
+        }
+        return client;
+    }
+
+
 
     @PostMapping("/callback")
     public void xiangfuCallBack(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -114,7 +136,7 @@ public class XiangfuController {
             clientService.addPoint(detail.getClientId(), detail.getPoint().doubleValue());
         }
         xiangfuRechargeDetailMapper.updateByPrimaryKeySelective(detail);
-        System.out.println(result);
+//        System.out.println(result);
         response.getWriter().write("success");
     }
 

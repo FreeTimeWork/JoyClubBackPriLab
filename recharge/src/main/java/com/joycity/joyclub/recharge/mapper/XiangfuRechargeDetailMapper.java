@@ -1,6 +1,7 @@
 package com.joycity.joyclub.recharge.mapper;
 
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.recharge.modal.filter.XiangfuRechargeDetailFilter;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetail;
 import com.joycity.joyclub.recharge.modal.generated.XiangfuRechargeDetailExample;
 import org.apache.ibatis.annotations.Param;
@@ -13,5 +14,7 @@ public interface XiangfuRechargeDetailMapper extends BaseMapper<XiangfuRechargeD
 
     @Select("select id from xiangfu_recharge_detail where order_code = #{orderCode}")
     Long selectIdByXiangfuOrderCode(@Param("orderCode") String orderCode);
+
+    Integer selectRechargeNumOnMonth(@Param("filter") XiangfuRechargeDetailFilter filter);
 
 }
