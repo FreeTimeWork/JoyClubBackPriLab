@@ -26,6 +26,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.joycity.joyclub.commons.constant.Global.PLATFORM_ID;
 import static com.joycity.joyclub.commons.constant.ProjectVipCard.VIP_CARD_DIGITAL;
 import static com.joycity.joyclub.commons.constant.ResultCode.DATA_NOT_EXIST;
@@ -197,7 +200,9 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         }
         Client user = clientMapper.selectByPrimaryKey(clientId);
         addTokenCookie(response,user);
-        return new ResultData();
+        Map map = new HashMap();
+        map.put("phone", user.getTel());
+        return new ResultData(map);
     }
 
     @Override
