@@ -202,6 +202,8 @@ public class LoginFrontServiceImpl implements LoginFrontService {
         addTokenCookie(response,user);
         Map map = new HashMap();
         map.put("phone", user.getTel());
+        Client keClient = keChuanCrmService.getMemberByVipCode(user.getVipCode());
+        map.put("point", keClient.getVipPoint());
         return new ResultData(map);
     }
 
