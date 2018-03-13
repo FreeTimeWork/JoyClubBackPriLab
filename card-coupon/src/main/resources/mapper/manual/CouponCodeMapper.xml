@@ -49,6 +49,26 @@
         </if>
     </sql>
 
+    <select id="selectCouponLimitInfo" resultType="int">
+        SELECT count(*) FROM card_coupon_code
+        <where>
+            <if test="storeId != null">
+               AND issue_shop = #{storeId}
+            </if>
+            <if test="launchId != null">
+                AND launch_id = #{launchId}
+            </if>
+            <if test="range != null">
+                <if test="range.from != null">
+                    AND #{range.from} <![CDATA[ <= ]]> receive_time
+                </if>
+                <if test="range.to != null">
+                    AND receive_time <![CDATA[ < ]]> #{range.to}
+                </if>
+            </if>
+        </where>
+    </select>
+
     <select id="countSysCardCouponCodeByFilter" resultType="long">
         SELECT
         count(*)

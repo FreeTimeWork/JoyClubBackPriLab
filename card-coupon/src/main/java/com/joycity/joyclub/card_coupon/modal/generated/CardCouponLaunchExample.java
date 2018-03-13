@@ -696,6 +696,66 @@ public class CardCouponLaunchExample {
             return (Criteria) this;
         }
 
+        public Criteria andLaunchNumDailyIsNull() {
+            addCriterion("launch_num_daily is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyIsNotNull() {
+            addCriterion("launch_num_daily is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyEqualTo(Integer value) {
+            addCriterion("launch_num_daily =", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyNotEqualTo(Integer value) {
+            addCriterion("launch_num_daily <>", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyGreaterThan(Integer value) {
+            addCriterion("launch_num_daily >", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("launch_num_daily >=", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyLessThan(Integer value) {
+            addCriterion("launch_num_daily <", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyLessThanOrEqualTo(Integer value) {
+            addCriterion("launch_num_daily <=", value, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyIn(List<Integer> values) {
+            addCriterion("launch_num_daily in", values, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyNotIn(List<Integer> values) {
+            addCriterion("launch_num_daily not in", values, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyBetween(Integer value1, Integer value2) {
+            addCriterion("launch_num_daily between", value1, value2, "launchNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLaunchNumDailyNotBetween(Integer value1, Integer value2) {
+            addCriterion("launch_num_daily not between", value1, value2, "launchNumDaily");
+            return (Criteria) this;
+        }
+
         public Criteria andPayTypeIsNull() {
             addCriterion("pay_type is null");
             return (Criteria) this;

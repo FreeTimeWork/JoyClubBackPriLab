@@ -5,6 +5,7 @@ import com.joycity.joyclub.card_coupon.modal.filter.ShowCouponCodeFilter;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCode;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponCodeExample;
 import com.joycity.joyclub.commons.mapper.BaseMapper;
+import com.joycity.joyclub.commons.modal.base.TimeRange;
 import com.joycity.joyclub.commons.utils.PageUtil;
 import com.joycity.joyclub.mallcoo.modal.result.data.JoinShop;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +19,8 @@ import java.util.List;
  * Created by fangchen.chai on 2017/7/11.
  */
 public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, CardCouponCodeExample> {
+
+    Integer selectCouponLimitInfo(@Param("launchId") Long launchId, @Param("storeId") Long storeId, @Param("range") TimeRange range);
 
     @Select("select count(*) from card_coupon_code where launch_id = #{launchId} and use_status = #{useStatus} and delete_flag = 0")
     int countByLaunchIdAndUseStatus(@Param("launchId") Long launchId, @Param("useStatus") Byte useStatus);

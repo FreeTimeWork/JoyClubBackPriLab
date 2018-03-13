@@ -16,4 +16,7 @@ public interface CardCouponTriggerScopeMapper extends BaseMapper<CardCouponTrigg
     @Select({"select * from card_coupon_trigger_scope where launch_id = #{launchId}"})
     List<CardCouponTriggerScope> selectCardCouponTriggerScopesByLaunchId(@Param("launchId") Long launchId);
 
+    @Select({"select * from card_coupon_trigger_scope where launch_id = #{launchId} and store_id = #{shopId}"})
+    CardCouponTriggerScope selectCardCouponTriggerScopesByLaunchIdAndShop(@Param("launchId") Long launchId, @Param("shopId") Long shopId);
+
 }

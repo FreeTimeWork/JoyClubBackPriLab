@@ -1,6 +1,7 @@
 package com.joycity.joyclub.card_coupon.service.impl;
 
 import com.joycity.joyclub.card_coupon.cache.CardCouponCodeCache;
+import com.joycity.joyclub.card_coupon.constant.CouponCalculateType;
 import com.joycity.joyclub.card_coupon.constant.CouponCodeUseStatus;
 import com.joycity.joyclub.card_coupon.constant.RefundType;
 import com.joycity.joyclub.card_coupon.mapper.*;
@@ -9,6 +10,8 @@ import com.joycity.joyclub.card_coupon.modal.generated.*;
 import com.joycity.joyclub.card_coupon.service.CardCouponCodeService;
 import com.joycity.joyclub.card_coupon.service.CardPosService;
 import com.joycity.joyclub.card_coupon.service.ShopService;
+import com.joycity.joyclub.card_coupon.service.sendcardstrategy.SingleStrategy;
+import com.joycity.joyclub.card_coupon.service.sendcardstrategy.SingleStrategyFactory;
 import com.joycity.joyclub.client.mapper.ClientUserMapper;
 import com.joycity.joyclub.client.modal.Client;
 import com.joycity.joyclub.client.service.KeChuanCrmService;
@@ -59,6 +62,8 @@ public class CardPosServiceImpl implements CardPosService {
     KeChuanCrmService keChuanCrmService;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private CardCouponTriggerScopeMapper triggerScopeMapper;
 
     @Override
     public ResultData getCurrentCoupons(Long projectId, String shopCode, String vipCode) {
@@ -194,7 +199,7 @@ public class CardPosServiceImpl implements CardPosService {
         CouponLaunchBetweenInfo info = clientCouponNumAndSumPaidInfo(shop.getId(), new Date(), clientId);
         //如果该订单在条件投放期间
         if (info != null) {
-            int receiveNum = receiveCashCouponNum(info, clientId);
+            int receiveNum = receiveCashCouponNum(info, clientId,shop.getId(),payment);
             if (receiveNum > 0) {
                 CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
                 //发卡
@@ -410,31 +415,62 @@ public class CardPosServiceImpl implements CardPosService {
      * 返回应发代金券的数量
      * @return
      */
-    private int receiveCashCouponNum(CouponLaunchBetweenInfo info, Long clientId) throws ParseException {
+    private int receiveCashCouponNum(CouponLaunchBetweenInfo info, Long clientId,Long  shopId,BigDecimal payment) throws ParseException {
+        CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
+        Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
+        Date end = DateTimeUtil.addDays(start, 1);
+        int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
         int receiveNum = 0;
-        int subCouponNum= getSubCouponNum(info, BigDecimal.ZERO);
-        //会员实际拥有代金券与应该拥有代金券数量的差
-        int diff = actualNumSubtractSubNum(info, subCouponNum);
-        //1.实际数量比应发数量小，应该发券
-        //2.检查当天领取的代金券是否达到该投放限制的每日最大获取量
-        if (diff < 0) {
-            Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
-            Date end = DateTimeUtil.addDays(start, 1);
-            int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
-            //每日限制数量 - 当日已领取代金券数量
-            int todayLimitNum = info.getMaxReceive() - cashCouponNum;
-            if (todayLimitNum > 0) {
-                //发卡数量
-                if ((todayLimitNum + diff) >= 0) {
-                    return -diff;
-                } else {
-                    return todayLimitNum;
-                }
+        if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_MANY.getId())) {
+            int subCouponNum= getSubCouponNum(info, BigDecimal.ZERO);
+            //会员实际拥有代金券与应该拥有代金券数量的差
+            int diff = actualNumSubtractSubNum(info, subCouponNum);
+            //1.实际数量比应发数量小，应该发券
+            //2.检查当天领取的代金券是否达到该投放限制的每日最大获取量
+            if (diff < 0) {
+                //每日限制数量 - 当日已领取代金券数量
+                int todayLimitNum = info.getMaxReceive() - cashCouponNum;
+                if (todayLimitNum > 0) {
+                    //发卡数量
+                    if ((todayLimitNum + diff) >= 0) {
+                        return -diff;
+                    } else {
+                        return todayLimitNum;
+                    }
 
+                }
             }
+        } else if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_SINGLE.getId())) {
+            SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
+            SingleStrategy singleStrategy = factory.getSingleStrategy();
+            return singleStrategy.CouponNum(payment, info.getConditionAmount());
+        } else if (launch.getCalculateType().equals(CouponCalculateType.NONINCREMENT_SINGLE.getId())) {
+            SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.NONINCREMENT_SINGLE);
+            SingleStrategy singleStrategy = factory.getSingleStrategy();
+            return singleStrategy.CouponNum(payment, info.getConditionAmount());
         }
         return receiveNum;
     }
 
+    private boolean preReceiveCashCouponNum(CouponLaunchBetweenInfo info, Long clientId, Long shopId,CardCouponLaunch launch) throws ParseException {
+        //按投放批次，限制每日最大投放券张数
+        //按投放批次，限制每个店铺活动期最大投放券张数、每个店铺每日最大投放券张数
+        //查出该投放今日投放张数，该店铺今日发卡数，活动期的发卡数，
+
+        Date now = new Date();
+        TimeRange today = TimeRange.toTimeRange(DateTimeUtil.formatYYYYMMDD(now), DateTimeUtil.formatYYYYMMDD(now));
+        Integer launchNumDaily = cardCouponCodeMapper.selectCouponLimitInfo(info.getLaunchId(), null, today);
+        Integer launchNumShopDaily = cardCouponCodeMapper.selectCouponLimitInfo(info.getLaunchId(), shopId, today);
+        TimeRange activePeriod = new TimeRange();
+        activePeriod.setFrom(launch.getLaunchStartTime());
+        activePeriod.setTo(launch.getLaunchEndTime());
+        Integer launchNumShopActivePeriod = cardCouponCodeMapper.selectCouponLimitInfo(info.getLaunchId(), shopId, activePeriod);
+        CardCouponTriggerScope triggerScope = triggerScopeMapper.selectCardCouponTriggerScopesByLaunchIdAndShop(info.getLaunchId(), shopId);
+        if (launchNumDaily <= launch.getLaunchNumDaily()
+                && launchNumShopDaily <= triggerScope.getLimitNumDaily()
+                && launchNumShopActivePeriod <= triggerScope.getLimitNum()) {
+
+        }
+    }
 
 }
