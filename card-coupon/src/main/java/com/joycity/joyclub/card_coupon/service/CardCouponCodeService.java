@@ -30,7 +30,7 @@ public interface CardCouponCodeService {
      * @param clientId
      * @param launchId
      */
-    Long sendCouponCode(Long clientId, Long launchId, Long couponId);
+    Long sendCouponCode(Long clientId, Long launchId, Long couponId,Long shopId);
 
     ResultData getListByFilter(Long projectId, ShowCouponCodeFilter filter, PageUtil pageUtil);
 

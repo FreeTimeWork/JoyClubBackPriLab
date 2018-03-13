@@ -80,7 +80,7 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
      * @param now
      * @return
      */
-    CouponLaunchBetweenInfo selectCouponNumFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId);
+    CouponLaunchBetweenInfo selectCouponNumFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId, @Param("shopId") Long shopId);
 
     /**
      * 条件投放期间内，从该会员未使用的代金券中找到num个couponCodeId

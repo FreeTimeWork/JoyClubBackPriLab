@@ -95,7 +95,7 @@ public class CardCouponOrderServiceImpl implements CardCouponOrderService {
         CardCouponOrder order = couponOrderMapper.selectByPrimaryKey(id);
         setOrderPayed(code, outCode);
         CardCouponLaunch launch = launchMapper.selectByPrimaryKey(order.getLaunchId());
-        couponCodeService.sendCouponCode(order.getClientId(), order.getLaunchId(), launch.getCouponId());
+        couponCodeService.sendCouponCode(order.getClientId(), order.getLaunchId(), launch.getCouponId(),null);
         return true;
     }
 

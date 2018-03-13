@@ -130,18 +130,18 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         if (pointSum.intValue() > 0) {
             clientService.addPoint(clientId, -pointSum.doubleValue());
         }
-        Long id = sendCouponCode(clientId, launchId, launch.getCouponId());
+        Long id = sendCouponCode(clientId, launchId, launch.getCouponId(),null);
         return new ResultData(new CreateResult(id));
     }
 
     @Override
-    public Long sendCouponCode(Long clientId, Long launchId, Long couponId) {
+    public Long sendCouponCode(Long clientId, Long launchId, Long couponId,Long shopId) {
 
         CardCoupon cardCoupon = cardCouponMapper.selectByPrimaryKey(couponId);
         Long id = null;
         if (cardCoupon.getSysgenFlag()) {
             try {
-                id = sendSingleCouponCode(launchId, cardCoupon.getType(), clientId, cardCoupon.getThirdpartyShopId(), null);
+                id = sendSingleCouponCode(launchId, cardCoupon.getType(), clientId, cardCoupon.getThirdpartyShopId(), null,shopId);
             } catch (Exception e) {
                 //发券逻辑执行失败,cache库存恢复。
                 couponCodeCache.changeInventory(launchId, 1);
@@ -178,7 +178,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
      * @param couponCode
      * @return
      */
-    private Long sendSingleCouponCode(Long launchId, Byte couponType, Long clientId, Long thirdPartyShopId, String couponCode) {
+    private Long sendSingleCouponCode(Long launchId, Byte couponType, Long clientId, Long thirdPartyShopId, String couponCode,Long shopId) {
 
         CardCouponCode cardCouponCode = new CardCouponCode();
 
@@ -196,6 +196,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         cardCouponCode.setClientId(clientId);
         cardCouponCode.setReceiveTime(new Date());
         cardCouponCode.setUseStatus(CouponCodeUseStatus.NOT_USED);
+        cardCouponCode.setIssueShop(shopId);
         cardCouponCodeMapper.insertSelective(cardCouponCode);
         return cardCouponCode.getId();
     }
@@ -310,7 +311,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
             } else {
                 //执行发券逻辑
                 try {
-                    sendSingleCouponCode(launchId, cardCoupon.getType(), clientIds.get(i), cardCoupon.getThirdpartyShopId(), null);
+                    sendSingleCouponCode(launchId, cardCoupon.getType(), clientIds.get(i), cardCoupon.getThirdpartyShopId(), null,null);
                 } catch (Exception e) {
                     //发券逻辑执行失败,cache库存恢复。
                     couponCodeCache.changeInventory(launchId, 1);
@@ -446,7 +447,7 @@ public class CardCouponCodeServiceImpl implements CardCouponCodeService {
         CardCouponCode cardCouponCode = new CardCouponCode();
         Long thirdPartyShopId = cardCoupon.getThirdpartyShopId();
         cardCouponCode.setBelong(thirdPartyShopId);
-        Long id = sendSingleCouponCode(launchId, cardCoupon.getType(), clientId, thirdPartyShopId, cardThirdpartyCouponCode.getCode());
+        Long id = sendSingleCouponCode(launchId, cardCoupon.getType(), clientId, thirdPartyShopId, cardThirdpartyCouponCode.getCode(),null);
         cardThirdpartyCouponCodeMapper.deleteById(cardThirdpartyCouponCode.getId());
         return id;
     }
