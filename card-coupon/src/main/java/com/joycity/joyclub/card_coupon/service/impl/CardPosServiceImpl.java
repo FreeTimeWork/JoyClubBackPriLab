@@ -271,13 +271,21 @@ public class CardPosServiceImpl implements CardPosService {
         if (info.getDetail() == null) {
             return new ResultData(new UpdateResult(0));
         }
-//        // 如果 refundAmount = 0，直接 从订单里找退款金额
-//        if (refundAmount != null && refundAmount.intValue() == 0) {
-//            refundAmount = info.getDetail().getBalance();
-//        }
-        //应该代金券拥有量
-        int subCouponNum = getSubCouponNum(info, refundAmount);
-        Integer num = actualNumSubtractSubNum(info, subCouponNum);
+        Integer num = 0;
+        CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
+        if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_MANY.getId())) {
+            //应该代金券拥有量
+            int subCouponNum = getSubCouponNum(info, refundAmount);
+            num = actualNumSubtractSubNum(info, subCouponNum);
+        } else if (launch.getCalculateType().equals(CouponCalculateType.NONINCREMENT_SINGLE.getId())) {
+            SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.NONINCREMENT_SINGLE);
+            SingleStrategy singleStrategy = factory.getSingleStrategy();
+            num = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
+        } else if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_SINGLE.getId())) {
+            SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
+            SingleStrategy singleStrategy = factory.getSingleStrategy();
+            num = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
+        }
         if (num > 0 && num <= info.getNotUsedNum()) {
             Date date = info.getDetail().getCreateTime();
             Long clientId = info.getDetail().getClientId();
@@ -419,8 +427,11 @@ public class CardPosServiceImpl implements CardPosService {
         CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
         Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
         Date end = DateTimeUtil.addDays(start, 1);
-        int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
         int receiveNum = 0;
+        if (!preReceiveCashCouponNum(info, clientId, shopId, launch)) {
+            return receiveNum;
+        }
+        int cashCouponNum = cardCouponCodeMapper.todayConditionCouponCodeNum(info.getLaunchId(), clientId, start, end);
         if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_MANY.getId())) {
             int subCouponNum= getSubCouponNum(info, BigDecimal.ZERO);
             //会员实际拥有代金券与应该拥有代金券数量的差
@@ -456,7 +467,7 @@ public class CardPosServiceImpl implements CardPosService {
         //按投放批次，限制每日最大投放券张数
         //按投放批次，限制每个店铺活动期最大投放券张数、每个店铺每日最大投放券张数
         //查出该投放今日投放张数，该店铺今日发卡数，活动期的发卡数，
-
+        boolean b = false;
         Date now = new Date();
         TimeRange today = TimeRange.toTimeRange(DateTimeUtil.formatYYYYMMDD(now), DateTimeUtil.formatYYYYMMDD(now));
         Integer launchNumDaily = cardCouponCodeMapper.selectCouponLimitInfo(info.getLaunchId(), null, today);
@@ -469,8 +480,9 @@ public class CardPosServiceImpl implements CardPosService {
         if (launchNumDaily <= launch.getLaunchNumDaily()
                 && launchNumShopDaily <= triggerScope.getLimitNumDaily()
                 && launchNumShopActivePeriod <= triggerScope.getLimitNum()) {
-
+            b = true;
         }
+        return b;
     }
 
 }
