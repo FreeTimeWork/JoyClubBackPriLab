@@ -49,12 +49,12 @@ public interface CardCouponLaunchMapper extends BaseMapper<CardCouponLaunch, Lon
 
     /**
      * 条件投放期间没有重叠 返回0
+     *
      * @param launchStartTime
      * @param launchEndTime
      * @return
      */
-    @Select("SELECT count(*) from card_coupon_launch where review_status = 1 AND confirm_flag = 1 AND type = 1 AND !((#{launchStartTime} > IFNULL(forbid_time,launch_end_time) AND #{launchEndTime} > IFNULL(forbid_time,launch_end_time)) OR ( #{launchStartTime} < launch_start_time AND #{launchEndTime} < launch_start_time)) ")
-    int verifyConditionLaunch(@Param("launchStartTime") Date launchStartTime, @Param("launchEndTime") Date launchEndTime);
+    int verifyConditionLaunch(@Param("launchStartTime") Date launchStartTime, @Param("launchEndTime") Date launchEndTime, @Param("storeId") Long storeId);
 
     /**
      * 根据 id 得到 该投放下应剩余的库存。

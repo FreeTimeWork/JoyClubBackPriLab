@@ -348,4 +348,17 @@
 
         ORDER BY cc.display_weight DESC, ccl.create_time DESC
     </select>
+
+    <select id="verifyConditionLaunch" resultType="int">
+        SELECT count(*)
+        from card_coupon_launch ccl
+        INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id
+        where ccl.review_status = 1
+        AND ccl.confirm_flag = 1
+        AND ccl.type = 1
+        AND ccts.store_id = #{storeId}
+        AND !((#{launchStartTime} > IFNULL(ccl.forbid_time,ccl.launch_end_time)
+        AND #{launchEndTime} > IFNULL(ccl.forbid_time,ccl.launch_end_time)) OR ( #{launchStartTime} <![CDATA[ < ]]> ccl.launch_start_time AND #{launchEndTime} <![CDATA[ < ]]> ccl.launch_start_time))
+
+    </select>
 </mapper>

@@ -19,6 +19,7 @@ import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponTriggerScope;
+import com.joycity.joyclub.card_coupon.modal.generated.SysShop;
 import com.joycity.joyclub.card_coupon.quartz.BatchLaunchJob;
 import com.joycity.joyclub.card_coupon.service.CardCouponLaunchService;
 import com.joycity.joyclub.commons.AbstractGetListData;
@@ -56,6 +57,8 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
     private CardCouponCodeCache couponCodeCache;
     @Autowired
     private CardVipBatchMapper cardVipBatchMapper;
+    @Autowired
+    private ShopMapper shopMapper;
 
     @Override
     public ResultData createCardCouponLaunch(CreateCouponLaunchInfo launch) {
@@ -137,11 +140,15 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "已经投放");
 
         }
-        //一个条件投放期间只能有一个条件投放
+        //一个店铺一个条件投放期间只能有一个活动
         if (launchDb.getType().equals(CouponLaunchType.CONDITION_LAUNCH)) {
-            int num = launchMapper.verifyConditionLaunch(launchDb.getLaunchStartTime(), launchDb.getLaunchEndTime());
-            if (num > 0) {
-                throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "投放期间已存在其他条件投放");
+            List<CardCouponTriggerScope> triggerScopes = cardCouponTriggerScopeMapper.selectCardCouponTriggerScopesByLaunchId(launchDb.getId());
+            for (CardCouponTriggerScope scope : triggerScopes) {
+                int num = launchMapper.verifyConditionLaunch(launchDb.getLaunchStartTime(), launchDb.getLaunchEndTime(), scope.getStoreId());
+                if (num > 0) {
+                    SysShop shop = shopMapper.selectByPrimaryKey(scope.getStoreId());
+                    throw new BusinessException(ResultCode.COUPON_LAUNCH_ERROR, "活动时间内，"+shop.getName()+"已在其他投放!");
+                }
             }
         }
 
