@@ -12,10 +12,7 @@ import com.joycity.joyclub.card_coupon.constant.CouponLaunchReviewStatus;
 import com.joycity.joyclub.card_coupon.constant.CouponLaunchType;
 import com.joycity.joyclub.card_coupon.constant.CouponType;
 import com.joycity.joyclub.card_coupon.mapper.*;
-import com.joycity.joyclub.card_coupon.modal.CreateCouponInfo;
-import com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo;
-import com.joycity.joyclub.card_coupon.modal.ShowClientVisibleLaunchCoupon;
-import com.joycity.joyclub.card_coupon.modal.ShowCouponLaunchInfo;
+import com.joycity.joyclub.card_coupon.modal.*;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCoupon;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponLaunch;
 import com.joycity.joyclub.card_coupon.modal.generated.CardCouponTriggerScope;
@@ -82,11 +79,13 @@ public class CardCouponLaunchServiceImpl implements CardCouponLaunchService {
             launch.setLaunchNum(num.intValue());
         }
         launchMapper.insertSelective(launch);
-        if (CollectionUtils.isNotEmpty(launch.getTriggerScopeIds())) {
+        if (CollectionUtils.isNotEmpty(launch.getCouponTriggerScopes())) {
             CardCouponTriggerScope triggerScope = new CardCouponTriggerScope();
             triggerScope.setLaunchId(launch.getId());
-            for (Long storeId : launch.getTriggerScopeIds()) {
-                triggerScope.setStoreId(storeId);
+            for (CouponTriggerScopeWithShop triggerScopeWithShop : launch.getCouponTriggerScopes()) {
+                triggerScope.setStoreId(triggerScopeWithShop.getStoreId());
+                triggerScope.setLimitNum(triggerScopeWithShop.getLimitNum());
+                triggerScope.setLimitNumDaily(triggerScopeWithShop.getLimitNumDaily());
                 cardCouponTriggerScopeMapper.insertSelective(triggerScope);
             }
         }
