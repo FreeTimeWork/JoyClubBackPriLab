@@ -315,6 +315,126 @@ public class CardCouponTriggerScopeExample {
             return (Criteria) this;
         }
 
+        public Criteria andLimitNumIsNull() {
+            addCriterion("limit_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumIsNotNull() {
+            addCriterion("limit_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumEqualTo(Integer value) {
+            addCriterion("limit_num =", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumNotEqualTo(Integer value) {
+            addCriterion("limit_num <>", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumGreaterThan(Integer value) {
+            addCriterion("limit_num >", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("limit_num >=", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumLessThan(Integer value) {
+            addCriterion("limit_num <", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumLessThanOrEqualTo(Integer value) {
+            addCriterion("limit_num <=", value, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumIn(List<Integer> values) {
+            addCriterion("limit_num in", values, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumNotIn(List<Integer> values) {
+            addCriterion("limit_num not in", values, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumBetween(Integer value1, Integer value2) {
+            addCriterion("limit_num between", value1, value2, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("limit_num not between", value1, value2, "limitNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyIsNull() {
+            addCriterion("limit_num_daily is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyIsNotNull() {
+            addCriterion("limit_num_daily is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyEqualTo(Integer value) {
+            addCriterion("limit_num_daily =", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyNotEqualTo(Integer value) {
+            addCriterion("limit_num_daily <>", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyGreaterThan(Integer value) {
+            addCriterion("limit_num_daily >", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("limit_num_daily >=", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyLessThan(Integer value) {
+            addCriterion("limit_num_daily <", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyLessThanOrEqualTo(Integer value) {
+            addCriterion("limit_num_daily <=", value, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyIn(List<Integer> values) {
+            addCriterion("limit_num_daily in", values, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyNotIn(List<Integer> values) {
+            addCriterion("limit_num_daily not in", values, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyBetween(Integer value1, Integer value2) {
+            addCriterion("limit_num_daily between", value1, value2, "limitNumDaily");
+            return (Criteria) this;
+        }
+
+        public Criteria andLimitNumDailyNotBetween(Integer value1, Integer value2) {
+            addCriterion("limit_num_daily not between", value1, value2, "limitNumDaily");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

@@ -755,6 +755,66 @@ public class CardCouponCodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andIssueShopIsNull() {
+            addCriterion("issue_shop is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopIsNotNull() {
+            addCriterion("issue_shop is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopEqualTo(Long value) {
+            addCriterion("issue_shop =", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopNotEqualTo(Long value) {
+            addCriterion("issue_shop <>", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopGreaterThan(Long value) {
+            addCriterion("issue_shop >", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopGreaterThanOrEqualTo(Long value) {
+            addCriterion("issue_shop >=", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopLessThan(Long value) {
+            addCriterion("issue_shop <", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopLessThanOrEqualTo(Long value) {
+            addCriterion("issue_shop <=", value, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopIn(List<Long> values) {
+            addCriterion("issue_shop in", values, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopNotIn(List<Long> values) {
+            addCriterion("issue_shop not in", values, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopBetween(Long value1, Long value2) {
+            addCriterion("issue_shop between", value1, value2, "issueShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueShopNotBetween(Long value1, Long value2) {
+            addCriterion("issue_shop not between", value1, value2, "issueShop");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

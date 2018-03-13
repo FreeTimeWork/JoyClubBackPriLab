@@ -446,6 +446,66 @@ public class CardCouponLaunchExample {
             return (Criteria) this;
         }
 
+        public Criteria andCalculateTypeIsNull() {
+            addCriterion("calculate_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeIsNotNull() {
+            addCriterion("calculate_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeEqualTo(Integer value) {
+            addCriterion("calculate_type =", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeNotEqualTo(Integer value) {
+            addCriterion("calculate_type <>", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeGreaterThan(Integer value) {
+            addCriterion("calculate_type >", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("calculate_type >=", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeLessThan(Integer value) {
+            addCriterion("calculate_type <", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("calculate_type <=", value, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeIn(List<Integer> values) {
+            addCriterion("calculate_type in", values, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeNotIn(List<Integer> values) {
+            addCriterion("calculate_type not in", values, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeBetween(Integer value1, Integer value2) {
+            addCriterion("calculate_type between", value1, value2, "calculateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andCalculateTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("calculate_type not between", value1, value2, "calculateType");
+            return (Criteria) this;
+        }
+
         public Criteria andVipBatchIsNull() {
             addCriterion("vip_batch is null");
             return (Criteria) this;
