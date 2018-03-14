@@ -8,6 +8,7 @@
     <sql id="CardCouponLaunchColumn">
         ccl.id , ccl.coupon_id , ccl.name , ccl.type , ccl.vip_batch, ccl.condition_amount ,
         ccl.pay_type  , ccl.pay_amount  , ccl.launch_num  ,ccl.max_receive,
+        ccl.calculate_type,ccl.launch_num_daily,
         ccl.launch_start_time  , ccl.launch_end_time  ,
         ccl.effective_start_time  , ccl.effective_end_time,ccl.review_status  ,
         ccl.review_info  , ccl.confirm_flag  , ccl.forbid_flag  , ccl.confirm_time  ,
@@ -168,7 +169,8 @@
         SELECT
         <include refid="CardCouponLaunchColumn"/>,
         <include refid="status"/>,
-        cc.name AS coupon_name, ss.id AS ccts_store_id, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name
+        cc.name AS coupon_name, ss.id AS ccts_store_id, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name,
+        ccts.limit_num, ccts.limit_num_daily
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id AND ccts.delete_flag = 0
