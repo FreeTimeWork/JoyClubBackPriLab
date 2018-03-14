@@ -296,7 +296,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (num > 0 && num <= info.getNotUsedNum()) {
             Date date = info.getDetail().getCreateTime();
             Long clientId = info.getDetail().getClientId();
-            List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCashCouponCodeIdFromLaunchBetween(date, clientId, num);
+            List<Long> couponCodeIds = cardCouponCodeMapper.selectNotUsedCashCouponCodeIdFromLaunchBetween(info.getDetail().getShopId(),date, clientId, num);
             //未使用代金券废弃
             for (Long id : couponCodeIds) {
                 CardCouponCode cardCouponCode = new CardCouponCode();
@@ -465,12 +465,20 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
-            return getReceiveNum(info, num, cashCouponNum);
+            if (num > launch.getMaxReceive()) {
+                return launch.getMaxReceive();
+            } else {
+                return num;
+            }
         } else if (launch.getCalculateType().equals(CouponCalculateType.NONINCREMENT_SINGLE.getId())) {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.NONINCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
-            return getReceiveNum(info, num, cashCouponNum);
+            if (num > launch.getMaxReceive()) {
+                return launch.getMaxReceive();
+            } else {
+                return num;
+            }
         }
         return receiveNum;
     }
