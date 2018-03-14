@@ -156,6 +156,8 @@
                extends="com.joycity.joyclub.card_coupon.mapper.CardCouponTriggerScopeMapper.BaseResultMap">
         <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
         <result column="sub_commercial_type_name" jdbcType="VARCHAR" property="subCommercialTypeName"/>
+        <result column="limit_num" jdbcType="INTEGER" property="limitNum"/>
+        <result column="limit_num_daily" jdbcType="INTEGER" property="limitNumDaily"/>
     </resultMap>
 
     <resultMap id="CreateCouponLaunchInfo" type="com.joycity.joyclub.card_coupon.modal.CreateCouponLaunchInfo" extends="BaseResultMap">
@@ -170,7 +172,7 @@
         <include refid="CardCouponLaunchColumn"/>,
         <include refid="status"/>,
         cc.name AS coupon_name, ss.id AS ccts_store_id, ss.name AS ccts_shop_name, ss.sub_commercial_type_name AS ccts_sub_commercial_type_name,
-        ccts.limit_num, ccts.limit_num_daily
+        ccts.limit_num AS  ccts_limit_num, ccts.limit_num_daily AS ccts_limit_num_daily
         FROM card_coupon_launch ccl
         INNER JOIN card_coupon cc ON cc.id = ccl.coupon_id AND cc.delete_flag = 0
         LEFT JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = ccl.id AND ccts.delete_flag = 0
