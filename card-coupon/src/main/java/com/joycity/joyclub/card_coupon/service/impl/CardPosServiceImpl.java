@@ -283,14 +283,14 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             num = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
             if (num > launch.getMaxReceive()) {
-                num = num - launch.getMaxReceive();
+                num = launch.getMaxReceive();
             }
         } else if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_SINGLE.getId())) {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             num = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
             if (num > launch.getMaxReceive()) {
-                num = num - launch.getMaxReceive();
+                num = launch.getMaxReceive();
             }
         }
         if (num > 0 && num <= info.getNotUsedNum()) {
@@ -377,14 +377,14 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             diff = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
             if (diff > launch.getMaxReceive()) {
-                diff = diff - launch.getMaxReceive();
+                diff = launch.getMaxReceive();
             }
         } else if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_SINGLE.getId())) {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             diff = singleStrategy.CouponNum(info.getDetail().getBalance(), info.getConditionAmount());
             if (diff > launch.getMaxReceive()) {
-                diff = diff - launch.getMaxReceive();
+                diff = launch.getMaxReceive();
             }
         }
         if (diff > info.getNotUsedNum() ) {
@@ -465,6 +465,7 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
+            num = num - cashCouponNum;
             if (num > launch.getMaxReceive()) {
                 return launch.getMaxReceive();
             } else {
@@ -474,6 +475,7 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.NONINCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
+            num = num - cashCouponNum;
             if (num > launch.getMaxReceive()) {
                 return launch.getMaxReceive();
             } else {
