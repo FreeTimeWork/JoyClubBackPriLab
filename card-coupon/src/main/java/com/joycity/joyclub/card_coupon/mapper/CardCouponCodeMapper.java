@@ -103,8 +103,8 @@ public interface CardCouponCodeMapper extends BaseMapper<CardCouponCode, Long, C
             " AND psd.create_time < launch_time.launch_end_time"+
             " INNER JOIN card_coupon_trigger_scope ccts ON ccts.launch_id = launch_time.id"+
             "        WHERE "+
-            " psd.client_id = #{clientId} AND ccts.store_id = psd.shop_id and psd.delete_flag = 0")
-    BigDecimal selectSumPaidFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId);
+            " psd.client_id = #{clientId} AND ccts.store_id = psd.shop_id and ccts.launch_Id = #{launchId} and psd.delete_flag = 0")
+    BigDecimal selectSumPaidFromLaunchBetween(@Param("now") Date now, @Param("clientId") Long clientId,@Param("launchId") Long launchId);
 
     /**
      * 订单存在禁止退款的卡券

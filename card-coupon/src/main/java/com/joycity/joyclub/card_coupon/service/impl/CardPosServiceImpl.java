@@ -412,7 +412,7 @@ public class CardPosServiceImpl implements CardPosService {
         if (info == null) {
             return null;
         }
-        BigDecimal sumPaid = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(date, clientId);
+        BigDecimal sumPaid = cardCouponCodeMapper.selectSumPaidFromLaunchBetween(date, clientId,info.getLaunchId());
         info.setSumPaid(sumPaid);
         //在条件投放期间内，卡券的使用和未使用的数量
         CouponLaunchBetweenInfo couponNumInfo = cardCouponCodeMapper.selectCouponNumFromLaunchBetween(date, clientId, shopId);
@@ -465,21 +465,25 @@ public class CardPosServiceImpl implements CardPosService {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.INCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
-            num = num - cashCouponNum;
-            if (num > launch.getMaxReceive()) {
-                return launch.getMaxReceive();
-            } else {
-                return num;
+            if (cashCouponNum < launch.getMaxReceive()) {
+                Integer allowNum =  launch.getMaxReceive() - cashCouponNum;
+                if (num > allowNum) {
+                    return allowNum;
+                } else {
+                    return num;
+                }
             }
         } else if (launch.getCalculateType().equals(CouponCalculateType.NONINCREMENT_SINGLE.getId())) {
             SingleStrategyFactory factory = new SingleStrategyFactory(CouponCalculateType.NONINCREMENT_SINGLE);
             SingleStrategy singleStrategy = factory.getSingleStrategy();
             int num = singleStrategy.CouponNum(payment, info.getConditionAmount());
-            num = num - cashCouponNum;
-            if (num > launch.getMaxReceive()) {
-                return launch.getMaxReceive();
-            } else {
-                return num;
+            if (cashCouponNum < launch.getMaxReceive()) {
+                Integer allowNum =  launch.getMaxReceive() - cashCouponNum;
+                if (num > allowNum) {
+                    return allowNum;
+                } else {
+                    return num;
+                }
             }
         }
         return receiveNum;

@@ -6,7 +6,7 @@ package com.joycity.joyclub.card_coupon.constant;
 public enum CouponCalculateType {
     INCREMENT_SINGLE(1,"单笔累加"),
     NONINCREMENT_SINGLE(2,"单笔不累加"),
-    INCREMENT_MANY(2,"多笔累加"),
+    INCREMENT_MANY(3,"多笔累加"),
     ;
 
     private Integer id;
