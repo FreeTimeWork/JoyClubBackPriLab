@@ -9,6 +9,6 @@ public class IncrementSingleStrategy implements SingleStrategy {
 
     @Override
     public Integer CouponNum(BigDecimal amount, BigDecimal criteriaAmount) {
-        return (amount.divide( criteriaAmount)).intValue();
+        return (amount.divide( criteriaAmount,0, BigDecimal.ROUND_DOWN)).intValue();
     }
 }

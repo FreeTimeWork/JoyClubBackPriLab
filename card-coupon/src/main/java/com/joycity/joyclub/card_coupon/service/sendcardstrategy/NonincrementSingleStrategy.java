@@ -9,7 +9,7 @@ public class NonincrementSingleStrategy implements SingleStrategy {
 
     @Override
     public Integer CouponNum(BigDecimal amount, BigDecimal criteriaAmount) {
-        if ((amount.divide(criteriaAmount) ).compareTo(BigDecimal.ZERO) > 0) {
+        if ((amount.divide(criteriaAmount,0, BigDecimal.ROUND_DOWN) ).compareTo(BigDecimal.ZERO) > 0) {
             return 1;
         } else {
             return 0;
