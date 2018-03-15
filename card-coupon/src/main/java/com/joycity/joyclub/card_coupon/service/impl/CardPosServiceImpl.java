@@ -200,8 +200,8 @@ public class CardPosServiceImpl implements CardPosService {
         //如果该订单在条件投放期间
         if (info != null) {
             int receiveNum = receiveCashCouponNum(info, clientId,shop.getId(),payment);
+            CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
             if (receiveNum > 0) {
-                CardCouponLaunch launch = launchMapper.selectByPrimaryKey(info.getLaunchId());
                 //发卡
                 for (int i= 0 ; i < receiveNum ; i++) {
                     boolean result = couponCodeCache.sendCouponCode(info.getLaunchId());
@@ -213,6 +213,9 @@ public class CardPosServiceImpl implements CardPosService {
                         }
                     }
                 }
+
+            }
+            if (launch.getCalculateType().equals(CouponCalculateType.INCREMENT_MANY.getId())) {
                 // 没有在每日限制领券范围内，当消费金额不够发券，发短信提示
                 Date start = DateTimeUtil.parseYYYYMMDD(DateTimeUtil.formatYYYYMMDD(new Date()));
                 Date end = DateTimeUtil.addDays(start, 1);
@@ -233,7 +236,6 @@ public class CardPosServiceImpl implements CardPosService {
                     logger.info("sendMessage response:" + result);
                 }
             }
-
         }
         return new ResultData(new CreateResult(posSaleDetailId));
     }
